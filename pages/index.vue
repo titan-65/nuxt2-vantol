@@ -46,9 +46,8 @@
             v-for="item in post"
             :key="item.slug"
             :item="item"
-            @click="handleClick(item.slug)"
           />
-<!--           <pre>{{ post }}</pre> -->
+          <!--           <pre>{{ post }}</pre> -->
         </div>
       </div>
     </div>

@@ -1,9 +1,9 @@
 <template>
   <!-- header block -->
     <header class="flex justify-between max-w-screen-xl px-6 py-4 mx-auto lg:px-8 xl:px-4 lg:py-6">
-      <a href="#">
+      <NuxtLink to="/">
         Vantol
-      </a>
+      </NuxtLink>
       <nav class="flex items-center space-x-4">
         <a href="#" class="flex items-center space-x-1 hover:text-gray-500">
           <svg class="hidden w-5 h-5 sm:inline" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path></svg>

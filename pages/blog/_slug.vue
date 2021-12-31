@@ -4,14 +4,14 @@ export default {
     const post = await $content('posts', params.slug).fetch()
 
     const [prev, next] = await $content('posts')
-    .only(['title', 'slug'])
-    .sortBy('createdAt', 'asc')
-    .surround(params.slug)
-    .fetch()
+      .only(['title', 'slug'])
+      .sortBy('createdAt', 'asc')
+      .surround(params.slug)
+      .fetch()
     return {
       post,
       prev,
-      next
+      next,
     }
   },
 
@@ -47,8 +47,8 @@ export default {
     <p>{{ post.description }}</p>
     <p>Last Updated: {{ formatDate(post.updatedAt) }}</p>
     <nuxt-content :document="post" />
-
-      <prev-next :prev="prev" :next="next" />
+    <author :author="post.author" />
+    <prev-next :prev="prev" :next="next" />
   </div>
 </template>
 <style>
