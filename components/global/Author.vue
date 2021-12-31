@@ -10,7 +10,7 @@ export default {
 </script>
 <template>
   <div>
-<!--     <img :src="author.img" />
+    <!--     <img :src="author.img" />
     <div>
       <h4>Author</h4>
       <p>{{ author.name }}</p>
