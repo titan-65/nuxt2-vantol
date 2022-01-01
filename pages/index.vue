@@ -42,11 +42,7 @@
           </h1>
         </div>
         <div class="flex flex-wrap">
-          <PostCard
-            v-for="item in post"
-            :key="item.slug"
-            :item="item"
-          />
+          <PostCard v-for="item in post" :key="item.slug" :item="item" />
           <!--           <pre>{{ post }}</pre> -->
         </div>
       </div>
@@ -66,6 +62,10 @@
           </p>
         </div>
       </div>
+      <div class="flex flex-wrap">
+        <ProjectCard />
+
+      </div>
     </div>
   </div>
 </template>
@@ -73,7 +73,19 @@
 <script>
 export default {
   async asyncData({ $content }) {
-    const post = await $content('posts').fetch()
+    const post = await $content('posts')
+      .only([
+        'title',
+        'description',
+        'language',
+        'tag',
+        'rating',
+        'readTime',
+        'img',
+        'author',
+        'slug',
+      ])
+      .fetch()
     return { post }
   },
   methods: {
