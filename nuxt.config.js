@@ -62,6 +62,14 @@ export default {
     nestedProperties: ['author.name'],
   },
 
+  publicRuntimeConfig: {
+    supabaseUrl: process.env.SUPABASE_URL,
+  },
+  privateRuntimeConfig: {
+        supabaseKey: process.env.SUPABASE_KEY,
+
+  },
+
   // Build Configuration: https://go.nuxtjs.dev/config-build
   build: {},
 }
