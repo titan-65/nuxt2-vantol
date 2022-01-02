@@ -64,7 +64,7 @@
         </div>
       </div>
       <div class="flex flex-wrap">
-        <ProjectCard />
+        <ProjectCard v-for="project in data" :key="project.id" :data="project"/>
       </div>
     </div>
   </div>
@@ -79,6 +79,7 @@ export default {
     if (error) {
       console.log(error)
     }
+    console.log(data)
 
     const post = await $content('posts')
       .only([

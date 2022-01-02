@@ -1,11 +1,20 @@
-<script></script>
+<script>
+export default {
+  props: {
+    data: {
+      type: Object,
+      required: true,
+    },
+  }
+}
+</script>
 <template>
   <div
     class="max-w-sm mx-auto mt-4 overflow-hidden bg-white rounded-lg shadow-lg dark:bg-gray-800"
   >
     <img
       class="object-cover object-center w-full h-56"
-      src="https://images.unsplash.com/photo-1517841905240-472988babdf9?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=334&q=80"
+      :src="data.image"
       alt="avatar"
     />
 
@@ -23,17 +32,16 @@
         />
       </svg>
 
-      <h1 class="mx-3 text-lg font-semibold text-white">Focusing</h1>
+      <h1 class="mx-3 text-lg font-semibold text-white">{{ data.tag }}</h1>
     </div>
 
     <div class="px-6 py-4">
       <h1 class="text-xl font-semibold text-gray-800 dark:text-white">
-        Patterson johnson
+        {{ data.title }}
       </h1>
 
       <p class="py-2 text-gray-700 dark:text-gray-400">
-        Full Stack maker & UI / UX Designer , love hip hop music Author of
-        Building UI.
+        {{ data.preview}}
       </p>
 
       <div class="flex items-center mt-4 text-gray-700 dark:text-gray-200">
@@ -51,7 +59,7 @@
           />
         </svg>
 
-        <h1 class="px-2 text-sm">Meraki UI</h1>
+        <h1 class="px-2 text-sm">{{ data.stack.Backend }}</h1>
       </div>
 
       <div class="flex items-center mt-4 text-gray-700 dark:text-gray-200">
@@ -73,7 +81,7 @@
           />
         </svg>
 
-        <h1 class="px-2 text-sm">California</h1>
+        <h1 class="px-2 text-sm">{{ data.stack.Framework }}</h1>
       </div>
 
       <div class="flex items-center mt-4 text-gray-700 dark:text-gray-200">
@@ -90,7 +98,7 @@
           />
         </svg>
 
-        <h1 class="px-2 text-sm">patterson@example.com</h1>
+        <h1 class="px-2 text-sm">{{ data.url }}</h1>
       </div>
     </div>
   </div>

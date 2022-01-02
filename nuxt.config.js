@@ -64,10 +64,11 @@ export default {
 
   publicRuntimeConfig: {
     supabaseUrl: process.env.SUPABASE_URL,
+    supabaseKey: process.env.SUPABASE_KEY,
   },
   privateRuntimeConfig: {
+    supabaseUrl: process.env.SUPABASE_URL,
     supabaseKey: process.env.SUPABASE_KEY,
-
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build

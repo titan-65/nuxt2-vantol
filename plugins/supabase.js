@@ -1,5 +1,5 @@
 import { createClient } from '@supabase/supabase-js';
-import config from '../nuxt.config';
+import config from '~/nuxt.config';
 
 
 const SUPABASE_URL = config.publicRuntimeConfig.supabaseUrl;
