@@ -66,7 +66,7 @@ export default {
     supabaseUrl: process.env.SUPABASE_URL,
   },
   privateRuntimeConfig: {
-        supabaseKey: process.env.SUPABASE_KEY,
+    supabaseKey: process.env.SUPABASE_KEY,
 
   },
 

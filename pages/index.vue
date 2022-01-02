@@ -1,3 +1,4 @@
+/* eslint-disable vue/order-in-components */
 <template>
   <div>
     <div class="py-12 bg-gray-100 md:py-24">
@@ -64,15 +65,21 @@
       </div>
       <div class="flex flex-wrap">
         <ProjectCard />
-
       </div>
     </div>
   </div>
 </template>
 
 <script>
+import { supabase } from '~/plugins/supabase'
 export default {
   async asyncData({ $content }) {
+    const { data, error } = await supabase.from('projects').select('*')
+
+    if (error) {
+      console.log(error)
+    }
+
     const post = await $content('posts')
       .only([
         'title',
@@ -86,7 +93,13 @@ export default {
         'slug',
       ])
       .fetch()
-    return { post }
+    return { post, data }
+  },
+  data() {
+    return {
+      projects: [],
+      errorMessage: null,
+    }
   },
   methods: {
     handleClick(slug) {
