@@ -1,4 +1,3 @@
-/* eslint-disable vue/order-in-components */
 <template>
   <div>
     <div class="py-12 bg-gray-100 md:py-24">
@@ -44,7 +43,6 @@
         </div>
         <div class="flex flex-wrap">
           <PostCard v-for="item in post" :key="item.slug" :item="item" />
-          <!--           <pre>{{ post }}</pre> -->
         </div>
       </div>
     </div>
@@ -64,48 +62,42 @@
         </div>
       </div>
       <div class="flex flex-wrap">
-        <!--         <ProjectCard v-for="project in data" :key="project.id" :data="project"/> -->
+        <ProjectCard
+          v-for="item in projects"
+          :key="item.slug"
+          :item="item"/>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-// import { supabase } from '~/plugins/supabase'
+// import ProjectCard from "~/components/ProjectCard.vue"
 export default {
-  async asyncData({ $content }) {
-    //     const { data, error } = await supabase.from('projects').select('*')
-    //
-    //     if (error) {
-    //       console.log(error)
-    //     }
-    //     console.log(data)
-
-    const post = await $content('posts')
-      .only([
-        'title',
-        'description',
-        'language',
-        'tag',
-        'rating',
-        'readTime',
-        'img',
-        'author',
-        'slug',
-      ])
-      .fetch()
-    return { post }
-  },
-  data() {
-    return {
-      projects: [],
-      errorMessage: null,
-    }
-  },
-  methods: {
-    handleClick(slug) {
-      this.$router.push(`/blog/${slug}`)
+    async asyncData({ $content, params }) {
+        const post = await $content("posts")
+            .only([
+            "title",
+            "description",
+            "language",
+            "tag",
+            "rating",
+            "readTime",
+            "img",
+            "author",
+            "slug",
+        ])
+            .fetch();
+        const projects = await $content("projects").fetch();
+        return { post, projects };
     },
-  },
+    data() {
+        return {
+            projects: [],
+            errorMessage: null,
+        };
+    },
+    methods: {},
+    // components: { ProjectCard }
 }
 </script>

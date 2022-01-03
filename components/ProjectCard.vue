@@ -1,11 +1,12 @@
 <script>
 export default {
   props: {
-    data: {
+    item: {
       type: Object,
       required: true,
     },
-  }
+  },
+
 }
 </script>
 <template>
@@ -14,7 +15,7 @@ export default {
   >
     <img
       class="object-cover object-center w-full h-56"
-      :src="data.image"
+      :src="item.image"
       alt="avatar"
     />
 
@@ -32,16 +33,16 @@ export default {
         />
       </svg>
 
-      <h1 class="mx-3 text-lg font-semibold text-white">{{ data.tag }}</h1>
+      <h1 class="mx-3 text-lg font-semibold text-white">{{ item.tag }}</h1>
     </div>
 
     <div class="px-6 py-4">
       <h1 class="text-xl font-semibold text-gray-800 dark:text-white">
-        {{ data.title }}
+        {{ item.title }}
       </h1>
 
       <p class="py-2 text-gray-700 dark:text-gray-400">
-        {{ data.preview}}
+        {{ item.preview}}
       </p>
 
       <div class="flex items-center mt-4 text-gray-700 dark:text-gray-200">
@@ -59,7 +60,7 @@ export default {
           />
         </svg>
 
-        <h1 class="px-2 text-sm">{{ data.stack.Backend }}</h1>
+        <h1 class="px-2 text-sm">{{ item.stack.Backend }}</h1>
       </div>
 
       <div class="flex items-center mt-4 text-gray-700 dark:text-gray-200">
@@ -81,7 +82,7 @@ export default {
           />
         </svg>
 
-        <h1 class="px-2 text-sm">{{ data.stack.Framework }}</h1>
+        <h1 class="px-2 text-sm">{{ item.stack.Frontend }}</h1>
       </div>
 
       <div class="flex items-center mt-4 text-gray-700 dark:text-gray-200">
@@ -98,7 +99,7 @@ export default {
           />
         </svg>
 
-        <h1 class="px-2 text-sm">{{ data.url }}</h1>
+        <h1 class="px-2 text-sm">{{ item.url }}</h1>
       </div>
     </div>
   </div>
