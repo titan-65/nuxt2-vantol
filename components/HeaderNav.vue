@@ -3,7 +3,7 @@
   <header
     class="flex justify-between max-w-screen-xl px-6 py-4 mx-auto lg:px-8 xl:px-4 lg:py-6"
   >
-    <NuxtLink to="/"> Vantol </NuxtLink>
+    <NuxtLink :to="{ name: 'index' }"> Vantol </NuxtLink>
     <nav class="flex items-center space-x-4">
       <a href="#" class="flex items-center space-x-1 hover:text-gray-500">
         <svg

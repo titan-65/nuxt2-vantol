@@ -64,22 +64,22 @@
         </div>
       </div>
       <div class="flex flex-wrap">
-        <ProjectCard v-for="project in data" :key="project.id" :data="project"/>
+        <!--         <ProjectCard v-for="project in data" :key="project.id" :data="project"/> -->
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { supabase } from '~/plugins/supabase'
+// import { supabase } from '~/plugins/supabase'
 export default {
   async asyncData({ $content }) {
-    const { data, error } = await supabase.from('projects').select('*')
-
-    if (error) {
-      console.log(error)
-    }
-    console.log(data)
+    //     const { data, error } = await supabase.from('projects').select('*')
+    //
+    //     if (error) {
+    //       console.log(error)
+    //     }
+    //     console.log(data)
 
     const post = await $content('posts')
       .only([
@@ -94,7 +94,7 @@ export default {
         'slug',
       ])
       .fetch()
-    return { post, data }
+    return { post }
   },
   data() {
     return {
