@@ -57,7 +57,7 @@
             Projects
           </h2>
           <p class="text-lg text-gray-300 xl:text-xl">
-            Various Framework including React.js, Nuxt.js, Vue.js
+            Various Framework including React.js, Nuxt.js, & Vue.js
           </p>
         </div>
       </div>

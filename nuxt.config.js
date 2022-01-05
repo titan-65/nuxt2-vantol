@@ -4,14 +4,20 @@ export default {
 
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'nuxt2-vantol',
+    title: 'VantolBennett',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
-      { hid: 'description', name: 'description', content: '' },
+      { hid: 'description', name: 'description', content: 'Fullstack Developer- Vantol Bennett. Over 10 years of experience in Web and Mobile development. Vue.js, Nuxtjs, React, Javascript, Node.js and Django (Python) Framework.' },
       { name: 'format-detection', content: 'telephone=no' },
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    link: [
+      { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' },
+      { rel: "apple-touch-icon", sizes: "180x180", href: "/apple-touch-icon.png" },
+      { rel: "icon", type: "image/png", sizes: "32x32", href: "/favicon-32x32.png" },
+      { rel: "icon", type: "image/png", sizes: "16x16", href: "/favicon-16x16.png" },
+      { rel: "manifest", href: "/site.webmanifest"}
+    ],
   },
 
   // Global CSS: https://go.nuxtjs.dev/config-css
@@ -62,7 +68,7 @@ export default {
     nestedProperties: ['author.name'],
   },
 
-  
+
   publicRuntimeConfig: {
     supabaseUrl: process.env.SUPABASE_URL,
     supabaseKey: process.env.SUPABASE_KEY,
