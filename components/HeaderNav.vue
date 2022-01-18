@@ -1,7 +1,7 @@
 <template>
   <!-- header block -->
   <header
-    class="flex justify-between max-w-screen-xl px-6 py-4 mx-auto lg:px-8 xl:px-4 lg:py-6 shadow"
+    class="flex justify-between max-w-screen-xl px-6 py-4 mx-auto lg:px-8 xl:px-4 lg:py-6"
   >
     <NuxtLink :to="{ name: 'index' }">
       <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512" class="h-8 mr-4 md:h-9 lg:mr-0 text-white">
