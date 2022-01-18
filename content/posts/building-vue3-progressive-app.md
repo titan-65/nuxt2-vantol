@@ -6,7 +6,7 @@ language: Vue.js
 tag: Coffee App
 rating: 0
 readTime: 25
-img: 'https://res.cloudinary.com/ddszyeplg/image/upload/v1636919448/DSC_0991_snlozn.jpg'
+img: 'https://res.cloudinary.com/ddszyeplg/image/upload/v1642478176/vantol/Screenshot_2021-07-29_at_11.07.21_PM_mepvjg.png'
 author:
   name: Vantol Bennett
   website: www.teammps.com
