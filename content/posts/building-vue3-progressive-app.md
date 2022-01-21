@@ -1,5 +1,5 @@
 ---
-title: Building a Vue 3 Progressive Koffee Lovers App
+title: Building a Vue 3 Progressive Koffee Lovers App Part One
 description: Examine the inner workings of a Vue 3 app combining technologies like Supabase, Pinia to complete this code.
 keywords: [developer, jamaican, vue.js, supabase, pinia, vite]
 language: Vue.js
