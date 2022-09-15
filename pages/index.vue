@@ -24,9 +24,9 @@
         </div>
         <div class="order-1 col-span-2 md:order-2 xl:col-span-3">
           <img
-            src="https://res.cloudinary.com/zhyjenae/image/upload/v1640791500/highlights/DSC_0988_bvucoi.jpg"
+            src="https://res.cloudinary.com/ddszyeplg/image/upload/v1656478354/IMG_1412_orxemy.jpg"
             class="rounded-lg shadow-2xl"
-            alt=""
+            alt="Vantol Bennett"
           />
         </div>
       </div>
