@@ -1,0 +1,21 @@
+{
+  "skills": [
+    { "category": "Frontend", "items": ["Vue.js", "Nuxt.js", "React.js", "TypeScript", "Tailwind CSS"] },
+    { "category": "Backend", "items": ["Node.js", "Express", "Supabase", "PostgreSQL"] },
+    { "category": "Tools", "items": ["Git", "Docker", "VS Code", "Figma"] }
+  ],
+  "experience": [
+    {
+      "title": "Founder & Developer",
+      "company": "Zhyjenae",
+      "period": "Present",
+      "description": "Building innovative educational and development solutions."
+    },
+    {
+      "title": "Educator & Developer",
+      "company": "Independent",
+      "period": "Present",
+      "description": "Teaching and creating web applications using modern frameworks."
+    }
+  ]
+}

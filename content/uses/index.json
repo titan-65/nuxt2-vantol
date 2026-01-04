@@ -1,0 +1,67 @@
+{
+  "categories": [
+    {
+      "title": "Development",
+      "description": "My coding setup and tools",
+      "items": [
+        { "name": "VS Code", "description": "Primary code editor with custom themes and extensions" },
+        { "name": "iTerm2", "description": "Terminal emulator with zsh and oh-my-zsh" },
+        { "name": "Git & GitHub", "description": "Version control and collaboration" },
+        { "name": "Docker", "description": "Containerization for consistent development environments" },
+        { "name": "Postman", "description": "API development and testing" }
+      ]
+    },
+    {
+      "title": "Frontend Stack",
+      "description": "Frameworks and libraries I use",
+      "items": [
+        { "name": "Vue.js / Nuxt.js", "description": "Primary framework for building web applications" },
+        { "name": "React.js / Next.js", "description": "Alternative framework for various projects" },
+        { "name": "TypeScript", "description": "Type-safe JavaScript for better DX" },
+        { "name": "Tailwind CSS", "description": "Utility-first CSS framework" },
+        { "name": "Shadcn/ui", "description": "Beautiful component library" }
+      ]
+    },
+    {
+      "title": "Backend & Database",
+      "description": "Server-side technologies",
+      "items": [
+        { "name": "Node.js", "description": "JavaScript runtime for backend services" },
+        { "name": "Express.js", "description": "Web framework for Node.js" },
+        { "name": "Supabase", "description": "Backend-as-a-service with PostgreSQL" },
+        { "name": "PostgreSQL", "description": "Relational database management" },
+        { "name": "MongoDB", "description": "NoSQL database for flexible schemas" }
+      ]
+    },
+    {
+      "title": "Design & Productivity",
+      "description": "Tools for design and workflow",
+      "items": [
+        { "name": "Figma", "description": "UI/UX design and prototyping" },
+        { "name": "Notion", "description": "Note-taking and project management" },
+        { "name": "Raycast", "description": "Productivity launcher for macOS" },
+        { "name": "Arc Browser", "description": "Modern web browser for development" }
+      ]
+    },
+    {
+      "title": "Hardware",
+      "description": "Physical setup",
+      "items": [
+        { "name": "MacBook Pro", "description": "Primary development machine" },
+        { "name": "External Monitor", "description": "Extended workspace for better productivity" },
+        { "name": "Mechanical Keyboard", "description": "Comfortable typing experience" },
+        { "name": "Magic Mouse", "description": "Smooth navigation and gestures" }
+      ]
+    },
+    {
+      "title": "Deployment & Hosting",
+      "description": "Where I deploy and host projects",
+      "items": [
+        { "name": "Vercel", "description": "Frontend deployment platform" },
+        { "name": "Netlify", "description": "Alternative hosting for JAMstack sites" },
+        { "name": "Cloudflare", "description": "CDN and DNS management" },
+        { "name": "Railway", "description": "Backend deployment and databases" }
+      ]
+    }
+  ]
+}

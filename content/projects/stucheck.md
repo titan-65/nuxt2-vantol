@@ -1,7 +1,7 @@
 ---
 title: Stucheck
 preview: Vue.js WebApp that provides a way to provide support for students in the Stucheck program.
-active: false
+active: true
 url: 'https://student-ticket.vercel.app/'
 tag: Hold dem!
 image: 'https://res.cloudinary.com/ddszyeplg/image/upload/v1641170530/vantol/stucheck_xrsnyh.png'
@@ -15,6 +15,14 @@ stack:
   Database: Supabase
 ---
 
-# Stucheck -
+# Stucheck
+
+::Flex{gap="4"}
+  ::StatBox{label="Students" value="500+"}
+  ::StatBox{label="Tickets" value="1.2k"}
+  ::StatBox{label="Uptime" value="99.9%"}
+::
+
+
 
 

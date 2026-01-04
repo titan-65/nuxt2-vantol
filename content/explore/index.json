@@ -1,0 +1,35 @@
+{
+  "cards": [
+    {
+      "title": "Writing Experiments",
+      "label": "Notes",
+      "description": "Short drafts, outlines, and future post topics—kept simple and searchable.",
+      "status": "Planned"
+    },
+    {
+      "title": "UI / DX Patterns",
+      "label": "Patterns",
+      "description": "Reusable patterns for Nuxt, Vue, and Tailwind—things I want to remember and reuse.",
+      "status": "Active"
+    },
+    {
+      "title": "Small Demos",
+      "label": "Labs",
+      "description": "Tiny experiments: animations, component APIs, content rendering, and performance checks.",
+      "status": "Draft"
+    },
+    {
+      "title": "Nuxt Layers",
+      "label": "Architecture",
+      "description": "Exploring the power of Nuxt Layers for building reusable, extendable application patterns and modular configurations.",
+      "status": "Active"
+    },
+    {
+      "title": "The Solo Level",
+      "label": "Project",
+      "description": "A focus on performance, discipline, and building high-quality digital experiences. Insights from thesololevel.com.",
+      "to": "https://www.thesololevel.com/",
+      "status": "Active"
+    }
+  ]
+}

@@ -1,0 +1,53 @@
+{
+  "items": [
+    {
+      "title": "Building Solo Level with Mortal Kombat",
+      "type": "Photo",
+      "year": "2026",
+      "note": "Play Mortal Kombat while building Solo Level",
+      "img": "https://res.cloudinary.com/ddszyeplg/image/upload/v1767533060/PXL_20251228_134416107.MP_cfbnc0.jpg"
+    },
+    {
+      "title": "Work and Play",
+      "type": "Photo",
+      "year": "2026",
+      "note": "Work hard, and relaxing in front the screen",
+      "img": "https://res.cloudinary.com/ddszyeplg/image/upload/v1767533046/PXL_20250801_131746900_s601j4.jpg"
+    },
+    {
+      "title": "Working Hard",
+      "type": "Photo",
+      "year": "2026",
+      "note": "Gotta keep up with the demands of a startup",
+      "img": "https://res.cloudinary.com/ddszyeplg/image/upload/v1767533043/IMG_1074_sbfu63.jpg"
+    },
+    {
+      "title": "Mashed Potato Studios CEO",
+      "type": "Photo",
+      "year": "2026",
+      "note": "Locked in a meeting with a client",
+      "img": "https://res.cloudinary.com/ddszyeplg/image/upload/v1767533041/IMG_1090_yun7lo.jpg"
+    },
+    {
+      "title": "Wireframe Studies",
+      "type": "Sketch",
+      "year": "2026",
+      "note": "Layout experiments + UI rhythm (borders, mono labels, low-contrast backgrounds).",
+      "img": "https://res.cloudinary.com/ddszyeplg/image/upload/v1636919448/DSC_0991_snlozn.jpg"
+    },
+    {
+      "title": "Project UI Snapshots",
+      "type": "Screenshot",
+      "year": "2025",
+      "note": "Screens from shipped work (dashboards, landing pages, internal tools).",
+      "img": "https://res.cloudinary.com/ddszyeplg/image/upload/v1656478354/IMG_1412_orxemy.jpg"
+    },
+    {
+      "title": "Code-to-Design Notes",
+      "type": "Photo",
+      "year": "2025",
+      "note": "Notebook captures + ideation moments that influenced build decisions.",
+      "img": "https://res.cloudinary.com/ddszyeplg/image/upload/v1636919468/DSC_0988_zsfhgy.jpg"
+    }
+  ]
+}
