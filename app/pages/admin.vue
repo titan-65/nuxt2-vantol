@@ -2,6 +2,10 @@
 useHead({
   title: 'Admin - VantolBennett'
 })
+
+definePageMeta({
+  middleware: ['admin-auth']
+})
 </script>
 
 <template>

@@ -1,4 +1,9 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
+
+declare const process: {
+  env: Record<string, string | undefined>
+}
+
 export default defineNuxtConfig({
   modules: ['@nuxt/content', '@nuxtjs/tailwindcss', 'shadcn-nuxt', 'nuxt-studio'],
   studio: {
@@ -24,7 +29,7 @@ export default defineNuxtConfig({
         { rel: "apple-touch-icon", sizes: "180x180", href: "/apple-touch-icon.png" },
         { rel: "icon", type: "image/png", sizes: "32x32", href: "/favicon-32x32.png" },
         { rel: "icon", type: "image/png", sizes: "16x16", href: "/favicon-16x16.png" },
-        { rel: "manifest", href: "/site.webmanifest"},
+        { rel: "manifest", href: "/site.webmanifest" },
         { rel: "alternate", type: "application/rss+xml", title: "VantolBennett RSS Feed", href: "/rss.xml" }
       ],
     }
@@ -71,6 +76,16 @@ export default defineNuxtConfig({
     public: {
       supabaseUrl: '',
       supabaseKey: '',
+      adminEmails: process.env.NUXT_PUBLIC_ADMIN_EMAILS || '',
+      firebase: {
+        apiKey: process.env.NUXT_PUBLIC_FIREBASE_API_KEY || '',
+        authDomain: process.env.NUXT_PUBLIC_FIREBASE_AUTH_DOMAIN || '',
+        projectId: process.env.NUXT_PUBLIC_FIREBASE_PROJECT_ID || '',
+        appId: process.env.NUXT_PUBLIC_FIREBASE_APP_ID || '',
+        storageBucket: process.env.NUXT_PUBLIC_FIREBASE_STORAGE_BUCKET || '',
+        messagingSenderId: process.env.NUXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || '',
+        databaseURL: process.env.NUXT_PUBLIC_FIREBASE_DATABASE_URL || ''
+      }
     }
   },
   devtools: { enabled: true },

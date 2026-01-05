@@ -1,0 +1,24 @@
+{
+    "rules": {
+        "posts": {
+            "$slug": {
+                "views": {
+                    ".read": true,
+                    ".write": true
+                },
+                "presence": {
+                    ".read": true,
+                    "$visitorId": {
+                        ".write": true
+                    }
+                },
+                "comments": {
+                    ".read": true,
+                    "$commentId": {
+                        ".write": "auth != null && (!data.exists() || data.child('authorEmail').val() === auth.token.email)"
+                    }
+                }
+            }
+        }
+    }
+}

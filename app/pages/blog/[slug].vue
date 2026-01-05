@@ -1,5 +1,10 @@
 <script setup lang="ts">
 const route = useRoute()
+const slug = computed(() => {
+  const param = route.params.slug
+  return Array.isArray(param) ? param.join('/') : param
+})
+
 const { data: post } = await useAsyncData('post-' + route.path, () => {
   return queryCollection('blog').path(route.path).first() as Promise<any>
 })
@@ -71,7 +76,7 @@ useHead({
           <article class="bg-white border border-black/20 p-8 md:p-12">
             <!-- Header -->
             <header class="mb-12 border-b border-black/10 pb-8">
-              <div class="flex items-center gap-3 mb-6">
+              <div class="flex flex-wrap items-center gap-3 mb-6">
                 <NuxtLink
                   :to="`/blog?tag=${post.tag}`"
                   class="px-2 py-1 bg-black text-white text-[10px] font-bold uppercase tracking-widest hover:bg-gray-800 transition-colors"
@@ -80,6 +85,9 @@ useHead({
                 </NuxtLink>
                 <span class="text-xs font-mono text-gray-500 uppercase">{{ formatDate(post.date || post.createdAt) }}</span>
                 <span class="text-xs font-mono text-gray-500 uppercase">• {{ readingTime }} min read</span>
+                <span class="text-xs font-mono text-gray-300">|</span>
+                <ViewCounter :slug="slug" />
+                <PresenceIndicator :slug="slug" />
               </div>
               
               <h1 class="text-3xl md:text-5xl font-medium tracking-tight mb-8 leading-tight">
@@ -121,6 +129,11 @@ useHead({
               <div class="mt-12">
                 <Newsletter />
               </div>
+            </div>
+
+            <!-- Comments Section -->
+            <div class="mt-12">
+              <RealtimeComments :slug="slug" />
             </div>
           </article>
           
