@@ -1,5 +1,37 @@
 <script setup lang="ts">
 import AdminLink from '@/components/AdminLink.vue'
+
+const footerEmail = ref('')
+const footerStatus = ref<'idle' | 'loading' | 'success' | 'error'>('idle')
+const footerMessage = ref('')
+
+const { subscribe } = useNewsletter()
+
+const handleFooterSubscribe = async () => {
+  if (!footerEmail.value || !footerEmail.value.includes('@')) {
+    footerStatus.value = 'error'
+    footerMessage.value = 'Invalid email'
+    return
+  }
+  
+  footerStatus.value = 'loading'
+  
+  const result = await subscribe(footerEmail.value, 'footer')
+  
+  if (result.success) {
+    footerStatus.value = 'success'
+    footerMessage.value = result.message
+    footerEmail.value = ''
+  } else {
+    footerStatus.value = 'error'
+    footerMessage.value = result.message
+  }
+  
+  setTimeout(() => {
+    footerStatus.value = 'idle'
+    footerMessage.value = ''
+  }, 3000)
+}
 </script>
 
 <template>
@@ -25,7 +57,7 @@ import AdminLink from '@/components/AdminLink.vue'
             <li>
               <NuxtLink to="/explore" class="hover:text-black hover:underline transition-colors uppercase">Explore</NuxtLink>
             </li>
-            <!-- <AdminLink /> -->
+            <AdminLink />
           </ul>
         </div>
 
@@ -55,14 +87,39 @@ import AdminLink from '@/components/AdminLink.vue'
           </ul>
         </div>
 
-        <!-- Subscribe (Simplified) -->
+        <!-- Subscribe -->
         <div class="space-y-4">
           <h3 class="text-xs font-bold uppercase tracking-widest border-b border-black/10 pb-2">Stay Updated</h3>
           <p class="text-xs font-mono text-gray-500">Subscribe for the latest updates.</p>
-          <div class="flex border border-black/20 bg-white">
-            <input type="email" placeholder="EMAIL" class="flex-1 px-3 py-2 text-xs font-mono focus:outline-none" />
-            <button type="submit" class="px-3 py-2 bg-black text-white text-xs font-bold uppercase hover:bg-gray-800 transition-colors">-></button>
-          </div>
+          <ClientOnly>
+            <form @submit.prevent="handleFooterSubscribe" class="flex border border-black/20 bg-white">
+              <input 
+                v-model="footerEmail" 
+                type="email" 
+                placeholder="EMAIL" 
+                class="flex-1 px-3 py-2 text-xs font-mono focus:outline-none"
+                :disabled="footerStatus === 'loading' || footerStatus === 'success'"
+              />
+              <button 
+                type="submit" 
+                class="px-3 py-2 bg-black text-white text-xs font-bold uppercase hover:bg-gray-800 transition-colors disabled:opacity-50"
+                :disabled="footerStatus === 'loading' || footerStatus === 'success'"
+              >
+                <span v-if="footerStatus === 'loading'">...</span>
+                <span v-else-if="footerStatus === 'success'">✓</span>
+                <span v-else>-></span>
+              </button>
+            </form>
+            <p v-if="footerMessage" class="text-[10px] font-mono" :class="footerStatus === 'error' ? 'text-red-500' : 'text-green-600'">
+              {{ footerMessage }}
+            </p>
+            <template #fallback>
+              <div class="flex border border-black/20 bg-white">
+                <input type="email" placeholder="EMAIL" class="flex-1 px-3 py-2 text-xs font-mono focus:outline-none" disabled />
+                <button class="px-3 py-2 bg-black text-white text-xs font-bold uppercase">-></button>
+              </div>
+            </template>
+          </ClientOnly>
         </div>
       </div>
 
