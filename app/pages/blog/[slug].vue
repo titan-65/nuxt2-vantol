@@ -88,18 +88,22 @@ useHead({
                 <span class="text-xs font-mono text-gray-300">|</span>
                 <ViewCounter :slug="slug" />
                 <PresenceIndicator :slug="slug" />
+                <ReactionButton :slug="slug" />
               </div>
               
               <h1 class="text-3xl md:text-5xl font-medium tracking-tight mb-8 leading-tight">
                 {{ post.title }}
               </h1>
               
-              <div class="flex items-center gap-4">
-                <img :src="post.author?.img || post.img" class="h-10 w-10 rounded-full border border-black/10 grayscale" />
-                <div>
-                  <p class="text-xs font-bold uppercase tracking-wider text-black">By {{ post.author?.name }}</p>
-                  <p class="text-xs font-mono text-gray-500">Author</p>
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-4">
+                  <img :src="post.author?.img || post.img" class="h-10 w-10 rounded-full border border-black/10 grayscale" />
+                  <div>
+                    <p class="text-xs font-bold uppercase tracking-wider text-black">By {{ post.author?.name }}</p>
+                    <p class="text-xs font-mono text-gray-500">Author</p>
+                  </div>
                 </div>
+                <BookmarkButton :slug="slug" :title="post.title" />
               </div>
             </header>
             

@@ -46,27 +46,26 @@ const { data: relatedPosts } = await useAsyncData(
 </script>
 
 <template>
-  <div v-if="relatedPosts && relatedPosts.length > 0" class="mt-12 pt-8 border-t border-gray-200 dark:border-gray-700">
-    <h3 class="text-xl font-bold text-gray-800 dark:text-gray-200 mb-6">Related Posts</h3>
+  <div v-if="relatedPosts && relatedPosts.length > 0" class="mt-12 pt-8 border-t border-black/10">
     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
       <NuxtLink
         v-for="post in relatedPosts"
         :key="post.slug"
         :to="`/blog/${post.slug}`"
-        class="group block bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-shadow"
+        class="group block border border-black/20 bg-white hover:border-black transition-colors"
       >
-        <div class="relative h-32 overflow-hidden">
+        <div class="relative h-32 overflow-hidden border-b border-black/10">
           <img
             :src="post.img"
             :alt="post.title"
-            class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-300"
           />
         </div>
         <div class="p-4">
-          <span v-if="post.tag" class="inline-block px-2 py-0.5 text-xs bg-indigo-100 dark:bg-indigo-900 text-indigo-600 dark:text-indigo-300 rounded mb-2">
+          <span v-if="post.tag" class="inline-block px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest bg-black text-white mb-2">
             {{ post.tag }}
           </span>
-          <h4 class="font-medium text-gray-800 dark:text-gray-200 line-clamp-2 group-hover:text-indigo-600 dark:group-hover:text-indigo-400 transition-colors">
+          <h4 class="font-medium text-sm line-clamp-2 group-hover:underline transition-colors">
             {{ post.title }}
           </h4>
         </div>

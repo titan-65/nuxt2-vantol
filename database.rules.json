@@ -1,6 +1,7 @@
 {
     "rules": {
         "posts": {
+            ".read": "auth != null",
             "$slug": {
                 "views": {
                     ".read": true,
@@ -17,7 +18,22 @@
                     "$commentId": {
                         ".write": "auth != null && (!data.exists() || data.child('authorEmail').val() === auth.token.email)"
                     }
+                },
+                "likes": {
+                    ".read": true,
+                    "$visitorId": {
+                        ".write": true
+                    }
                 }
+            }
+        },
+        "subscribers": {
+            ".read": "auth != null",
+            ".indexOn": [
+                "subscribedAt"
+            ],
+            "$emailHash": {
+                ".write": true
             }
         }
     }
