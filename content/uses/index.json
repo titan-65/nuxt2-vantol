@@ -5,7 +5,7 @@
       "description": "My coding setup and tools",
       "items": [
         { "name": "VS Code", "description": "Primary code editor with custom themes and extensions" },
-        { "name": "iTerm2", "description": "Terminal emulator with zsh and oh-my-zsh" },
+        { "name": "Warp", "description": "Agentic terminal environment" },
         { "name": "Git & GitHub", "description": "Version control and collaboration" },
         { "name": "Docker", "description": "Containerization for consistent development environments" },
         { "name": "Postman", "description": "API development and testing" }
@@ -17,6 +17,7 @@
       "items": [
         { "name": "Vue.js / Nuxt.js", "description": "Primary framework for building web applications" },
         { "name": "React.js / Next.js", "description": "Alternative framework for various projects" },
+        { "name": "Tanstack Start", "description": "Best new framework"}
         { "name": "TypeScript", "description": "Type-safe JavaScript for better DX" },
         { "name": "Tailwind CSS", "description": "Utility-first CSS framework" },
         { "name": "Shadcn/ui", "description": "Beautiful component library" }
@@ -60,7 +61,6 @@
         { "name": "Vercel", "description": "Frontend deployment platform" },
         { "name": "Netlify", "description": "Alternative hosting for JAMstack sites" },
         { "name": "Cloudflare", "description": "CDN and DNS management" },
-        { "name": "Railway", "description": "Backend deployment and databases" }
       ]
     }
   ]
