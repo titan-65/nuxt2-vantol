@@ -15,10 +15,10 @@ const socials = [
     description: 'Send me an email'
   },
   {
-    name: 'Twitter',
+    name: 'Bluesky',
     icon: Twitter,
-    href: 'https://twitter.com/vantolbennett',
-    label: '@vantolbennett',
+    href: 'https://bsky.app/profile/vantolbennett.bsky.social',
+    label: '@vantolbennett.bsky.social',
     description: 'Follow me on Twitter'
   },
   {
