@@ -11,7 +11,7 @@ const socials = [
     name: 'Email',
     icon: Mail,
     href: 'mailto:vantolbennett@gmail.com',
-    label: 'vantolbennett@gmail.com',
+    label: 'vantolbennettclm@gmail.com',
     description: 'Send me an email'
   },
   {
