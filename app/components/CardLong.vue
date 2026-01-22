@@ -36,6 +36,12 @@ function formatDate(date: string | Date | undefined) {
             {{ item.tag }}
           </NuxtLink>
         </div>
+
+        <div class="flex flex-wrap items-center gap-3 mb-4">
+          <ViewCounter :slug="item.slug" />
+          <PresenceIndicator :slug="item.slug" />
+          <ReactionButton :slug="item.slug" />
+        </div>
         
         <NuxtLink
           :to="`/blog/${item.slug}`"
@@ -53,13 +59,15 @@ function formatDate(date: string | Date | undefined) {
           </p>
         </div>
         
-        <div class="flex items-center justify-between mt-auto pt-4 border-t border-black/10">
+        <div class="flex flex-wrap items-center justify-between gap-4 mt-auto pt-4 border-t border-black/10">
           <NuxtLink
             :to="`/blog/${item.slug}`"
             class="text-xs font-bold uppercase tracking-widest hover:bg-black hover:text-white px-3 py-1 transition-colors border border-transparent hover:border-black -ml-3"
           >
             Read Post ->
           </NuxtLink>
+
+          <BookmarkButton :slug="item.slug" :title="item.title" />
           
           <div v-if="item.author">
             <NuxtLink
