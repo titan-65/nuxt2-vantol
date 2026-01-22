@@ -23,9 +23,11 @@ function formatDate(date: string | Date) {
     <div class="container mx-auto px-6">
       <div v-if="author" class="text-center mb-12 border border-black/10 bg-white p-10 max-w-4xl mx-auto">
         <div class="relative inline-block mb-6">
-          <img
+          <NuxtImg
             :src="author.img"
             :alt="author.name"
+            width="128"
+            height="128"
             class="w-32 h-32 rounded-full mx-auto object-cover border border-black/10 grayscale hover:grayscale-0 transition-all duration-500"
           />
           <div class="absolute -bottom-2 -right-2 w-8 h-8 bg-black text-white rounded-full flex items-center justify-center border-4 border-white">

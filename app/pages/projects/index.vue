@@ -134,6 +134,8 @@ const clearFilter = () => {
             <img
               :src="project.image"
               :alt="project.title"
+              width="1200"
+              height="800"
               class="w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-all duration-500"
             />
           </div>

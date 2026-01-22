@@ -16,6 +16,7 @@ const { data: galleryData } = await useAsyncData('gallery-data', () => {
 })
 
 const items = computed(() => galleryData.value?.items || [])
+
 </script>
 
 <template>
@@ -64,8 +65,9 @@ const items = computed(() => galleryData.value?.items || [])
             <img
               :src="item.img"
               :alt="item.title"
-              class="w-full aspect-[4/3] object-cover"
-              loading="lazy"
+              width="1200"
+              height="900"
+              class="w-full aspect-4/3 object-cover"
             />
           </a>
 

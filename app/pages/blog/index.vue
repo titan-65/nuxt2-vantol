@@ -6,6 +6,9 @@ const { data: posts } = await useAsyncData('blog-posts', async () => {
   return items.map((p: any) => ({ ...p, _path: p.path, slug: p.path.split('/').pop() }))
 })
 
+const route = useRoute()
+const router = useRouter()
+
 const uniqueAuthors = computed(() => {
   const authors = new Map<string, any>()
   posts.value?.forEach((post: any) => {
@@ -16,16 +19,56 @@ const uniqueAuthors = computed(() => {
   return Array.from(authors.values())
 })
 
+const allTags = computed(() => {
+  const tags = new Set<string>()
+  posts.value?.forEach((post: any) => {
+    if (post.tag) tags.add(post.tag)
+  })
+  return Array.from(tags).sort((a, b) => a.localeCompare(b))
+})
+
 const selectedTag = ref<string | null>(null)
 const sortOrder = ref<'latest' | 'oldest'>('latest')
+const searchQuery = ref('')
+const currentPage = ref(1)
+const postsPerPage = 6
+
+watch(
+  () => route.query.tag,
+  (tag) => {
+    selectedTag.value = typeof tag === 'string' && tag.length ? tag : null
+    currentPage.value = 1
+  },
+  { immediate: true }
+)
+
+watch(selectedTag, (tag) => {
+  router.replace({
+    query: {
+      ...route.query,
+      tag: tag || undefined
+    }
+  })
+})
 
 const filteredPosts = computed(() => {
+  const query = searchQuery.value.trim().toLowerCase()
   let result = posts.value || []
-  
+
   if (selectedTag.value) {
     result = result.filter((post: any) => post.tag === selectedTag.value)
   }
-  
+
+  if (query) {
+    result = result.filter((post: any) => {
+      const titleMatch = post.title?.toLowerCase().includes(query)
+      const descMatch = post.description?.toLowerCase().includes(query)
+      const tagMatch = post.tag?.toLowerCase().includes(query)
+      const keywordsMatch = post.keywords?.some((k: string) => k.toLowerCase().includes(query))
+      return titleMatch || descMatch || tagMatch || keywordsMatch
+    })
+  }
+
   return result.sort((a: any, b: any) => {
     const dateA = new Date(a.date || a.createdAt).getTime()
     const dateB = new Date(b.date || b.createdAt).getTime()
@@ -33,8 +76,24 @@ const filteredPosts = computed(() => {
   })
 })
 
+const totalPages = computed(() => Math.max(1, Math.ceil(filteredPosts.value.length / postsPerPage)))
+
+const paginatedPosts = computed(() => {
+  const start = (currentPage.value - 1) * postsPerPage
+  return filteredPosts.value.slice(start, start + postsPerPage)
+})
+
+watch([searchQuery, sortOrder, selectedTag], () => {
+  currentPage.value = 1
+})
+
 const clearFilter = () => {
   selectedTag.value = null
+}
+
+const goToPage = (page: number) => {
+  const nextPage = Math.min(Math.max(1, page), totalPages.value)
+  currentPage.value = nextPage
 }
 </script>
 
@@ -59,9 +118,25 @@ const clearFilter = () => {
                   [Clear]
                 </button>
               </p>
+              <p class="text-xs font-mono text-gray-500 mt-2">
+                Showing {{ filteredPosts.length }} post{{ filteredPosts.length === 1 ? '' : 's' }}
+                <span v-if="searchQuery"> for "{{ searchQuery }}"</span>
+              </p>
             </div>
             
-            <div class="flex items-center border border-black/20 bg-white">
+            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+              <div class="flex items-center border border-black/20 bg-white">
+                <svg class="w-4 h-4 text-gray-500 ml-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                </svg>
+                <input
+                  v-model="searchQuery"
+                  type="text"
+                  placeholder="Search posts"
+                  class="px-3 py-2 bg-transparent text-xs font-mono tracking-widest focus:outline-none w-40 sm:w-52"
+                />
+              </div>
+              <div class="flex items-center border border-black/20 bg-white">
               <select
                 v-model="sortOrder"
                 class="px-4 py-2 bg-transparent text-xs font-bold uppercase tracking-widest focus:outline-none cursor-pointer"
@@ -69,6 +144,7 @@ const clearFilter = () => {
                 <option value="latest">Latest First</option>
                 <option value="oldest">Oldest First</option>
               </select>
+              </div>
             </div>
           </div>
           
@@ -77,7 +153,45 @@ const clearFilter = () => {
           </div>
           
           <div class="space-y-0">
-            <CardLong v-for="post in filteredPosts" :key="post.slug" :item="post"/>
+            <CardLong v-for="post in paginatedPosts" :key="post.slug" :item="post"/>
+          </div>
+
+          <div v-if="filteredPosts.length > postsPerPage" class="mt-10 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-black/10 pt-6">
+            <div class="text-xs font-mono text-gray-500">
+              Page {{ currentPage }} of {{ totalPages }}
+            </div>
+            <div class="flex items-center gap-2">
+              <button
+                type="button"
+                @click="goToPage(currentPage - 1)"
+                :disabled="currentPage === 1"
+                class="px-3 py-2 text-xs font-bold uppercase tracking-widest border border-black/20 disabled:opacity-40 disabled:cursor-not-allowed hover:border-black"
+              >
+                Prev
+              </button>
+              <button
+                v-for="page in totalPages"
+                :key="page"
+                type="button"
+                @click="goToPage(page)"
+                :class="[
+                  'px-3 py-2 text-xs font-bold uppercase tracking-widest border transition-colors',
+                  page === currentPage
+                    ? 'bg-black text-white border-black'
+                    : 'border-black/20 hover:border-black'
+                ]"
+              >
+                {{ page }}
+              </button>
+              <button
+                type="button"
+                @click="goToPage(currentPage + 1)"
+                :disabled="currentPage === totalPages"
+                class="px-3 py-2 text-xs font-bold uppercase tracking-widest border border-black/20 disabled:opacity-40 disabled:cursor-not-allowed hover:border-black"
+              >
+                Next
+              </button>
+            </div>
           </div>
           
           <div class="mt-16">

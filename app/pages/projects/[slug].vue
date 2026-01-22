@@ -3,6 +3,45 @@ const route = useRoute()
 const { data: project } = await useAsyncData('project-' + route.path, () => {
   return queryCollection('projects').path(route.path).first() as Promise<any>
 })
+
+const requestUrl = useRequestURL()
+const canonicalUrl = computed(() => `${requestUrl.origin}${route.path}`)
+const ogImage = computed(() => project.value?.image || '')
+
+useSeoMeta({
+  title: () => (project.value?.title ? `${project.value.title} | Projects | VantolBennett` : 'Projects | VantolBennett'),
+  description: () => project.value?.preview || '',
+  ogTitle: () => project.value?.title || '',
+  ogDescription: () => project.value?.preview || '',
+  ogImage: () => ogImage.value,
+  ogUrl: () => canonicalUrl.value,
+  twitterCard: 'summary_large_image',
+  twitterTitle: () => project.value?.title || '',
+  twitterDescription: () => project.value?.preview || '',
+  twitterImage: () => ogImage.value
+})
+
+useHead(() => {
+  const jsonLd = project.value
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'CreativeWork',
+        name: project.value.title,
+        description: project.value.preview,
+        image: ogImage.value ? [ogImage.value] : undefined,
+        url: canonicalUrl.value,
+        datePublished: project.value.date || project.value.createdAt,
+        dateModified: project.value.updatedAt || project.value.date || project.value.createdAt
+      }
+    : null
+
+  return {
+    link: [{ rel: 'canonical', href: canonicalUrl.value }],
+    script: jsonLd
+      ? [{ type: 'application/ld+json', children: JSON.stringify(jsonLd) }]
+      : []
+  }
+})
 </script>
 
 <template>
@@ -30,7 +69,13 @@ const { data: project } = await useAsyncData('project-' + route.path, () => {
             </div>
 
             <div class="mb-8 border border-black/10 p-2 bg-gray-50">
-               <img :src="project.image" class="w-full h-auto object-cover grayscale hover:grayscale-0 transition-all duration-500" />
+               <img
+                 :src="project.image"
+                 :alt="project.title"
+                 width="1600"
+                 height="900"
+                 class="w-full h-auto object-cover grayscale hover:grayscale-0 transition-all duration-500"
+               />
             </div>
             
             <div class="prose prose-neutral max-w-none font-light">

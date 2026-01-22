@@ -12,9 +12,11 @@ defineProps<{
   <div class="flex items-center gap-4 my-12 border-t border-black/10 pt-12">
     <NuxtLink :to="`/blog/author/${author?.name}`" class="flex items-center gap-4 group">
       <div class="relative">
-        <img
+        <NuxtImg
           :src="author?.img"
           :alt="author?.name"
+          width="96"
+          height="80"
           class="h-20 w-24 border border-black/10 grayscale group-hover:grayscale-0 transition-all duration-500 object-cover"
         />
         <div class="absolute -bottom-2 -right-2 w-6 h-6 bg-black text-white flex items-center justify-center border-2 border-white">

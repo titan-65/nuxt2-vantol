@@ -9,9 +9,11 @@ defineProps<{
 
 <template>
   <li class="flex items-center py-2 border-b border-black/10 last:border-0">
-    <img
+    <NuxtImg
       :src="author?.img"
       alt="avatar"
+      width="32"
+      height="32"
       class="object-cover w-8 h-8 mx-3 rounded-full grayscale"
     />
     <p>

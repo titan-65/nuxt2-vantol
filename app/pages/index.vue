@@ -61,10 +61,12 @@ const { data: projects } = await useAsyncData('projects', async () => {
             <!-- Image with Wireframe decoration -->
             <div class="relative z-10 border border-black/20 bg-white p-2 shadow-sm transform rotate-2 hover:rotate-0 transition-transform duration-500">
               <div class="aspect-square overflow-hidden bg-gray-100 border border-black/10">
-                <img
-                  src="https://res.cloudinary.com/ddszyeplg/image/upload/v1656478354/IMG_1412_orxemy.jpg"
-                  class="w-full h-full object-cover filter grayscale hover:grayscale-0 transition-all duration-500"
+                <NuxtImg
+                  provider="cloudinary"
+                  src="v1656478354/IMG_1412_orxemy.jpg"
                   alt="Vantol Bennett"
+                 
+                  class="w-full h-full object-cover filter grayscale hover:grayscale-0 transition-all duration-500"
                 />
               </div>
               <div class="mt-2 flex justify-between items-center px-1">

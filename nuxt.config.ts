@@ -5,7 +5,7 @@ declare const process: {
 }
 
 export default defineNuxtConfig({
-  modules: ['@nuxt/content', '@nuxtjs/tailwindcss', 'shadcn-nuxt', 'nuxt-studio'],
+  modules: ['@nuxt/content', '@nuxtjs/tailwindcss', '@nuxt/image', 'shadcn-nuxt', 'nuxt-studio'],
   studio: {
     // route: '/_studio',
     repository: {
@@ -62,6 +62,22 @@ export default defineNuxtConfig({
     prerender: {
       routes: ['/'],
       crawlLinks: true
+    },
+    routeRules: {
+      '/**': {
+        headers: {
+          'Cross-Origin-Opener-Policy': 'same-origin-allow-popups',
+          'Cross-Origin-Embedder-Policy': 'unsafe-none'
+        }
+      }
+    }
+  },
+  // @ts-expect-error - provided by @nuxt/image module once dependencies are installed
+  image: {
+    provider: 'ipx',
+    domains: ['res.cloudinary.com', 'ui-avatars.com', 'lh3.googleusercontent.com'],
+    cloudinary: {
+      baseURL: 'https://res.cloudinary.com/ddszyeplg/image/upload'
     }
   },
   shadcn: {
@@ -74,6 +90,7 @@ export default defineNuxtConfig({
     spotifyClientSecret: '',
     spotifyRefreshToken: '',
     public: {
+      siteUrl: process.env.NUXT_PUBLIC_SITE_URL || '',
       supabaseUrl: '',
       supabaseKey: '',
       adminEmails: process.env.NUXT_PUBLIC_ADMIN_EMAILS || '',

@@ -15,6 +15,7 @@ defineProps<{
     path: string
   }
 }>()
+
 </script>
 
 <template>
@@ -25,6 +26,8 @@ defineProps<{
         class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 filter grayscale group-hover:grayscale-0"
         :src="item.image"
         :alt="item.title"
+        width="1200"
+        height="800"
       />
       <div class="absolute bottom-0 left-0 w-full bg-white/90 backdrop-blur-sm border-t border-black/20 p-2 flex items-center justify-between">
         <span class="text-xs font-mono font-bold uppercase tracking-wider">{{ item.tag }}</span>

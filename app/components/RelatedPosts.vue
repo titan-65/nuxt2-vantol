@@ -55,9 +55,12 @@ const { data: relatedPosts } = await useAsyncData(
         class="group block border border-black/20 bg-white hover:border-black transition-colors"
       >
         <div class="relative h-32 overflow-hidden border-b border-black/10">
-          <img
+          <NuxtImg
             :src="post.img"
             :alt="post.title"
+            width="400"
+            height="256"
+            sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
             class="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-300"
           />
         </div>

@@ -20,9 +20,10 @@ const formatDate = (date: string) => {
 <template>
   <Card class="flex flex-col h-full hover:shadow-lg transition-shadow">
     <div class="relative w-full aspect-video overflow-hidden rounded-t-lg">
-      <img
+      <NuxtImg
         :src="post.img"
         :alt="post.title"
+        sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
         class="object-cover w-full h-full transition-transform duration-300 hover:scale-105"
       />
       <div class="absolute top-2 right-2">
@@ -46,7 +47,7 @@ const formatDate = (date: string) => {
         {{ post.description }}
       </CardDescription>
     </CardHeader>
-    <CardContent class="flex-grow">
+    <CardContent class="grow">
       <!-- Optional extra content -->
     </CardContent>
     <CardFooter class="flex items-center justify-between border-t pt-4">

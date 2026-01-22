@@ -20,6 +20,9 @@ export default defineContentConfig({
         keywords: z.array(z.string()).optional(),
         language: z.string().optional(),
         rating: z.number().optional(),
+        categories: z.array(z.string()).optional(),
+        ogImage: z.string().optional(),
+        canonical: z.string().optional(),
         excerpt: z.object({
           type: z.string(),
           children: z.any(),
@@ -33,6 +36,8 @@ export default defineContentConfig({
         title: z.string(),
         preview: z.string(),
         active: z.boolean(),
+        date: z.string().optional(),
+        updatedAt: z.string().optional(),
         url: z.string().optional(),
         tag: z.string(),
         image: z.string(),

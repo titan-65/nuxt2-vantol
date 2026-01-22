@@ -4,6 +4,7 @@ const slug = computed(() => {
   const param = route.params.slug
   return Array.isArray(param) ? param.join('/') : param
 })
+const slugValue = computed(() => slug.value || '')
 
 const { data: post } = await useAsyncData('post-' + route.path, () => {
   return queryCollection('blog').path(route.path).first() as Promise<any>
@@ -28,20 +29,56 @@ const readingTime = computed(() => {
   return 1
 })
 
+const requestUrl = useRequestURL()
+const canonicalUrl = computed(() => post.value?.canonical || `${requestUrl.origin}${route.path}`)
+const ogImage = computed(() => post.value?.ogImage || post.value?.img || '')
+
 function formatDate(date: string | Date | undefined) {
   if (!date) return ''
   const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' }
   return new Date(date).toLocaleDateString('en', options)
 }
 
-useHead({
-  title: () => post.value?.title ? `${post.value.title} | VantolBennett` : 'VantolBennett',
-  meta: [
-    { name: 'description', content: () => post.value?.description || '' },
-    { property: 'og:title', content: () => post.value?.title || '' },
-    { property: 'og:description', content: () => post.value?.description || '' },
-    { property: 'og:image', content: () => post.value?.img || '' },
-  ]
+useSeoMeta({
+  title: () => (post.value?.title ? `${post.value.title} | VantolBennett` : 'VantolBennett'),
+  description: () => post.value?.description || '',
+  ogTitle: () => post.value?.title || '',
+  ogDescription: () => post.value?.description || '',
+  ogImage: () => ogImage.value,
+  ogUrl: () => canonicalUrl.value,
+  twitterCard: 'summary_large_image',
+  twitterTitle: () => post.value?.title || '',
+  twitterDescription: () => post.value?.description || '',
+  twitterImage: () => ogImage.value
+})
+
+useHead(() => {
+  const jsonLd = post.value
+    ? {
+        '@context': 'https://schema.org',
+        '@type': 'Article',
+        headline: post.value.title,
+        description: post.value.description,
+        image: ogImage.value ? [ogImage.value] : undefined,
+        datePublished: post.value.date || post.value.createdAt,
+        dateModified: post.value.updatedAt || post.value.date || post.value.createdAt,
+        author: post.value.author?.name
+          ? {
+              '@type': 'Person',
+              name: post.value.author.name,
+              url: post.value.author.website || undefined
+            }
+          : undefined,
+        mainEntityOfPage: canonicalUrl.value
+      }
+    : null
+
+  return {
+    link: [{ rel: 'canonical', href: canonicalUrl.value }],
+    script: jsonLd
+      ? [{ type: 'application/ld+json', children: JSON.stringify(jsonLd) }]
+      : []
+  }
 })
 </script>
 
@@ -86,9 +123,9 @@ useHead({
                 <span class="text-xs font-mono text-gray-500 uppercase">{{ formatDate(post.date || post.createdAt) }}</span>
                 <span class="text-xs font-mono text-gray-500 uppercase">• {{ readingTime }} min read</span>
                 <span class="text-xs font-mono text-gray-300">|</span>
-                <ViewCounter :slug="slug" />
-                <PresenceIndicator :slug="slug" />
-                <ReactionButton :slug="slug" />
+                <ViewCounter :slug="slugValue" />
+                <PresenceIndicator :slug="slugValue" />
+                <ReactionButton :slug="slugValue" />
               </div>
               
               <h1 class="text-3xl md:text-5xl font-medium tracking-tight mb-8 leading-tight">
@@ -97,19 +134,30 @@ useHead({
               
               <div class="flex items-center justify-between">
                 <div class="flex items-center gap-4">
-                  <img :src="post.author?.img || post.img" class="h-10 w-10 rounded-full border border-black/10 grayscale" />
+                  <NuxtImg
+                    :src="post.author?.img || post.img"
+                    :alt="post.author?.name || post.title"
+                    width="40"
+                    height="40"
+                    class="h-10 w-10 rounded-full border border-black/10 grayscale"
+                  />
                   <div>
                     <p class="text-xs font-bold uppercase tracking-wider text-black">By {{ post.author?.name }}</p>
                     <p class="text-xs font-mono text-gray-500">Author</p>
                   </div>
                 </div>
-                <BookmarkButton :slug="slug" :title="post.title" />
+                <BookmarkButton :slug="slugValue" :title="post.title" />
               </div>
             </header>
             
             <!-- Hero Image -->
             <div class="mb-12 border border-black/10 p-2 bg-gray-50">
-              <img :src="post.img" class="w-full h-auto object-cover grayscale hover:grayscale-0 transition-all duration-500" />
+              <NuxtImg
+                :src="post.img"
+                :alt="post.title"
+                sizes="100vw"
+                class="w-full h-auto object-cover grayscale hover:grayscale-0 transition-all duration-500"
+              />
             </div>
             
             <!-- Content -->
@@ -137,7 +185,7 @@ useHead({
 
             <!-- Comments Section -->
             <div class="mt-12">
-              <RealtimeComments :slug="slug" />
+              <RealtimeComments :slug="slugValue" />
             </div>
           </article>
           

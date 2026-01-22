@@ -69,10 +69,12 @@ function formatDate(date: string | Date | undefined) {
               <span class="text-xs font-mono text-gray-500 group-hover/author:text-black transition-colors">
                 {{ item.author.name }}
               </span>
-              <img
+              <NuxtImg
                 v-if="item.author.img"
                 :src="item.author.img"
                 alt="avatar"
+                width="24"
+                height="24"
                 class="w-6 h-6 rounded-full grayscale group-hover/author:grayscale-0 transition-all border border-black/10"
               />
             </NuxtLink>

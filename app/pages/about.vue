@@ -45,9 +45,10 @@ const experience = computed(() => aboutData.value?.experience || [])
           <div class="relative">
             <div class="border border-black/20 bg-white p-2 transform rotate-2 hover:rotate-0 transition-transform duration-500">
               <div class="aspect-square overflow-hidden bg-gray-100 border border-black/10">
-                <img
+                <NuxtImg
                   src="https://res.cloudinary.com/ddszyeplg/image/upload/v1656478354/IMG_1412_orxemy.jpg"
                   alt="Vantol Bennett"
+                  sizes="(min-width: 1024px) 50vw, 100vw"
                   class="w-full h-full object-cover filter grayscale hover:grayscale-0 transition-all duration-500"
                 />
               </div>

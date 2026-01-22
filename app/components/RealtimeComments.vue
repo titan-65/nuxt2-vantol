@@ -84,9 +84,11 @@ function formatDate(timestamp: number) {
           class="border-b border-black/10 pb-6 last:border-b-0 last:pb-0"
         >
           <div class="flex items-start gap-3">
-            <img
+            <NuxtImg
               :src="comment.authorPhoto || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(comment.authorName)"
               :alt="comment.authorName"
+              width="32"
+              height="32"
               class="w-8 h-8 rounded-full border border-black/10 grayscale"
             />
             <div class="flex-1 min-w-0">
@@ -123,9 +125,11 @@ function formatDate(timestamp: number) {
       <div v-if="user">
         <div class="flex items-center justify-between mb-4">
           <div class="flex items-center gap-3">
-            <img
+            <NuxtImg
               :src="user.photoURL || 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.displayName || 'U')"
               :alt="user.displayName || 'User'"
+              width="32"
+              height="32"
               class="w-8 h-8 rounded-full border border-black/10"
             />
             <span class="text-xs font-mono text-gray-500">Commenting as <strong class="text-black">{{ user.displayName }}</strong></span>

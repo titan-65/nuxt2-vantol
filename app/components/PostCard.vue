@@ -31,10 +31,11 @@ const readingTime = computed(() => {
   <div class="group h-full flex flex-col border border-black/20 bg-white hover:border-black transition-all duration-300">
     <!-- Image Container -->
     <div class="relative h-48 overflow-hidden border-b border-black/20 group-hover:border-black transition-colors">
-      <img
+      <NuxtImg
         :src="item.img"
-        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 filter grayscale group-hover:grayscale-0"
         :alt="item.title"
+        sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
+        class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 filter grayscale group-hover:grayscale-0"
       />
       <div class="absolute top-2 left-2">
         <span class="inline-block bg-white border border-black/20 px-2 py-1 text-xs font-mono uppercase tracking-wider">
