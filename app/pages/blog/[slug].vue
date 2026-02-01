@@ -29,8 +29,18 @@ const readingTime = computed(() => {
   return 1
 })
 
-const requestUrl = useRequestURL()
-const canonicalUrl = computed(() => post.value?.canonical || `${requestUrl.origin}${route.path}`)
+const runtimeConfig = useRuntimeConfig()
+const requestOrigin = computed(() => {
+  if (import.meta.server) {
+    try {
+      return useRequestURL().origin
+    } catch {
+      return runtimeConfig.public.siteUrl || ''
+    }
+  }
+  return runtimeConfig.public.siteUrl || ''
+})
+const canonicalUrl = computed(() => post.value?.canonical || `${requestOrigin.value}${route.path}`)
 const ogImage = computed(() => post.value?.ogImage || post.value?.img || '')
 
 function formatDate(date: string | Date | undefined) {

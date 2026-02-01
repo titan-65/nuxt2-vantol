@@ -63,7 +63,7 @@ const { data: projects } = await useAsyncData('projects', async () => {
               <div class="aspect-square overflow-hidden bg-gray-100 border border-black/10">
                 <NuxtImg
                   provider="cloudinary"
-                  src="v1656478354/IMG_1412_orxemy.jpg"
+                  src="v1767533046/PXL_20250906_141912803_3_bb50xd.jpg"
                   alt="Vantol Bennett"
                  
                   class="w-full h-full object-cover filter grayscale hover:grayscale-0 transition-all duration-500"
