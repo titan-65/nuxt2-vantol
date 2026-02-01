@@ -4,8 +4,18 @@ const { data: project } = await useAsyncData('project-' + route.path, () => {
   return queryCollection('projects').path(route.path).first() as Promise<any>
 })
 
-const requestUrl = useRequestURL()
-const canonicalUrl = computed(() => `${requestUrl.origin}${route.path}`)
+const runtimeConfig = useRuntimeConfig()
+const requestOrigin = computed(() => {
+  if (import.meta.server) {
+    try {
+      return useRequestURL().origin
+    } catch {
+      return runtimeConfig.public.siteUrl || ''
+    }
+  }
+  return runtimeConfig.public.siteUrl || ''
+})
+const canonicalUrl = computed(() => `${requestOrigin.value}${route.path}`)
 const ogImage = computed(() => project.value?.image || '')
 
 useSeoMeta({
