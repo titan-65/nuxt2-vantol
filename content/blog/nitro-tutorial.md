@@ -3,7 +3,7 @@ title: "Building Real Nitro Plugins: Step-by-Step Tutorials You Can Use Today"
 description: "Hands-on Nitro plugin tutorials showing how to build logging, authentication, caching, and feature flag plugins for real-world applications."
 date: 2026-01-30
 tag: "Technology"
-img: "https://res.cloudinary.com/ddszyeplg/image/upload/v1769835725/NitroFull_dnlnzg.png"
+img: "https://res.cloudinary.com/ddszyeplg/image/upload/v1769836111/NitroFull_ww4pbg.png"
 author:
   name: "Vantol Bennett"
   img: "https://res.cloudinary.com/ddszyeplg/image/upload/v1636919468/DSC_0988_zsfhgy.jpg"
