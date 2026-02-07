@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet'
-import { Menu, Github, Twitter } from 'lucide-vue-next'
+import { Menu, Github, Twitter, Command } from 'lucide-vue-next'
 
 const links = [
   { name: 'HOME', to: '/' },
@@ -10,11 +10,18 @@ const links = [
   { name: 'GALLERY', to: '/gallery' },
   { name: 'EXPLORE', to: '/explore' },
   { name: 'ABOUT', to: '/about' },
+  { name: 'STATS', to: '/stats' },
+  { name: 'GUESTBOOK', to: '/guestbook' },
   { name: 'USES', to: '/uses' },
   { name: 'CONTACT', to: '/contact' },
 ]
 
 const isOpen = ref(false)
+
+const openCommandPalette = () => {
+  const event = new KeyboardEvent('keydown', { key: 'k', metaKey: true })
+  document.dispatchEvent(event)
+}
 </script>
 
 <template>
@@ -44,6 +51,13 @@ const isOpen = ref(false)
 
       <!-- Right Actions -->
       <div class="hidden md:flex items-center gap-4">
+        <button
+          @click="openCommandPalette"
+          class="flex items-center gap-1.5 border border-black/10 px-2.5 py-1 text-[10px] font-mono text-gray-500 hover:border-black hover:text-black transition-colors"
+          title="Search (⌘K)"
+        >
+          <Command class="w-3 h-3" />K
+        </button>
         <a href="https://github.com/titan-65" target="_blank" rel="noopener noreferrer" class="text-black hover:text-gray-600 transition-colors">
           <Github class="w-5 h-5" />
         </a>

@@ -16,6 +16,9 @@ export default defineNuxtConfig({
     }
   },
   app: {
+    viewTransition: true,
+    pageTransition: { name: 'page', mode: 'out-in' },
+    layoutTransition: { name: 'layout', mode: 'out-in' },
     head: {
       title: 'VantolBennett',
       meta: [

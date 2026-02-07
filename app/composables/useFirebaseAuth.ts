@@ -1,7 +1,24 @@
 import type { User } from 'firebase/auth'
 import { onAuthStateChanged, signInWithPopup, signInWithRedirect, getRedirectResult, signOut } from 'firebase/auth'
 
-let initPromise: Promise<User | null> | null = null
+export interface SerializedUser {
+  uid: string
+  email: string | null
+  displayName: string | null
+  photoURL: string | null
+}
+
+function serializeUser(fbUser: User | null): SerializedUser | null {
+  if (!fbUser) return null
+  return {
+    uid: fbUser.uid,
+    email: fbUser.email,
+    displayName: fbUser.displayName,
+    photoURL: fbUser.photoURL
+  }
+}
+
+let initPromise: Promise<SerializedUser | null> | null = null
 let unsubscribe: (() => void) | null = null
 
 export const useFirebaseAuth = () => {
@@ -9,7 +26,7 @@ export const useFirebaseAuth = () => {
 
   const config = useRuntimeConfig()
 
-  const user = useState<User | null>('firebase:user', () => null)
+  const user = useState<SerializedUser | null>('firebase:user', () => null)
   const loading = useState<boolean>('firebase:loading', () => true)
 
   const adminEmails = computed(() => {
@@ -59,9 +76,9 @@ export const useFirebaseAuth = () => {
       }
 
       unsubscribe = onAuthStateChanged(auth, (nextUser: User | null) => {
-        user.value = nextUser
+        user.value = serializeUser(nextUser)
         loading.value = false
-        resolve(nextUser)
+        resolve(user.value)
       })
     })
 
