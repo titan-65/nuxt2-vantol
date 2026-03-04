@@ -7,7 +7,9 @@ declare const process: {
 export default defineNuxtConfig({
   modules: ['@nuxt/content', '@nuxtjs/tailwindcss', '@nuxt/image', 'shadcn-nuxt', 'nuxt-studio'],
   studio: {
-    // route: '/_studio',
+    enabled: process.env.NUXT_STUDIO_ENABLED === 'true' || process.env.NODE_ENV === 'development',
+    route: '/_studio',
+    apiToken: process.env.NUXT_STUDIO_API_TOKEN,
     repository: {
       provider: 'github',
       owner: 'titan-65',
@@ -64,7 +66,8 @@ export default defineNuxtConfig({
   nitro: {
     prerender: {
       routes: ['/'],
-      crawlLinks: true
+      crawlLinks: true,
+      ignore: ['/_studio', '/_nuxt', '/api']
     },
     routeRules: {
       '/**': {
@@ -72,7 +75,9 @@ export default defineNuxtConfig({
           'Cross-Origin-Opener-Policy': 'same-origin-allow-popups',
           'Cross-Origin-Embedder-Policy': 'unsafe-none'
         }
-      }
+      },
+      '/_studio/**': { ssr: false },
+      '/api/**': { cors: true }
     }
   },
   // @ts-expect-error - provided by @nuxt/image module once dependencies are installed
