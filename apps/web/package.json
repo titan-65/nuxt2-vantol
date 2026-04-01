@@ -26,7 +26,8 @@
     "nuxt": "^4.2.2",
     "reka-ui": "^2.7.0",
     "tailwind-merge": "^3.4.0",
-    "vaul-vue": "^0.4.1"
+    "vaul-vue": "^0.4.1",
+    "vue-router": "^4.6.4"
   },
   "devDependencies": {
     "@nuxtjs/tailwindcss": "7.0.0-beta.1",
