@@ -1,0 +1,39 @@
+{
+  "name": "@vantol/web",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "scripts": {
+    "dev": "nuxt dev",
+    "build": "nuxt build",
+    "generate": "nuxt generate",
+    "preview": "nuxt preview",
+    "postinstall": "nuxt prepare"
+  },
+  "dependencies": {
+    "@nuxt/content": "latest",
+    "@nuxt/image": "^1.8.0",
+    "@radix-icons/vue": "^1.0.0",
+    "@vercel/analytics": "^1.6.1",
+    "@vueuse/core": "^14.1.0",
+    "better-sqlite3": "^12.5.0",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "firebase": "^10.14.1",
+    "lucide-vue-next": "^0.562.0",
+    "nuxt": "^4.2.2",
+    "reka-ui": "^2.7.0",
+    "tailwind-merge": "^3.4.0",
+    "vaul-vue": "^0.4.1"
+  },
+  "devDependencies": {
+    "@nuxtjs/tailwindcss": "7.0.0-beta.1",
+    "@tailwindcss/typography": "^0.5.19",
+    "@types/node": "^20.17.0",
+    "shadcn-nuxt": "^2.4.3",
+    "tailwindcss": "^4.1.18",
+    "typescript": "^5.9.3"
+  }
+}
