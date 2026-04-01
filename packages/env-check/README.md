@@ -1,5 +1,11 @@
 # @vvantol2000/env-check
 
+[![npm version](https://img.shields.io/npm/v/@vvantol2000/env-check)](https://www.npmjs.com/package/@vvantol2000/env-check)
+[![npm downloads](https://img.shields.io/npm/dt/@vvantol2000/env-check)](https://www.npmjs.com/package/@vvantol2000/env-check)
+[![license](https://img.shields.io/npm/l/@vvantol2000/env-check)](./LICENSE)
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![tests](https://img.shields.io/badge/tests-19%20passing-brightgreen)](.)
+
 Validate environment variables against a schema. Fail fast at startup with clear error messages.
 
 Zero dependencies. TypeScript support. Works as both a library and a CLI.

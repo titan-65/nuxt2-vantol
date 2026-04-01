@@ -1,5 +1,11 @@
 # @vvantol2000/vercel-deploy-hooks
 
+[![npm version](https://img.shields.io/npm/v/@vvantol2000/vercel-deploy-hooks)](https://www.npmjs.com/package/@vvantol2000/vercel-deploy-hooks)
+[![npm downloads](https://img.shields.io/npm/dt/@vvantol2000/vercel-deploy-hooks)](https://www.npmjs.com/package/@vvantol2000/vercel-deploy-hooks)
+[![license](https://img.shields.io/npm/l/@vvantol2000/vercel-deploy-hooks)](./LICENSE)
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![tests](https://img.shields.io/badge/tests-13%20passing-brightgreen)](.)
+
 Trigger Vercel deployments from Node.js, scripts, or CI/CD using [Vercel Deploy Hooks](https://vercel.com/docs/deploy-hooks).
 
 Zero dependencies. TypeScript support. Works as both a library and a CLI.

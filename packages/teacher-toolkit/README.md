@@ -1,5 +1,11 @@
 # @vvantol2000/teacher-toolkit
 
+[![npm version](https://img.shields.io/npm/v/@vvantol2000/teacher-toolkit)](https://www.npmjs.com/package/@vvantol2000/teacher-toolkit)
+[![npm downloads](https://img.shields.io/npm/dt/@vvantol2000/teacher-toolkit)](https://www.npmjs.com/package/@vvantol2000/teacher-toolkit)
+[![license](https://img.shields.io/npm/l/@vvantol2000/teacher-toolkit)](./LICENSE)
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![tests](https://img.shields.io/badge/tests-17%20passing-brightgreen)](.)
+
 Grade calculation utilities for teachers. Zero dependencies, full TypeScript support.
 
 ## Install

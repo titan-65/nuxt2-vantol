@@ -1,5 +1,10 @@
 # Vantol Bennett — Monorepo
 
+[![pnpm](https://img.shields.io/badge/pnpm-F69220?logo=pnpm&logoColor=white)](https://pnpm.io/)
+[![Vite+](https://img.shields.io/badge/Vite+-646CFF?logo=vite&logoColor=white)](https://viteplus.dev/)
+[![Nuxt](https://img.shields.io/badge/Nuxt-00DC82?logo=nuxt.js&logoColor=white)](https://nuxt.com/)
+[![license](https://img.shields.io/badge/license-MIT-blue)](./LICENSE)
+
 Personal portfolio and open-source packages, managed as a pnpm monorepo.
 
 ## Structure
