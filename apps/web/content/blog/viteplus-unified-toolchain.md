@@ -3,10 +3,10 @@ title: "Vite+: The Unified Toolchain That Replaces Your Entire Frontend Setup"
 description: "Vite+ combines Vite, Vitest, Oxlint, Oxfmt, and Rolldown into a single CLI — managing your runtime, package manager, and toolchain in one place."
 date: 2026-03-30
 tag: "Technology"
-img: "https://images.unsplash.com/photo-1555066931-4365d14bab8c"
+img: "https://res.cloudinary.com/ddszyeplg/image/upload/v1775009589/viteplus_et4prw.png"
 author:
   name: "Vantol Bennett"
-  img: "https://res.cloudinary.com/ddszyeplg/image/upload/v1636919468/DSC_0988_zsfhgy.jpg"
+  img: "https://res.cloudinary.com/ddszyeplg/image/upload/v1767533048/PXL_20251010_202726442_2_hhudfr.jpg"
   website: "https://vantolbennett.com"
 readTime: 8
 keywords: [vite+, vite, frontend, toolchain, javascript, typescript, oxc, vitest, rolldown]

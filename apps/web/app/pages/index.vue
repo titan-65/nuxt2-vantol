@@ -4,7 +4,7 @@ const { data: posts } = await useAsyncData('posts', async () => {
     .order('date', 'DESC')
     .limit(3)
     .all() as any[]
-  
+
   return items.map(p => ({ ...p, _path: p.path, slug: p.path.split('/').pop() }))
 })
 
@@ -63,9 +63,9 @@ const { data: projects } = await useAsyncData('projects', async () => {
               <div class="aspect-square overflow-hidden bg-gray-100 border border-black/10">
                 <NuxtImg
                   provider="cloudinary"
-                  src="v1767533046/PXL_20250906_141912803_3_bb50xd.jpg"
+                  src="v1767533048/PXL_20251010_202726442_2_hhudfr.jpg"
                   alt="Vantol Bennett"
-                 
+
                   class="w-full h-full object-cover filter grayscale hover:grayscale-0 transition-all duration-500"
                 />
               </div>
@@ -78,7 +78,7 @@ const { data: projects } = await useAsyncData('projects', async () => {
                 <span class="text-[10px] font-mono text-gray-400">IMG_1412.JPG</span>
               </div>
             </div>
-            
+
             <!-- Background decorative elements -->
             <div class="absolute -top-4 -right-4 w-full h-full border border-dashed border-black/20 z-0"></div>
             <div class="absolute -bottom-4 -left-4 w-24 h-24 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGRlZnM+PHBhdHRlcm4gaWQ9ImEiIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgcGF0dGVyblVuaXRzPSJ1c2VyU3BhY2VPblVzZSI+PHBhdGggZD0iTTAgNDBMMDQwIDBaIiBzdHJva2U9IiMwMDAiIHN0cm9rZS1vcGFjaXR5PSIuMSIgZmlsbD0ibm9uZSIvPjwvcGF0dGVybj48L2RlZnM+PHJlY3Qgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgZmlsbD0idXJsKCNhKSIvPjwvc3ZnPg==')] opacity-20"></div>
@@ -91,7 +91,7 @@ const { data: projects } = await useAsyncData('projects', async () => {
     <section class="border-b border-black/10 bg-[#F3F3F3] relative overflow-hidden">
       <!-- Background Pattern -->
       <div class="absolute inset-0 opacity-[0.03]" style="background-image: repeating-linear-gradient(45deg, #000 0, #000 1px, transparent 0, transparent 10px);"></div>
-      
+
       <div class="container mx-auto px-6 py-24 relative z-10">
         <div class="flex items-center gap-2 mb-16">
           <span class="w-2 h-2 bg-[#FF4F4F] rounded-full"></span>
@@ -230,7 +230,7 @@ const { data: projects } = await useAsyncData('projects', async () => {
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
           <PostCard v-for="post in posts" :key="post._path" :item="post" />
         </div>
-        
+
         <div class="mt-12 text-center">
              <NuxtLink to="/blog" class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest border-b border-black hover:text-gray-600 transition-colors pb-1">
                 View All Posts ->
@@ -318,7 +318,7 @@ const { data: projects } = await useAsyncData('projects', async () => {
         <div class="bg-white border border-black/10 p-8 md:p-16 relative overflow-hidden group hover:border-black transition-colors">
           <!-- Decoration -->
           <div class="absolute top-0 left-0 w-2 h-full bg-black/5 group-hover:bg-[#FF4F4F] transition-colors"></div>
-          
+
           <blockquote class="text-2xl md:text-4xl font-medium leading-tight mb-12 relative z-10">
             "The best way to write code all day is by doing it! Evolve with innovation."
           </blockquote>
@@ -340,7 +340,7 @@ const { data: projects } = await useAsyncData('projects', async () => {
     <section class="py-24 bg-white">
       <div class="container mx-auto px-6">
         <div class="bg-[#111111] text-white p-8 md:p-16 rounded-lg relative overflow-hidden min-h-[500px] flex flex-col justify-between group">
-          
+
           <!-- Top Labels -->
           <div class="flex justify-between items-start z-10">
             <div class="flex items-center gap-2">
@@ -362,9 +362,9 @@ const { data: projects } = await useAsyncData('projects', async () => {
                  Ready to build<br>the software of<br>the future?
                </h2>
             </div>
-            
+
             <NuxtLink to="/contact" class="inline-flex items-center gap-2 bg-white text-black px-6 py-3 text-sm font-bold uppercase tracking-widest hover:bg-gray-200 transition-colors">
-              Start Building 
+              Start Building
               <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>
@@ -394,7 +394,7 @@ const { data: projects } = await useAsyncData('projects', async () => {
                 Various Framework including React.js, Nuxt.js, & Vue.js
             </p>
         </div>
-        
+
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
             <ProjectCard v-for="project in projects" :key="project._path" :item="project" />
         </div>

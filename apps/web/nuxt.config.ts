@@ -70,7 +70,7 @@ export default defineNuxtConfig({
   // @ts-expect-error - provided by @nuxt/image module once dependencies are installed
   image: {
     provider: 'ipx',
-    domains: ['res.cloudinary.com', 'ui-avatars.com', 'lh3.googleusercontent.com'],
+    domains: ['ui-avatars.com', 'lh3.googleusercontent.com'],
     cloudinary: {
       baseURL: 'https://res.cloudinary.com/ddszyeplg/image/upload'
     }
