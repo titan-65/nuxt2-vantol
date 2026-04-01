@@ -7,7 +7,9 @@
     "generate": "pnpm --filter @vvantol2000/web generate",
     "preview": "pnpm --filter @vvantol2000/web preview",
     "test": "pnpm -r run test",
-    "pack:toolkit": "pnpm --filter @vvantol2000/teacher-toolkit pack"
+    "pack:toolkit": "pnpm --filter @vvantol2000/teacher-toolkit pack",
+    "pack:env-check": "pnpm --filter @vvantol2000/env-check build",
+    "pack:deploy-hooks": "pnpm --filter @vvantol2000/vercel-deploy-hooks build"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

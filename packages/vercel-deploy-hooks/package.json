@@ -1,0 +1,55 @@
+{
+  "name": "@vvantol2000/vercel-deploy-hooks",
+  "version": "1.0.0",
+  "description": "Trigger Vercel deployments programmatically via deploy hooks",
+  "type": "module",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js",
+      "require": "./dist/index.cjs"
+    },
+    "./cli": {
+      "import": "./dist/cli.js"
+    }
+  },
+  "bin": {
+    "vercel-deploy-hooks": "./dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "vite build",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^25.5.0",
+    "typescript": "^5.9.3",
+    "vite": "^6.3.0",
+    "vite-plugin-dts": "^4.5.0",
+    "vitest": "^3.1.0"
+  },
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/titan-65/nuxt2-vantol",
+    "directory": "packages/vercel-deploy-hooks"
+  },
+  "keywords": [
+    "vercel",
+    "deploy",
+    "hooks",
+    "ci",
+    "cd",
+    "automation"
+  ]
+}
