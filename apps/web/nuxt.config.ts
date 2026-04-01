@@ -56,7 +56,7 @@ export default defineNuxtConfig({
     prerender: {
       routes: ['/'],
       crawlLinks: true,
-      ignore: ['/_nuxt', '/api']
+      ignore: ['/_nuxt', '/_studio', '/api']
     },
     routeRules: {
       '/**': {

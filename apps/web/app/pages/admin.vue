@@ -94,24 +94,8 @@ function formatDate(timestamp: number) {
       </div>
 
       <div class="grid gap-8 md:grid-cols-2 max-w-4xl mx-auto mb-12">
-        <!-- Nuxt Studio Card -->
-        <div class="bg-white border border-black/20 p-8 hover:border-black transition-colors flex flex-col">
-          <h2 class="text-xl font-bold mb-3 uppercase tracking-wide">Nuxt Studio</h2>
-          <p class="text-sm font-mono text-gray-500 mb-6 grow">
-            The official visual editor for Nuxt Content. Edit your site in real-time with live preview.
-          </p>
-          <div class="mt-auto">
-             <a 
-                href="/_studio" 
-                class="block w-full py-3 bg-black text-white text-center text-xs font-bold uppercase tracking-widest hover:bg-gray-800 transition-colors"
-              >
-                Open Studio
-              </a>
-          </div>
-        </div>
-
         <!-- Local Content Card -->
-        <div class="bg-white border border-black/20 p-8 hover:border-black transition-colors flex flex-col">
+        <div class="bg-white border border-black/20 p-8 hover:border-black transition-colors flex flex-col md:col-span-2">
           <h2 class="text-xl font-bold mb-3 uppercase tracking-wide">Local Content</h2>
           <p class="text-sm font-mono text-gray-500 mb-6 flex-grow">
              Edit markdown files directly in your local environment. Changes in <code>content/</code> are reflected immediately.
