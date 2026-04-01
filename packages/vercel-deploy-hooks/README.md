@@ -15,11 +15,10 @@ import { triggerDeploy } from '@vvantol2000/vercel-deploy-hooks';
 
 const result = await triggerDeploy({
   hookUrl: 'https://api.vercel.com/v1/integrations/deploy/mysite/hook/abc123',
-  name: 'content-triggered-build',
 });
 
 console.log(result);
-// { jobId: 'xxx', status: 'QUEUED', createdAt: '2026-04-01T00:00:00Z' }
+// { jobId: 'okzCd50AIap1O31g0gne', state: 'PENDING', createdAt: '2026-04-01T12:00:00.000Z' }
 ```
 
 ## CLI Usage
@@ -31,8 +30,11 @@ npx vercel-deploy-hooks --url https://api.vercel.com/v1/integrations/deploy/...
 # Via env var
 VERCEL_DEPLOY_HOOK_URL=https://... npx vercel-deploy-hooks
 
-# With a label
-npx vercel-deploy-hooks --url https://... --name "blog-update"
+# Dry run (validate without deploying)
+npx vercel-deploy-hooks --url https://... --dry-run
+
+# Disable build cache
+npx vercel-deploy-hooks --url https://... --no-build-cache
 
 # From config file
 npx vercel-deploy-hooks --config deploy.config.json
@@ -43,23 +45,37 @@ npx vercel-deploy-hooks --config deploy.config.json
 ```json
 {
   "hookUrl": "https://api.vercel.com/v1/integrations/deploy/mysite/hook/abc123",
-  "name": "scheduled-deploy"
+  "noBuildCache": false
 }
 ```
 
 ## How to Get a Deploy Hook URL
 
-1. Go to your Vercel project → **Settings** → **Deploy Hooks**
-2. Create a new hook (e.g., "Trigger from CI")
+1. Go to your Vercel project → **Settings** → **Git**
+2. In "Deploy Hooks", enter a name and select a branch
 3. Copy the generated URL
 
-## Return Type
+## How It Works
+
+This package sends a `POST` request to your Vercel deploy hook URL. Vercel's API returns:
+
+```json
+{
+  "job": {
+    "id": "okzCd50AIap1O31g0gne",
+    "state": "PENDING",
+    "createdAt": 1662825789999
+  }
+}
+```
+
+The package maps this to a clean `DeployResult`:
 
 ```ts
 interface DeployResult {
   jobId: string;     // Vercel job ID
-  status: string;    // Usually "QUEUED"
-  createdAt: string; // ISO timestamp
+  state: string;     // PENDING, QUEUED, etc.
+  createdAt: string; // ISO timestamp (converted from unix ms)
 }
 ```
 
@@ -70,7 +86,30 @@ Throws with clear messages for:
 - Invalid URL format
 - Non-Vercel URL
 - HTTP errors (401, 404, etc.)
+- Unexpected response format (no `job` field)
+- Non-JSON response body
+- Request timeout (default 30s)
 - Network failures
+
+## Integration Tests
+
+Run against a real Vercel deploy hook:
+
+```bash
+# Dry run (validates URL only)
+VERCEL_DRY_RUN=true VERCEL_DEPLOY_HOOK_URL=https://... pnpm test
+
+# Real deploy (actually triggers!)
+VERCEL_DEPLOY_HOOK_URL=https://... pnpm test
+```
+
+## Verify Your Hooks
+
+List deploy hooks for a project using the Vercel API:
+
+```bash
+VERCEL_TOKEN=xxx VERCEL_PROJECT_ID=xxx node scripts/verify.mjs
+```
 
 ## License
 

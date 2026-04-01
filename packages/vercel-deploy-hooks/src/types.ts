@@ -1,17 +1,27 @@
 export interface DeployConfig {
   /** The Vercel deploy hook URL */
   hookUrl: string;
-  /** Optional label for this deployment */
-  name?: string;
+  /** Disable build cache (appends ?buildCache=false) */
+  noBuildCache?: boolean;
+  /** Request timeout in milliseconds (default: 30000) */
+  timeoutMs?: number;
 }
 
 export interface DeployResult {
   /** Vercel job ID */
   jobId: string;
-  /** Deployment status */
-  status: string;
+  /** Deployment state (PENDING, QUEUED, etc.) */
+  state: string;
   /** ISO timestamp of creation */
   createdAt: string;
+}
+
+export interface VercelJobResponse {
+  job: {
+    id: string;
+    state: string;
+    createdAt: number;
+  };
 }
 
 export interface DeployError {

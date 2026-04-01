@@ -25,15 +25,17 @@ Usage:
   npx vercel-deploy-hooks [options]
 
 Options:
-  --url <hookUrl>     Vercel deploy hook URL (or set VERCEL_DEPLOY_HOOK_URL env var)
-  --name <label>      Optional label for this deployment
-  --config <path>     Path to a JSON config file
-  --help, -h          Show this help
+  --url <hookUrl>        Vercel deploy hook URL (or set VERCEL_DEPLOY_HOOK_URL env var)
+  --config <path>        Path to a JSON config file
+  --no-build-cache       Disable build cache for this deployment
+  --dry-run              Validate the URL and print what would happen, without deploying
+  --help, -h             Show this help
 
 Examples:
   npx vercel-deploy-hooks --url https://api.vercel.com/v1/integrations/deploy/...
   VERCEL_DEPLOY_HOOK_URL=https://... npx vercel-deploy-hooks
   npx vercel-deploy-hooks --config deploy.config.json
+  npx vercel-deploy-hooks --url https://... --dry-run
 `);
 }
 
@@ -67,7 +69,7 @@ async function main() {
     }
     config = {
       hookUrl,
-      name: getArg('--name'),
+      noBuildCache: hasFlag('--no-build-cache'),
     };
   }
 
@@ -76,12 +78,32 @@ async function main() {
     process.exit(1);
   }
 
+  // Validate URL
+  try {
+    const url = new URL(config.hookUrl);
+    if (!url.hostname.includes('vercel.com')) {
+      throw new Error('URL does not appear to be a Vercel deploy hook');
+    }
+  } catch (err) {
+    console.error(`vercel-deploy-hooks: invalid URL — ${err instanceof Error ? err.message : err}`);
+    process.exit(1);
+  }
+
+  // Dry run
+  if (hasFlag('--dry-run')) {
+    console.log('vercel-deploy-hooks: dry run (no deploy triggered)');
+    console.log(`  URL:    ${config.hookUrl.slice(0, 60)}...`);
+    console.log(`  Cache:  ${config.noBuildCache ? 'disabled' : 'enabled'}`);
+    console.log('  Valid:  yes');
+    process.exit(0);
+  }
+
   try {
     console.log('vercel-deploy-hooks: triggering deploy...');
     const result = await triggerDeploy(config);
-    console.log(`vercel-deploy-hooks: deployed successfully`);
+    console.log('vercel-deploy-hooks: deployed successfully');
     console.log(`  Job ID:  ${result.jobId}`);
-    console.log(`  Status:  ${result.status}`);
+    console.log(`  State:   ${result.state}`);
     console.log(`  Created: ${result.createdAt}`);
   } catch (err) {
     console.error(err instanceof Error ? err.message : err);
