@@ -5,6 +5,8 @@
 [![license](https://img.shields.io/npm/l/@vvantol2000/teacher-toolkit)](./LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![tests](https://img.shields.io/badge/tests-17%20passing-brightgreen)](.)
+[![dependencies](https://img.shields.io/badge/dependencies-0-brightgreen)](.)
+[![bundle size](https://img.shields.io/badge/bundle-1.8%20kB-lightgrey)](.)
 
 Grade calculation utilities for teachers. Zero dependencies, full TypeScript support.
 

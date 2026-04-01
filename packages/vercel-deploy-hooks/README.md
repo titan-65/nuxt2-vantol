@@ -5,6 +5,8 @@
 [![license](https://img.shields.io/npm/l/@vvantol2000/vercel-deploy-hooks)](./LICENSE)
 [![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![tests](https://img.shields.io/badge/tests-13%20passing-brightgreen)](.)
+[![dependencies](https://img.shields.io/badge/dependencies-0-brightgreen)](.)
+[![bundle size](https://img.shields.io/badge/bundle-2.2%20kB-lightgrey)](.)
 
 Trigger Vercel deployments from Node.js, scripts, or CI/CD using [Vercel Deploy Hooks](https://vercel.com/docs/deploy-hooks).
 
