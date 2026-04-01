@@ -1,75 +1,62 @@
-# Nuxt Content Starter
+# Vantol Bennett — Monorepo
 
-Look at the [Nuxt Content documentation](https://content.nuxt.com) to learn more.
+Personal portfolio and open-source packages, managed as a pnpm monorepo.
 
-## Setup
+## Structure
 
-Make sure to install dependencies:
+```
+├── apps/
+│   └── web/                      # Portfolio website (Nuxt 4)
+├── packages/
+│   └── teacher-toolkit/          # Grade calculation utilities for teachers
+├── pnpm-workspace.yaml
+└── vite.config.ts                # Vite+ task orchestration
+```
+
+## Quick Start
 
 ```bash
-# npm
-npm install
-
-# pnpm
 pnpm install
-
-# yarn
-yarn install
-
-# bun
-bun install
+pnpm dev            # Start portfolio dev server
 ```
 
-## Development Server
+## Commands
 
-Start the development server on `http://localhost:3000`:
+| Command | Description |
+|---|---|
+| `pnpm dev` | Start the Nuxt dev server |
+| `pnpm build` | Build portfolio for production |
+| `pnpm generate` | Static site generation |
+| `pnpm test` | Run tests across all packages |
+
+## Packages
+
+### `@vvantol2000/teacher-toolkit`
+
+Grade calculation utilities for teachers — letter grades, GPA, weighted averages, score curving, and class statistics.
 
 ```bash
-# npm
-npm run dev
-
-# pnpm
-pnpm dev
-
-# yarn
-yarn dev
-
-# bun
-bun run dev
+npm install @vvantol2000/teacher-toolkit
 ```
 
-## Production
+```ts
+import { toLetterGrade, weightedAverage, classStats } from '@vvantol2000/teacher-toolkit';
 
-Build the application for production:
-
-```bash
-# npm
-npm run build
-
-# pnpm
-pnpm build
-
-# yarn
-yarn build
-
-# bun
-bun run build
+toLetterGrade(87);                    // => "B"
+weightedAverage([
+  { name: 'Quiz', score: 92, weight: 0.2 },
+  { name: 'Final', score: 85, weight: 0.8 },
+]);                                   // => 86.4
+classStats([90, 82, 75, 68, 55]);     // => { mean: 74, median: 75, ... }
 ```
 
-Locally preview production build:
+See [packages/teacher-toolkit/README.md](packages/teacher-toolkit/README.md) for full API.
 
-```bash
-# npm
-npm run preview
+## Stack
 
-# pnpm
-pnpm preview
-
-# yarn
-yarn preview
-
-# bun
-bun run preview
-```
-
-Check out the [deployment documentation](https://nuxt.com/docs/getting-started/deployment) for more information.
+- **Framework:** Nuxt 4 + Nuxt Content v3
+- **Styling:** Tailwind CSS v4 + shadcn-vue
+- **Auth / DB:** Firebase
+- **Deployment:** Vercel
+- **Package Manager:** pnpm
+- **Tooling:** Vite+

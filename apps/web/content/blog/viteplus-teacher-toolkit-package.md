@@ -3,7 +3,7 @@ title: "Building a Teacher's Grading Toolkit with Vite+"
 description: "A hands-on guide to packaging a reusable npm library for educators using Vite+ — covering grade calculations, score curving, and GPA utilities."
 date: 2026-03-30
 tag: "Technology"
-img: "https://images.unsplash.com/photo-1503676260728-1c00da094a0b"
+img: "https://res.cloudinary.com/ddszyeplg/image/upload/v1775009589/viteplus_et4prw.png"
 author:
   name: "Vantol Bennett"
   img: "https://res.cloudinary.com/ddszyeplg/image/upload/v1636919468/DSC_0988_zsfhgy.jpg"

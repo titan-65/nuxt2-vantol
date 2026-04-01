@@ -1,5 +1,5 @@
 {
-  "name": "@vantol/teacher-toolkit",
+  "name": "@vvantol2000/teacher-toolkit",
   "version": "1.0.0",
   "description": "Grade calculation utilities for teachers",
   "type": "module",
@@ -28,5 +28,14 @@
     "vitest": "^3.1.0",
     "vite-plugin-dts": "^4.5.0"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/titan-65/nuxt2-vantol",
+    "directory": "packages/teacher-toolkit"
+  },
+  "keywords": ["teacher", "grading", "education", "gpa", "gradebook", "scores"]
 }

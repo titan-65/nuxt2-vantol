@@ -2,12 +2,12 @@
   "name": "vantolbennett-monorepo",
   "private": true,
   "scripts": {
-    "dev": "pnpm --filter @vantol/web dev",
-    "build": "pnpm --filter @vantol/web build",
-    "generate": "pnpm --filter @vantol/web generate",
-    "preview": "pnpm --filter @vantol/web preview",
+    "dev": "pnpm --filter @vvantol2000/web dev",
+    "build": "pnpm --filter @vvantol2000/web build",
+    "generate": "pnpm --filter @vvantol2000/web generate",
+    "preview": "pnpm --filter @vvantol2000/web preview",
     "test": "pnpm -r run test",
-    "pack:toolkit": "pnpm --filter @vantol/teacher-toolkit pack"
+    "pack:toolkit": "pnpm --filter @vvantol2000/teacher-toolkit pack"
   },
   "pnpm": {
     "onlyBuiltDependencies": [
