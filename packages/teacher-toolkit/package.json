@@ -1,6 +1,6 @@
 {
   "name": "@vvantol2000/teacher-toolkit",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Grade calculation utilities for teachers",
   "type": "module",
   "main": "dist/index.cjs",
@@ -37,5 +37,12 @@
     "url": "https://github.com/titan-65/nuxt2-vantol",
     "directory": "packages/teacher-toolkit"
   },
-  "keywords": ["teacher", "grading", "education", "gpa", "gradebook", "scores"]
+  "keywords": [
+    "teacher",
+    "grading",
+    "education",
+    "gpa",
+    "gradebook",
+    "scores"
+  ]
 }
