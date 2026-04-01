@@ -176,4 +176,29 @@ describe('validateEnv', () => {
     expect(result.DEBUG).toBe(false);
     expect(result.APP_NAME).toBe('My App');
   });
+
+  it('defaults to required when required is omitted and no default', () => {
+    expect(() =>
+      validateEnv(
+        { API_KEY: { type: 'string' } },
+        {},
+      ),
+    ).toThrow('API_KEY is required but missing');
+  });
+
+  it('treats required:false explicitly as optional', () => {
+    const result = validateEnv(
+      { OPTIONAL: { type: 'string', required: false } },
+      {},
+    );
+    expect(result.OPTIONAL).toBeUndefined();
+  });
+
+  it('treats field with default as not required', () => {
+    const result = validateEnv(
+      { PORT: { type: 'number', default: 8080 } },
+      {},
+    );
+    expect(result.PORT).toBe(8080);
+  });
 });

@@ -25,7 +25,8 @@ export function validateEnv<T extends EnvSchema>(
         result[key] = field.default;
         continue;
       }
-      if (field.required === true) {
+      // Default to required when no explicit required:false and no default
+      if (field.required !== false) {
         errors.push({
           key,
           message: `${key} is required but missing`,
