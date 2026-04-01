@@ -108,6 +108,32 @@ export default defineContentConfig({
         }))
       })
     }),
+    publications: defineCollection({
+      type: 'data',
+      source: 'publications/*.json',
+      schema: z.object({
+        items: z.array(z.object({
+          title: z.string(),
+          subtitle: z.string().optional(),
+          cover: z.string(),
+          publisher: z.string().optional(),
+          isbn: z.string().optional(),
+          format: z.enum(['ebook', 'paperback', 'hardcover']).optional(),
+          pages: z.number().optional(),
+          date: z.string().optional(),
+          description: z.string(),
+          amazonUrl: z.string(),
+          previewUrl: z.string().optional(),
+          reviews: z.array(z.object({
+            quote: z.string(),
+            author: z.string(),
+            source: z.string()
+          })).optional(),
+          toc: z.array(z.string()).optional(),
+          relatedPosts: z.array(z.string()).optional()
+        }))
+      })
+    }),
     pages: defineCollection({
       type: 'page',
       source: '*.md'

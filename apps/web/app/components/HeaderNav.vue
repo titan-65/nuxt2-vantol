@@ -7,6 +7,7 @@ const links = [
   { name: 'HOME', to: '/' },
   { name: 'BLOG', to: '/blog' },
   { name: 'PROJECTS', to: '/projects' },
+  { name: 'PUBLICATIONS', to: '/publications' },
   { name: 'GALLERY', to: '/gallery' },
   { name: 'EXPLORE', to: '/explore' },
   { name: 'ABOUT', to: '/about' },

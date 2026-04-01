@@ -1,0 +1,31 @@
+{
+  "items": [
+    {
+      "title": "Nuxt Unleashed",
+      "subtitle": "Harnessing the Power of Nuxt 3",
+      "cover": "https://m.media-amazon.com/images/I/71Vkg-jAHEL._SY466_.jpg",
+      "publisher": "Independently published",
+      "isbn": "B0CL3SC3D8",
+      "format": "ebook",
+      "pages": 300,
+      "date": "2023-10-20",
+      "description": "Nuxt Unleashed is a comprehensive guide to building modern web applications with Nuxt 3. From server-side rendering to static site generation, this book covers everything you need to know to harness the full power of the Nuxt framework. Whether you're a beginner or an experienced developer, you'll find practical examples, best practices, and real-world patterns to take your Nuxt applications to the next level.",
+      "amazonUrl": "https://www.amazon.com/Nuxt-Unleashed-Harnessing-Power-3-ebook/dp/B0CL3SC3D8",
+      "previewUrl": null,
+      "reviews": [],
+      "toc": [
+        "Chapter 1: Introduction to Nuxt 3",
+        "Chapter 2: Getting Started",
+        "Chapter 3: Routing and Pages",
+        "Chapter 4: Components and Composables",
+        "Chapter 5: State Management",
+        "Chapter 6: Server-Side Rendering",
+        "Chapter 7: Static Site Generation",
+        "Chapter 8: API Routes and Server Middleware",
+        "Chapter 9: Deployment and Production",
+        "Chapter 10: Advanced Patterns"
+      ],
+      "relatedPosts": []
+    }
+  ]
+}
