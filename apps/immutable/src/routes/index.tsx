@@ -1,5 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
+import { Bot, Wrench, Monitor, GitBranch, Search, Keyboard, Globe } from "lucide-react";
 import TerminalAnimation from "../components/TerminalAnimation";
 import FeatureCard from "../components/FeatureCard";
 import CodeBlock from "../components/CodeBlock";
@@ -11,27 +12,27 @@ export const Route = createFileRoute("/")({ component: LandingPage });
 
 const features = [
   {
-    icon: "🤖",
+    icon: <Bot size={20} strokeWidth={1.75} />,
     title: "Multi-Provider LLM",
     description: "Connect to OpenAI, Anthropic, or any provider. Streaming responses by default.",
   },
   {
-    icon: "🔧",
+    icon: <Wrench size={20} strokeWidth={1.75} />,
     title: "Built-in Tools",
     description: "File read/write, shell execution, git operations — 10 tools ready to go.",
   },
   {
-    icon: "🖥️",
+    icon: <Monitor size={20} strokeWidth={1.75} />,
     title: "Four Interfaces",
     description: "Terminal UI, readline REPL, HTTP API server, or one-shot CLI.",
   },
   {
-    icon: "🔀",
+    icon: <GitBranch size={20} strokeWidth={1.75} />,
     title: "Orchestrator",
     description: "Spawn parallel sub-agents with concurrency limits and task management.",
   },
   {
-    icon: "🔍",
+    icon: <Search size={20} strokeWidth={1.75} />,
     title: "Project Scanning",
     description: "Auto-detect language, framework, package manager, and conventions.",
   },
@@ -131,7 +132,7 @@ function LandingPage() {
       {/* Features */}
       <section className="mt-12">
         <p className="island-kicker mb-4 text-center">Features</p>
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {features.map((f, i) => (
             <FeatureCard
               key={f.title}
@@ -177,17 +178,17 @@ function LandingPage() {
             {
               title: "Terminal UI",
               desc: "Full interactive TUI with Ink — status bar, chat panel, animated mascot, slash commands.",
-              icon: "🖥️",
+              icon: <Monitor size={18} strokeWidth={1.75} />,
             },
             {
               title: "REPL",
               desc: "Lightweight readline interface with colored output. Quick and simple.",
-              icon: "⌨️",
+              icon: <Keyboard size={18} strokeWidth={1.75} />,
             },
             {
               title: "HTTP Server",
               desc: "REST API on port 3737 with streaming SSE. Integrate with any frontend.",
-              icon: "🌐",
+              icon: <Globe size={18} strokeWidth={1.75} />,
             },
           ].map((iface, i) => (
             <FeatureCard

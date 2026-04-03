@@ -4,6 +4,21 @@ import TerminalAnimation from "../components/TerminalAnimation";
 import FeatureCard from "../components/FeatureCard";
 import CodeBlock from "../components/CodeBlock";
 import InstallTabs from "../components/InstallTabs";
+import {
+  Bot,
+  Wrench,
+  GitBranch,
+  Database,
+  Search,
+  Lock,
+  Radio,
+  Puzzle,
+  Undo2,
+  Zap,
+  Monitor,
+  Keyboard,
+  Globe,
+} from "lucide-react";
 
 export const Route = createFileRoute("/null-agent")({
   component: NullAgentPage,
@@ -66,28 +81,28 @@ const agent = new Agent({
 const interfaces = [
   {
     title: "Terminal UI",
-    icon: "🖥️",
+    icon: <Monitor size={18} strokeWidth={1.75} />,
     description:
       "Full interactive terminal interface built with Ink (React for terminal). Features status bar showing provider/model/project info, chat panel with message bubbles, animated NullFace mascot, slash commands (/help, /clear, /context, /tasks, /config), and formatted tool call display.",
     code: "null-agent",
   },
   {
     title: "Readline REPL",
-    icon: "⌨️",
+    icon: <Keyboard size={18} strokeWidth={1.75} />,
     description:
       "Lightweight readline-based REPL with colored output. No dependencies beyond Node.js. Perfect for quick interactions or environments where Ink isn't available.",
     code: "null-agent --plain",
   },
   {
     title: "HTTP API Server",
-    icon: "🌐",
+    icon: <Globe size={18} strokeWidth={1.75} />,
     description:
       "REST API server (default port 3737) with streaming SSE support. Integrate null-agent into any frontend or service. Endpoints for chat, history, tasks, config, and health.",
     code: "null-agent --server --port 3737",
   },
   {
     title: "One-Shot CLI",
-    icon: "⚡",
+    icon: <Zap size={18} strokeWidth={1.75} />,
     description:
       "Send a single message and get a response. Perfect for scripting, CI/CD pipelines, or quick one-off tasks without entering interactive mode.",
     code: 'null-agent "explain the auth module"',
@@ -126,55 +141,55 @@ function NullAgentPage() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {[
             {
-              icon: "🤖",
+              icon: <Bot size={20} strokeWidth={1.75} />,
               title: "Multi-Provider LLM",
               description:
                 "OpenAI and Anthropic providers with streaming. Extensible provider interface for custom backends.",
             },
             {
-              icon: "🔧",
+              icon: <Wrench size={20} strokeWidth={1.75} />,
               title: "10 Built-in Tools",
               description:
                 "File read/write, shell execution, and 7 git operations. Register custom tools with JSON Schema parameters.",
             },
             {
-              icon: "🔀",
+              icon: <GitBranch size={20} strokeWidth={1.75} />,
               title: "Orchestrator",
               description:
                 "Spawn parallel sub-agents for complex tasks. Concurrency limits, task tracking, and result aggregation.",
             },
             {
-              icon: "💾",
+              icon: <Database size={20} strokeWidth={1.75} />,
               title: "Memory & Persistence",
               description:
                 "File-based conversation storage at ~/.null-agent/memory/. Resume conversations across sessions.",
             },
             {
-              icon: "🔍",
+              icon: <Search size={20} strokeWidth={1.75} />,
               title: "Project Scanning",
               description:
                 "Auto-detect language, framework, package manager, monorepo status, test/build commands, and conventions.",
             },
             {
-              icon: "🔒",
+              icon: <Lock size={20} strokeWidth={1.75} />,
               title: "Permission System",
               description:
                 "Mode-based permissions (auto/confirm/plan). Risk classification, deny patterns, and allow-always overrides.",
             },
             {
-              icon: "📡",
+              icon: <Radio size={20} strokeWidth={1.75} />,
               title: "Awareness",
               description:
                 "Real-time git monitoring and file watching. Events for git changes, branch switches, conflicts, and file modifications.",
             },
             {
-              icon: "🧩",
+              icon: <Puzzle size={20} strokeWidth={1.75} />,
               title: "Plugin System",
               description:
                 "Extend with custom plugins that add tools and listen to events. Built-in plugins for file, shell, and git.",
             },
             {
-              icon: "↩️",
+              icon: <Undo2 size={20} strokeWidth={1.75} />,
               title: "Command Undo/Redo",
               description:
                 "Command history with undo support. File writes automatically snapshot for undo capability.",
