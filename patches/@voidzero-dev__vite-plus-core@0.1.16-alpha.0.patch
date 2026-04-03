@@ -1,0 +1,27 @@
+diff --git a/dist/rolldown/shared/normalize-string-or-regex-CCT059Zu.mjs b/dist/rolldown/shared/normalize-string-or-regex-CCT059Zu.mjs
+index 9458d9c3d55c076996ea8d95ca5b666afd13496c..c9e6a0787aa6708841ae1354e83aaeb46eafa0f0 100644
+--- a/dist/rolldown/shared/normalize-string-or-regex-CCT059Zu.mjs
++++ b/dist/rolldown/shared/normalize-string-or-regex-CCT059Zu.mjs
+@@ -17,13 +17,16 @@ function makeBuiltinPluginCallable(plugin) {
+ 		const wrappedHook = async function(...args) {
+ 			try {
+ 				return await callablePlugin[key](...args);
+-			} catch (e) {
+-				if (e instanceof Error && !e.stack?.includes("at ")) Error.captureStackTrace(e, wrappedPlugin[key]);
+-				return error(logPluginError(e, plugin.name, {
+-					hook: key,
+-					id: key === "transform" ? args[2] : void 0
+-				}));
++		} catch (e) {
++			if (e instanceof Error && e.message?.includes("Missing field `moduleType`")) {
++				return null;
+ 			}
++			if (e instanceof Error && !e.stack?.includes("at ")) Error.captureStackTrace(e, wrappedPlugin[key]);
++			return error(logPluginError(e, plugin.name, {
++				hook: key,
++				id: key === "transform" ? args[2] : void 0
++			}));
++		}
+ 		};
+ 		const order = callablePlugin.getOrder(key);
+ 		if (order == void 0) wrappedPlugin[key] = wrappedHook;

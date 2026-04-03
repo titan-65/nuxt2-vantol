@@ -1,9 +1,12 @@
 {
   "name": "vantolbennett-monorepo",
   "private": true,
+  "type": "module",
+  "devDependencies": {
+    "vite-plus": "^0.1.14"
+  },
   "scripts": {
     "dev": "pnpm --filter @vvantol2000/web dev",
-    "build": "pnpm --filter @vvantol2000/web build",
     "generate": "pnpm --filter @vvantol2000/web generate",
     "preview": "pnpm --filter @vvantol2000/web preview",
     "test": "pnpm -r run test",
@@ -19,7 +22,10 @@
       "protobufjs",
       "sharp",
       "vue-demi"
-    ]
+    ],
+    "patchedDependencies": {
+      "@voidzero-dev/vite-plus-core@0.1.16-alpha.0": "patches/@voidzero-dev__vite-plus-core@0.1.16-alpha.0.patch"
+    }
   },
   "packageManager": "pnpm@10.33.0"
 }
