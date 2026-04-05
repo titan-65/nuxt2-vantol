@@ -1,5 +1,6 @@
 import { Link } from "@tanstack/react-router";
-import { Github, ThemeToggle } from "lucide-react";
+import { Github } from "lucide-react";
+import ThemeToggle from "./ThemeToggle";
 
 export default function Header() {
   return (

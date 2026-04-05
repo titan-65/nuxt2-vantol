@@ -1,6 +1,6 @@
 {
   "name": "@vvantol2000/env-check",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Validate environment variables against a schema with clear error messages",
   "type": "module",
   "main": "dist/index.cjs",
@@ -17,7 +17,7 @@
     }
   },
   "bin": {
-    "env-check": "./dist/cli.js"
+    "env-check": "dist/cli.js"
   },
   "files": [
     "dist"
@@ -41,7 +41,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/titan-65/nuxt2-vantol",
+    "url": "git+https://github.com/titan-65/nuxt2-vantol.git",
     "directory": "packages/env-check"
   },
   "keywords": [

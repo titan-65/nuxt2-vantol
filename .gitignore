@@ -23,5 +23,11 @@ logs
 .env.*
 !.env.example
 
+.superpowers
+/superpowers
 # Vercel
 .vercel
+
+AGENTS.md
+CLAUDE.md
+GEMINI.md
