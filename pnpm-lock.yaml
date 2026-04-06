@@ -266,6 +266,19 @@ importers:
         version: 3.2.4(@types/debug@4.1.13)(@types/node@20.19.37)(jiti@2.6.1)(jsdom@28.1.0)(lightningcss@1.32.0)(terser@5.46.1)(tsx@4.21.0)(yaml@2.8.3)
 
   packages/null-agent:
+    dependencies:
+      ajv:
+        specifier: ^8.18.0
+        version: 8.18.0
+      h3:
+        specifier: 2.0.1-rc.20
+        version: 2.0.1-rc.20(crossws@0.4.4(srvx@0.11.14))
+      keytar:
+        specifier: ^7.9.0
+        version: 7.9.0
+      typebox:
+        specifier: ^1.1.16
+        version: 1.1.16
     devDependencies:
       '@inkjs/ui':
         specifier: ^2.0.0
@@ -6490,6 +6503,9 @@ packages:
     resolution: {integrity: sha512-EkxoDTk8ufHqHlf9QxGwcxeLkWRR3iOuYfRpfORgYfqc8s13bgb+YtRY59NK5ZpRaCwq1kqA6a5lpX8C/eLphQ==}
     hasBin: true
 
+  keytar@7.9.0:
+    resolution: {integrity: sha512-VPD8mtVtm5JNtA2AErl6Chp06JBfy7diFQ7TQQhdpWOl6MrCRB+eRbvAZUsbGQS9kiMq0coJsy0W0vHpDCkWsQ==}
+
   khroma@2.1.0:
     resolution: {integrity: sha512-Ls993zuzfayK269Svk9hzpeGUKob/sIgZzyHYdjQoAdQetRKpOLj+k/QQQ/6Qi0Yz65mlROrfd+Ev+1+7dz9Kw==}
 
@@ -7000,6 +7016,9 @@ packages:
   node-abi@3.89.0:
     resolution: {integrity: sha512-6u9UwL0HlAl21+agMN3YAMXcKByMqwGx+pq+P76vii5f7hTPtKDp08/H9py6DY+cfDw7kQNTGEj/rly3IgbNQA==}
     engines: {node: '>=10'}
+
+  node-addon-api@4.3.0:
+    resolution: {integrity: sha512-73sE9+3UaLYYFmDsFZnqCInzPyh3MqIwZO9cw58yIqAZhONrrabrYyYe3TuIqtIiOuTXVhsGau8hcrhhwSsDIQ==}
 
   node-addon-api@6.1.0:
     resolution: {integrity: sha512-+eawOlIgy680F0kBzPUNFhMZGtJ1YmqM6l4+Crf4IkImjYrO/mqPwRMh352g23uIaQKFItcQ64I7KMaJxHgAVA==}
@@ -8046,11 +8065,6 @@ packages:
   sprintf-js@1.0.3:
     resolution: {integrity: sha512-D9cPgkvLlV3t3IzL0D0YLvGA9Ahk4PcvVwUbN0dSGr1aP0Nrt4AEnTUbuGvquEC0mA64Gqt1fzirlRs5ibXx8g==}
 
-  srvx@0.11.13:
-    resolution: {integrity: sha512-oknN6qduuMPafxKtHucUeG32Q963pjriA5g3/Bl05cwEsUe5VVbIU4qR9LrALHbipSCyBe+VmfDGGydqazDRkw==}
-    engines: {node: '>=20.16.0'}
-    hasBin: true
-
   srvx@0.11.14:
     resolution: {integrity: sha512-mx+pKrWJCzo5m6uXqyB7n4VA81mpdFRroSWsVTQTYqCZE65hFJ+jtVIeyhtL2/kvtDMrHdbA0hWEUh/vu0+Viw==}
     engines: {node: '>=20.16.0'}
@@ -8341,6 +8355,9 @@ packages:
 
   type-level-regexp@0.1.17:
     resolution: {integrity: sha512-wTk4DH3cxwk196uGLK/E9pE45aLfeKJacKmcEgEOA/q5dnPGNxXt0cfYdFxb57L+sEpf1oJH4Dnx/pnRcku9jg==}
+
+  typebox@1.1.16:
+    resolution: {integrity: sha512-czccfm5FNze8MqHI+HWMactX7S8fZNugjXL56b6YeEvIgLnbZMuLdZ/uSwSgAK0vm55OGzVbZGofjEP7nRZYGQ==}
 
   typed-array-buffer@1.0.3:
     resolution: {integrity: sha512-nAYYwfY3qnzX30IkA6AQZjVbtK6duGontcQm1WSG1MD94YLqK0515GNApXkoxKOWMusVssAHWLh9SeaoefYFGw==}
@@ -10241,7 +10258,7 @@ snapshots:
       pkg-types: 2.3.0
       scule: 1.3.0
       semver: 7.7.4
-      srvx: 0.11.13
+      srvx: 0.11.14
       std-env: 3.10.0
       tinyclip: 0.1.12
       tinyexec: 1.0.4
@@ -12904,7 +12921,7 @@ snapshots:
       pathe: 2.0.3
       picomatch: 4.0.4
       source-map: 0.7.6
-      srvx: 0.11.13
+      srvx: 0.11.14
       tinyglobby: 0.2.15
       ufo: 1.6.3
       vite: 7.3.1(@types/node@22.19.15)(jiti@2.6.1)(lightningcss@1.32.0)(terser@5.46.1)(tsx@4.21.0)(yaml@2.8.3)
@@ -15790,6 +15807,11 @@ snapshots:
     dependencies:
       commander: 8.3.0
 
+  keytar@7.9.0:
+    dependencies:
+      node-addon-api: 4.3.0
+      prebuild-install: 7.1.3
+
   khroma@2.1.0: {}
 
   kleur@4.1.5: {}
@@ -16595,6 +16617,8 @@ snapshots:
   node-abi@3.89.0:
     dependencies:
       semver: 7.7.4
+
+  node-addon-api@4.3.0: {}
 
   node-addon-api@6.1.0:
     optional: true
@@ -18099,8 +18123,6 @@ snapshots:
 
   sprintf-js@1.0.3: {}
 
-  srvx@0.11.13: {}
-
   srvx@0.11.14: {}
 
   stack-utils@2.0.6:
@@ -18422,6 +18444,8 @@ snapshots:
       mime-types: 3.0.2
 
   type-level-regexp@0.1.17: {}
+
+  typebox@1.1.16: {}
 
   typed-array-buffer@1.0.3:
     dependencies:
