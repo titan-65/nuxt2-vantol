@@ -16,11 +16,19 @@
   },
   "pnpm": {
     "onlyBuiltDependencies": [
-      "keytar"
+      "keytar",
+      "better-sqlite3",
+      "esbuild",
+      "sharp"
     ],
     "patchedDependencies": {
       "@voidzero-dev/vite-plus-core@0.1.16-alpha.0": "patches/@voidzero-dev__vite-plus-core@0.1.16-alpha.0.patch"
-    }
+    },
+    "ignoredBuiltDependencies": [
+      "@parcel/watcher",
+      "protobufjs",
+      "vue-demi"
+    ]
   },
   "packageManager": "pnpm@10.33.0"
 }
