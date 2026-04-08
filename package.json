@@ -30,5 +30,6 @@
       "vue-demi"
     ]
   },
-  "packageManager": "pnpm@10.33.0"
+  "packageManager": "pnpm@10.33.0",
+  "version": "0.0.1"
 }
