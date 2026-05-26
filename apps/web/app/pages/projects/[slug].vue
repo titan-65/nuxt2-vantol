@@ -55,49 +55,52 @@ useHead(() => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-[#F3F3F3] font-sans">
-    <div class="container mx-auto px-6 py-12">
+  <div class="min-h-screen bg-[#0a0a0a] text-white font-sans">
+    <div class="max-w-5xl mx-auto px-6 py-12">
       <div v-if="project" class="max-w-4xl mx-auto">
         <div class="mb-8">
-          <NuxtLink to="/projects" class="text-xs font-bold uppercase tracking-widest hover:underline flex items-center gap-2 mb-6">
-            <- Back to Projects
+          <NuxtLink to="/projects" class="text-xs font-bold uppercase tracking-widest hover:text-[#f5c542] transition-colors flex items-center gap-2 mb-6 text-zinc-400">
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            </svg>
+            Back to Projects
           </NuxtLink>
           
-          <div class="bg-white border border-black/20 p-8 md:p-12">
-            <h1 class="text-3xl md:text-5xl font-medium tracking-tight mb-6">{{ project.title }}</h1>
+          <div class="bg-[#111] border border-white/10 rounded-xl p-8 md:p-12">
+            <h1 class="text-3xl md:text-5xl font-semibold tracking-tight mb-6">{{ project.title }}</h1>
             
-            <div class="flex flex-wrap gap-4 mb-8 text-xs font-mono text-gray-500 uppercase">
+            <div class="flex flex-wrap gap-4 mb-8 text-xs text-zinc-500 uppercase">
               <div v-if="project.stack?.Frontend">
-                <span class="font-bold text-black">Frontend:</span> {{ project.stack.Frontend }}
+                <span class="font-bold text-zinc-300">Frontend:</span> {{ project.stack.Frontend }}
               </div>
               <div v-if="project.stack?.Backend">
-                <span class="font-bold text-black">Backend:</span> {{ project.stack.Backend }}
+                <span class="font-bold text-zinc-300">Backend:</span> {{ project.stack.Backend }}
               </div>
               <div v-if="project.tag">
-                <span class="font-bold text-black">Tag:</span> {{ project.tag }}
+                <span class="font-bold text-zinc-300">Tag:</span> {{ project.tag }}
               </div>
             </div>
 
-            <div class="mb-8 border border-black/10 p-2 bg-gray-50">
+            <div class="mb-8 rounded-xl overflow-hidden bg-zinc-900">
                <img
                  :src="project.image"
                  :alt="project.title"
                  width="1600"
                  height="900"
-                 class="w-full h-auto object-cover grayscale hover:grayscale-0 transition-all duration-500"
+                 class="w-full h-auto object-cover"
                />
             </div>
             
-            <div class="prose prose-neutral max-w-none font-light">
+            <div class="prose prose-invert max-w-none font-light prose-headings:font-semibold prose-headings:tracking-tight prose-a:text-[#f5c542] prose-strong:text-white prose-code:text-[#f5c542] prose-pre:bg-zinc-900 prose-pre:border prose-pre:border-white/10">
               <ContentRenderer :value="project" />
             </div>
             
-            <div class="mt-12 pt-8 border-t border-black/10 flex gap-4">
+            <div class="mt-12 pt-8 border-t border-white/10 flex gap-4">
               <a 
                 v-if="project.url" 
                 :href="project.url" 
                 target="_blank"
-                class="px-6 py-3 bg-black text-white text-xs font-bold uppercase tracking-widest hover:bg-gray-800 transition-colors"
+                class="px-6 py-3 bg-[#f5c542] text-black text-xs font-bold uppercase tracking-widest hover:bg-[#e0b13a] transition-colors rounded-lg"
               >
                 View Live Site
               </a>
@@ -105,7 +108,7 @@ useHead(() => {
                 v-if="project.git" 
                 :href="project.git" 
                 target="_blank"
-                class="px-6 py-3 border border-black/20 text-xs font-bold uppercase tracking-widest hover:bg-black/5 transition-colors"
+                class="px-6 py-3 border border-white/10 text-zinc-300 text-xs font-bold uppercase tracking-widest hover:bg-white/5 hover:border-white/20 transition-colors rounded-lg"
               >
                 View Source
               </a>

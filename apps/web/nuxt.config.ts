@@ -67,7 +67,6 @@ export default defineNuxtConfig({
       }
     }
   },
-  // @ts-expect-error - provided by @nuxt/image module once dependencies are installed
   image: {
     provider: 'ipx',
     domains: ['ui-avatars.com', 'lh3.googleusercontent.com'],

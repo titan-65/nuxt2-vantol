@@ -12,21 +12,18 @@ const publications = computed(() => publicationsData.value?.items || [])
 </script>
 
 <template>
-  <div class="min-h-screen bg-[#F3F3F3] font-sans">
+  <div class="min-h-screen bg-[#0a0a0a] text-white font-sans">
     <!-- Hero Section -->
-    <section class="py-20 border-b border-black/10">
-      <div class="container mx-auto px-6">
+    <section class="py-20 border-b border-white/10">
+      <div class="max-w-5xl mx-auto px-6">
         <div class="max-w-3xl">
-          <div class="flex items-center gap-2 mb-4">
-            <span class="w-2 h-2 bg-[#FF4F4F] rounded-full"></span>
-            <span class="text-xs font-medium tracking-widest text-gray-500 uppercase">PUBLICATIONS</span>
-          </div>
+          <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-4">Publications</p>
 
-          <h1 class="text-5xl md:text-6xl font-medium tracking-tight mb-8">
+          <h1 class="text-5xl md:text-6xl font-semibold tracking-tight mb-8">
             Published Works
           </h1>
 
-          <p class="text-xl text-gray-600 font-light leading-relaxed border-l-2 border-black/10 pl-6">
+          <p class="text-xl text-zinc-400 font-light leading-relaxed border-l-2 border-white/10 pl-6">
             Books and written works exploring modern web development, frameworks, and the craft of building software.
           </p>
         </div>
@@ -35,7 +32,7 @@ const publications = computed(() => publicationsData.value?.items || [])
 
     <!-- Publications -->
     <section class="py-16 md:py-24">
-      <div class="container mx-auto px-6">
+      <div class="max-w-5xl mx-auto px-6">
         <div class="space-y-24">
           <PublicationCard
             v-for="publication in publications"
@@ -48,9 +45,9 @@ const publications = computed(() => publicationsData.value?.items || [])
 
     <!-- Empty State -->
     <section v-if="publications.length === 0" class="py-24">
-      <div class="container mx-auto px-6">
-        <div class="max-w-2xl mx-auto text-center border border-black/20 p-12 bg-white">
-          <p class="text-gray-500 font-mono text-sm uppercase tracking-wider">
+      <div class="max-w-5xl mx-auto px-6">
+        <div class="max-w-2xl mx-auto text-center border border-white/10 p-12 bg-[#111] rounded-xl">
+          <p class="text-zinc-500 text-sm uppercase tracking-wider">
             More publications coming soon.
           </p>
         </div>
@@ -58,17 +55,20 @@ const publications = computed(() => publicationsData.value?.items || [])
     </section>
 
     <!-- CTA Section -->
-    <section class="py-16 bg-white border-t border-black/10">
-      <div class="container mx-auto px-6">
-        <div class="max-w-2xl mx-auto text-center border border-black/20 p-8 bg-[#F3F3F3]">
-          <p class="text-gray-600 font-light mb-4">
+    <section class="py-16 border-t border-white/10">
+      <div class="max-w-5xl mx-auto px-6">
+        <div class="max-w-2xl mx-auto text-center border border-white/10 p-8 bg-[#111] rounded-xl">
+          <p class="text-zinc-400 font-light mb-4">
             Interested in collaborating on a technical book or publication?
           </p>
           <NuxtLink
             to="/contact"
-            class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest bg-black text-white px-6 py-3 hover:bg-gray-800 transition-colors"
+            class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest bg-[#f5c542] text-black px-6 py-3 hover:bg-[#e0b13a] transition-colors rounded-lg"
           >
-            Get in Touch ->
+            Get in Touch
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
           </NuxtLink>
         </div>
       </div>

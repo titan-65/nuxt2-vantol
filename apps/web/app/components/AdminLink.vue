@@ -1,5 +1,5 @@
 <template>
   <li>
-    <NuxtLink to="/admin" class="hover:text-black hover:underline transition-colors uppercase">Admin</NuxtLink>
+    <NuxtLink to="/admin" class="hover:text-white hover:underline transition-colors uppercase text-zinc-500">Admin</NuxtLink>
   </li>
 </template>

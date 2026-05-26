@@ -18,9 +18,9 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="fixed top-0 left-0 right-0 z-50 h-1 bg-gray-200 dark:bg-gray-700">
+  <div class="fixed top-0 left-0 right-0 z-50 h-1 bg-zinc-900">
     <div
-      class="h-full bg-gradient-to-r from-indigo-500 to-purple-600 transition-all duration-150"
+      class="h-full bg-[#f5c542] transition-all duration-150"
       :style="{ width: `${progress}%` }"
     />
   </div>

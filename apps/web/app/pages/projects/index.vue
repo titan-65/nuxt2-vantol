@@ -1,6 +1,5 @@
 <script setup lang="ts">
 const { data: projects } = await useAsyncData('projects', async () => {
-  // Debug: Try fetching with leading slash and ensure we are hitting the right path
   const items = await queryCollection('projects').all() as any[]
   return items.map((p: any) => ({ ...p, _path: p.path, slug: p.path.split('/').pop() }))
 })
@@ -20,11 +19,11 @@ const viewMode = ref<'grid' | 'list'>('grid')
 
 const filteredProjects = computed(() => {
   if (!selectedTech.value) return projects.value || []
-  
+
   return (projects.value || []).filter((project: any) => {
     const stack = project.stack || {}
-    return stack.Frontend === selectedTech.value || 
-           stack.Backend === selectedTech.value || 
+    return stack.Frontend === selectedTech.value ||
+           stack.Backend === selectedTech.value ||
            stack.Framework === selectedTech.value
   })
 })
@@ -35,29 +34,26 @@ const clearFilter = () => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-[#F3F3F3] font-sans">
-    <div class="container mx-auto px-6 py-12">
-      <div class="text-center mb-16 border-b border-black/10 pb-12">
-        <div class="flex items-center justify-center gap-2 mb-4">
-          <span class="w-2 h-2 bg-[#FF4F4F] rounded-full"></span>
-          <span class="text-xs font-medium tracking-widest text-gray-500 uppercase">PORTFOLIO</span>
-        </div>
-        <h1 class="text-4xl md:text-5xl font-medium tracking-tight mb-4">Projects</h1>
-        <p class="text-gray-600 font-light max-w-2xl mx-auto">
+  <div class="min-h-screen bg-[#0a0a0a] text-white font-sans">
+    <div class="max-w-5xl mx-auto px-6 py-12">
+      <div class="text-center mb-16 border-b border-white/10 pb-12">
+        <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-4">Portfolio</p>
+        <h1 class="text-4xl md:text-5xl font-semibold tracking-tight mb-4">Projects</h1>
+        <p class="text-zinc-500 font-light max-w-2xl mx-auto">
           A collection of projects built with various technologies including Vue.js, Nuxt.js, React, and more.
         </p>
       </div>
-      
+
       <!-- Controls -->
-      <div class="flex flex-col md:flex-row items-center justify-between gap-6 mb-12 border-b border-black/10 pb-6">
+      <div class="flex flex-col md:flex-row items-center justify-between gap-6 mb-12 border-b border-white/10 pb-6">
         <div class="flex flex-wrap justify-center gap-2">
           <button
             @click="clearFilter"
             :class="[
-              'px-4 py-2 text-xs font-bold uppercase tracking-widest border transition-colors',
+              'px-4 py-2 text-xs font-bold uppercase tracking-widest border rounded-lg transition-colors',
               !selectedTech
-                ? 'bg-black text-white border-black'
-                : 'bg-white text-gray-500 border-black/20 hover:border-black hover:text-black'
+                ? 'bg-[#f5c542] text-black border-[#f5c542]'
+                : 'bg-transparent text-zinc-500 border-white/10 hover:border-white/30 hover:text-white'
             ]"
           >
             All
@@ -67,24 +63,24 @@ const clearFilter = () => {
             :key="tech"
             @click="selectedTech = selectedTech === tech ? null : tech"
             :class="[
-              'px-4 py-2 text-xs font-bold uppercase tracking-widest border transition-colors',
+              'px-4 py-2 text-xs font-bold uppercase tracking-widest border rounded-lg transition-colors',
               selectedTech === tech
-                ? 'bg-black text-white border-black'
-                : 'bg-white text-gray-500 border-black/20 hover:border-black hover:text-black'
+                ? 'bg-[#f5c542] text-black border-[#f5c542]'
+                : 'bg-transparent text-zinc-500 border-white/10 hover:border-white/30 hover:text-white'
             ]"
           >
             {{ tech }}
           </button>
         </div>
-        
-        <div class="flex items-center gap-0 border border-black/20 bg-white">
+
+        <div class="flex items-center gap-0 border border-white/10 rounded-lg overflow-hidden bg-[#111]">
           <button
             @click="viewMode = 'grid'"
             :class="[
-              'p-2 transition-colors border-r border-black/20 last:border-0',
+              'p-2 transition-colors border-r border-white/10',
               viewMode === 'grid'
-                ? 'bg-black text-white'
-                : 'bg-transparent text-gray-400 hover:text-black'
+                ? 'bg-white/10 text-white'
+                : 'bg-transparent text-zinc-500 hover:text-white'
             ]"
             aria-label="Grid view"
           >
@@ -97,8 +93,8 @@ const clearFilter = () => {
             :class="[
               'p-2 transition-colors',
               viewMode === 'list'
-                ? 'bg-black text-white'
-                : 'bg-transparent text-gray-400 hover:text-black'
+                ? 'bg-white/10 text-white'
+                : 'bg-transparent text-zinc-500 hover:text-white'
             ]"
             aria-label="List view"
           >
@@ -108,78 +104,78 @@ const clearFilter = () => {
           </button>
         </div>
       </div>
-      
-      <div v-if="filteredProjects.length === 0" class="text-center py-20 border border-dashed border-black/20 bg-white">
-        <p class="text-gray-500 font-mono text-sm uppercase mb-4">No projects found</p>
-        <button @click="clearFilter" class="text-black border-b border-black hover:opacity-50 text-xs font-bold uppercase tracking-widest">
+
+      <div v-if="filteredProjects.length === 0" class="text-center py-20 border border-dashed border-white/10 bg-[#111] rounded-xl">
+        <p class="text-zinc-500 text-sm mb-4">No projects found</p>
+        <button @click="clearFilter" class="text-zinc-400 hover:text-[#f5c542] text-xs font-bold uppercase tracking-widest transition-colors">
           Clear filter
         </button>
       </div>
-      
-      <div v-else-if="viewMode === 'grid'" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+
+      <div v-else-if="viewMode === 'grid'" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <ProjectCard
           v-for="project in filteredProjects"
           :key="project.slug"
           :item="project"
         />
       </div>
-      
-      <div v-else class="space-y-6">
+
+      <div v-else class="space-y-4">
         <div
           v-for="project in filteredProjects"
           :key="project.slug"
-          class="bg-white border border-black/20 p-6 flex flex-col md:flex-row gap-6 hover:border-black transition-colors group"
+          class="bg-[#111] border border-white/10 rounded-xl p-6 flex flex-col md:flex-row gap-6 hover:border-white/20 transition-colors group"
         >
-          <div class="md:w-64 h-48 md:h-auto overflow-hidden shrink-0 border border-black/10">
+          <div class="md:w-64 h-48 md:h-auto overflow-hidden shrink-0 rounded-lg bg-zinc-900">
             <img
               :src="project.image"
               :alt="project.title"
               width="1200"
               height="800"
-              class="w-full h-full object-cover filter grayscale group-hover:grayscale-0 transition-all duration-500"
+              class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
             />
           </div>
-          
+
           <div class="flex-1 flex flex-col">
             <div class="flex items-start justify-between gap-4 mb-3">
               <div>
-                <h3 class="text-xl font-bold mb-2 group-hover:underline decoration-1 underline-offset-4">
+                <h3 class="text-xl font-semibold mb-2 group-hover:text-[#f5c542] transition-colors">
                   {{ project.title }}
                 </h3>
-                <p class="text-gray-600 font-light text-sm line-clamp-2">
+                <p class="text-zinc-500 text-sm line-clamp-2">
                   {{ project.preview }}
                 </p>
               </div>
               <span
                 v-if="project.active"
-                class="px-2 py-1 text-[10px] font-mono bg-black text-white uppercase tracking-widest shrink-0"
+                class="px-2 py-1 text-[10px] font-bold bg-[#f5c542] text-black uppercase tracking-wider rounded-md shrink-0"
               >
                 Active
               </span>
             </div>
-            
+
             <div class="flex flex-wrap gap-2 mb-6">
               <span
                 v-if="project.stack?.Frontend"
-                class="px-2 py-1 text-[10px] font-mono border border-black/20 text-gray-600 uppercase"
+                class="px-2 py-1 text-[10px] font-mono border border-white/10 text-zinc-400 uppercase rounded-md"
               >
                 {{ project.stack.Frontend }}
               </span>
               <span
                 v-if="project.stack?.Backend"
-                class="px-2 py-1 text-[10px] font-mono border border-black/20 text-gray-600 uppercase"
+                class="px-2 py-1 text-[10px] font-mono border border-white/10 text-zinc-400 uppercase rounded-md"
               >
                 {{ project.stack.Backend }}
               </span>
             </div>
-            
+
             <div class="flex gap-3 mt-auto">
               <a
                 v-if="project.url"
                 :href="project.url"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="py-2 px-4 bg-black text-white text-xs font-bold uppercase tracking-widest hover:bg-gray-800 transition-colors"
+                class="py-2 px-4 bg-[#f5c542] text-black text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-[#e0b13a] transition-colors"
               >
                 Live Demo
               </a>
@@ -188,7 +184,7 @@ const clearFilter = () => {
                 :href="project.git"
                 target="_blank"
                 rel="noopener noreferrer"
-                class="py-2 px-4 border border-black/20 hover:bg-black/5 text-xs font-bold uppercase tracking-widest transition-colors"
+                class="py-2 px-4 border border-white/10 text-zinc-300 text-xs font-bold uppercase tracking-wider rounded-lg hover:bg-white/5 hover:border-white/20 transition-colors"
               >
                 GitHub
               </a>

@@ -13,8 +13,9 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@nuxt/content": "latest",
+    "@nuxt/content": "^3.4.0",
     "@nuxt/image": "^1.8.0",
+    "h3": "^1.15.11",
     "@radix-icons/vue": "^1.0.0",
     "@vercel/analytics": "^1.6.1",
     "@vueuse/core": "^14.1.0",

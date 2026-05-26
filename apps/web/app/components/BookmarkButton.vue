@@ -20,7 +20,7 @@ const handleToggle = () => {
 <template>
   <button 
     @click="handleToggle"
-    class="group flex items-center gap-1 text-xs font-mono text-gray-500 hover:text-black transition-colors uppercase"
+    class="group flex items-center gap-1 text-xs font-mono text-zinc-500 hover:text-white transition-colors uppercase"
     :title="saved ? 'Remove bookmark' : 'Save for later'"
   >
     <svg 
@@ -32,7 +32,7 @@ const handleToggle = () => {
       stroke="currentColor" 
       stroke-width="2"
       class="transition-colors"
-      :class="saved ? 'text-black' : 'text-gray-400 group-hover:text-black'"
+      :class="saved ? 'text-[#f5c542]' : 'text-zinc-600 group-hover:text-white'"
     >
       <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/>
     </svg>

@@ -93,20 +93,20 @@ useHead(() => {
 </script>
 
 <template>
-  <div v-if="post" class="min-h-screen bg-[#F3F3F3] font-sans">
+  <div v-if="post" class="min-h-screen bg-[#0a0a0a] text-white font-sans">
     <ReadingProgress />
-    <div class="container mx-auto px-6 py-12">
+    <div class="max-w-5xl mx-auto px-6 py-12">
       <div class="lg:flex gap-12">
         <!-- Sidebar / TOC -->
         <aside class="hidden lg:block w-64 shrink-0">
-          <div class="sticky top-24 border border-black/20 bg-white p-6">
-            <h3 class="text-xs font-bold uppercase tracking-widest mb-4 border-b border-black/10 pb-2">Table of Contents</h3>
+          <div class="sticky top-24 border border-white/10 bg-[#111] rounded-xl p-6">
+            <h3 class="text-[11px] font-bold uppercase tracking-widest mb-4 pb-2 border-b border-white/10 text-zinc-500">Contents</h3>
             <nav class="text-sm">
               <ul class="space-y-2">
                 <li v-for="link of (post.body?.toc?.links || [])" :key="link.id">
                   <NuxtLink
                     :to="`#${link.id}`"
-                    class="block text-gray-500 hover:text-black hover:underline transition-colors font-mono text-xs"
+                    class="block text-zinc-500 hover:text-white transition-colors text-xs"
                     :class="{
                       'pl-0': link.depth === 2,
                       'pl-4': link.depth === 3,
@@ -117,31 +117,31 @@ useHead(() => {
             </nav>
           </div>
         </aside>
-        
+
         <!-- Main Content -->
         <div class="flex-auto min-w-0">
-          <article class="bg-white border border-black/20 p-8 md:p-12">
+          <article class="bg-[#111] border border-white/10 rounded-xl p-8 md:p-12">
             <!-- Header -->
-            <header class="mb-12 border-b border-black/10 pb-8">
+            <header class="mb-12 border-b border-white/10 pb-8">
               <div class="flex flex-wrap items-center gap-3 mb-6">
                 <NuxtLink
                   :to="`/blog?tag=${post.tag}`"
-                  class="px-2 py-1 bg-black text-white text-[10px] font-bold uppercase tracking-widest hover:bg-gray-800 transition-colors"
+                  class="px-2.5 py-1 bg-[#f5c542] text-black text-[10px] font-bold uppercase tracking-widest rounded-md hover:bg-[#e0b13a] transition-colors"
                 >
                   {{ post.tag }}
                 </NuxtLink>
-                <span class="text-xs font-mono text-gray-500 uppercase">{{ formatDate(post.date || post.createdAt) }}</span>
-                <span class="text-xs font-mono text-gray-500 uppercase">• {{ readingTime }} min read</span>
-                <span class="text-xs font-mono text-gray-300">|</span>
+                <span class="text-xs text-zinc-500">{{ formatDate(post.date || post.createdAt) }}</span>
+                <span class="text-xs text-zinc-600">• {{ readingTime }} min read</span>
+                <span class="text-xs text-zinc-700">|</span>
                 <ViewCounter :slug="slugValue" />
                 <PresenceIndicator :slug="slugValue" />
                 <ReactionButton :slug="slugValue" />
               </div>
-              
-              <h1 class="text-3xl md:text-5xl font-medium tracking-tight mb-8 leading-tight">
+
+              <h1 class="text-3xl md:text-5xl font-semibold tracking-tight mb-8 leading-tight">
                 {{ post.title }}
               </h1>
-              
+
               <div class="flex items-center justify-between">
                 <div class="flex items-center gap-4">
                   <NuxtImg
@@ -149,45 +149,45 @@ useHead(() => {
                     :alt="post.author?.name || post.title"
                     width="40"
                     height="40"
-                    class="h-10 w-10 rounded-full border border-black/10 grayscale"
+                    class="h-10 w-10 rounded-full border border-white/10"
                   />
                   <div>
-                    <p class="text-xs font-bold uppercase tracking-wider text-black">By {{ post.author?.name }}</p>
-                    <p class="text-xs font-mono text-gray-500">Author</p>
+                    <p class="text-xs font-bold uppercase tracking-wider text-white">By {{ post.author?.name }}</p>
+                    <p class="text-xs text-zinc-500">Author</p>
                   </div>
                 </div>
                 <BookmarkButton :slug="slugValue" :title="post.title" />
               </div>
             </header>
-            
+
             <!-- Hero Image -->
-            <div class="mb-12 border border-black/10 p-2 bg-gray-50">
+            <div class="mb-12 rounded-xl overflow-hidden bg-zinc-900">
               <NuxtImg
                 :src="post.img"
                 :alt="post.title"
                 sizes="100vw"
-                class="w-full h-auto object-cover grayscale hover:grayscale-0 transition-all duration-500"
+                class="w-full h-auto object-cover"
               />
             </div>
-            
+
             <!-- Content -->
-            <div class="prose prose-neutral max-w-none font-light prose-headings:font-medium prose-headings:tracking-tight prose-a:text-black prose-a:underline prose-a:decoration-1 prose-a:underline-offset-4 hover:prose-a:decoration-2">
+            <div class="prose prose-invert max-w-none font-light prose-headings:font-semibold prose-headings:tracking-tight prose-a:text-[#f5c542] prose-a:no-underline hover:prose-a:underline prose-strong:text-white prose-code:text-[#f5c542] prose-pre:bg-zinc-900 prose-pre:border prose-pre:border-white/10">
               <ContentRenderer :value="post" />
             </div>
-            
+
             <!-- Footer -->
-            <div class="mt-12 pt-8 border-t border-black/10">
+            <div class="mt-12 pt-8 border-t border-white/10">
               <div class="flex flex-col sm:flex-row justify-between items-center gap-6">
                 <div class="w-full sm:w-auto">
-                  <h4 class="text-xs font-bold uppercase tracking-widest mb-4">Share this post</h4>
+                  <h4 class="text-xs font-bold uppercase tracking-widest mb-4 text-zinc-500">Share this post</h4>
                   <ShareButtons :title="post.title" :description="post.description" />
                 </div>
-                
+
                 <div class="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-end">
                   <PrevNext :prev="prev" :next="next" />
                 </div>
               </div>
-              
+
               <div class="mt-12">
                 <Newsletter />
               </div>
@@ -198,9 +198,9 @@ useHead(() => {
               <RealtimeComments :slug="slugValue" />
             </div>
           </article>
-          
+
           <div class="mt-12">
-            <h3 class="text-xl font-medium mb-6">Related Posts</h3>
+            <h3 class="text-xl font-semibold mb-6">Related Posts</h3>
             <RelatedPosts
               :current-slug="route.params.slug as string"
               :current-tag="post.tag"

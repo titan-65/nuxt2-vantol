@@ -16,7 +16,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="inline-flex items-center gap-1.5 text-xs font-mono text-gray-500">
+  <div class="inline-flex items-center gap-1.5 text-xs font-mono text-zinc-500">
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="14"
@@ -27,7 +27,7 @@ onUnmounted(() => {
       stroke-width="1.5"
       stroke-linecap="round"
       stroke-linejoin="round"
-      class="text-gray-400"
+      class="text-zinc-500"
     >
       <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z" />
       <circle cx="12" cy="12" r="3" />

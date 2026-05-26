@@ -1,31 +1,31 @@
 <script setup lang="ts">
-const colorMode = useState('colorMode', () => 'light')
+const colorMode = useState("colorMode", () => "light");
 
 const toggleDarkMode = () => {
-  colorMode.value = colorMode.value === 'dark' ? 'light' : 'dark'
-  if (typeof document !== 'undefined') {
-    document.documentElement.classList.toggle('dark', colorMode.value === 'dark')
-    localStorage.setItem('colorMode', colorMode.value)
+  colorMode.value = colorMode.value === "dark" ? "light" : "dark";
+  if (typeof document !== "undefined") {
+    document.documentElement.classList.toggle("dark", colorMode.value === "dark");
+    localStorage.setItem("colorMode", colorMode.value);
   }
-}
+};
 
 onMounted(() => {
-  const saved = localStorage.getItem('colorMode')
-  const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-  colorMode.value = saved || (prefersDark ? 'dark' : 'light')
-  document.documentElement.classList.toggle('dark', colorMode.value === 'dark')
-})
+  const saved = localStorage.getItem("colorMode");
+  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  colorMode.value = saved || (prefersDark ? "dark" : "light");
+  document.documentElement.classList.toggle("dark", colorMode.value === "dark");
+});
 </script>
 
 <template>
   <button
     @click="toggleDarkMode"
-    class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+    class="p-2 rounded-lg text-zinc-500 hover:bg-black/5 hover:text-[#171717] transition-colors dark:text-zinc-400 dark:hover:bg-white/5 dark:hover:text-white"
     :aria-label="colorMode === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'"
   >
     <svg
       v-if="colorMode === 'dark'"
-      class="w-5 h-5 text-yellow-400"
+      class="w-5 h-5 text-[#f5c542]"
       fill="currentColor"
       viewBox="0 0 20 20"
     >
@@ -35,12 +35,7 @@ onMounted(() => {
         clip-rule="evenodd"
       />
     </svg>
-    <svg
-      v-else
-      class="w-5 h-5 text-gray-600"
-      fill="currentColor"
-      viewBox="0 0 20 20"
-    >
+    <svg v-else class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
       <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
     </svg>
   </button>

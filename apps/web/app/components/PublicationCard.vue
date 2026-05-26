@@ -31,53 +31,44 @@ const formatDate = (dateStr?: string) => {
     <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
       <!-- Cover Image -->
       <div class="relative">
-        <div class="relative z-10 border border-black/20 bg-white p-2 shadow-sm transform rotate-2 hover:rotate-0 transition-transform duration-500">
-          <div class="aspect-[3/4] overflow-hidden bg-gray-100 border border-black/10">
+        <div class="relative z-10 rounded-xl overflow-hidden bg-zinc-900 shadow-lg">
+          <div class="aspect-[3/4] overflow-hidden">
             <img
               :src="item.cover"
               :alt="item.title"
               class="w-full h-full object-cover"
             />
           </div>
-          <div class="mt-2 flex justify-between items-center px-1">
-            <div class="flex gap-1">
-              <div class="w-2 h-2 rounded-full bg-red-400/20"></div>
-              <div class="w-2 h-2 rounded-full bg-yellow-400/20"></div>
-              <div class="w-2 h-2 rounded-full bg-green-400/20"></div>
-            </div>
-            <span class="text-[10px] font-mono text-gray-400 uppercase">{{ item.format || 'BOOK' }}</span>
-          </div>
         </div>
-        <div class="absolute -top-4 -right-4 w-full h-full border border-dashed border-black/20 z-0"></div>
       </div>
 
       <!-- Details -->
       <div>
-        <h2 class="text-3xl md:text-4xl font-medium tracking-tight mb-2">
+        <h2 class="text-3xl md:text-4xl font-semibold tracking-tight mb-2">
           {{ item.title }}
         </h2>
-        <p v-if="item.subtitle" class="text-lg text-gray-500 font-light mb-6">
+        <p v-if="item.subtitle" class="text-lg text-zinc-500 font-light mb-6">
           {{ item.subtitle }}
         </p>
 
         <!-- Metadata Badges -->
         <div class="flex flex-wrap gap-3 mb-8">
-          <span v-if="item.format" class="inline-block px-2 py-1 text-xs font-mono bg-black text-white uppercase">
+          <span v-if="item.format" class="inline-block px-2.5 py-1 text-xs font-mono bg-[#f5c542] text-black rounded-md uppercase font-bold">
             {{ item.format }}
           </span>
-          <span v-if="item.pages" class="inline-block px-2 py-1 text-xs font-mono border border-black/20 text-gray-600 uppercase">
+          <span v-if="item.pages" class="inline-block px-2.5 py-1 text-xs font-mono border border-white/10 text-zinc-400 rounded-md uppercase">
             {{ item.pages }} pages
           </span>
-          <span v-if="item.date" class="inline-block px-2 py-1 text-xs font-mono border border-black/20 text-gray-600 uppercase">
+          <span v-if="item.date" class="inline-block px-2.5 py-1 text-xs font-mono border border-white/10 text-zinc-400 rounded-md uppercase">
             {{ formatDate(item.date) }}
           </span>
-          <span v-if="item.publisher" class="inline-block px-2 py-1 text-xs font-mono border border-black/20 text-gray-600 uppercase">
+          <span v-if="item.publisher" class="inline-block px-2.5 py-1 text-xs font-mono border border-white/10 text-zinc-400 rounded-md uppercase">
             {{ item.publisher }}
           </span>
         </div>
 
         <!-- Description -->
-        <p class="text-gray-600 font-light leading-relaxed mb-8">
+        <p class="text-zinc-400 font-light leading-relaxed mb-8">
           {{ item.description }}
         </p>
 
@@ -87,7 +78,7 @@ const formatDate = (dateStr?: string) => {
             :href="item.amazonUrl"
             target="_blank"
             rel="noopener noreferrer"
-            class="inline-flex items-center gap-2 bg-black text-white px-6 py-3 text-sm font-bold uppercase tracking-widest hover:bg-gray-800 transition-colors"
+            class="inline-flex items-center gap-2 bg-[#f5c542] text-black px-6 py-3 text-sm font-bold uppercase tracking-widest hover:bg-[#e0b13a] transition-colors rounded-lg"
           >
             Buy on Amazon
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -99,7 +90,7 @@ const formatDate = (dateStr?: string) => {
             :href="item.previewUrl"
             target="_blank"
             rel="noopener noreferrer"
-            class="inline-flex items-center gap-2 border border-black/20 bg-transparent text-black px-6 py-3 text-sm font-medium uppercase tracking-widest hover:bg-black/5 transition-colors"
+            class="inline-flex items-center gap-2 border border-white/10 bg-transparent text-white px-6 py-3 text-sm font-medium uppercase tracking-widest hover:bg-white/5 transition-colors rounded-lg"
           >
             Preview
           </a>
@@ -110,8 +101,7 @@ const formatDate = (dateStr?: string) => {
     <!-- Reviews Section -->
     <div v-if="item.reviews && item.reviews.length > 0">
       <div class="flex items-center gap-2 mb-8">
-        <span class="w-2 h-2 bg-[#FF4F4F] rounded-full"></span>
-        <span class="text-xs font-medium tracking-widest text-gray-500 uppercase">REVIEWS</span>
+        <span class="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Reviews</span>
       </div>
       <div class="grid md:grid-cols-2 gap-6">
         <ReviewCard
@@ -127,17 +117,16 @@ const formatDate = (dateStr?: string) => {
     <!-- Table of Contents -->
     <div v-if="item.toc && item.toc.length > 0">
       <div class="flex items-center gap-2 mb-8">
-        <span class="w-2 h-2 bg-[#FF4F4F] rounded-full"></span>
-        <span class="text-xs font-medium tracking-widest text-gray-500 uppercase">TABLE OF CONTENTS</span>
+        <span class="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Table of Contents</span>
       </div>
-      <div class="bg-white border border-black/10 p-8">
+      <div class="bg-[#111] border border-white/10 rounded-xl p-8">
         <ol class="space-y-3">
           <li
             v-for="(chapter, index) in item.toc"
             :key="index"
-            class="flex items-start gap-4 text-gray-600 font-mono text-sm"
+            class="flex items-start gap-4 text-zinc-400 text-sm"
           >
-            <span class="text-xs font-bold text-gray-400 mt-0.5 w-6 text-right">{{ String(index + 1).padStart(2, '0') }}</span>
+            <span class="text-xs font-bold text-zinc-600 mt-0.5 w-6 text-right">{{ String(index + 1).padStart(2, '0') }}</span>
             <span class="font-light">{{ chapter }}</span>
           </li>
         </ol>
@@ -147,15 +136,14 @@ const formatDate = (dateStr?: string) => {
     <!-- Related Posts -->
     <div v-if="item.relatedPosts && item.relatedPosts.length > 0">
       <div class="flex items-center gap-2 mb-8">
-        <span class="w-2 h-2 bg-[#FF4F4F] rounded-full"></span>
-        <span class="text-xs font-medium tracking-widest text-gray-500 uppercase">RELATED POSTS</span>
+        <span class="text-[10px] font-bold uppercase tracking-widest text-zinc-500">Related Posts</span>
       </div>
       <div class="flex flex-wrap gap-3">
         <NuxtLink
           v-for="slug in item.relatedPosts"
           :key="slug"
           :to="`/blog/${slug}`"
-          class="inline-flex items-center gap-2 px-4 py-2 text-xs font-mono border border-black/20 hover:bg-black hover:text-white transition-colors uppercase"
+          class="inline-flex items-center gap-2 px-4 py-2 text-xs font-mono border border-white/10 hover:bg-white/5 hover:border-white/20 transition-colors uppercase rounded-lg text-zinc-400"
         >
           {{ slug }}
         </NuxtLink>

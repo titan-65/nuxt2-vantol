@@ -18,7 +18,7 @@ const getSlug = (path: string | undefined) => path?.split('/').pop() || ''
     <NuxtLink
       v-if="prev"
       :to="`/blog/${getSlug(prev.path)}`"
-      class="flex items-center gap-1 text-indigo-600 dark:text-indigo-400 hover:underline transition-colors"
+      class="flex items-center gap-1 text-[#f5c542] hover:underline transition-colors"
     >
       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
@@ -29,7 +29,7 @@ const getSlug = (path: string | undefined) => path?.split('/').pop() || ''
     <NuxtLink
       v-if="next"
       :to="`/blog/${getSlug(next.path)}`"
-      class="flex items-center gap-1 text-indigo-600 dark:text-indigo-400 hover:underline transition-colors"
+      class="flex items-center gap-1 text-[#f5c542] hover:underline transition-colors"
     >
       <span class="font-medium line-clamp-1">{{ next.title }}</span>
       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">

@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Home, FileText, FolderOpen, Image, Compass, User, Wrench, Mail, BarChart3, BookOpen, Moon, Sun, Search, MessageSquare } from 'lucide-vue-next'
+import { Home, FileText, FolderOpen, Image, Compass, User, Wrench, Mail, BarChart3, BookOpen, Search, MessageSquare } from 'lucide-vue-next'
 
 const isOpen = ref(false)
 const searchQuery = ref('')
@@ -113,36 +113,36 @@ defineExpose({ open })
 <template>
   <Teleport to="body">
     <div v-if="isOpen" class="fixed inset-0 z-100 overflow-y-auto">
-      <div class="fixed inset-0 bg-black/50 backdrop-blur-sm" @click="close" />
+      <div class="fixed inset-0 bg-black/70 backdrop-blur-sm" @click="close" />
       <div class="relative min-h-screen flex items-start justify-center pt-[15vh] px-4">
         <div
-          class="relative w-full max-w-lg bg-white border border-black/20 shadow-2xl"
+          class="relative w-full max-w-lg bg-[#111] border border-white/10 shadow-2xl rounded-xl overflow-hidden"
           @keydown="handleKeydown"
         >
           <!-- Search Input -->
-          <div class="flex items-center border-b border-black/10 px-4 py-3">
-            <Search class="w-4 h-4 text-gray-400 shrink-0" />
+          <div class="flex items-center border-b border-white/10 px-4 py-3">
+            <Search class="w-4 h-4 text-zinc-500 shrink-0" />
             <input
               v-model="searchQuery"
               type="text"
               placeholder="Search pages and posts..."
-              class="w-full ml-3 bg-transparent outline-none text-sm text-black placeholder-gray-400 font-mono"
+              class="w-full ml-3 bg-transparent outline-none text-sm text-white placeholder-zinc-500 font-mono"
               autofocus
             />
-            <kbd class="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-mono text-gray-400 border border-black/10 rounded">
+            <kbd class="hidden sm:inline-flex items-center gap-1 px-2 py-0.5 text-[10px] font-mono text-zinc-500 border border-white/10 rounded">
               ESC
             </kbd>
           </div>
 
           <!-- Results -->
           <div class="max-h-80 overflow-y-auto py-2">
-            <div v-if="filteredItems.length === 0" class="px-4 py-8 text-center text-sm text-gray-400 font-mono">
+            <div v-if="filteredItems.length === 0" class="px-4 py-8 text-center text-sm text-zinc-500 font-mono">
               No results for "{{ searchQuery }}"
             </div>
 
             <template v-for="(items, group) in groupedItems" :key="group">
               <div class="px-4 pt-3 pb-1">
-                <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-gray-400">{{ group }}</span>
+                <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500">{{ group }}</span>
               </div>
               <button
                 v-for="(item, idx) in items"
@@ -150,13 +150,13 @@ defineExpose({ open })
                 @click="navigate(item.to)"
                 class="w-full flex items-center gap-3 px-4 py-2.5 text-left transition-colors"
                 :class="flatItems.indexOf(item) === selectedIndex
-                  ? 'bg-black text-white'
-                  : 'text-gray-700 hover:bg-gray-50'"
+                  ? 'bg-white/10 text-white'
+                  : 'text-zinc-300 hover:bg-white/5'"
               >
                 <component
                   :is="item.icon"
                   class="w-4 h-4 shrink-0"
-                  :class="flatItems.indexOf(item) === selectedIndex ? 'text-gray-300' : 'text-gray-400'"
+                  :class="flatItems.indexOf(item) === selectedIndex ? 'text-[#f5c542]' : 'text-zinc-500'"
                 />
                 <span class="text-sm font-medium truncate">{{ item.name }}</span>
               </button>
@@ -164,19 +164,19 @@ defineExpose({ open })
           </div>
 
           <!-- Footer -->
-          <div class="border-t border-black/10 px-4 py-2.5 flex items-center justify-between">
-            <div class="flex items-center gap-3 text-[10px] font-mono text-gray-400">
+          <div class="border-t border-white/10 px-4 py-2.5 flex items-center justify-between">
+            <div class="flex items-center gap-3 text-[10px] font-mono text-zinc-600">
               <span class="flex items-center gap-1">
-                <kbd class="px-1 py-0.5 border border-black/10 rounded text-[9px]">↑↓</kbd> navigate
+                <kbd class="px-1 py-0.5 border border-white/10 rounded text-[9px]">↑↓</kbd> navigate
               </span>
               <span class="flex items-center gap-1">
-                <kbd class="px-1 py-0.5 border border-black/10 rounded text-[9px]">↵</kbd> open
+                <kbd class="px-1 py-0.5 border border-white/10 rounded text-[9px]">↵</kbd> open
               </span>
               <span class="flex items-center gap-1">
-                <kbd class="px-1 py-0.5 border border-black/10 rounded text-[9px]">esc</kbd> close
+                <kbd class="px-1 py-0.5 border border-white/10 rounded text-[9px]">esc</kbd> close
               </span>
             </div>
-            <span class="text-[10px] font-mono text-gray-400">{{ filteredItems.length }} results</span>
+            <span class="text-[10px] font-mono text-zinc-600">{{ filteredItems.length }} results</span>
           </div>
         </div>
       </div>
