@@ -1,6 +1,6 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useState } from "react";
-import { Bot, Wrench, Monitor, GitBranch, Search, Keyboard, Globe } from "lucide-react";
+import { Wrench, Monitor, Keyboard, Globe, Bell, UserCircle, Shield, Target } from "lucide-react";
 import TerminalAnimation from "../components/TerminalAnimation";
 import FeatureCard from "../components/FeatureCard";
 import CodeBlock from "../components/CodeBlock";
@@ -12,29 +12,39 @@ export const Route = createFileRoute("/")({ component: LandingPage });
 
 const features = [
   {
-    icon: <Bot size={20} strokeWidth={1.75} />,
-    title: "Multi-Provider LLM",
-    description: "Connect to OpenAI, Anthropic, or any provider. Streaming responses by default.",
+    icon: <Bell size={20} strokeWidth={1.75} />,
+    title: "Proactive Engine",
+    description:
+      "Watches your environment and reaches out before you ask. Calendar events, git conflicts, file changes — classified and delivered with the right urgency.",
+  },
+  {
+    icon: <UserCircle size={20} strokeWidth={1.75} />,
+    title: "User Model",
+    description:
+      "Builds a persistent model of who you are — expertise, preferences, goals, communication style. Every chat feels personal.",
   },
   {
     icon: <Wrench size={20} strokeWidth={1.75} />,
-    title: "Built-in Tools",
-    description: "File read/write, shell execution, git operations — 10 tools ready to go.",
+    title: "49 Built-in Tools",
+    description:
+      "File, shell, git, code review, testing, web search, process management, terminal sessions, and more.",
+  },
+  {
+    icon: <Shield size={20} strokeWidth={1.75} />,
+    title: "Privacy Mode",
+    description:
+      "Toggle privacy to redact all personal data from the LLM's view. Your habits and history stay local.",
+  },
+  {
+    icon: <Target size={20} strokeWidth={1.75} />,
+    title: "Accountability",
+    description:
+      "Track goals, monitor activity patterns, generate daily/weekly reports. A developer day tracker that keeps you accountable.",
   },
   {
     icon: <Monitor size={20} strokeWidth={1.75} />,
     title: "Four Interfaces",
-    description: "Terminal UI, readline REPL, HTTP API server, or one-shot CLI.",
-  },
-  {
-    icon: <GitBranch size={20} strokeWidth={1.75} />,
-    title: "Orchestrator",
-    description: "Spawn parallel sub-agents with concurrency limits and task management.",
-  },
-  {
-    icon: <Search size={20} strokeWidth={1.75} />,
-    title: "Project Scanning",
-    description: "Auto-detect language, framework, package manager, and conventions.",
+    description: "Terminal UI, readline REPL, HTTP API server, or one-shot CLI. Your choice.",
   },
 ];
 
@@ -42,34 +52,37 @@ const codeExamples = [
   {
     label: "Create an agent",
     filename: "agent.ts",
-    code: `import { Agent, createProvider, createDefaultRegistry } from "null-agent";
+    code: `import { Agent, createProvider, createDefaultRegistry, UserModel } from "null-agent";
+
+const userModel = new UserModel();
+await userModel.recordCorrection("package manager", "prefers pnpm", "explicit", 0.95);
 
 const agent = new Agent({
-  provider: createProvider("anthropic"),
+  provider: createProvider("openai"),
   tools: createDefaultRegistry(),
-  systemPrompt: "You are a helpful coding assistant.",
+  userModel,
 });
 
-const result = await agent.chat("Explain this file");
+const result = await agent.chat("How do I install this?");
+// The assistant already knows you prefer pnpm
 console.log(result.content);`,
   },
   {
-    label: "Add custom tools",
-    filename: "tools.ts",
-    code: `import { ToolRegistry, builtinTools } from "null-agent";
+    label: "Proactive Engine",
+    filename: "proactive.ts",
+    code: `import { EventBus, ProactiveEngine } from "null-agent";
 
-const registry = new ToolRegistry();
-builtinTools.forEach(t => registry.register(t));
-
-registry.register({
-  name: "deploy",
-  description: "Deploy to production",
-  parameters: { type: "object", properties: { env: { type: "string" } } },
-  execute: async ({ env }) => {
-    // your deploy logic
-    return \`Deployed to \${env}\`;
+const bus = new EventBus();
+const engine = new ProactiveEngine({
+  eventBus: bus,
+  agent,
+  onConfirm: (plan) => {
+    console.log(\`🔔 \${plan.signal.payload.message}\`);
   },
-});`,
+});
+engine.start();
+// Calendar events, git conflicts, file changes —
+// the assistant reaches out with the right urgency.`,
   },
   {
     label: "Chat programmatically",
@@ -77,7 +90,7 @@ registry.register({
     code: `import { Agent, createProvider } from "null-agent";
 
 const agent = new Agent({
-  provider: createProvider("openai"),
+  provider: createProvider("anthropic"),
 });
 
 for await (const chunk of agent.provider.chat([
@@ -105,8 +118,9 @@ function LandingPage() {
               null-agent
             </h1>
             <p className="mb-8 max-w-2xl text-base text-[var(--sea-ink-soft)] sm:text-lg">
-              Multi-provider LLM support, built-in tools, multi-agent orchestration. TUI, REPL, HTTP
-              server, or CLI — your choice of interface.
+              Proactive engine, user model, 49 built-in tools, multi-provider LLM support. Terminal
+              UI, REPL, HTTP server, or CLI — your choice. Now with Google Calendar integration,
+              privacy mode, and developer accountability.
             </p>
             <div className="flex flex-wrap gap-3">
               <Link
@@ -177,7 +191,7 @@ function LandingPage() {
           {[
             {
               title: "Terminal UI",
-              desc: "Full interactive TUI with Ink — status bar, chat panel, animated mascot, slash commands.",
+              desc: "Full interactive TUI with Ink — status bar, chat panel, animated mascot, slash commands, proactive notifications.",
               icon: <Monitor size={18} strokeWidth={1.75} />,
             },
             {

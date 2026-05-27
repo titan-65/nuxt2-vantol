@@ -18,86 +18,92 @@ import {
   Monitor,
   Keyboard,
   Globe,
+  Bell,
+  UserCircle,
+  Shield,
+  Target,
+  Calendar,
+  Eye,
 } from "lucide-react";
 
 export const Route = createFileRoute("/null-agent")({
   component: NullAgentPage,
 });
 
-const architectureCode = `import { Agent, createProvider, createDefaultRegistry } from "null-agent";
+const agentCode = `import { Agent, createProvider, createDefaultRegistry, UserModel } from "null-agent";
+
+const userModel = new UserModel();
+await userModel.recordCorrection("package manager", "prefers pnpm", "explicit", 0.95);
+
+const agent = new Agent({
+  provider: createProvider("openai"),
+  tools: createDefaultRegistry(),
+  userModel,
+});
+
+const result = await agent.chat("How do I install this?");
+// The assistant already knows you prefer pnpm
+console.log(result.content);`;
+
+const proactiveCode = `import { EventBus, ProactiveEngine } from "null-agent";
+
+const bus = new EventBus();
+const engine = new ProactiveEngine({
+  eventBus: bus,
+  agent,
+  onConfirm: (plan) => {
+    console.log(\`🔔 \${plan.signal.payload.message}\`);
+  },
+});
+engine.start();
+// Calendar events, git conflicts, file changes —
+// the assistant reaches out with the right urgency.`;
+
+const privacyCode = `import { Agent, createProvider } from "null-agent";
 
 const agent = new Agent({
   provider: createProvider("anthropic"),
   tools: createDefaultRegistry(),
-  systemPrompt: "You are a helpful coding assistant.",
-  maxIterations: 10,
+  privacyMode: true, // redacts user model from LLM
 });
 
-const result = await agent.chat("Help me refactor this function");
-console.log(result.content);
-console.log(\`Completed in \${result.iterations} iterations\`);`;
+await agent.chat("How do I install this?");
+// Works normally, but the LLM never sees your preferences`;
 
-const toolsCode = `import { ToolRegistry, builtinTools, fileReadTool, shellTool } from "null-agent";
+const accountabilityCode = `import { ActivityTracker, GoalTracker, Reporter } from "null-agent";
 
-// Use only specific built-in tools
-const registry = new ToolRegistry();
-registry.register(fileReadTool);
-registry.register(shellTool);
+const tracker = new ActivityTracker();
+await tracker.init();
 
-// Add your own tool
-registry.register({
-  name: "deploy",
-  description: "Deploy the application",
-  parameters: {
-    type: "object",
-    properties: {
-      environment: { type: "string", enum: ["staging", "production"] },
-    },
-    required: ["environment"],
-  },
-  execute: async ({ environment }) => {
-    // deploy logic here
-    return \`Deployed to \${environment}\`;
-  },
-});`;
+// Track goals
+const goals = new GoalTracker(store);
+await goals.createGoal("Ship auth feature", "daily");
 
-const serverCode = `import { Agent, createProvider, createDefaultRegistry } from "null-agent";
-import { createServer } from "node:http";
-
-// Start HTTP API server
-const agent = new Agent({
-  provider: createProvider("anthropic"),
-  tools: createDefaultRegistry(),
-});
-
-// Or use the built-in server
-// null-agent --server --port 3737
-
-// POST /chat        — Send a message
-// POST /chat/stream — Stream response (SSE)
-// GET  /history     — Get conversation history
-// GET  /health      — Health check`;
+// Generate reports
+const reporter = new Reporter(store, tracker);
+const report = await reporter.generateDailyReport();
+await reporter.saveReport(report);`;
 
 const interfaces = [
   {
     title: "Terminal UI",
     icon: <Monitor size={18} strokeWidth={1.75} />,
     description:
-      "Full interactive terminal interface built with Ink (React for terminal). Features status bar showing provider/model/project info, chat panel with message bubbles, animated NullFace mascot, slash commands (/help, /clear, /context, /tasks, /config), and formatted tool call display.",
+      "Full interactive terminal interface with Ink. Status bar, chat panel, animated NullFace mascot, slash commands, proactive notifications, daily summary panel, and formatted tool call display.",
     code: "null-agent",
   },
   {
     title: "Readline REPL",
     icon: <Keyboard size={18} strokeWidth={1.75} />,
     description:
-      "Lightweight readline-based REPL with colored output. No dependencies beyond Node.js. Perfect for quick interactions or environments where Ink isn't available.",
+      "Lightweight readline-based REPL with colored output. No extra dependencies. Perfect for quick interactions or environments where the TUI isn't available.",
     code: "null-agent --plain",
   },
   {
     title: "HTTP API Server",
     icon: <Globe size={18} strokeWidth={1.75} />,
     description:
-      "REST API server (default port 3737) with streaming SSE support. Integrate null-agent into any frontend or service. Endpoints for chat, history, tasks, config, and health.",
+      "REST API server with streaming SSE support. Default port 3737. Integrate null-agent into any frontend or service.",
     code: "null-agent --server --port 3737",
   },
   {
@@ -113,9 +119,10 @@ function NullAgentPage() {
   const [activeCode, setActiveCode] = useState(0);
 
   const codeTabs = [
-    { label: "Agent", code: architectureCode, filename: "agent.ts" },
-    { label: "Tools", code: toolsCode, filename: "tools.ts" },
-    { label: "Server", code: serverCode, filename: "server.ts" },
+    { label: "Agent + User Model", code: agentCode, filename: "agent.ts" },
+    { label: "Proactive Engine", code: proactiveCode, filename: "proactive.ts" },
+    { label: "Privacy Mode", code: privacyCode, filename: "privacy.ts" },
+    { label: "Accountability", code: accountabilityCode, filename: "accountability.ts" },
   ];
 
   return (
@@ -130,7 +137,15 @@ function NullAgentPage() {
         </h1>
         <p className="mb-8 max-w-2xl text-base text-[var(--sea-ink-soft)] sm:text-lg">
           Interactive coding assistant library with multi-provider LLM support, a built-in tool
-          system, conversation persistence, project awareness, and multi-agent orchestration.
+          system, conversation persistence, project awareness, multi-agent orchestration, and a
+          built-in <strong>developer day tracker</strong> that keeps you accountable.
+        </p>
+        <p className="mb-4 max-w-2xl text-sm text-[var(--sea-ink-soft)]">
+          <strong>v0.6.2</strong> adds the <strong>Proactive Engine</strong> — your assistant now
+          reaches out before you ask. It watches for calendar events, git conflicts, and file
+          changes, then offers help, warnings, or quiet assistance based on context. It builds a{" "}
+          <strong>User Model</strong> from your habits, preferences, and goals, so every chat feels
+          like talking to someone who knows you.
         </p>
         <InstallTabs packageName="null-agent" />
       </section>
@@ -141,40 +156,70 @@ function NullAgentPage() {
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {[
             {
+              icon: <Bell size={20} strokeWidth={1.75} />,
+              title: "Proactive Engine",
+              description:
+                "Observes → Interprets → Classifies → Notifies. Calendar events, git conflicts, file changes — the assistant reaches out with the right urgency. Auto, confirm, or block tiers.",
+            },
+            {
+              icon: <UserCircle size={20} strokeWidth={1.75} />,
+              title: "User Model",
+              description:
+                "Persistent model of expertise, preferences, communication style, active goals, and learned corrections. Feeds into every chat and proactive evaluation.",
+            },
+            {
+              icon: <Shield size={20} strokeWidth={1.75} />,
+              title: "Privacy Mode",
+              description:
+                "Toggle privacy to redact all User Model data from the LLM. System prompt shows a redaction notice. Proactive engine operates with minimal context.",
+            },
+            {
+              icon: <Calendar size={20} strokeWidth={1.75} />,
+              title: "Calendar Integration",
+              description:
+                "Google Calendar with OAuth device code flow. Transparent token refresh. Events emitted on the EventBus: upcoming (confirm tier) and started (auto tier).",
+            },
+            {
+              icon: <Target size={20} strokeWidth={1.75} />,
+              title: "Accountability",
+              description:
+                "Activity tracking (explicit + inferred), goal management, daily/weekly reports, proactive reminders for breaks, goals, and daily rituals.",
+            },
+            {
               icon: <Bot size={20} strokeWidth={1.75} />,
               title: "Multi-Provider LLM",
               description:
-                "OpenAI and Anthropic providers with streaming. Extensible provider interface for custom backends.",
+                "OpenAI, Anthropic, Gemini, OpenRouter. Streaming responses. Extensible provider interface. Auto-detection from environment variables.",
             },
             {
               icon: <Wrench size={20} strokeWidth={1.75} />,
-              title: "10 Built-in Tools",
+              title: "49 Built-in Tools",
               description:
-                "File read/write, shell execution, and 7 git operations. Register custom tools with JSON Schema parameters.",
+                "File read/write/move/copy/delete/glob, shell execution, 15 git operations, code review, test generation, web search, process management, terminal sessions, and more.",
             },
             {
               icon: <GitBranch size={20} strokeWidth={1.75} />,
               title: "Orchestrator",
               description:
-                "Spawn parallel sub-agents for complex tasks. Concurrency limits, task tracking, and result aggregation.",
+                "Spawn parallel sub-agents for complex tasks. Concurrency limits (max 5), spawn limits (3 per turn), 30s timeout per sub-agent.",
             },
             {
               icon: <Database size={20} strokeWidth={1.75} />,
               title: "Memory & Persistence",
               description:
-                "File-based conversation storage at ~/.null-agent/memory/. Resume conversations across sessions.",
+                "File-based conversation storage at ~/.null-agent/memory/. Resume conversations across sessions. Searchable history.",
             },
             {
               icon: <Search size={20} strokeWidth={1.75} />,
               title: "Project Scanning",
               description:
-                "Auto-detect language, framework, package manager, monorepo status, test/build commands, and conventions.",
+                "Auto-detect language, framework, package manager, monorepo status, test/build commands, and conventions. Detects Next.js, React, Vue, Express, and more.",
             },
             {
               icon: <Lock size={20} strokeWidth={1.75} />,
               title: "Permission System",
               description:
-                "Mode-based permissions (auto/confirm/plan). Risk classification, deny patterns, and allow-always overrides.",
+                "Mode-based permissions (auto / confirm / plan). Risk classification, deny patterns, and allow-always overrides.",
             },
             {
               icon: <Radio size={20} strokeWidth={1.75} />,
@@ -194,6 +239,12 @@ function NullAgentPage() {
               description:
                 "Command history with undo support. File writes automatically snapshot for undo capability.",
             },
+            {
+              icon: <Eye size={20} strokeWidth={1.75} />,
+              title: "Restrictive Override",
+              description:
+                "The LLM Interpreter can only escalate approval tiers (make them more restrictive), never downgrade. Safety principle: the most restrictive tier always wins.",
+            },
           ].map((f, i) => (
             <FeatureCard
               key={f.title}
@@ -209,7 +260,7 @@ function NullAgentPage() {
       {/* Code Examples */}
       <section className="mt-12">
         <p className="island-kicker mb-4">Usage Examples</p>
-        <div className="mb-4 flex gap-2">
+        <div className="mb-4 flex flex-wrap gap-2">
           {codeTabs.map((tab, i) => (
             <button
               key={tab.label}
@@ -253,6 +304,66 @@ function NullAgentPage() {
       <section className="mt-12">
         <p className="island-kicker mb-4">See It In Action</p>
         <TerminalAnimation />
+      </section>
+
+      {/* New Commands */}
+      <section className="mt-12">
+        <p className="island-kicker mb-4">New in v0.6</p>
+        <div className="island-shell rounded-2xl p-6">
+          <h3 className="mb-3 text-lg font-semibold text-[var(--sea-ink)]">User Model Commands</h3>
+          <div className="mb-4 grid gap-2 font-mono text-sm sm:grid-cols-2">
+            <div className="flex gap-2">
+              <code className="text-[var(--lagoon-deep)]">/profile</code>
+              <span className="text-[var(--sea-ink-soft)]">Show developer profile</span>
+            </div>
+            <div className="flex gap-2">
+              <code className="text-[var(--lagoon-deep)]">/corrections</code>
+              <span className="text-[var(--sea-ink-soft)]">List learned corrections</span>
+            </div>
+            <div className="flex gap-2">
+              <code className="text-[var(--lagoon-deep)]">
+                /correction add &lt;ctx&gt; | &lt;fact&gt;
+              </code>
+              <span className="text-[var(--sea-ink-soft)]">Record a correction</span>
+            </div>
+          </div>
+
+          <h3 className="mb-3 text-lg font-semibold text-[var(--sea-ink)]">Config Commands</h3>
+          <div className="mb-4 grid gap-2 font-mono text-sm sm:grid-cols-2">
+            <div className="flex gap-2">
+              <code className="text-[var(--lagoon-deep)]">/config privacy on|off</code>
+              <span className="text-[var(--sea-ink-soft)]">Toggle privacy mode</span>
+            </div>
+            <div className="flex gap-2">
+              <code className="text-[var(--lagoon-deep)]">
+                /config context minimal|standard|full
+              </code>
+              <span className="text-[var(--sea-ink-soft)]">Set context package</span>
+            </div>
+            <div className="flex gap-2">
+              <code className="text-[var(--lagoon-deep)]">
+                /config interpreter-model &lt;model&gt;
+              </code>
+              <span className="text-[var(--sea-ink-soft)]">Set interpreter LLM</span>
+            </div>
+          </div>
+
+          <h3 className="mb-3 text-lg font-semibold text-[var(--sea-ink)]">Keyboard Shortcuts</h3>
+          <div className="grid gap-2 font-mono text-sm sm:grid-cols-3">
+            <div className="flex gap-2">
+              <kbd className="rounded bg-[rgba(79,184,178,0.1)] px-1.5 py-0.5 text-xs">Ctrl+H</kbd>
+              <span className="text-[var(--sea-ink-soft)]">Toggle help</span>
+            </div>
+            <div className="flex gap-2">
+              <kbd className="rounded bg-[rgba(79,184,178,0.1)] px-1.5 py-0.5 text-xs">Ctrl+S</kbd>
+              <span className="text-[var(--sea-ink-soft)]">Toggle daily summary</span>
+            </div>
+            <div className="flex gap-2">
+              <kbd className="rounded bg-[rgba(79,184,178,0.1)] px-1.5 py-0.5 text-xs">Y / N</kbd>
+              <span className="text-[var(--sea-ink-soft)]">Accept / dismiss notification</span>
+            </div>
+          </div>
+        </div>
       </section>
     </main>
   );
