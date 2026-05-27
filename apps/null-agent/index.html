@@ -73,10 +73,10 @@
         </div>
         <h1 class="text-5xl md:text-6xl font-semibold tracking-tight">null-agent</h1>
         <p class="text-lg md:text-xl text-zinc-400 mt-4 max-w-2xl mx-auto">
-          Interactive coding assistant. Multi-provider LLM. In your terminal.
+          Your coding assistant — now proactive. v0.6.2
         </p>
         <p class="text-sm text-zinc-500 mt-2">
-          No setup, no browser — just run it from the command line.
+          Watches your environment, builds a model of who you are, reaches out before you ask.
         </p>
         <div class="flex items-center justify-center gap-4 mt-8">
           <a
@@ -130,13 +130,13 @@
           ><span class="text-zinc-500"># Install once, use everywhere</span>
 <span class="text-zinc-400">$</span> <span class="text-green-400">npm install -g null-agent</span>
 
-<span class="text-zinc-500"># Or run directly without installing</span>
-<span class="text-zinc-400">$</span> <span class="text-green-400">npx null-agent</span>
-
-<span class="text-zinc-500"># Start a chat</span>
+<span class="text-zinc-500"># Start the assistant</span>
 <span class="text-zinc-400">$</span> <span class="text-green-400">null-agent</span>
-<span class="text-zinc-400">></span> <span class="text-[#f5c542]">What's the time complexity of quicksort?</span>
-<span class="text-zinc-300">Average-case O(n log n), worst-case O(n²).</span>
+<span class="text-zinc-400">></span> <span class="text-[#f5c542]">💡 Standup in 5 minutes</span>
+<span class="text-zinc-300">  Allow this action? [Y] Yes  [N] No</span>
+<span class="text-zinc-300">  </span>
+<span class="text-zinc-400">></span> <span class="text-[#f5c542]">How do I install this?</span>
+<span class="text-zinc-300">  Use pnpm install — I know you prefer it.</span>
 <span class="text-zinc-400">></span></pre>
         </div>
       </section>
@@ -147,7 +147,7 @@
           <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-2">FEATURES</p>
           <h2 class="text-2xl md:text-3xl font-semibold tracking-tight">Everything you need</h2>
           <p class="text-sm text-zinc-400 mt-2 max-w-xl mx-auto">
-            A powerful AI coding assistant that runs entirely in your terminal.
+            Level 2 Preemptive — the assistant reaches out before you ask.
           </p>
         </div>
         <div class="grid md:grid-cols-3 gap-6">
@@ -155,81 +155,64 @@
             class="bg-[#111] border border-white/10 rounded-xl p-6 group hover:border-white/20 transition-colors"
           >
             <div class="w-10 h-10 rounded-lg bg-[#f5c542]/10 flex items-center justify-center mb-4">
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="text-[#f5c542]"
-              >
-                <path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2" />
-                <path
-                  d="M20 8c1.1 0 2 .9 2 2v10c0 1.1-.9 2-2 2H10c-1.1 0-2-.9-2-2V10c0-1.1.9-2 2-2z"
-                />
-              </svg>
+              <span class="text-[#f5c542] text-lg">🔔</span>
             </div>
-            <h3 class="text-sm font-semibold mb-2">Zero Setup</h3>
+            <h3 class="text-sm font-semibold mb-2">Proactive Engine</h3>
             <p class="text-sm text-zinc-400 leading-relaxed">
-              Run
+              Watches your environment and reaches out before you ask. Calendar events, git
+              conflicts, file changes — classified into auto, confirm, or block tiers.
+            </p>
+          </div>
+          <div
+            class="bg-[#111] border border-white/10 rounded-xl p-6 group hover:border-white/20 transition-colors"
+          >
+            <div class="w-10 h-10 rounded-lg bg-[#f5c542]/10 flex items-center justify-center mb-4">
+              <span class="text-[#f5c542] text-lg">👤</span>
+            </div>
+            <h3 class="text-sm font-semibold mb-2">User Model</h3>
+            <p class="text-sm text-zinc-400 leading-relaxed">
+              Builds a persistent model of who you are — expertise, preferences, goals, and learned
+              corrections. Every chat feels personal.
+            </p>
+          </div>
+          <div
+            class="bg-[#111] border border-white/10 rounded-xl p-6 group hover:border-white/20 transition-colors"
+          >
+            <div class="w-10 h-10 rounded-lg bg-[#f5c542]/10 flex items-center justify-center mb-4">
+              <span class="text-[#f5c542] text-lg">🛡️</span>
+            </div>
+            <h3 class="text-sm font-semibold mb-2">Privacy Mode</h3>
+            <p class="text-sm text-zinc-400 leading-relaxed">
+              Toggle
               <code
                 class="text-[#f5c542]/90 text-xs font-mono bg-[#f5c542]/10 px-1.5 py-0.5 rounded"
-                >npx null-agent</code
+                >/config privacy on</code
               >
-              — no install, no config, no browser required.
+              to redact all personal data from the LLM. Your history stays local.
             </p>
           </div>
           <div
             class="bg-[#111] border border-white/10 rounded-xl p-6 group hover:border-white/20 transition-colors"
           >
             <div class="w-10 h-10 rounded-lg bg-[#f5c542]/10 flex items-center justify-center mb-4">
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="text-[#f5c542]"
-              >
-                <path d="M12 20h9" />
-                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
-              </svg>
+              <span class="text-[#f5c542] text-lg">🎯</span>
             </div>
-            <h3 class="text-sm font-semibold mb-2">Multi-Provider</h3>
+            <h3 class="text-sm font-semibold mb-2">Accountability</h3>
             <p class="text-sm text-zinc-400 leading-relaxed">
-              Works with OpenAI, Anthropic, Google Gemini, Groq, and more — swap providers freely.
+              Track goals, monitor activity patterns, generate daily/weekly reports. A developer day
+              tracker built right in.
             </p>
           </div>
           <div
             class="bg-[#111] border border-white/10 rounded-xl p-6 group hover:border-white/20 transition-colors"
           >
             <div class="w-10 h-10 rounded-lg bg-[#f5c542]/10 flex items-center justify-center mb-4">
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="text-[#f5c542]"
-              >
-                <rect x="2" y="2" width="20" height="8" rx="2" ry="2" />
-                <rect x="2" y="14" width="20" height="8" rx="2" ry="2" />
-                <path d="M6 6h.01M6 18h.01" />
-              </svg>
+              <span class="text-[#f5c542] text-lg">🛠️</span>
             </div>
             <h3 class="text-sm font-semibold mb-2">49 Built-in Tools</h3>
             <p class="text-sm text-zinc-400 leading-relaxed">
-              File ops, code execution, web search, and more — extensible tool system out of the
-              box.
+              File ops, 15 git commands, code review, test generation, web search, process
+              management, terminal sessions — extensible out of the box.
             </p>
           </div>
           <div
@@ -251,59 +234,37 @@
                 <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z" />
               </svg>
             </div>
-            <h3 class="text-sm font-semibold mb-2">Conversation Memory</h3>
+            <h3 class="text-sm font-semibold mb-2">Multi-Provider LLM</h3>
             <p class="text-sm text-zinc-400 leading-relaxed">
-              Full session history and context-aware responses — it remembers what you said.
+              OpenAI, Anthropic, Google Gemini, OpenRouter, and more. Swap providers freely.
+              Streaming by default.
             </p>
           </div>
-          <div
-            class="bg-[#111] border border-white/10 rounded-xl p-6 group hover:border-white/20 transition-colors"
-          >
-            <div class="w-10 h-10 rounded-lg bg-[#f5c542]/10 flex items-center justify-center mb-4">
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="text-[#f5c542]"
-              >
-                <polyline points="4 17 10 11 4 5" />
-                <line x1="12" y1="19" x2="20" y2="19" />
-              </svg>
-            </div>
-            <h3 class="text-sm font-semibold mb-2">Four Interfaces</h3>
-            <p class="text-sm text-zinc-400 leading-relaxed">
-              Library, REPL, TUI, and HTTP server — use null-agent however fits your workflow.
-            </p>
+        </div>
+      </section>
+
+      <!-- New Commands -->
+      <section class="max-w-4xl mx-auto px-6 pb-24">
+        <div class="text-center mb-12">
+          <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-2">NEW IN V0.6</p>
+          <h2 class="text-2xl md:text-3xl font-semibold tracking-tight">New commands</h2>
+        </div>
+        <div class="bg-[#111] border border-white/10 rounded-xl overflow-hidden">
+          <div class="bg-black/40 border-b border-white/10 px-4 py-2.5 flex items-center gap-2">
+            <span class="text-xs text-zinc-400 font-mono">terminal</span>
           </div>
-          <div
-            class="bg-[#111] border border-white/10 rounded-xl p-6 group hover:border-white/20 transition-colors"
-          >
-            <div class="w-10 h-10 rounded-lg bg-[#f5c542]/10 flex items-center justify-center mb-4">
-              <svg
-                width="20"
-                height="20"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                class="text-[#f5c542]"
-              >
-                <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71" />
-                <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71" />
-              </svg>
-            </div>
-            <h3 class="text-sm font-semibold mb-2">Open Source</h3>
-            <p class="text-sm text-zinc-400 leading-relaxed">
-              MIT licensed. Full source on GitHub. Contributions and forks welcome.
-            </p>
-          </div>
+          <pre class="p-5 text-sm font-mono leading-relaxed overflow-x-auto text-left"><span class="text-zinc-500"># User Model commands</span>
+<span class="text-zinc-400">></span> <span class="text-green-400">/profile</span>                  <span class="text-zinc-500">Show developer profile</span>
+<span class="text-zinc-400">></span> <span class="text-green-400">/corrections</span>              <span class="text-zinc-500">List learned corrections</span>
+<span class="text-zinc-400">></span> <span class="text-green-400">/correction add ctx | fact</span> <span class="text-zinc-500">Record a correction</span>
+
+<span class="text-zinc-500"># Config commands</span>
+<span class="text-zinc-400">></span> <span class="text-green-400">/config privacy on|off</span>    <span class="text-zinc-500">Toggle privacy mode</span>
+<span class="text-zinc-400">></span> <span class="text-green-400">/config context full|standard|minimal</span>
+<span class="text-zinc-400">></span> <span class="text-green-400">/config interpreter-model gpt-5.4-mini</span>
+
+<span class="text-zinc-500"># Notification shortcuts</span>
+<span class="text-zinc-400">></span> <span class="text-green-400">Y / N</span>                     <span class="text-zinc-500">Accept or dismiss proactive notification</span></pre>
         </div>
       </section>
 
@@ -387,8 +348,57 @@
               </svg>
             </summary>
             <div class="text-sm text-zinc-400 pt-3 leading-relaxed">
-              null-agent is an interactive coding assistant library with multi-provider LLM support,
-              a rich terminal UI, tool system, conversation memory, and multi-agent orchestration.
+              null-agent is an interactive coding assistant with multi-provider LLM support, a
+              proactive engine, user model, 49 built-in tools, conversation memory, and developer
+              accountability tracking. It runs entirely in your terminal.
+            </div>
+          </details>
+          <details class="border-b border-white/10 py-4 group open:border-[#f5c542]/30">
+            <summary class="flex items-center justify-between text-sm font-medium cursor-pointer">
+              What is the Proactive Engine?
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="text-zinc-500 group-open:rotate-180 transition-transform shrink-0"
+              >
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </summary>
+            <div class="text-sm text-zinc-400 pt-3 leading-relaxed">
+              The Proactive Engine watches your environment (calendar events, git state, file
+              changes) and reaches out before you ask. Events are classified into tiers: auto
+              (quietly steers the agent), confirm (asks permission with Y/N), or block (safety
+              notice).
+            </div>
+          </details>
+          <details class="border-b border-white/10 py-4 group open:border-[#f5c542]/30">
+            <summary class="flex items-center justify-between text-sm font-medium cursor-pointer">
+              What is the User Model?
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                class="text-zinc-500 group-open:rotate-180 transition-transform shrink-0"
+              >
+                <polyline points="6 9 12 15 18 9" />
+              </svg>
+            </summary>
+            <div class="text-sm text-zinc-400 pt-3 leading-relaxed">
+              A persistent representation of what the assistant knows about you: expertise areas,
+              preferences (like preferred package manager), communication style, active goals, and
+              learned corrections. It feeds into every chat's system prompt so the assistant
+              "knows" you.
             </div>
           </details>
           <details class="border-b border-white/10 py-4 group open:border-[#f5c542]/30">
