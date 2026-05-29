@@ -283,10 +283,10 @@ const { data: projects } = await useAsyncData('projects', async () => {
         <div class="max-w-2xl mx-auto text-center">
           <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-4">Stay Updated</p>
           <h2 class="text-3xl md:text-4xl font-semibold tracking-tight mb-4">
-            Get practical engineering notes.
+            Code that ships.
           </h2>
           <p class="text-zinc-400 mb-8">
-            Short updates on skills, frameworks, code review, and the parts of software engineering that survive contact with real code.
+            Notes on the tools, patterns, and hard-won lessons from building real software — no fluff, no hype cycles.
           </p>
           <Newsletter />
         </div>
