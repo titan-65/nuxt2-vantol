@@ -1,0 +1,199 @@
+// OpenAI Chat Completions API provider.
+//
+// Maps the normalized `ProviderRequest` to the OpenAI Chat Completions
+// wire format and parses the response back into a `ProviderResponse`.
+//
+// Wire format reference: https://platform.openai.com/docs/api-reference/chat
+//
+// The HTTP envelope is built by hand because the stdlib's
+// `std.http.writeRequest` and `std.http.writeJsonRequest` only emit
+// content-type and content-length. OpenAI needs an `Authorization:
+// Bearer <KEY>` header.
+//
+// Request body shape:
+//
+//   {
+//     "model": "<model>",
+//     "max_tokens": <max_tokens>,
+//     "messages": [
+//       {"role": "system", "content": "<system>"},
+//       ... <messages_json> ...
+//     ],
+//     "tools": <tools_json>
+//   }
+//
+// Note: the Agent owns `messages_json` and `tools_json`. The
+// `system` field is folded into the messages array as the first
+// `system` role entry, which is the only normalized representation
+// we can share with Anthropic.
+//
+// Response body shape (200 OK):
+//
+//   {
+//     "choices": [
+//       {"message": {"role": "assistant", "content": "..."},
+//        "finish_reason": "stop" | "tool_calls" | "length"}
+//     ]
+//   }
+
+use provider
+use std.str
+use std.mem
+use std.io
+use std.fmt
+
+fn provider_name() -> String {
+    return "openai"
+}
+
+fn default_model() -> String {
+    return "gpt-4o-mini"
+}
+
+pub fn openai_build_request(buf: MutSpan<u8>, req: ProviderRequest, api_key: String) -> Maybe<Span<u8>> {
+    // 1. Build the JSON body into a sibling buffer.
+    var body_buf: [8192]u8 = [0_u8; 8192]
+    let body: Maybe<Span<u8>> = build_json_body(body_buf, req)
+    if !body.has {
+        return null
+    }
+    let body_len: usize = mem.len(body.value)
+    var body_len_str_buf: [8]u8 = [0_u8; 8]
+    let body_len_str: Maybe<Span<u8>> = fmt.usize(body_len_str_buf, body_len)
+    if !body_len_str.has {
+        return null
+    }
+
+    // 2. Splice the HTTP envelope.
+    var off: usize = 0
+    let o1: Maybe<usize> = io.writeSpan(buf, off, "POST https://api.openai.com/v1/chat/completions HTTP/1.1\r\n")
+    if !o1.has { return null }
+    off = o1.value
+    let o2: Maybe<usize> = io.writeSpan(buf, off, "host: api.openai.com\r\n")
+    if !o2.has { return null }
+    off = o2.value
+    let o3: Maybe<usize> = io.writeSpan(buf, off, "content-type: application/json\r\n")
+    if !o3.has { return null }
+    off = o3.value
+    let o4: Maybe<usize> = io.writeSpan(buf, off, "authorization: Bearer ")
+    if !o4.has { return null }
+    off = o4.value
+    let o5: Maybe<usize> = io.writeSpan(buf, off, api_key)
+    if !o5.has { return null }
+    off = o5.value
+    let o6: Maybe<usize> = io.writeSpan(buf, off, "\r\n")
+    if !o6.has { return null }
+    off = o6.value
+    let o7: Maybe<usize> = io.writeSpan(buf, off, "content-length: ")
+    if !o7.has { return null }
+    off = o7.value
+    let o8: Maybe<usize> = io.writeSpan(buf, off, body_len_str.value)
+    if !o8.has { return null }
+    off = o8.value
+    let o9: Maybe<usize> = io.writeSpan(buf, off, "\r\n\r\n")
+    if !o9.has { return null }
+    off = o9.value
+    let o10: Maybe<usize> = io.writeSpan(buf, off, body.value)
+    if !o10.has { return null }
+    off = o10.value
+    return mem.prefix(buf, off)
+}
+
+fn empty_openai_response(text: Span<u8>) -> ProviderResponse {
+    var r: ProviderResponse = ProviderResponse { text: text, tool_calls_json: "[]", stop_reason: "stop" }
+    return r
+}
+// Build the OpenAI Chat Completions JSON body. The system prompt is
+// folded into the messages array as a leading `{"role":"system", ...}`
+fn openai_build_json_body(buf: MutSpan<u8>, req: ProviderRequest) -> Maybe<Span<u8>> {
+
+    var off: usize = 0
+    let o1: Maybe<usize> = io.writeSpan(buf, off, "{\"model\":\"")
+    if !o1.has { return null }
+    off = o1.value
+    let o2: Maybe<usize> = io.writeSpan(buf, off, req.model)
+    if !o2.has { return null }
+    off = o2.value
+    let o3: Maybe<usize> = io.writeSpan(buf, off, "\",\"max_tokens\":")
+    if !o3.has { return null }
+    off = o3.value
+    var max_buf: [12]u8 = [0_u8; 12]
+    let max_str: Maybe<Span<u8>> = fmt.u32(max_buf, req.max_tokens)
+    if !max_str.has { return null }
+    let o4: Maybe<usize> = io.writeSpan(buf, off, max_str.value)
+    if !o4.has { return null }
+    off = o4.value
+    let o5: Maybe<usize> = io.writeSpan(buf, off, ",\"messages\":[")
+    if !o5.has { return null }
+    off = o5.value
+    // Splice in the system prompt as a leading message, then the
+    // user-supplied messages verbatim.
+    if mem.len(req.system) > 0_usize {
+        let o6: Maybe<usize> = io.writeSpan(buf, off, "{\"role\":\"system\",\"content\":\"")
+        if !o6.has { return null }
+        off = o6.value
+        let o7: Maybe<usize> = io.writeSpan(buf, off, req.system)
+        if !o7.has { return null }
+        off = o7.value
+        let o8: Maybe<usize> = io.writeSpan(buf, off, "\"}")
+        if !o8.has { return null }
+        off = o8.value
+        // Comma separator if there are more messages.
+        if mem.len(req.messages_json) > 2_usize {
+            // 2 chars minimum for "[]"
+            let o9: Maybe<usize> = io.writeSpan(buf, off, ",")
+            if !o9.has { return null }
+            off = o9.value
+        }
+    }
+    // Splice the inner of messages_json, stripping the surrounding [].
+    if mem.len(req.messages_json) >= 2_usize {
+        let inner: Span<u8> = mem.prefix(mem.dropPrefix(req.messages_json, 1_usize), mem.len(req.messages_json) - 2_usize)
+        let o10: Maybe<usize> = io.writeSpan(buf, off, inner)
+        if !o10.has { return null }
+        off = o10.value
+    }
+    let o11: Maybe<usize> = io.writeSpan(buf, off, "],\"tools\":")
+    if !o11.has { return null }
+    off = o11.value
+    let o12: Maybe<usize> = io.writeSpan(buf, off, req.tools_json)
+    if !o12.has { return null }
+    off = o12.value
+    let o13: Maybe<usize> = io.writeSpan(buf, off, "}")
+    if !o13.has { return null }
+    off = o13.value
+    return mem.prefix(buf, off)
+}
+
+// Parse an OpenAI Chat Completions response body. Extracts the
+// assistant text from the first choice. Tool calls are not parsed in
+// v1.
+pub fn openai_parse_response(body: String, status: u16) -> ProviderOutcome {
+    if status != 200_u16 {
+        return ProviderOutcome.err(ProviderError.http(status, body))
+    }
+    // Look for `"content":"..."` inside the first choice.
+    let content_marker: Span<u8> = "\"content\":\""
+    let content_start: usize = str.indexOf(body, content_marker)
+    if content_start == 0_usize {
+        return ProviderOutcome.ok(empty_openai_response(""))
+    }
+    let content_off: usize = content_start + 11_usize
+    var end: usize = content_off
+    var i: usize = content_off
+    let blen: usize = mem.len(body)
+    while i < blen {
+        let b: Maybe<u8> = mem.get(body, i)
+        if !b.has { break }
+        if b.value == 0x22_u8 {
+            end = i
+            i = blen
+        } else {
+            i = i + 1_usize
+        }
+    }
+    let after_marker: Span<u8> = mem.dropPrefix(body, content_off)
+    let after_end: usize = end - content_off
+    let text_value: Span<u8> = mem.prefix(after_marker, after_end)
+    return ProviderOutcome.ok(empty_openai_response(text_value))
+}

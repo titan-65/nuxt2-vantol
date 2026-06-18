@@ -27,7 +27,7 @@ if (!page.value && !import.meta.dev) {
 
 <template>
   <main class="min-h-screen bg-[#0a0a0a] text-white font-sans">
-    <div class="max-w-5xl mx-auto px-6 py-12">
+    <div class="max-w-[1088px] mx-auto px-6 py-12">
       <div v-if="page" class="bg-[#111] border border-white/10 rounded-xl p-8 md:p-12 max-w-4xl mx-auto">
         <h1 class="text-4xl font-semibold tracking-tight mb-8">{{ page.title }}</h1>
         <div class="prose prose-invert max-w-none font-light prose-headings:font-semibold prose-headings:tracking-tight prose-a:text-[#f5c542] prose-strong:text-white">

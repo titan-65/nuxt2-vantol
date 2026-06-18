@@ -53,7 +53,7 @@ const handleSubmit = () => {
   <div class="min-h-screen bg-[#0a0a0a] text-white font-sans">
     <!-- Hero Section -->
     <section class="py-20 border-b border-white/10">
-      <div class="max-w-5xl mx-auto px-6">
+      <div class="max-w-[1088px] mx-auto px-6">
         <div class="max-w-3xl">
           <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-4">Get In Touch</p>
           <h1 class="text-5xl md:text-6xl font-semibold tracking-tight mb-8">Contact Me</h1>
@@ -66,7 +66,7 @@ const handleSubmit = () => {
 
     <!-- Contact Form & Social Links Section -->
     <section class="py-16 md:py-24">
-      <div class="max-w-5xl mx-auto px-6">
+      <div class="max-w-[1088px] mx-auto px-6">
         <div class="grid gap-12 lg:grid-cols-2">
           <!-- Contact Form -->
           <div>

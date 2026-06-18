@@ -52,7 +52,7 @@ watch(
   <header
     class="sticky top-0 z-50 w-full bg-white/85 text-[#171717] backdrop-blur-md border-b border-black/10 dark:bg-[#0a0a0a]/80 dark:text-white dark:border-white/10"
   >
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
+    <div class="max-w-[1088px] mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
       <!-- Logo -->
       <NuxtLink
         to="/"

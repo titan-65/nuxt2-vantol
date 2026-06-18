@@ -1,0 +1,347 @@
+// Agent loop.
+//
+// The Agent is the orchestrator. For v1, a single turn:
+//
+//   1. Take a user message.
+//   2. Append a `user` event to the session.
+//   3. Build a `ProviderRequest` from the system prompt, the message
+//      history, and the tool list.
+//   4. Call the chosen Provider. For `faux`, return canned text.
+//      For `anthropic` and `openai`, build the HTTP envelope and
+//      hand it to `std.http.fetch`.
+//   5. Parse the response into a `ProviderResponse`.
+//   6. Print the final text to stdout and append an `assistant` event
+//      to the session. v1 stops after one round (no tool loop).
+
+use provider
+use tools
+use session
+use providers.anthropic
+use providers.openai
+use testing.faux_provider
+use std.fs
+use std.mem
+use std.str
+use std.io
+use std.net
+use std.http
+use std.env
+use std.cli
+use std.fmt
+use std.time
+
+// The set of providers the Agent can route to. Adding a provider
+// means adding a branch in `parse_provider_kind` and ensuring the
+// corresponding module is imported above.
+pub choice ProviderKind {
+    anthropic,
+    openai,
+    faux,
+}
+
+fn empty_response() -> ProviderResponse {
+    var r: ProviderResponse = ProviderResponse { text: "", tool_calls_json: "[]", stop_reason: "end_turn" }
+    return r
+}
+// Resolve a provider name string to a `ProviderKind`. Returns `null`
+// for unknown names.
+pub fn parse_provider_kind(name: String) -> Maybe<ProviderKind> {
+    var result: Maybe<ProviderKind> = null
+    if str.eql(name, "anthropic") {
+        result = ProviderKind.anthropic
+    }
+    if str.eql(name, "openai") {
+        result = ProviderKind.openai
+    }
+    if str.eql(name, "faux") {
+        result = ProviderKind.faux
+    }
+    return result
+}
+
+// Default model name per provider. The Agent uses this when the
+// caller does not pass `--model`.
+pub fn default_model_for(kind: ProviderKind) -> String {
+    var name: String = ""
+    match kind {
+        .anthropic { name = "claude-sonnet-4-5" }
+        .openai { name = "gpt-4o-mini" }
+        .faux { name = "faux-model" }
+    }
+    return name
+}
+
+// Resolve the API key for a non-faux provider from the environment.
+// Returns the key, or empty if missing.
+pub fn resolve_api_key(world: World, kind: ProviderKind) -> String {
+    var key: String = ""
+    match kind {
+        .anthropic {
+            let k: Maybe<String> = std.env.get("ANTHROPIC_API_KEY")
+            if k.has {
+                key = k.value
+            } else {
+                check world.err.write("missing ANTHROPIC_API_KEY; pass --provider faux to skip the network call\n")
+            }
+        }
+        .openai {
+            let k: Maybe<String> = std.env.get("OPENAI_API_KEY")
+            if k.has {
+                key = k.value
+            } else {
+                check world.err.write("missing OPENAI_API_KEY; pass --provider faux to skip the network call\n")
+            }
+        }
+        .faux { key = "" }
+    }
+    return key
+}
+
+// Build the HTTP request envelope for the chosen provider. For
+// faux, this returns a sentinel and we skip the network call.
+pub fn build_provider_request(buf: MutSpan<u8>, req: ProviderRequest, kind: ProviderKind, api_key: String) -> Maybe<Span<u8>> {
+    var request: Maybe<Span<u8>> = null
+    match kind {
+        .anthropic {
+            request = providers.anthropic.build_http_request(buf, req, api_key)
+        }
+        .openai {
+            request = providers.openai.build_http_request(buf, req, api_key)
+        }
+        .faux {
+            request = providers.faux_provider.build_http_request(buf, req, api_key)
+        }
+    }
+    return request
+}
+
+// Call the provider and return a `ProviderOutcome`. For faux, this
+// is the canned response. For anthropic and openai, this builds the
+// HTTP request, makes the call, and parses the response.
+pub fn call_provider(world: World, kind: ProviderKind, request: Span<u8>) -> ProviderOutcome {
+    var resp_buf: [65536]u8 = [0_u8; 65536]
+    var outcome: ProviderOutcome = ProviderOutcome.ok(empty_response())
+    match kind {
+        .anthropic {
+            let client: HttpClient = std.http.client(std.net.host())
+            let result: HttpResult = std.http.fetch(client, request, resp_buf, std.time.seconds(60))
+            let status: u16 = std.http.resultStatus(result)
+            let body_off: usize = std.http.responseBodyOffset(resp_buf)
+            let body: Span<u8> = mem.dropPrefix(resp_buf, body_off)
+            outcome = providers.anthropic.parse_response_body(body, status)
+        }
+        .openai {
+            let client: HttpClient = std.http.client(std.net.host())
+            let result: HttpResult = std.http.fetch(client, request, resp_buf, std.time.seconds(60))
+            let status: u16 = std.http.resultStatus(result)
+            let body_off: usize = std.http.responseBodyOffset(resp_buf)
+            let body: Span<u8> = mem.dropPrefix(resp_buf, body_off)
+            outcome = providers.openai.parse_response_body(body, status)
+        }
+        .faux {
+            outcome = providers.faux_provider.parse_response_body("faux", 200_u16)
+        }
+    }
+    return outcome
+}
+
+// Run a single agent turn. `prompt` is the user message; `session_id`
+// new one. `kind` selects the provider; `model` overrides the default
+// model name. The function prints the assistant's reply to stdout
+// and returns an exit code (0 for success, non-zero for errors).
+pub fn run_turn(world: World, kind: ProviderKind, model: String, session_id: String, prompt: String) -> i32 {
+    // 1. Resolve the home directory and ensure the sessions dir exists.
+    let home: Maybe<String> = std.env.get("HOME")
+    if !home.has {
+        check world.err.write("HOME is not set\n")
+        return 1
+    }
+    if !session.ensure_sessions_dir(home.value) {
+        check world.err.write("could not create ~/.pi/sessions\n")
+        return 1
+    }
+
+    // 2. Resolve the session id and path.
+    var resolved_id: String = session_id
+    if str.eql(resolved_id, "") {
+        resolved_id = session.new_session_id()
+    }
+    let path: String = session.session_path(home.value, resolved_id)
+
+    // 3. Append the user event. We pre-encode the JSON payload.
+    let escaped_prompt: String = json_escape(prompt)
+    var user_payload: [8192]u8 = [0_u8; 8192]
+    let user_concat: Maybe<Span<u8>> = str.concat(user_payload, "\"text\":\"", escaped_prompt)
+    if !user_concat.has {
+        check world.err.write("format failed\n")
+        return 1
+    }
+    var user_payload_full: [8200]u8 = [0_u8; 8200]
+    let user_concat2: Maybe<Span<u8>> = str.concat(user_payload_full, user_concat.value, "\"")
+    if !user_concat2.has {
+        check world.err.write("format failed\n")
+        return 1
+    }
+    if !session.append_event(path, "user", user_concat2.value) {
+        check world.err.write("could not write user event\n")
+        return 1
+    }
+
+    // 4. Build the provider request. messages_json is a single user
+    // entry; tools_json comes from the static registry.
+    var tools_buf: [4096]u8 = [0_u8; 4096]
+    let tools_json: Maybe<String> = tools.tools_json_array(tools_buf)
+    if !tools_json.has {
+        check world.err.write("could not build tools list\n")
+        return 1
+    }
+    var messages_buf: [8192]u8 = [0_u8; 8192]
+    let messages_part1: Maybe<Span<u8>> = str.concat(messages_buf, "[{\"role\":\"user\",\"content\":\"", escaped_prompt)
+    if !messages_part1.has {
+        check world.err.write("format failed\n")
+        return 1
+    }
+    var messages_buf2: [8200]u8 = [0_u8; 8200]
+    let messages: Maybe<Span<u8>> = str.concat(messages_buf2, messages_part1.value, "\"}]")
+    if !messages.has {
+        check world.err.write("format failed\n")
+        return 1
+    }
+    var req: ProviderRequest = ProviderRequest { system: "You are pi, a CLI AI coding agent. You can read files, run shell commands, and answer questions about code. Be concise.", messages_json: messages.value, tools_json: tools_json.value, model: model, max_tokens: 1024_u32 }
+
+    // 5. Resolve the API key (faux returns empty).
+    let api_key: String = resolve_api_key(world, kind)
+    if str.eql(api_key, "") {
+        // The provider is faux, or resolve_api_key already printed an
+        // error. Continue only for faux; for the real providers we
+        // bail out.
+        var is_faux_kind: Bool = false
+        match kind {
+            .anthropic { is_faux_kind = false }
+            .openai { is_faux_kind = false }
+            .faux { is_faux_kind = true }
+        }
+        if !is_faux_kind {
+            return 1
+        }
+    }
+
+    // 6. Build the HTTP request envelope.
+    var req_buf: [16384]u8 = [0_u8; 16384]
+    let request: Maybe<Span<u8>> = build_provider_request(req_buf, req, kind, api_key)
+    if !request.has {
+        check world.err.write("could not build request\n")
+        return 1
+    }
+
+    // 7. Call the provider.
+    let outcome: ProviderOutcome = call_provider(world, kind, request.value)
+
+    // 8. Handle the outcome.
+    return handle_outcome(world, path, outcome)
+}
+
+fn handle_outcome(world: World, path: String, outcome: ProviderOutcome) -> i32 {
+    var code: i32 = 0
+    match outcome {
+        ok {
+            check world.out.write(ok.text)
+            check world.out.write("\n")
+            let escaped_text: String = json_escape(ok.text)
+            var asst_payload: [8192]u8 = [0_u8; 8192]
+            let asst_concat: Maybe<Span<u8>> = str.concat(asst_payload, "\"text\":\"", escaped_text)
+            if !asst_concat.has {
+                check world.err.write("format failed\n")
+                return 1
+            }
+            var asst_payload_full: [8200]u8 = [0_u8; 8200]
+            let asst_concat2: Maybe<Span<u8>> = str.concat(asst_payload_full, asst_concat.value, "\"")
+            if !asst_concat2.has {
+                check world.err.write("format failed\n")
+                return 1
+            }
+            if !session.append_event(path, "assistant", asst_concat2.value) {
+                check world.err.write("could not write assistant event\n")
+                return 1
+            }
+            code = 0
+        }
+        err {
+            match err.error {
+                http {
+                    var status_buf: [12]u8 = [0_u8; 12]
+                    let status_str: Maybe<Span<u8>> = std.fmt.u32(status_buf, http.status)
+                    if status_str.has {
+                        check world.err.write("provider error: status ")
+                        check world.err.write(status_str.value)
+                        check world.err.write("\n")
+                    }
+                    check world.err.write(http.body)
+                    check world.err.write("\n")
+                    code = 1
+                }
+                parse {
+                    check world.err.write("provider parse error: ")
+                    check world.err.write(parse.message)
+                    check world.err.write("\n")
+                    code = 1
+                }
+                auth {
+                    check world.err.write("provider auth error: ")
+                    check world.err.write(auth.message)
+                    check world.err.write("\n")
+                    code = 1
+                }
+                unavailable {
+                    check world.err.write("provider unavailable: ")
+                    check world.err.write(unavailable.message)
+                    check world.err.write("\n")
+                    code = 1
+                }
+            }
+        }
+    }
+    return code
+}
+
+// Escape a string for inclusion in a JSON string literal. Handles
+// `"`, `\`, and the common control characters (`\n`, `\r`, `\t`).
+// Characters outside the printable ASCII range that are not control
+// characters are passed through.
+fn json_escape(s: String) -> String {
+    var out: [4096]u8 = [0_u8; 4096]
+    var off: usize = 0
+    var i: usize = 0
+    let slen: usize = mem.len(s)
+    while i < slen {
+        let b: Maybe<u8> = mem.get(s, i)
+        if !b.has { break }
+        if b.value == 0x22_u8 {
+            let o: Maybe<usize> = io.writeSpan(out, off, "\\\"")
+            if !o.has { break }
+            off = o.value
+        } else if b.value == 0x5C_u8 {
+            let o: Maybe<usize> = io.writeSpan(out, off, "\\\\")
+            if !o.has { break }
+            off = o.value
+        } else if b.value == 0x0A_u8 {
+            let o: Maybe<usize> = io.writeSpan(out, off, "\\n")
+            if !o.has { break }
+            off = o.value
+        } else if b.value == 0x0D_u8 {
+            let o: Maybe<usize> = io.writeSpan(out, off, "\\r")
+            if !o.has { break }
+            off = o.value
+        } else if b.value == 0x09_u8 {
+            let o: Maybe<usize> = io.writeSpan(out, off, "\\t")
+            if !o.has { break }
+            off = o.value
+        } else {
+            let o: Maybe<usize> = io.writeByte(out, off, b.value)
+            if !o.has { break }
+            off = o.value
+        }
+        i = i + 1_usize
+    }
+    return mem.prefix(out, off)
+}

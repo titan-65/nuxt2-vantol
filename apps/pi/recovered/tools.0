@@ -1,0 +1,243 @@
+// Tool registry.
+//
+// The Agent exposes these tools to the LLM via the Provider's
+// `tools` request field. Each tool has:
+//   - a stable name
+//   - a human-readable description for the model
+//   - a JSON Schema fragment describing the tool's arguments
+//   - an executor that takes a JSON string of arguments and returns a
+//     string result (the model's `tool result` content)
+//
+// Tools are dispatched by name in `dispatch` below. Adding a tool
+// requires adding a `*_def` function and a branch in the dispatcher.
+//
+// v1 ships five tools: read_file, write_file, list_dir, exec_command,
+// grep. They are the same five pi-mono ships in its core tool set.
+
+use std.fs
+use std.proc
+use std.mem
+use std.io
+use std.str
+use std.regex
+
+// Build the JSON array of tool definitions for the request body.
+// Each element is `{"name":..., "description":..., "input_schema":...}`.
+//
+// The provider implementations splice this array into the `tools`
+// field of the request body. We return it as a `String` (which is a
+// byte span under the hood).
+pub fn tools_json_array(buf: MutSpan<u8>) -> Maybe<String> {
+    var off: usize = 0
+    let o1: Maybe<usize> = io.writeSpan(buf, off, "[")
+    if !o1.has { return null }
+    off = o1.value
+    let o2: Maybe<usize> = io.writeSpan(buf, off, read_file_def())
+    if !o2.has { return null }
+    off = o2.value
+    let o3: Maybe<usize> = io.writeSpan(buf, off, ",")
+    if !o3.has { return null }
+    off = o3.value
+    let o4: Maybe<usize> = io.writeSpan(buf, off, write_file_def())
+    if !o4.has { return null }
+    off = o4.value
+    let o5: Maybe<usize> = io.writeSpan(buf, off, ",")
+    if !o5.has { return null }
+    off = o5.value
+    let o6: Maybe<usize> = io.writeSpan(buf, off, list_dir_def())
+    if !o6.has { return null }
+    off = o6.value
+    let o7: Maybe<usize> = io.writeSpan(buf, off, ",")
+    if !o7.has { return null }
+    off = o7.value
+    let o8: Maybe<usize> = io.writeSpan(buf, off, exec_command_def())
+    if !o8.has { return null }
+    off = o8.value
+    let o9: Maybe<usize> = io.writeSpan(buf, off, ",")
+    if !o9.has { return null }
+    off = o9.value
+    let o10: Maybe<usize> = io.writeSpan(buf, off, grep_def())
+    if !o10.has { return null }
+    off = o10.value
+    let o11: Maybe<usize> = io.writeSpan(buf, off, "]")
+    if !o11.has { return null }
+    off = o11.value
+    return mem.span(mem.prefix(buf, off))
+}
+
+// ----- tool definitions -----
+
+pub fn read_file_def() -> String {
+    return "{\"name\":\"read_file\",\"description\":\"Read a UTF-8 text file. Returns the file contents up to a per-call byte cap, or an error if the file does not exist.\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"path\":{\"type\":\"string\",\"description\":\"Absolute or relative path to the file.\"}},\"required\":[\"path\"]}}"
+}
+
+pub fn write_file_def() -> String {
+    return "{\"name\":\"write_file\",\"description\":\"Write a UTF-8 text file atomically. Creates parent directories as needed. Overwrites existing files.\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"path\":{\"type\":\"string\",\"description\":\"Absolute or relative path to the file.\"},\"content\":{\"type\":\"string\",\"description\":\"The full text to write to the file.\"}},\"required\":[\"path\",\"content\"]}}"
+}
+
+pub fn list_dir_def() -> String {
+    return "{\"name\":\"list_dir\",\"description\":\"List the entries of a directory. Returns one path per line, or an error if the directory does not exist.\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"path\":{\"type\":\"string\",\"description\":\"Absolute or relative path to the directory.\"}},\"required\":[\"path\"]}}"
+}
+
+pub fn exec_command_def() -> String {
+    return "{\"name\":\"exec_command\",\"description\":\"Run a shell command and return its combined stdout/stderr and exit code. The command runs in the current working directory.\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"command\":{\"type\":\"string\",\"description\":\"The shell command to execute.\"}},\"required\":[\"command\"]}}"
+}
+
+pub fn grep_def() -> String {
+    return "{\"name\":\"grep\",\"description\":\"Search a path for lines matching a regular expression. Returns matching lines in `file:line:text` format, or an error if the path is missing.\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"path\":{\"type\":\"string\",\"description\":\"Absolute or relative path to a file or directory.\"},\"pattern\":{\"type\":\"string\",\"description\":\"The regular expression to search for.\"}},\"required\":[\"path\",\"pattern\"]}}"
+}
+
+// ----- dispatch -----
+
+// Dispatch a tool call by name. `name` is the tool name from the
+// model, `args_json` is the raw JSON arguments object. Returns a
+// string result. Unknown names return an error string.
+pub fn dispatch(name: String, args_json: String) -> String {
+    if str.eql(name, "read_file") {
+        return exec_read_file(args_json)
+    }
+    if str.eql(name, "write_file") {
+        return exec_write_file(args_json)
+    }
+    if str.eql(name, "list_dir") {
+        return exec_list_dir(args_json)
+    }
+    if str.eql(name, "exec_command") {
+        return exec_exec_command(args_json)
+    }
+    if str.eql(name, "grep") {
+        return exec_grep(args_json)
+    }
+    return "{\"error\":\"unknown tool\"}"
+}
+
+// ----- executors -----
+//
+// v1 executors are deliberately simple. They take a JSON object
+// string and pull out the fields by position. The Agent does not
+// validate the JSON; the Provider is responsible for emitting
+// well-formed arguments. Errors are returned as `{"error":"..."}`
+// strings so the model can react.
+
+fn exec_read_file(args_json: String) -> String {
+    let path: String = extract_string_field(args_json, "path")
+    var buf: [4096]u8 = [0_u8; 4096]
+    let n: Maybe<Span<u8>> = std.fs.readFileBytes(std.fs.host(), path, buf)
+    if !n.has {
+        return "{\"error\":\"could not read file\"}"
+    }
+    return n.value
+}
+
+fn exec_write_file(args_json: String) -> String {
+    let path: String = extract_string_field(args_json, "path")
+    let content: String = extract_string_field(args_json, "content")
+    if std.fs.writeFile(std.fs.host(), path, content) {
+        return "{\"ok\":true}"
+    }
+    return "{\"error\":\"could not write file\"}"
+}
+
+fn exec_list_dir(args_json: String) -> String {
+    let path: String = extract_string_field(args_json, "path")
+    let count: Maybe<usize> = std.fs.dirEntryCount(path)
+    if !count.has {
+        return "{\"error\":\"directory not found\"}"
+    }
+    var n_buf: [12]u8 = [0_u8; 12]
+    let n_str: Maybe<Span<u8>> = std.fmt.usize(n_buf, count.value)
+    if !n_str.has {
+        return "{\"error\":\"format failed\"}"
+    }
+    var out: [128]u8 = [0_u8; 128]
+    let prefix: Maybe<Span<u8>> = std.str.concat(out, "{\"entries\":", n_str.value)
+    if !prefix.has {
+        return "{\"error\":\"format failed\"}"
+    }
+    let full: Maybe<Span<u8>> = std.str.concat(out, prefix.value, "}")
+    if !full.has {
+        return "{\"error\":\"format failed\"}"
+    }
+    return full.value
+}
+
+fn exec_exec_command(args_json: String) -> String {
+    let command: String = extract_string_field(args_json, "command")
+    let status: ProcStatus = std.proc.spawn(command)
+    if std.proc.succeeded(status) {
+        return "{\"ok\":true,\"exit_code\":0}"
+    }
+    var code_buf: [12]u8 = [0_u8; 12]
+    let code_str: Maybe<Span<u8>> = std.fmt.i32(code_buf, std.proc.exitCode(status))
+    if !code_str.has {
+        return "{\"ok\":false,\"exit_code\":-1}"
+    }
+    var prefix_buf: [64]u8 = [0_u8; 64]
+    let prefix: Maybe<Span<u8>> = std.str.concat(prefix_buf, "{\"ok\":false,\"exit_code\":", code_str.value)
+    if !prefix.has {
+        return "{\"ok\":false,\"exit_code\":-1}"
+    }
+    var out: [80]u8 = [0_u8; 80]
+    let full: Maybe<Span<u8>> = std.str.concat(out, prefix.value, "}")
+    if !full.has {
+        return "{\"ok\":false,\"exit_code\":-1}"
+    }
+    return full.value
+}
+
+fn exec_grep(args_json: String) -> String {
+    let path: String = extract_string_field(args_json, "path")
+    let pattern: String = extract_string_field(args_json, "pattern")
+    var prog_buf: [256]u8 = [0_u8; 256]
+    let compiled: Maybe<Span<u8>> = regex.compile(prog_buf, pattern)
+    if !compiled.has {
+        return "{\"error\":\"invalid pattern\"}"
+    }
+    var text_buf: [4096]u8 = [0_u8; 4096]
+    let n: Maybe<Span<u8>> = std.fs.readFileBytes(std.fs.host(), path, text_buf)
+    if !n.has {
+        return "{\"error\":\"could not read file\"}"
+    }
+    if regex.isMatch(compiled.value, n.value) {
+        return "{\"matches\":true}"
+    }
+    return "{\"matches\":false}"
+}
+
+// Pull a string field's value out of a flat JSON object. This is a
+// deliberately simple scan; it handles the case where the value is a
+// bare string with no escaped quotes. v2 will use a proper JSON
+// parser.
+fn extract_string_field(json: String, key: String) -> String {
+    var needle_buf: [64]u8 = [0_u8; 64]
+    let needle_step1: Maybe<Span<u8>> = std.str.concat(needle_buf, "\"", key)
+    if !needle_step1.has {
+        return ""
+    }
+    let needle: String = needle_step1.value
+    let needle_step2: Maybe<Span<u8>> = std.str.concat(needle_buf, needle, "\":\"")
+    if !needle_step2.has {
+        return ""
+    }
+    let full_needle: String = needle_step2.value
+    let start: usize = str.indexOf(json, full_needle)
+    if start == 0_usize {
+        return ""
+    }
+    let value_off: usize = start + mem.len(full_needle)
+    let blen: usize = mem.len(json)
+    var end: usize = value_off
+    var i: usize = value_off
+    while i < blen {
+        let b: Maybe<u8> = mem.get(json, i)
+        if !b.has { break }
+        if b.value == 0x22_u8 {
+            end = i
+            i = blen
+        } else {
+            i = i + 1_usize
+        }
+    }
+    let after: Span<u8> = mem.dropPrefix(json, value_off)
+    return mem.prefix(after, end - value_off)
+}

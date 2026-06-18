@@ -95,7 +95,7 @@ useHead(() => {
 <template>
   <div v-if="post" class="min-h-screen bg-[#0a0a0a] text-white font-sans">
     <ReadingProgress />
-    <div class="max-w-5xl mx-auto px-6 py-12">
+    <div class="max-w-[1088px] mx-auto px-6 py-12">
       <div class="lg:flex gap-12">
         <!-- Sidebar / TOC -->
         <aside class="hidden lg:block w-64 shrink-0">

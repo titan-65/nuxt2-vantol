@@ -28,6 +28,9 @@ logs
 # Vercel
 .vercel
 
+# Sibling repositories (each has its own remote)
+/apps/zhyjen/
+
 AGENTS.md
 CLAUDE.md
 GEMINI.md

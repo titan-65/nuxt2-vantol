@@ -20,7 +20,7 @@ function formatDate(date: string | Date) {
 
 <template>
   <div class="min-h-screen bg-[#0a0a0a] text-white font-sans py-12">
-    <div class="max-w-5xl mx-auto px-6">
+    <div class="max-w-[1088px] mx-auto px-6">
       <div v-if="author" class="text-center mb-12 border border-white/10 bg-[#111] rounded-xl p-10 max-w-4xl mx-auto">
         <div class="relative inline-block mb-6">
           <NuxtImg

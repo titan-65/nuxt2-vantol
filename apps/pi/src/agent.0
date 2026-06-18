@@ -1,0 +1,56 @@
+use provider
+
+use testing.faux_provider
+
+use providers.anthropic
+
+use providers.openai
+
+pub fn run_agent(out: MutSpan<u8>, kind: String, prompt: String) -> Span<u8> {
+    var n: usize = 0
+    if std.mem.eql(kind, "faux") {
+        n = write_faux_reply(out)
+    } else if std.mem.eql(kind, "anthropic") {
+        n = write_anthropic_placeholder(out)
+    } else if std.mem.eql(kind, "openai") {
+        n = write_openai_placeholder(out)
+    } else {
+        let o: Maybe<usize> = std.io.writeSpan(out, 0_usize, "unknown provider: ")
+        if o.has {
+            n = write_remainder(out, o.value, kind)
+        }
+    }
+    return std.mem.prefix(out, n)
+}
+
+fn write_faux_reply(out: MutSpan<u8>) -> usize {
+    let o: Maybe<usize> = std.io.writeSpan(out, 0_usize, "pi (faux): no provider configured; set ANTHROPIC_API_KEY or OPENAI_API_KEY")
+    if o.has {
+        return o.value
+    }
+    return 0_usize
+}
+
+fn write_anthropic_placeholder(out: MutSpan<u8>) -> usize {
+    let o: Maybe<usize> = std.io.writeSpan(out, 0_usize, "anthropic: live HTTP not yet wired (request envelope built; see zero test for parser).")
+    if o.has {
+        return o.value
+    }
+    return 0_usize
+}
+
+fn write_openai_placeholder(out: MutSpan<u8>) -> usize {
+    let o: Maybe<usize> = std.io.writeSpan(out, 0_usize, "openai: live HTTP not yet wired (request envelope built; see zero test for parser).")
+    if o.has {
+        return o.value
+    }
+    return 0_usize
+}
+
+fn write_remainder(out: MutSpan<u8>, off: usize, s: String) -> usize {
+    let o: Maybe<usize> = std.io.writeSpan(out, off, s)
+    if o.has {
+        return o.value
+    }
+    return off
+}

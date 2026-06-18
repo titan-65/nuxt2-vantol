@@ -99,7 +99,7 @@ const goToPage = (page: number) => {
 
 <template>
   <div class="min-h-screen bg-[#0a0a0a] text-white font-sans">
-    <div class="max-w-5xl mx-auto px-6 py-12">
+    <div class="max-w-[1088px] mx-auto px-6 py-12">
       <div class="flex flex-col lg:flex-row gap-12">
         <!-- Main Content -->
         <div class="w-full lg:w-8/12">

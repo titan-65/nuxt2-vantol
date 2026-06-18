@@ -1,0 +1,203 @@
+// Anthropic Messages API provider.
+//
+// Maps the normalized `ProviderRequest` to the Anthropic Messages wire
+// format and parses the response back into a `ProviderResponse`.
+//
+// Wire format reference: https://docs.anthropic.com/en/api/messages
+//
+// The HTTP envelope is built by hand because the stdlib's
+// `std.http.writeRequest` and `std.http.writeJsonRequest` only emit
+// content-type and content-length. Anthropic needs `x-api-key` and
+// `anthropic-version` headers, so we construct the full request
+// envelope byte-by-byte.
+//
+// Request body shape:
+//
+//   {
+//     "model": "<model>",
+//     "max_tokens": <max_tokens>,
+//     "system": "<system>",
+//     "messages": <messages_json>,
+//     "tools": <tools_json>
+//   }
+//
+// Response body shape (200 OK):
+//
+//   {
+//     "content": [
+//       {"type": "text", "text": "..."},
+//       {"type": "tool_use", "id": "...", "name": "...", "input": {...}}
+//     ],
+//     "stop_reason": "end_turn" | "tool_use" | "max_tokens"
+//   }
+
+use provider
+use std.str
+use std.mem
+use std.io
+use std.fmt
+
+fn provider_name() -> String {
+    return "anthropic"
+}
+
+fn default_model() -> String {
+    return "claude-sonnet-4-5"
+}
+
+// Build the raw HTTP/1.1 request envelope for the Anthropic Messages
+// API. The caller passes a 16 KiB `MutSpan<u8>`; we return the slice
+// that contains the request text.
+//
+// `api_key` is interpolated into the `x-api-key` header verbatim. The
+// caller is responsible for sourcing it from the environment.
+pub fn anthropic_build_request(buf: MutSpan<u8>, req: ProviderRequest, api_key: String) -> Maybe<Span<u8>> {
+    // 1. Build the JSON body into a sibling buffer. We need its byte
+    //    length to set the `content-length` header accurately.
+    var body_buf: [8192]u8 = [0_u8; 8192]
+    let body: Maybe<Span<u8>> = build_json_body(body_buf, req)
+    if !body.has {
+        return null
+    }
+    let body_len: usize = mem.len(body.value)
+    var body_len_str_buf: [8]u8 = [0_u8; 8]
+    let body_len_str: Maybe<Span<u8>> = fmt.usize(body_len_str_buf, body_len)
+    if !body_len_str.has {
+        return null
+    }
+
+    // 2. Splice the HTTP envelope. The pattern is:
+    //
+    //    POST https://api.anthropic.com/v1/messages HTTP/1.1\r\n
+    //    host: api.anthropic.com\r\n
+    //    content-type: application/json\r\n
+    //    x-api-key: <KEY>\r\n
+    //    anthropic-version: 2023-06-01\r\n
+    //    content-length: <N>\r\n
+    //    \r\n
+    //    <body>
+    //
+    // Each fragment is appended via std.io.writeSpan; we chain by
+    // advancing the offset.
+    var off: usize = 0
+    let off1: Maybe<usize> = io.writeSpan(buf, off, "POST https://api.anthropic.com/v1/messages HTTP/1.1\r\n")
+    if !off1.has { return null }
+    off = off1.value
+    let off2: Maybe<usize> = io.writeSpan(buf, off, "host: api.anthropic.com\r\n")
+    if !off2.has { return null }
+    off = off2.value
+    let off3: Maybe<usize> = io.writeSpan(buf, off, "content-type: application/json\r\n")
+    if !off3.has { return null }
+    off = off3.value
+    let off4: Maybe<usize> = io.writeSpan(buf, off, "x-api-key: ")
+    if !off4.has { return null }
+    off = off4.value
+    let off5: Maybe<usize> = io.writeSpan(buf, off, api_key)
+    if !off5.has { return null }
+    off = off5.value
+    let off6: Maybe<usize> = io.writeSpan(buf, off, "\r\n")
+    if !off6.has { return null }
+    off = off6.value
+    let off7: Maybe<usize> = io.writeSpan(buf, off, "anthropic-version: 2023-06-01\r\n")
+    if !off7.has { return null }
+    off = off7.value
+    let off8: Maybe<usize> = io.writeSpan(buf, off, "content-length: ")
+    if !off8.has { return null }
+    off = off8.value
+    let off9: Maybe<usize> = io.writeSpan(buf, off, body_len_str.value)
+    if !off9.has { return null }
+    off = off9.value
+    let off10: Maybe<usize> = io.writeSpan(buf, off, "\r\n\r\n")
+    if !off10.has { return null }
+    off = off10.value
+    let off11: Maybe<usize> = io.writeSpan(buf, off, body.value)
+    if !off11.has { return null }
+    off = off11.value
+
+    return mem.prefix(buf, off)
+}
+
+fn empty_anthropic_response(text: Span<u8>) -> ProviderResponse {
+    var r: ProviderResponse = ProviderResponse { text: text, tool_calls_json: "[]", stop_reason: "end_turn" }
+    return r
+}
+// fixed except for the five dynamic fields.
+fn anthropic_build_json_body(buf: MutSpan<u8>, req: ProviderRequest) -> Maybe<Span<u8>> {
+    var off: usize = 0
+    let o1: Maybe<usize> = io.writeSpan(buf, off, "{\"model\":\"")
+    if !o1.has { return null }
+    off = o1.value
+    let o2: Maybe<usize> = io.writeSpan(buf, off, req.model)
+    if !o2.has { return null }
+    off = o2.value
+    let o3: Maybe<usize> = io.writeSpan(buf, off, "\",\"max_tokens\":")
+    if !o3.has { return null }
+    off = o3.value
+    var max_buf: [12]u8 = [0_u8; 12]
+    let max_str: Maybe<Span<u8>> = fmt.u32(max_buf, req.max_tokens)
+    if !max_str.has { return null }
+    let o4: Maybe<usize> = io.writeSpan(buf, off, max_str.value)
+    if !o4.has { return null }
+    off = o4.value
+    let o5: Maybe<usize> = io.writeSpan(buf, off, ",\"system\":\"")
+    if !o5.has { return null }
+    off = o5.value
+    let o6: Maybe<usize> = io.writeSpan(buf, off, req.system)
+    if !o6.has { return null }
+    off = o6.value
+    let o7: Maybe<usize> = io.writeSpan(buf, off, "\",\"messages\":")
+    if !o7.has { return null }
+    off = o7.value
+    let o8: Maybe<usize> = io.writeSpan(buf, off, req.messages_json)
+    if !o8.has { return null }
+    off = o8.value
+    let o9: Maybe<usize> = io.writeSpan(buf, off, ",\"tools\":")
+    if !o9.has { return null }
+    off = o9.value
+    let o10: Maybe<usize> = io.writeSpan(buf, off, req.tools_json)
+    if !o10.has { return null }
+    off = o10.value
+    let o11: Maybe<usize> = io.writeSpan(buf, off, "}")
+    if !o11.has { return null }
+    off = o11.value
+    return mem.prefix(buf, off)
+}
+
+// Parse an Anthropic Messages response body into a normalized
+// `ProviderResponse`. The body is JSON; we scan for the fields we
+// need with byte-level helpers and a few hand-rolled extractors.
+//
+// For v1 we only extract `content[].text` and `stop_reason`. Tool
+// calls are not parsed in this version; they will be added in v2.
+pub fn anthropic_parse_response(body: String, status: u16) -> ProviderOutcome {
+    if status != 200_u16 {
+        return ProviderOutcome.err(ProviderError.http(status, body))
+    }
+    // Extract the first `"text":"..."` substring. This is a
+    // deliberately simple parser; full JSON parsing is out of scope
+    // for v1 and is documented in ADR-0002.
+    let text_marker: Span<u8> = "\"text\":\""
+    let text_start: usize = str.indexOf(body, text_marker)
+    if text_start == 0 {
+        return ProviderOutcome.ok(empty_anthropic_response(""))
+    }
+    let text_off: usize = text_start + 8_usize
+    // Scan until the next unescaped `"`.
+    var end: usize = text_off
+    var i: usize = text_off
+    let blen: usize = mem.len(body)
+    while i < blen {
+        let b: Maybe<u8> = mem.get(body, i)
+        if !b.has { break }
+        if b.value == 0x22_u8 {
+            end = i
+            i = blen
+        } else {
+            i = i + 1_usize
+        }
+    }
+    let after_marker: Span<u8> = mem.dropPrefix(body, text_off)
+    let after_end: usize = end - text_off
+    let text_value: Span<u8> = mem.prefix(after_marker, after_end)
+    return ProviderOutcome.ok(empty_anthropic_response(text_value))
+}

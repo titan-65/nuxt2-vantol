@@ -1,0 +1,17 @@
+{
+  "name": "pi",
+  "version": "0.1.0",
+  "private": true,
+  "description": "CLI-first AI coding agent built in the Zero language. Modeled on pi-mono.",
+  "type": "module",
+  "scripts": {
+    "dev": "vp dev",
+    "build": "vp build",
+    "preview": "vp preview"
+  },
+  "devDependencies": {
+    "typescript": "~6.0.2",
+    "vite": "^6.3.0",
+    "vite-plus": "^0.1.14"
+  }
+}

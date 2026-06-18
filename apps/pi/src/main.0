@@ -1,0 +1,43 @@
+use std.cli
+
+use provider
+
+use tools
+
+use session
+
+use agent
+
+use testing.faux_provider
+
+use providers.anthropic
+
+use providers.openai
+
+pub fn main(world: World) -> Void raises {
+    let cmd: String = std.cli.argOr(1_usize, "")
+    if std.mem.eql(cmd, "chat") {
+        check world.out.write(run_chat_text())
+        return
+    }
+    if std.mem.eql(cmd, "tools") {
+        check world.out.write(run_tools_subcommand())
+        return
+    }
+    if std.mem.eql(cmd, "providers") {
+        check world.out.write(run_providers_subcommand())
+        return
+    }
+    if std.mem.eql(cmd, "--help") {
+        check world.out.write(usage_text())
+        return
+    }
+    if std.mem.eql(cmd, "") {
+        check world.out.write(usage_text())
+        return
+    }
+    check world.err.write("unknown command: ")
+    check world.err.write(cmd)
+    check world.err.write("\n")
+    check world.out.write(usage_text())
+}

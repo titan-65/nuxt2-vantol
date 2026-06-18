@@ -35,7 +35,7 @@ const clearFilter = () => {
 
 <template>
   <div class="min-h-screen bg-[#0a0a0a] text-white font-sans">
-    <div class="max-w-5xl mx-auto px-6 py-12">
+    <div class="max-w-[1088px] mx-auto px-6 py-12">
       <div class="text-center mb-16 border-b border-white/10 pb-12">
         <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-4">Portfolio</p>
         <h1 class="text-4xl md:text-5xl font-semibold tracking-tight mb-4">Projects</h1>

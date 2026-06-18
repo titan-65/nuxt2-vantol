@@ -21,7 +21,7 @@ const items = computed(() => galleryData.value?.items || [])
 
 <template>
   <main class="min-h-screen bg-[#0a0a0a] text-white font-sans">
-    <div class="max-w-5xl mx-auto px-6 py-10">
+    <div class="max-w-[1088px] mx-auto px-6 py-10">
       <section class="border border-white/10 bg-[#111] rounded-xl p-6 md:p-10">
         <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
           <div>

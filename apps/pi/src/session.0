@@ -1,0 +1,33 @@
+use std.io
+
+use std.mem
+
+pub fn format_event(buf: MutSpan<u8>, kind: String, payload: String) -> Span<u8> {
+    var off: usize = 0
+    let o1: Maybe<usize> = std.io.writeSpan(buf, off, "{\"kind\":\"")
+    if !o1.has {
+        return std.mem.prefix(buf, off)
+    }
+    off = o1.value
+    let o2: Maybe<usize> = std.io.writeSpan(buf, off, kind)
+    if !o2.has {
+        return std.mem.prefix(buf, off)
+    }
+    off = o2.value
+    let o3: Maybe<usize> = std.io.writeSpan(buf, off, "\",")
+    if !o3.has {
+        return std.mem.prefix(buf, off)
+    }
+    off = o3.value
+    let o4: Maybe<usize> = std.io.writeSpan(buf, off, payload)
+    if !o4.has {
+        return std.mem.prefix(buf, off)
+    }
+    off = o4.value
+    let o5: Maybe<usize> = std.io.writeSpan(buf, off, "}\n")
+    if !o5.has {
+        return std.mem.prefix(buf, off)
+    }
+    off = o5.value
+    return std.mem.prefix(buf, off)
+}

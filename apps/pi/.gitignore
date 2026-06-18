@@ -1,0 +1,9 @@
+# Zero compiler caches
+.zero/
+
+# Vite+ build output
+dist/
+.output/
+
+# Node
+node_modules/

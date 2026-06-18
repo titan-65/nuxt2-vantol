@@ -1,0 +1,9 @@
+use provider
+
+pub fn faux_build_request(buf: MutSpan<u8>, req: ProviderRequest, api_key: String) -> Maybe<Span<u8>> {
+    return std.str.copy(buf, "{\"model\":\"faux\",\"max_tokens\":1024,\"system\":\"faux system\",\"messages\":[\"hi\"],\"tools\":[]}")
+}
+
+pub fn faux_parse_response(body: String, status: u16) -> ProviderOutcome {
+    return ProviderOutcome.ok(ProviderResponse { text: "pi (faux): no provider configured; set ANTHROPIC_API_KEY or OPENAI_API_KEY", tool_calls_json: "[]", stop_reason: "end_turn" })
+}

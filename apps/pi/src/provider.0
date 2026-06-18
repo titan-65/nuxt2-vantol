@@ -1,0 +1,70 @@
+pub type ProviderRequest {
+    system: String,
+    messages_json: String,
+    tools_json: String,
+    model: String,
+    max_tokens: u32,
+}
+
+pub type ProviderResponse {
+    text: String,
+    tool_calls_json: String,
+    stop_reason: String,
+}
+
+pub type HttpDetail {
+    status: u16,
+    body: String,
+}
+
+pub choice ProviderError {
+    http: HttpDetail,
+    parse: String,
+    auth: String,
+    unavailable: String,
+}
+
+pub choice ProviderOutcome {
+    ok: ProviderResponse,
+    err: ProviderError,
+}
+
+fn usage_text() -> String {
+    return "pi v0.1.0 - CLI AI coding agent\n\nUsage:\n  pi chat --prompt \"<text>\" [--provider anthropic|openai|faux]\n  pi tools list\n  pi providers list\n  pi --help\n\nProviders: anthropic, openai, faux\n"
+}
+
+fn tools_list_text() -> String {
+    return "registered tools:\n  read_file     - read a UTF-8 text file\n  write_file    - write a UTF-8 text file atomically\n  list_dir      - list directory entries\n  exec_command  - run a shell command\n  grep          - search a path for a regex\n"
+}
+
+fn providers_list_text() -> String {
+    return "registered providers:\n  anthropic  - Anthropic Messages API (ANTHROPIC_API_KEY)\n  openai     - OpenAI Chat Completions API (OPENAI_API_KEY)\n  faux       - canned responses, no network (no key required)\n"
+}
+
+fn run_chat_text() -> String {
+    var buf: [4096]u8 = [0_u8; 4096]
+    let prompt: Maybe<String> = std.cli.optionValue("--prompt")
+    if !prompt.has {
+        return "chat: --prompt is required\n"
+    }
+    let provider_name: String = std.cli.optionValueOr("--provider", "faux")
+    let kind: String = provider_name
+    let reply: Span<u8> = agent.run_agent(buf, kind, prompt.value)
+    return reply
+}
+
+fn run_tools_subcommand() -> String {
+    let sub: String = std.cli.argOr(2_usize, "")
+    if std.mem.eql(sub, "list") {
+        return tools_list_text()
+    }
+    return "pi tools <subcommand>\n  list - list registered tools\n"
+}
+
+fn run_providers_subcommand() -> String {
+    let sub: String = std.cli.argOr(2_usize, "")
+    if std.mem.eql(sub, "list") {
+        return providers_list_text()
+    }
+    return "pi providers <subcommand>\n  list - list registered providers\n"
+}

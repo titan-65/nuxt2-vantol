@@ -7,6 +7,10 @@ const footerMessage = ref('')
 
 const { subscribe } = useNewsletter()
 
+// Compute year once on the server and serialize to client payload to avoid
+// SSR/CSR hydration mismatches when server and client straddle the year boundary.
+const year = useState('copyright-year', () => new Date().getFullYear())
+
 const handleFooterSubscribe = async () => {
   if (!footerEmail.value || !footerEmail.value.includes('@')) {
     footerStatus.value = 'error'
@@ -36,7 +40,7 @@ const handleFooterSubscribe = async () => {
 
 <template>
   <footer class="bg-[#0a0a0a] text-white border-t border-white/10">
-    <div class="max-w-5xl mx-auto px-6 py-12 md:py-16">
+    <div class="max-w-[1088px] mx-auto px-6 py-12 md:py-16">
       <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12">
         <!-- Navigation -->
         <div class="space-y-4">
@@ -74,42 +78,34 @@ const handleFooterSubscribe = async () => {
         <div class="space-y-4 col-span-2 md:col-span-1">
           <h3 class="text-[11px] font-bold uppercase tracking-widest text-zinc-500 pb-2">Stay Updated</h3>
           <p class="text-xs text-zinc-600">Subscribe for the latest updates.</p>
-          <ClientOnly>
-            <form @submit.prevent="handleFooterSubscribe" class="flex rounded-lg overflow-hidden border border-white/10 bg-[#111] focus-within:border-white/30 transition-colors">
-              <input
-                v-model="footerEmail"
-                type="email"
-                placeholder="Email"
-                class="flex-1 px-3 py-2 text-xs bg-transparent focus:outline-none text-white placeholder:text-zinc-600"
-                :disabled="footerStatus === 'loading' || footerStatus === 'success'"
-              />
-              <button
-                type="submit"
-                class="px-3 py-2 bg-[#f5c542] text-black text-xs font-bold hover:bg-[#e0b13a] transition-colors disabled:opacity-50"
-                :disabled="footerStatus === 'loading' || footerStatus === 'success'"
-              >
-                <span v-if="footerStatus === 'loading'">...</span>
-                <span v-else-if="footerStatus === 'success'">✓</span>
-                <span v-else>→</span>
-              </button>
-            </form>
-            <p v-if="footerMessage" class="text-[11px]" :class="footerStatus === 'error' ? 'text-red-400' : 'text-green-400'">
-              {{ footerMessage }}
-            </p>
-            <template #fallback>
-              <div class="flex rounded-lg overflow-hidden border border-white/10 bg-[#111]">
-                <input type="email" placeholder="Email" class="flex-1 px-3 py-2 text-xs bg-transparent text-white placeholder:text-zinc-600" disabled />
-                <button class="px-3 py-2 bg-[#f5c542] text-black text-xs font-bold">→</button>
-              </div>
-            </template>
-          </ClientOnly>
+          <form @submit.prevent="handleFooterSubscribe" class="flex rounded-lg overflow-hidden border border-white/10 bg-[#111] focus-within:border-white/30 transition-colors">
+            <input
+              v-model="footerEmail"
+              type="email"
+              placeholder="Email"
+              class="flex-1 px-3 py-2 text-xs bg-transparent focus:outline-none text-white placeholder:text-zinc-600"
+              :disabled="footerStatus === 'loading' || footerStatus === 'success'"
+            />
+            <button
+              type="submit"
+              class="px-3 py-2 bg-[#f5c542] text-black text-xs font-bold hover:bg-[#e0b13a] transition-colors disabled:opacity-50"
+              :disabled="footerStatus === 'loading' || footerStatus === 'success'"
+            >
+              <span v-if="footerStatus === 'loading'">...</span>
+              <span v-else-if="footerStatus === 'success'">✓</span>
+              <span v-else>→</span>
+            </button>
+          </form>
+          <p v-if="footerMessage" class="text-[11px]" :class="footerStatus === 'error' ? 'text-red-400' : 'text-green-400'">
+            {{ footerMessage }}
+          </p>
         </div>
       </div>
 
       <div class="pt-8 border-t border-white/10 flex flex-col md:flex-row justify-between items-center gap-4">
         <div class="flex items-center gap-2">
           <span class="font-bold text-sm tracking-tight">VantolBennett</span>
-          <span class="text-xs text-zinc-600">© {{ new Date().getFullYear() }}</span>
+          <span class="text-xs text-zinc-600">© {{ year }}</span>
         </div>
 
         <div class="flex items-center gap-2 text-xs text-zinc-600">
