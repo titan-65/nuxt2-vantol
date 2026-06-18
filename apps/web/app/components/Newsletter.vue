@@ -39,8 +39,9 @@ const handleSubscribe = async () => {
       <p class="text-zinc-500 text-sm mb-6">Get the latest posts delivered straight to your inbox.</p>
 
       <ClientOnly>
-        <form @submit.prevent="handleSubscribe" class="flex flex-col sm:flex-row gap-0 border border-white/10 rounded-lg overflow-hidden p-1 bg-[#0a0a0a] focus-within:border-white/30 transition-colors">
-          <input
+        <div>
+          <form @submit.prevent="handleSubscribe" class="flex flex-col sm:flex-row gap-0 border border-white/10 rounded-lg overflow-hidden p-1 bg-[#0a0a0a] focus-within:border-white/30 transition-colors">
+            <input
             v-model="email"
             type="email"
             placeholder="Enter your email"
@@ -60,6 +61,7 @@ const handleSubscribe = async () => {
 
         <p v-if="status === 'error'" class="mt-3 text-red-400 text-xs">{{ message }}</p>
         <p v-if="status === 'success'" class="mt-3 text-green-400 text-xs">{{ message }}</p>
+        </div>
 
         <template #fallback>
           <div class="flex flex-col sm:flex-row gap-0 border border-white/10 rounded-lg overflow-hidden p-1 bg-[#0a0a0a]">
