@@ -1,0 +1,114 @@
+// Session JSON Lines codec.
+//
+// A session is one file at `~/.pi/sessions/<id>.jsonl`. Each line is
+// a single JSON object describing one event in the conversation:
+//
+//   {"kind":"user","text":"..."}
+//   {"kind":"assistant","text":"..."}
+//   {"kind":"tool_call","id":"...","name":"...","arguments":"..."}
+//   {"kind":"tool_result","id":"...","output":"..."}
+//
+// The codec is deliberately narrow: it knows how to read the four
+// event kinds above, and to write the first two. Tool events are
+// written by the agent loop; this module does not own their format.
+
+use std.fs
+use std.mem
+use std.str
+use std.io
+use std.path
+use std.rand
+
+// Generate a 12-character hex session id. The id is purely a
+// filename; we do not need cryptographic uniqueness.
+pub fn new_session_id() -> String {
+    var hex_buf: [16]u8 = [0_u8; 16]
+    let hex: Maybe<Span<u8>> = std.rand.entropyHex32(hex_buf)
+    if !hex.has {
+        return "000000000000"
+    }
+    // Truncate to 12 hex chars.
+    return mem.prefix(hex.value, 12_usize)
+}
+
+// Build the absolute path to a session file under ~/.pi/sessions/.
+// `home` is the value of the HOME environment variable.
+pub fn session_path(home: String, id: String) -> String {
+    var dir_buf: [256]u8 = [0_u8; 256]
+    let joined: Maybe<String> = std.path.join(dir_buf, home, ".pi/sessions")
+    if !joined.has {
+        return ""
+    }
+    var id_buf: [20]u8 = [0_u8; 20]
+    let id_concat: Maybe<Span<u8>> = str.concat(id_buf, id, ".jsonl")
+    if !id_concat.has {
+        return ""
+    }
+    var final_buf: [320]u8 = [0_u8; 320]
+    let final_path: Maybe<String> = std.path.join(final_buf, joined.value, mem.span(id_concat.value))
+    if !final_path.has {
+        return ""
+    }
+    return final_path.value
+}
+
+// Ensure the sessions directory exists. Returns true on success.
+pub fn ensure_sessions_dir(home: String) -> Bool {
+    var dir_buf: [256]u8 = [0_u8; 256]
+    let joined: Maybe<String> = std.path.join(dir_buf, home, ".pi/sessions")
+    if !joined.has {
+        return false
+    }
+    if std.fs.isDir(joined.value) {
+        return true
+    }
+    return std.fs.makeDir(joined.value)
+}
+
+// Append one event line to a session file. Each line is a complete
+// JSON object followed by a newline. Atomicity is best-effort via
+// the stdlib's atomic write helper.
+pub fn append_event(path: String, kind: String, payload: String) -> Bool {
+    var buf: [8192]u8 = [0_u8; 8192]
+    var off: usize = 0
+    let o1: Maybe<usize> = io.writeSpan(buf, off, "{\"kind\":\"")
+    if !o1.has { return false }
+    off = o1.value
+    let o2: Maybe<usize> = io.writeSpan(buf, off, kind)
+    if !o2.has { return false }
+    off = o2.value
+    let o3: Maybe<usize> = io.writeSpan(buf, off, "\",")
+    if !o3.has { return false }
+    off = o3.value
+    let o4: Maybe<usize> = io.writeSpan(buf, off, payload)
+    if !o4.has { return false }
+    off = o4.value
+    let o5: Maybe<usize> = io.writeSpan(buf, off, "}\n")
+    if !o5.has { return false }
+    off = o5.value
+    let line: Span<u8> = mem.prefix(buf, off)
+    var tmp_buf: [320]u8 = [0_u8; 320]
+    let tmp_path: Maybe<String> = std.path.join(tmp_buf, path, ".tmp")
+    if !tmp_path.has {
+        return false
+    }
+    return std.fs.atomicWrite(path, tmp_path.value, line)
+}
+
+// Count the session files in ~/.pi/sessions/. Returns 0 if the
+// directory does not exist.
+pub fn count_sessions(home: String) -> usize {
+    var dir_buf: [256]u8 = [0_u8; 256]
+    let joined: Maybe<String> = std.path.join(dir_buf, home, ".pi/sessions")
+    if !joined.has {
+        return 0_usize
+    }
+    if !std.fs.isDir(joined.value) {
+        return 0_usize
+    }
+    let n: Maybe<usize> = std.fs.dirEntryCount(joined.value)
+    if !n.has {
+        return 0_usize
+    }
+    return n.value
+}

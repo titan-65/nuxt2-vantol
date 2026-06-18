@@ -1,0 +1,126 @@
+use std.io
+
+use std.mem
+
+pub fn tool_defs(buf: MutSpan<u8>) -> Span<u8> {
+    var off: usize = 0
+    let o1: Maybe<usize> = std.io.writeSpan(buf, off, "[")
+    if !o1.has {
+        return std.mem.prefix(buf, off)
+    }
+    off = o1.value
+    let o2: Maybe<usize> = std.io.writeSpan(buf, off, read_file_def())
+    if !o2.has {
+        return std.mem.prefix(buf, off)
+    }
+    off = o2.value
+    let o3: Maybe<usize> = std.io.writeSpan(buf, off, ",")
+    if !o3.has {
+        return std.mem.prefix(buf, off)
+    }
+    off = o3.value
+    let o4: Maybe<usize> = std.io.writeSpan(buf, off, write_file_def())
+    if !o4.has {
+        return std.mem.prefix(buf, off)
+    }
+    off = o4.value
+    let o5: Maybe<usize> = std.io.writeSpan(buf, off, ",")
+    if !o5.has {
+        return std.mem.prefix(buf, off)
+    }
+    off = o5.value
+    let o6: Maybe<usize> = std.io.writeSpan(buf, off, list_dir_def())
+    if !o6.has {
+        return std.mem.prefix(buf, off)
+    }
+    off = o6.value
+    let o7: Maybe<usize> = std.io.writeSpan(buf, off, ",")
+    if !o7.has {
+        return std.mem.prefix(buf, off)
+    }
+    off = o7.value
+    let o8: Maybe<usize> = std.io.writeSpan(buf, off, exec_command_def())
+    if !o8.has {
+        return std.mem.prefix(buf, off)
+    }
+    off = o8.value
+    let o9: Maybe<usize> = std.io.writeSpan(buf, off, ",")
+    if !o9.has {
+        return std.mem.prefix(buf, off)
+    }
+    off = o9.value
+    let o10: Maybe<usize> = std.io.writeSpan(buf, off, grep_def())
+    if !o10.has {
+        return std.mem.prefix(buf, off)
+    }
+    off = o10.value
+    let o11: Maybe<usize> = std.io.writeSpan(buf, off, "]")
+    if !o11.has {
+        return std.mem.prefix(buf, off)
+    }
+    off = o11.value
+    return std.mem.prefix(buf, off)
+}
+
+pub fn read_file_def() -> String {
+    return "{\"name\":\"read_file\",\"description\":\"Read a UTF-8 text file.\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"path\":{\"type\":\"string\"}},\"required\":[\"path\"]}}"
+}
+
+pub fn write_file_def() -> String {
+    return "{\"name\":\"write_file\",\"description\":\"Write a UTF-8 text file atomically.\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"path\":{\"type\":\"string\"},\"content\":{\"type\":\"string\"}},\"required\":[\"path\",\"content\"]}}"
+}
+
+pub fn list_dir_def() -> String {
+    return "{\"name\":\"list_dir\",\"description\":\"List directory entries.\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"path\":{\"type\":\"string\"}},\"required\":[\"path\"]}}"
+}
+
+pub fn exec_command_def() -> String {
+    return "{\"name\":\"exec_command\",\"description\":\"Run a shell command.\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"command\":{\"type\":\"string\"}},\"required\":[\"command\"]}}"
+}
+
+pub fn grep_def() -> String {
+    return "{\"name\":\"grep\",\"description\":\"Search a path for a regex.\",\"input_schema\":{\"type\":\"object\",\"properties\":{\"path\":{\"type\":\"string\"},\"pattern\":{\"type\":\"string\"}},\"required\":[\"path\",\"pattern\"]}}"
+}
+
+pub fn dispatch(name: String, args_json: String) -> String {
+    if std.mem.eql(name, "read_file") {
+        return "{\"stub\":\"read_file\"}"
+    }
+    if std.mem.eql(name, "write_file") {
+        return "{\"stub\":\"write_file\"}"
+    }
+    if std.mem.eql(name, "list_dir") {
+        return "{\"stub\":\"list_dir\"}"
+    }
+    if std.mem.eql(name, "exec_command") {
+        return "{\"stub\":\"exec_command\"}"
+    }
+    if std.mem.eql(name, "grep") {
+        return "{\"stub\":\"grep\"}"
+    }
+    return "{\"error\":\"unknown tool\"}"
+}
+
+test "dispatch_routes_read_file" {
+    expect (std.mem.eql(dispatch("read_file", "{}"), "{\"stub\":\"read_file\"}"))
+}
+
+test "dispatch_routes_write_file" {
+    expect (std.mem.eql(dispatch("write_file", "{}"), "{\"stub\":\"write_file\"}"))
+}
+
+test "dispatch_routes_list_dir" {
+    expect (std.mem.eql(dispatch("list_dir", "{}"), "{\"stub\":\"list_dir\"}"))
+}
+
+test "dispatch_routes_exec_command" {
+    expect (std.mem.eql(dispatch("exec_command", "{}"), "{\"stub\":\"exec_command\"}"))
+}
+
+test "dispatch_routes_grep" {
+    expect (std.mem.eql(dispatch("grep", "{}"), "{\"stub\":\"grep\"}"))
+}
+
+test "dispatch_rejects_unknown" {
+    expect (std.mem.eql(dispatch("not_a_tool", "{}"), "{\"error\":\"unknown tool\"}"))
+}

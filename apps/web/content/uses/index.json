@@ -15,9 +15,8 @@
       "title": "Frontend Stack",
       "description": "Frameworks and libraries I use",
       "items": [
-        { "name": "Vue.js / Nuxt.js", "description": "Primary framework for building web applications" },
         { "name": "React.js / Next.js", "description": "Alternative framework for various projects" },
-        { "name": "Tanstack Start", "description": "Best new framework"}
+        { "name": "Tanstack Start", "description": "Best new framework" },
         { "name": "TypeScript", "description": "Type-safe JavaScript for better DX" },
         { "name": "Tailwind CSS", "description": "Utility-first CSS framework" },
         { "name": "Shadcn/ui", "description": "Beautiful component library" }
@@ -60,7 +59,7 @@
       "items": [
         { "name": "Vercel", "description": "Frontend deployment platform" },
         { "name": "Netlify", "description": "Alternative hosting for JAMstack sites" },
-        { "name": "Cloudflare", "description": "CDN and DNS management" },
+        { "name": "Cloudflare", "description": "CDN and DNS management" }
       ]
     }
   ]

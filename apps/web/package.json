@@ -13,9 +13,8 @@
     "postinstall": "nuxt prepare"
   },
   "dependencies": {
-    "@nuxt/content": "^3.4.0",
+    "@nuxt/content": "~3.8.0",
     "@nuxt/image": "^1.8.0",
-    "h3": "^1.15.11",
     "@radix-icons/vue": "^1.0.0",
     "@vercel/analytics": "^1.6.1",
     "@vueuse/core": "^14.1.0",
@@ -23,10 +22,12 @@
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
     "firebase": "^10.14.1",
+    "h3": "^1.15.11",
     "lucide-vue-next": "^0.562.0",
     "nuxt": "^4.2.2",
     "reka-ui": "^2.7.0",
     "tailwind-merge": "^3.4.0",
+    "three": "^0.184.0",
     "vaul-vue": "^0.4.1",
     "vue-router": "^4.6.4"
   },

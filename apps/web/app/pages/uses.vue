@@ -15,7 +15,7 @@ const categories = computed(() => usesData.value?.categories || [])
   <div class="min-h-screen bg-[#0a0a0a] text-white font-sans">
     <!-- Hero Section -->
     <section class="py-20 border-b border-white/10">
-      <div class="max-w-5xl mx-auto px-6">
+      <div class="max-w-[1088px] mx-auto px-6">
         <div class="max-w-3xl">
           <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-4">Tech Stack</p>
           
@@ -33,7 +33,7 @@ const categories = computed(() => usesData.value?.categories || [])
 
     <!-- Categories Section -->
     <section class="py-16 md:py-24">
-      <div class="max-w-5xl mx-auto px-6">
+      <div class="max-w-[1088px] mx-auto px-6">
         <div class="space-y-16">
           <div
             v-for="(category, index) in categories"
@@ -70,7 +70,7 @@ const categories = computed(() => usesData.value?.categories || [])
 
     <!-- Footer Note -->
     <section class="py-16 border-t border-white/10">
-      <div class="max-w-5xl mx-auto px-6">
+      <div class="max-w-[1088px] mx-auto px-6">
         <div class="max-w-2xl mx-auto text-center border border-white/10 p-8 bg-[#111] rounded-xl">
           <p class="text-zinc-400 font-light mb-4">
             This page is regularly updated as I discover new tools and refine my workflow.

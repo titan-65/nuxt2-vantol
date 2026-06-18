@@ -26,7 +26,7 @@ const { data: projects } = await useAsyncData('projects', async () => {
   <div class="min-h-screen bg-[#0a0a0a] text-white font-sans">
     <!-- Hero Section -->
     <section class="border-b border-white/10">
-      <div class="max-w-5xl mx-auto px-6">
+      <div class="max-w-[1088px] mx-auto px-6">
         <div class="grid lg:grid-cols-2 gap-0 items-stretch min-h-[70vh]">
           <!-- Left: Text -->
           <div class="flex flex-col justify-center py-16 lg:py-24 lg:pr-12">
@@ -71,7 +71,7 @@ const { data: projects } = await useAsyncData('projects', async () => {
 
     <!-- Featured Posts Row -->
     <section v-if="posts?.length" class="border-b border-white/10">
-      <div class="max-w-5xl mx-auto px-6 py-12">
+      <div class="max-w-[1088px] mx-auto px-6 py-12">
         <div class="flex items-center gap-3 mb-8">
           <span class="px-2 py-1 text-[10px] font-bold uppercase tracking-wider bg-white/10 rounded text-zinc-300">Latest</span>
           <span class="text-[10px] font-mono uppercase tracking-wider text-zinc-500">From the blog</span>
@@ -114,7 +114,7 @@ const { data: projects } = await useAsyncData('projects', async () => {
 
     <!-- Editorial Section -->
     <section class="border-b border-white/10">
-      <div class="max-w-5xl mx-auto px-6 py-24">
+      <div class="max-w-[1088px] mx-auto px-6 py-24">
         <div class="grid md:grid-cols-2 gap-12 md:gap-20">
           <div>
             <h2 class="text-3xl md:text-4xl font-semibold tracking-tight leading-tight">
@@ -141,7 +141,7 @@ const { data: projects } = await useAsyncData('projects', async () => {
 
     <!-- Level Up Heading -->
     <section class="border-b border-white/10">
-      <div class="max-w-5xl mx-auto px-6 py-20 text-center">
+      <div class="max-w-[1088px] mx-auto px-6 py-20 text-center">
         <h2 class="text-3xl md:text-5xl font-semibold tracking-tight">
           Learn. Build. Ship. Repeat.
         </h2>
@@ -150,7 +150,7 @@ const { data: projects } = await useAsyncData('projects', async () => {
 
     <!-- Featured Resources -->
     <section class="border-b border-white/10">
-      <div class="max-w-5xl mx-auto px-6 py-16">
+      <div class="max-w-[1088px] mx-auto px-6 py-16">
         <div class="space-y-4">
           <NuxtLink
             v-for="project in projects?.slice(0, 4)"
@@ -192,7 +192,7 @@ const { data: projects } = await useAsyncData('projects', async () => {
 
     <!-- Latest Posts Grid -->
     <section class="border-b border-white/10">
-      <div class="max-w-5xl mx-auto px-6 py-20">
+      <div class="max-w-[1088px] mx-auto px-6 py-20">
         <h2 class="text-2xl md:text-3xl font-semibold tracking-tight text-center mb-12">
           My latest posts
         </h2>
@@ -214,7 +214,7 @@ const { data: projects } = await useAsyncData('projects', async () => {
 
     <!-- Testimonial -->
     <section class="border-b border-white/10">
-      <div class="max-w-5xl mx-auto px-6 py-24">
+      <div class="max-w-[1088px] mx-auto px-6 py-24">
         <div class="max-w-3xl mx-auto text-center">
           <div class="flex justify-center gap-1 mb-6">
             <svg v-for="i in 5" :key="i" width="20" height="20" viewBox="0 0 24 24" fill="#f5c542" class="text-[#f5c542]">
@@ -239,7 +239,7 @@ const { data: projects } = await useAsyncData('projects', async () => {
 
     <!-- About / Bio Section -->
     <section class="border-b border-white/10">
-      <div class="max-w-5xl mx-auto px-6 py-24">
+      <div class="max-w-[1088px] mx-auto px-6 py-24">
         <div class="grid md:grid-cols-2 gap-12 items-center">
           <div class="relative aspect-[4/3] rounded-2xl overflow-hidden bg-zinc-900">
             <NuxtImg
@@ -279,7 +279,7 @@ const { data: projects } = await useAsyncData('projects', async () => {
 
     <!-- Newsletter CTA -->
     <section class="border-b border-white/10">
-      <div class="max-w-5xl mx-auto px-6 py-24">
+      <div class="max-w-[1088px] mx-auto px-6 py-24">
         <div class="max-w-2xl mx-auto text-center">
           <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-4">Stay Updated</p>
           <h2 class="text-3xl md:text-4xl font-semibold tracking-tight mb-4">
@@ -295,7 +295,7 @@ const { data: projects } = await useAsyncData('projects', async () => {
 
     <!-- Projects Section -->
     <section>
-      <div class="max-w-5xl mx-auto px-6 py-24">
+      <div class="max-w-[1088px] mx-auto px-6 py-24">
         <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
           <div>
             <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-3">Latest Work</p>

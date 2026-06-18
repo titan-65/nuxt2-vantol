@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>pi · AI coding agent in Zero</title>
+  </head>
+  <body>
+    <main>
+      <h1>pi</h1>
+      <p>
+        CLI-first AI coding agent built in the <a href="https://zerolang.ai">Zero language</a>.
+        Modeled on <a href="https://github.com/badlogic/pi-mono">pi-mono</a>.
+      </p>
+      <h2>Quick start</h2>
+      <pre><code># Build and run
+cd apps/pi
+zero run -- "list the files in src"</code></pre>
+      <h2>Subcommands</h2>
+      <ul>
+        <li><code>pi chat</code> &mdash; one-shot prompt to the default provider.</li>
+        <li><code>pi tools list</code> &mdash; list registered tools.</li>
+        <li>
+          <code>pi sessions list</code> &mdash; list saved sessions under
+          <code>~/.pi/sessions/</code>.
+        </li>
+        <li><code>pi sessions show &lt;id&gt;</code> &mdash; print a saved session.</li>
+        <li><code>pi providers list</code> &mdash; list registered providers.</li>
+      </ul>
+    </main>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

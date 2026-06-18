@@ -1,0 +1,69 @@
+// Provider interface and normalized request/response types.
+//
+// Zero has no reflection or dynamic dispatch. The "interface" is the
+// shared shape that every Provider implementation provides:
+//
+//   1. A function `build_request(req, api_key) -> ProviderRequestBody`
+//      that turns a normalized `ProviderRequest` into a Provider-specific
+//      HTTP body.
+//   2. A function `parse_response(body, status) -> ProviderOutcome`
+//      that turns a Provider-specific HTTP body into a normalized
+//      `ProviderResponse` or a `ProviderError`.
+//
+// The shape is stable across Anthropic and OpenAI; the divergence is
+// hidden inside the implementations in `src/providers/anthropic.0` and
+// `src/providers/openai.0`. The Agent in `src/agent.0` picks the right
+// pair by name.
+
+// A normalized provider request. The Agent constructs this from a
+// Session's messages and the static tool list. Providers then map it
+// onto their own wire format.
+pub type ProviderRequest {
+    // The system prompt. May be empty.
+    system: String,
+    // The full message history in chronological order. Each entry is
+    // a JSON object with a `role` field ("user" or "assistant") and a
+    // `content` field (a string for text, or a JSON array of content
+    // blocks for tool calls / tool results).
+    messages_json: String,
+    // The JSON array of tool definitions, as it should appear in the
+    // request body's tool list. Each element is
+    // `{"name": ..., "description": ..., "input_schema": ...}`.
+    tools_json: String,
+    // The model identifier. Provider-specific.
+    model: String,
+    // Maximum tokens for the reply. Provider-specific.
+    max_tokens: u32,
+}
+
+// A normalized provider response. The Agent consumes this and either
+// prints the text, dispatches a tool call, or stops.
+pub type ProviderResponse {
+    // The text reply from the model, or empty if the model only
+    // emitted tool calls.
+    text: String,
+    // The tool calls the model wants to make, as a JSON array of
+    // `{"id": ..., "name": ..., "arguments": <json object>}` objects.
+    tool_calls_json: String,
+    // The stop reason. One of "end_turn", "tool_use", "max_tokens",
+    // "stop". Provider-specific; the Agent only needs to know whether
+    // the model is done or wants to call a tool.
+    stop_reason: String,
+}
+
+// The error a Provider can return. Kept narrow on purpose: the
+// Provider either succeeded (returning a `ProviderResponse`) or it
+// didn't (returning one of these variants).
+pub choice ProviderError {
+    http: u16, body: String,
+    parse: String,
+    auth: String,
+    unavailable: String,
+}
+
+// The result of a Provider call. `ok` holds a `ProviderResponse`;
+// `err` holds a `ProviderError`.
+pub choice ProviderOutcome {
+    ok: ProviderResponse,
+    err: ProviderError,
+}

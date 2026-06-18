@@ -1,0 +1,25 @@
+// FauxProvider: a Provider implementation for tests and local smoke
+// runs that have no API key.
+//
+// The provider echoes a fixed response back to the Agent without
+// making any network call. The canned text is taken from the request
+// body if a marker is present, so the smoke run can prove the loop
+// actually carried the prompt through.
+
+use provider
+
+fn provider_name() -> String {
+    return "faux"
+}
+
+fn default_model() -> String {
+    return "faux-model"
+}
+
+pub fn faux_build_request(buf: MutSpan<u8>, req: ProviderRequest, api_key: String) -> Maybe<Span<u8>> {
+    return std.mem.span("FAUX REQUEST")
+}
+
+pub fn faux_parse_response(body: String, status: u16) -> ProviderOutcome {
+    return ProviderOutcome.ok(ProviderResponse { text: "faux: no provider is configured; set ANTHROPIC_API_KEY or OPENAI_API_KEY, or pass --provider faux to skip the network call.", tool_calls_json: "[]", stop_reason: "end_turn" })
+}

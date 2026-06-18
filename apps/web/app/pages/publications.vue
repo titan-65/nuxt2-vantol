@@ -15,7 +15,7 @@ const publications = computed(() => publicationsData.value?.items || [])
   <div class="min-h-screen bg-[#0a0a0a] text-white font-sans">
     <!-- Hero Section -->
     <section class="py-20 border-b border-white/10">
-      <div class="max-w-5xl mx-auto px-6">
+      <div class="max-w-[1088px] mx-auto px-6">
         <div class="max-w-3xl">
           <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-4">Publications</p>
 
@@ -32,7 +32,7 @@ const publications = computed(() => publicationsData.value?.items || [])
 
     <!-- Publications -->
     <section class="py-16 md:py-24">
-      <div class="max-w-5xl mx-auto px-6">
+      <div class="max-w-[1088px] mx-auto px-6">
         <div class="space-y-24">
           <PublicationCard
             v-for="publication in publications"
@@ -45,7 +45,7 @@ const publications = computed(() => publicationsData.value?.items || [])
 
     <!-- Empty State -->
     <section v-if="publications.length === 0" class="py-24">
-      <div class="max-w-5xl mx-auto px-6">
+      <div class="max-w-[1088px] mx-auto px-6">
         <div class="max-w-2xl mx-auto text-center border border-white/10 p-12 bg-[#111] rounded-xl">
           <p class="text-zinc-500 text-sm uppercase tracking-wider">
             More publications coming soon.
@@ -56,7 +56,7 @@ const publications = computed(() => publicationsData.value?.items || [])
 
     <!-- CTA Section -->
     <section class="py-16 border-t border-white/10">
-      <div class="max-w-5xl mx-auto px-6">
+      <div class="max-w-[1088px] mx-auto px-6">
         <div class="max-w-2xl mx-auto text-center border border-white/10 p-8 bg-[#111] rounded-xl">
           <p class="text-zinc-400 font-light mb-4">
             Interested in collaborating on a technical book or publication?

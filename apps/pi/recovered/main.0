@@ -1,0 +1,121 @@
+// CLI entry point. Dispatches on the first positional argument:
+//
+//   pi chat --prompt "..." [--session <id>] [--provider <name>] [--model <id>]
+//   pi tools list
+//   pi sessions list
+//   pi providers list
+//   pi --help
+
+use agent
+use tools
+use session
+use std.cli
+use std.fmt
+use std.str
+use std.io
+
+pub fn main(world: World) -> Void raises {
+    let command: Maybe<String> = std.cli.command()
+    if !command.has {
+        print_usage(world)
+        return
+    }
+    if str.eql(command.value, "chat") {
+        run_chat(world)
+        return
+    }
+    if str.eql(command.value, "tools") {
+        run_tools(world)
+        return
+    }
+    if str.eql(command.value, "sessions") {
+        run_sessions(world)
+        return
+    }
+    if str.eql(command.value, "providers") {
+        run_providers(world)
+        return
+    }
+    if str.eql(command.value, "--help") || str.eql(command.value, "-h") {
+        print_usage(world)
+        return
+    }
+    check world.err.write("unknown command: ")
+    check world.err.write(command.value)
+    check world.err.write("\n")
+    print_usage(world)
+}
+
+fn print_usage(world: World) -> Void raises {
+    check world.out.write("pi - CLI AI coding agent\n\n")
+    check world.out.write("Usage:\n")
+    check world.out.write("  pi chat --prompt \"<text>\" [--session <id>] [--provider <name>] [--model <id>]\n")
+    check world.out.write("  pi tools list\n")
+    check world.out.write("  pi sessions list\n")
+    check world.out.write("  pi providers list\n")
+    check world.out.write("\nProviders: anthropic, openai, faux\n")
+}
+
+fn run_chat(world: World) -> Void raises {
+    let prompt: Maybe<String> = std.cli.optionValue("--prompt")
+    if !prompt.has {
+        check world.err.write("chat: --prompt is required\n")
+        return
+    }
+    let session_id: String = std.cli.optionValueOr("--session", "")
+    let provider_name: String = std.cli.optionValueOr("--provider", "anthropic")
+    let model_override: String = std.cli.optionValueOr("--model", "")
+
+    let kind: Maybe<ProviderKind> = agent.parse_provider_kind(provider_name)
+    if !kind.has {
+        check world.err.write("unknown provider: ")
+        check world.err.write(provider_name)
+        check world.err.write("\n")
+        return
+    }
+    var model: String = ""
+    if str.eql(model_override, "") {
+        model = agent.default_model_for(kind.value)
+    } else {
+        model = model_override
+    }
+    let _code: i32 = agent.run_turn(world, kind.value, model, session_id, prompt.value)
+    return
+}
+
+fn run_tools(world: World) -> Void raises {
+    check world.out.write("registered tools:\n")
+    check world.out.write("  read_file     - read a UTF-8 text file\n")
+    check world.out.write("  write_file    - write a UTF-8 text file atomically\n")
+    check world.out.write("  list_dir      - list the entries of a directory\n")
+    check world.out.write("  exec_command  - run a shell command\n")
+    check world.out.write("  grep          - search a file for a regex\n")
+    return
+}
+
+fn run_sessions(world: World) -> Void raises {
+    let home: Maybe<String> = std.env.get("HOME")
+    if !home.has {
+        check world.err.write("HOME is not set\n")
+        return
+    }
+    let n: usize = session.count_sessions(home.value)
+    var n_buf: [12]u8 = [0_u8; 12]
+    let n_str: Maybe<Span<u8>> = std.fmt.usize(n_buf, n)
+    if !n_str.has {
+        check world.err.write("format failed\n")
+        return
+    }
+    check world.out.write("sessions: ")
+    check world.out.write(n_str.value)
+    check world.out.write("\n")
+    return
+}
+
+fn run_providers(world: World) -> Void raises {
+    check world.out.write("registered providers:\n")
+    check world.out.write("  anthropic  - Anthropic Messages API (ANTHROPIC_API_KEY)\n")
+    check world.out.write("  openai     - OpenAI Chat Completions API (OPENAI_API_KEY)\n")
+    check world.out.write("  faux       - canned responses, no network (no key required)\n")
+    return
+}

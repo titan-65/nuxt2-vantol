@@ -16,7 +16,7 @@ const experience = computed(() => aboutData.value?.experience || [])
   <div class="min-h-screen bg-[#0a0a0a] text-white font-sans">
     <!-- Hero Section -->
     <section class="py-20 border-b border-white/10">
-      <div class="max-w-5xl mx-auto px-6">
+      <div class="max-w-[1088px] mx-auto px-6">
         <div class="grid gap-12 lg:grid-cols-2 items-center">
           <div class="space-y-6">
             <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-500">About Me</p>
@@ -55,7 +55,7 @@ const experience = computed(() => aboutData.value?.experience || [])
 
     <!-- Skills Section -->
     <section class="py-20 border-b border-white/10">
-      <div class="max-w-5xl mx-auto px-6">
+      <div class="max-w-[1088px] mx-auto px-6">
         <div class="mb-12">
           <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-3">Skills</p>
           <h2 class="text-3xl font-semibold mb-4">Skills & Technologies</h2>
@@ -89,7 +89,7 @@ const experience = computed(() => aboutData.value?.experience || [])
 
     <!-- Experience Section -->
     <section class="py-20">
-      <div class="max-w-5xl mx-auto px-6">
+      <div class="max-w-[1088px] mx-auto px-6">
         <div class="mb-12">
           <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-3">Experience</p>
           <h2 class="text-3xl font-semibold mb-4">Experience</h2>
