@@ -2,6 +2,8 @@
 
 declare const process: {
   env: Record<string, string | undefined>
+  version: string
+  versions: { modules: string }
 }
 
 export default defineNuxtConfig({

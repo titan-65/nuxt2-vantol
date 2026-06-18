@@ -4,6 +4,11 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+overrides:
+  h3: 1.15.11
+  nitro-nightly>h3: 2.0.1-rc.22
+  unstorage@2.0.0-alpha.7>h3: 2.0.1-rc.22
+
 patchedDependencies:
   '@voidzero-dev/vite-plus-core@0.1.16-alpha.0':
     hash: b0eb08682beb9a6306a60f59b6c924c4d4eae57efe7018ca30e6c6e2c635f189
@@ -240,7 +245,7 @@ importers:
         specifier: ^10.14.1
         version: 10.14.1
       h3:
-        specifier: ^1.15.11
+        specifier: 1.15.11
         version: 1.15.11
       lucide-vue-next:
         specifier: ^0.562.0
@@ -362,7 +367,7 @@ importers:
         specifier: ^8.20.0
         version: 8.20.0
       h3:
-        specifier: ^1.15.11
+        specifier: 1.15.11
         version: 1.15.11
       ink:
         specifier: ^6.8.0
@@ -6319,8 +6324,8 @@ packages:
       crossws:
         optional: true
 
-  h3@2.0.1-rc.20:
-    resolution: {integrity: sha512-28ljodXuUp0fZovdiSRq4G9OgrxCztrJe5VdYzXAB7ueRvI7pIUqLU14Xi3XqdYJ/khXjfpUOOD2EQa6CmBgsg==}
+  h3@2.0.1-rc.22:
+    resolution: {integrity: sha512-Esv0DMIuPkCTSWCA0vO73vcTqwzH1wjSrAO1TXNu/K3up1sZHa9EKMapbmxCDYBeymC3fVTk4qxp7ogQWQ+KgA==}
     engines: {node: '>=20.11.1'}
     hasBin: true
     peerDependencies:
@@ -15655,7 +15660,7 @@ snapshots:
     optionalDependencies:
       crossws: 0.4.4(srvx@0.11.15)
 
-  h3@2.0.1-rc.20(crossws@0.4.4(srvx@0.11.15)):
+  h3@2.0.1-rc.22(crossws@0.4.4(srvx@0.11.15)):
     dependencies:
       rou3: 0.8.1
       srvx: 0.11.15
@@ -16903,7 +16908,7 @@ snapshots:
       crossws: 0.4.4(srvx@0.11.15)
       db0: 0.3.4(better-sqlite3@12.8.0)
       env-runner: 0.1.7
-      h3: 2.0.1-rc.20(crossws@0.4.4(srvx@0.11.15))
+      h3: 2.0.1-rc.22(crossws@0.4.4(srvx@0.11.15))
       hookable: 6.1.0
       nf3: 0.3.16
       ocache: 0.1.4
