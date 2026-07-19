@@ -1,5 +1,5 @@
 ---
-title: "Roadmap & When to Reach For It"
+title: "Roadmap & When to Use"
 description: "Where Vapor Mode stands today, the signal from the Vue team, and a personal decision guide: workloads that benefit vs. ones to wait on."
 series: "vue-vapor"
 order: 8
