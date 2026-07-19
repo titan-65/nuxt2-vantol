@@ -59,4 +59,4 @@ None. Track the pinned version's changelog and the Vue blog for GA.
 
 ## Recap
 
-Vapor is experimental and improving. Reach for it on leaf-heavy, update-heavy UIs once your features and libs clear the matrix. Go deeper: Vue Macros and Reactivity Transform are adjacent experimental surfaces we deliberately left for another series.
+Vapor is experimental and improving. Reach for it on leaf-heavy, update-heavy UIs once your features and libs clear the matrix. Go deeper: Vue Macros — which now houses the former Reactivity Transform — is an adjacent experimental surface we deliberately left for another series.

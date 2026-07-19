@@ -28,8 +28,8 @@ Vapor Mode is **experimental** and version-sensitive. This series pins **Vue 3.6
 3. **How Vapor Compiles** — templates to direct DOM ops.
 4. **Setting Up Vapor Mode** — hands-on, pinned version.
 5. **Block Tree & Fine-Grained Reactivity** — the internals.
-6. **Porting a Component** — light hands-on.
-7. **Limitations** — what doesn't work yet.
+6. **Porting a Component to Vapor** — light hands-on.
+7. **Limitations & What Doesn't Work Yet** — what doesn't work yet.
 8. **Roadmap & When to Use** — the adoption call.
 
 ## How this series works

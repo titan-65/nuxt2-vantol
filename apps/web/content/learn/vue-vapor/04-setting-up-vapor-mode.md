@@ -46,7 +46,7 @@ cd my-vapor-app
 Replace `npm create`'s Vue with the pinned version in `package.json`:
 
 ```bash
-pnpm add vue@3.6.0-rc.1 && pnpm add -D @vitejs/plugin-vue@6.0.8 vite
+npm install vue@3.6.0-rc.1 && npm install -D @vitejs/plugin-vue@6.0.8 vite
 ```
 
 ### 3. Keep `vite.config.ts` standard
@@ -84,14 +84,17 @@ createVaporApp(App).mount('#app')
 
 ### 6. Verify
 
-Temporarily add to `App.vue`:
+Add these two lines **inside the existing `<script setup vapor>` block** of `App.vue`:
 
-```js
-import { getCurrentInstance } from 'vue'
+```vue
+<script setup vapor>
+import { ref, getCurrentInstance } from 'vue'
+const count = ref(0)
 console.log('vapor?', getCurrentInstance() === null)
+</script>
 ```
 
-Run `pnpm dev`; the browser console should print `vapor? true`. (`true` ⇒ Vapor; `false` ⇒ the marker was dropped.) Remove the temp log after.
+Run `npm run dev`; the browser console should print `vapor? true`. (`true` ⇒ Vapor; `false` ⇒ the marker was dropped.) Remove the temp `console.log` after.
 
 ## Gotchas
 
@@ -101,4 +104,4 @@ Run `pnpm dev`; the browser console should print `vapor? true`. (`true` ⇒ Vapo
 
 ## Recap
 
-Mark an SFC `vapor`, use `createVaporApp` for a pure build, verify with `getCurrentInstance() === null`. You now have a Vapor playground.
+Mark an SFC `vapor`, use `createVaporApp` for a pure build, verify with `getCurrentInstance() === null`. You now have a Vapor playground — keep this project, lesson 6 reuses it.
