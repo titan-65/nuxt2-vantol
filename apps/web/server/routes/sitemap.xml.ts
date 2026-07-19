@@ -18,6 +18,7 @@ export default defineEventHandler(async (event) => {
     '/',
     '/about',
     '/blog',
+    '/learn',
     '/projects',
     '/uses',
     '/gallery',
@@ -28,6 +29,7 @@ export default defineEventHandler(async (event) => {
 
   const blogPosts = await queryCollection(event, 'blog').all() as any[]
   const projectPosts = await queryCollection(event, 'projects').all() as any[]
+  const tutorials = await queryCollection(event, 'tutorials').all() as any[]
 
   const urls: SitemapEntry[] = [
     ...staticRoutes.map((route) => ({ loc: toUrl(baseUrl, route) })),
@@ -38,6 +40,10 @@ export default defineEventHandler(async (event) => {
     ...projectPosts.map((project) => ({
       loc: toUrl(baseUrl, project.path || `/projects/${project.slug || project.path?.split('/').pop()}`),
       lastmod: project.updatedAt || project.date || project.createdAt
+    })),
+    ...tutorials.map((doc) => ({
+      loc: toUrl(baseUrl, doc.path),
+      lastmod: doc.updatedAt || doc.releaseDate || doc.createdAt
     }))
   ]
 

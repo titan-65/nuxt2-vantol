@@ -1,13 +1,4 @@
 <script setup lang="ts">
-const { data: posts } = await useAsyncData('posts', async () => {
-  const items = await queryCollection('blog')
-    .order('date', 'DESC')
-    .limit(3)
-    .all() as any[]
-
-  return items.map(p => ({ ...p, _path: p.path, slug: p.path.split('/').pop() }))
-})
-
 const { data: allPosts } = await useAsyncData('all-posts', async () => {
   const items = await queryCollection('blog')
     .order('date', 'DESC')
@@ -16,9 +7,12 @@ const { data: allPosts } = await useAsyncData('all-posts', async () => {
   return items.map(p => ({ ...p, _path: p.path, slug: p.path.split('/').pop() }))
 })
 
-const { data: projects } = await useAsyncData('projects', async () => {
-  const items = await queryCollection('projects').all() as any[]
-  return items.map(p => ({ ...p, _path: p.path, slug: p.path.split('/').pop() }))
+const { data: series } = await useAsyncData('home-series', async () => {
+  const items = await queryCollection('tutorials').all() as any[]
+  return items
+    .filter((doc: any) => !doc.order && doc.path?.split('/').filter(Boolean).length === 2)
+    .map((doc: any) => ({ ...doc, slug: doc.path?.split('/').pop() }))
+    .sort((a: any, b: any) => new Date(b.releaseDate || 0).getTime() - new Date(a.releaseDate || 0).getTime())
 })
 </script>
 
@@ -41,8 +35,8 @@ const { data: projects } = await useAsyncData('projects', async () => {
             </p>
 
             <div class="flex flex-wrap gap-3">
-              <NuxtLink to="/projects" class="hero-btn inline-flex items-center gap-2">
-                View Projects
+              <NuxtLink to="/learn" class="hero-btn inline-flex items-center gap-2">
+                Start Learning
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                   <path d="M5 12h14M12 5l7 7-7 7"/>
                 </svg>
@@ -65,49 +59,6 @@ const { data: projects } = await useAsyncData('projects', async () => {
               <div class="absolute inset-0 bg-gradient-to-t from-[#0a0a0a]/60 to-transparent"/>
             </div>
           </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Featured Posts Row -->
-    <section v-if="posts?.length" class="border-b border-white/10">
-      <div class="max-w-[1088px] mx-auto px-6 py-12">
-        <div class="flex items-center gap-3 mb-8">
-          <span class="px-2 py-1 text-[10px] font-bold uppercase tracking-wider bg-white/10 rounded text-zinc-300">Latest</span>
-          <span class="text-[10px] font-mono uppercase tracking-wider text-zinc-500">From the blog</span>
-        </div>
-
-        <div class="space-y-0">
-          <NuxtLink
-            v-for="(post, i) in posts"
-            :key="post._path"
-            :to="`/blog/${post.slug}`"
-            class="group flex items-center gap-6 py-6 border-t border-white/10 first:border-t-0 hover:bg-white/[0.02] transition-colors -mx-3 px-3 rounded-lg"
-          >
-            <div class="hidden sm:block w-24 h-16 rounded-lg overflow-hidden bg-zinc-900 shrink-0">
-              <NuxtImg
-                v-if="post.img"
-                :src="post.img"
-                :alt="post.title"
-                class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
-                width="96"
-                height="64"
-              />
-            </div>
-            <div class="flex-1 min-w-0">
-              <h3 class="text-lg font-semibold mb-1 group-hover:text-[#f5c542] transition-colors truncate">
-                {{ post.title }}
-              </h3>
-              <p class="text-sm text-zinc-500 line-clamp-1">
-                {{ post.description }}
-              </p>
-            </div>
-            <div class="shrink-0 w-10 h-10 rounded-full border border-white/10 flex items-center justify-center group-hover:border-[#f5c542] group-hover:bg-[#f5c542]/10 transition-colors">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-zinc-500 group-hover:text-[#f5c542] transition-colors">
-                <path d="M5 12h14M12 5l7 7-7 7"/>
-              </svg>
-            </div>
-          </NuxtLink>
         </div>
       </div>
     </section>
@@ -139,71 +90,69 @@ const { data: projects } = await useAsyncData('projects', async () => {
       </div>
     </section>
 
-    <!-- Level Up Heading -->
-    <section class="border-b border-white/10">
-      <div class="max-w-[1088px] mx-auto px-6 py-20 text-center">
-        <h2 class="text-3xl md:text-5xl font-semibold tracking-tight">
-          Learn. Build. Ship. Repeat.
-        </h2>
-      </div>
-    </section>
+    <!-- Learn Section -->
+    <section class="relative overflow-hidden">
+      <div class="absolute inset-0 bg-gradient-to-br from-[#f5c542]/10 via-transparent to-transparent" />
+      <div class="relative max-w-[1088px] mx-auto px-6 py-24">
+        <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
+          <div>
+            <p class="text-[10px] font-bold uppercase tracking-widest text-[#f5c542] mb-3 flex items-center gap-2">
+              <span class="inline-block w-2 h-2 rounded-full bg-[#f5c542] animate-pulse" />
+              Now Learning
+            </p>
+            <h2 class="text-3xl md:text-5xl font-semibold tracking-tight">
+              Learn
+              <ClientOnly>
+                <RotatingText
+                  :texts="['Nuxt', 'Vue', 'React', 'Svelte', 'E-framework']"
+                  class="text-[#f5c542]"
+                  element-level-class-name="inline-block"
+                  :rotation-interval="2200"
+                  :stagger-duration="0.02"
+                />
+                <template #fallback>
+                  <span class="text-[#f5c542]">Nuxt</span>
+                </template>
+              </ClientOnly>
+              <span class="block text-2xl md:text-4xl text-zinc-400 mt-2">one release at a time</span>
+            </h2>
+          </div>
+          <p class="text-zinc-400 text-sm max-w-md">
+            Hands-on tutorials where we learn the new framework features together — straight from the release notes, step by step.
+          </p>
+        </div>
 
-    <!-- Featured Resources -->
-    <section class="border-b border-white/10">
-      <div class="max-w-[1088px] mx-auto px-6 py-16">
-        <div class="space-y-4">
+        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
           <NuxtLink
-            v-for="project in projects?.slice(0, 4)"
-            :key="project._path"
-            :to="`/projects/${project.slug}`"
-            class="group flex items-center gap-5 p-4 rounded-xl border border-white/10 hover:border-white/20 hover:bg-white/[0.02] transition-all"
+            v-for="s in series"
+            :key="s.slug"
+            :to="`/learn/${s.slug}`"
+            class="group relative flex flex-col bg-[#111] border border-white/10 hover:border-[#f5c542] rounded-2xl overflow-hidden transition-all hover:-translate-y-1 hover:shadow-[0_0_40px_-12px_rgba(245,197,66,0.35)]"
           >
-            <div class="w-16 h-16 rounded-lg overflow-hidden bg-zinc-900 shrink-0">
-              <img
-                v-if="project.image"
-                :src="project.image"
-                :alt="project.title"
-                class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
-                width="64"
-                height="64"
-              />
+            <div v-if="s.img" class="aspect-[16/9] overflow-hidden bg-zinc-900">
+              <NuxtImg :src="s.img" :alt="s.title" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500" sizes="500px" />
             </div>
-            <div class="flex-1 min-w-0">
-              <div class="flex items-center gap-2 mb-1">
-                <span class="px-1.5 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-white/10 rounded text-zinc-400">Project</span>
-                <span class="text-[10px] font-mono text-zinc-600 uppercase tracking-wider">{{ project.tag }}</span>
+            <div class="p-6 flex flex-col flex-1">
+              <div class="flex items-center gap-2 mb-3">
+                <span class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-[#f5c542] text-black rounded">v{{ s.nuxtVersion }}</span>
+                <span v-if="s.difficulty" class="text-[10px] font-mono uppercase tracking-wider text-zinc-500">{{ s.difficulty }}</span>
+                <span v-if="s.releaseDate" class="text-[10px] text-zinc-600 ml-auto">{{ new Date(s.releaseDate).toLocaleDateString('en', { month: 'short', year: 'numeric' }) }}</span>
               </div>
-              <h3 class="text-base font-semibold group-hover:text-[#f5c542] transition-colors">
-                {{ project.title }}
-              </h3>
-              <p class="text-sm text-zinc-500 line-clamp-1">
-                {{ project.preview }}
-              </p>
-            </div>
-            <div class="shrink-0 w-8 h-8 rounded-full border border-white/10 flex items-center justify-center group-hover:border-[#f5c542] transition-colors">
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-zinc-500 group-hover:text-[#f5c542] transition-colors">
-                <path d="M5 12h14M12 5l7 7-7 7"/>
-              </svg>
+              <h3 class="text-lg font-semibold group-hover:text-[#f5c542] transition-colors mb-2">{{ s.title }}</h3>
+              <p class="text-sm text-zinc-500 line-clamp-2 flex-1">{{ s.description }}</p>
+              <span class="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-[#f5c542] transition-colors">
+                Start learning
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="group-hover:translate-x-1 transition-transform">
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </span>
             </div>
           </NuxtLink>
         </div>
-      </div>
-    </section>
-
-    <!-- Latest Posts Grid -->
-    <section class="border-b border-white/10">
-      <div class="max-w-[1088px] mx-auto px-6 py-20">
-        <h2 class="text-2xl md:text-3xl font-semibold tracking-tight text-center mb-12">
-          My latest posts
-        </h2>
-
-        <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <PostCard v-for="post in allPosts" :key="post._path" :item="post" />
-        </div>
 
         <div class="mt-12 text-center">
-          <NuxtLink to="/blog" class="hero-btn-outline inline-flex items-center gap-2">
-            View All Posts
+          <NuxtLink to="/learn" class="hero-btn inline-flex items-center gap-2">
+            Browse All Tutorials
             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
               <path d="M5 12h14M12 5l7 7-7 7"/>
             </svg>
@@ -293,21 +242,24 @@ const { data: projects } = await useAsyncData('projects', async () => {
       </div>
     </section>
 
-    <!-- Projects Section -->
-    <section>
-      <div class="max-w-[1088px] mx-auto px-6 py-24">
-        <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
-          <div>
-            <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-3">Latest Work</p>
-            <h2 class="text-3xl md:text-4xl font-semibold tracking-tight">Projects</h2>
-          </div>
-          <p class="text-zinc-500 text-sm max-w-md">
-            Various frameworks including React.js, Nuxt.js, Vue.js & TypeScript
-          </p>
-        </div>
+    <!-- Latest Posts Grid -->
+    <section class="border-b border-white/10">
+      <div class="max-w-[1088px] mx-auto px-6 py-20">
+        <h2 class="text-2xl md:text-3xl font-semibold tracking-tight text-center mb-12">
+          My latest posts
+        </h2>
 
         <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          <ProjectCard v-for="project in projects" :key="project._path" :item="project" />
+          <PostCard v-for="post in allPosts" :key="post._path" :item="post" />
+        </div>
+
+        <div class="mt-12 text-center">
+          <NuxtLink to="/blog" class="hero-btn-outline inline-flex items-center gap-2">
+            View All Posts
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+          </NuxtLink>
         </div>
       </div>
     </section>
