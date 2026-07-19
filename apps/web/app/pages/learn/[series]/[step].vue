@@ -148,7 +148,7 @@ function markComplete() {
             </header>
 
             <!-- Content -->
-            <div class="prose prose-invert max-w-none font-light prose-headings:font-semibold prose-headings:tracking-tight prose-a:text-[#f5c542] prose-a:no-underline hover:prose-a:underline prose-strong:text-white prose-code:text-[#f5c542] prose-pre:bg-zinc-900 prose-pre:border prose-pre:border-white/10">
+            <div class="prose prose-invert max-w-none font-light prose-headings:font-semibold prose-headings:tracking-tight prose-a:text-[#f5c542] prose-a:no-underline hover:prose-a:underline prose-code:text-[#f5c542] prose-pre:bg-zinc-900 prose-pre:border prose-pre:border-white/10">
               <ContentRenderer :value="step" />
             </div>
 
