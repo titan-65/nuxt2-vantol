@@ -19,6 +19,11 @@
       "vite": "^6.3.0",
       "vite-plus": "^0.1.14"
     },
+    "overrides": {
+      "h3": "1.15.11",
+      "nitro-nightly>h3": "2.0.1-rc.22",
+      "unstorage@2.0.0-alpha.7>h3": "2.0.1-rc.22"
+    },
     "onlyBuiltDependencies": [
       "keytar",
       "better-sqlite3",

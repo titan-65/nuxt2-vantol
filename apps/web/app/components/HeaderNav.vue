@@ -7,6 +7,7 @@ const route = useRoute();
 const primaryLinks = [
   { name: "HOME", to: "/" },
   { name: "BLOG", to: "/blog" },
+  { name: "LEARN", to: "/learn" },
   { name: "PROJECTS", to: "/projects" },
   { name: "ABOUT", to: "/about" },
 ];
@@ -179,7 +180,8 @@ watch(
       </div>
 
       <!-- Mobile -->
-      <div class="flex lg:hidden items-center gap-2">
+      <ClientOnly>
+        <div class="flex lg:hidden items-center gap-2">
         <button
           @click="openCommandPalette"
           class="p-2 text-zinc-500 hover:text-[#171717] transition-colors dark:text-zinc-400 dark:hover:text-white"
@@ -317,8 +319,9 @@ watch(
               </div>
             </div>
           </SheetContent>
-        </Sheet>
-      </div>
+          </Sheet>
+        </div>
+      </ClientOnly>
     </div>
   </header>
 </template>

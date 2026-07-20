@@ -50,7 +50,7 @@ const handleFooterSubscribe = async () => {
             <li><NuxtLink to="/blog" class="hover:text-white transition-colors">Blog</NuxtLink></li>
             <li><NuxtLink to="/projects" class="hover:text-white transition-colors">Projects</NuxtLink></li>
             <li><NuxtLink to="/about" class="hover:text-white transition-colors">About</NuxtLink></li>
-            <li><AdminLink /></li>
+            <AdminLink />
           </ul>
         </div>
 

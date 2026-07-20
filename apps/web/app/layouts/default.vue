@@ -49,7 +49,7 @@ import ColorBends from '~/components/backgrounds/ColorBends.vue'
       class="relative z-10 font-sans min-h-screen text-[#171717] selection:bg-[#f5c542] selection:text-black dark:text-white"
     >
       <div
-        class="min-h-screen max-w-[1088px] mx-auto bg-white border-x border-black/10 dark:bg-[#0a0a0a] dark:border-white/10"
+        class="min-h-screen max-w-[1200px] mx-auto bg-white border-x border-black/10 dark:bg-[#0a0a0a] dark:border-white/10"
       >
         <HeaderNav />
         <slot />
