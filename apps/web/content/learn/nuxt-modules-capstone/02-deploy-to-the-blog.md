@@ -56,7 +56,40 @@ export default defineNuxtConfig({
 NUXT_PUBLIC_SITE_URL=https://vantolbennett.com
 ```
 
-### 3. The packaging trap
+### 3. Decide what the key means
+
+Nothing is required here — that's the point worth making explicitly, because a
+module that silently needs a secret is a module people can't deploy.
+
+The keypair generates itself on first build. But a build host starts from a clean
+checkout every time, so **each deploy generates a new one**. The mark verifies fine;
+it just identifies *that build* rather than you.
+
+If you want the public key to stay put across deploys, generate one and hand it over
+as an env var:
+
+```bash
+node -e "const {generateKeyPairSync}=require('crypto');const {privateKey}=generateKeyPairSync('ed25519');console.log(privateKey.export({type:'pkcs8',format:'pem'}).toString())"
+```
+
+```ts
+mark: {
+  handle: "vantolbennett",
+  // defaults to process.env.NUXT_PRESENCE_PRIVATE_KEY
+}
+```
+
+The public half is derived from whatever key you supply, so there's one secret to
+manage, not two. Set it in Vercel under Settings → Environment Variables.
+
+::BlogAlert{type="warning"}
+Whichever route you take, the private key never goes in the repo. Add `**/.presence/`
+to `.gitignore` and confirm with `git check-ignore -v` — see the gotchas for why the
+obvious pattern silently fails. If a key does get committed, rotating it is the only
+fix; deleting the file later leaves it in history.
+::
+
+### 4. The packaging trap
 
 The first build failed here, and the reason is worth the detour. The package was set up to build a bundle and export `dist/module.mjs` — the normal thing for a library. But `setup()` registers runtime paths relative to the module entry:
 
@@ -82,7 +115,7 @@ Two ways out. Either your build emits the runtime tree alongside the entry, pres
 
 Nuxt loads modules through jiti, which compiles the TypeScript. One fewer build step, one fewer way to be wrong.
 
-### 4. Build and verify
+### 5. Build and verify
 
 ```bash
 NUXT_PUBLIC_SITE_URL=https://vantolbennett.com npx nuxi build
@@ -107,7 +140,7 @@ const ok = verify(null, Buffer.from(enc), createPublicKey(readFileSync(".presenc
 
 That `buildSha` is the commit that produced the build. The mark is doing what it claimed.
 
-### 5. On the live site
+### 6. On the live site
 
 Open devtools on any page here:
 
