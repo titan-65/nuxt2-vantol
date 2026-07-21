@@ -35,7 +35,7 @@ export default defineNuxtModule<ModuleOptions>({
       publicConfig.pollMs = resolved.wall.pollMs;
 
       addPlugin({
-        src: resolve("./runtime/plugins/presence.client"),
+        src: resolve("./runtime/plugins/presence.client.plugin"),
         mode: "client",
       });
 

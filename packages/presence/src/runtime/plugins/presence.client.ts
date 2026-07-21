@@ -136,7 +136,7 @@ export function mountWall(): () => void {
 // `#build/*` virtual modules at runtime, which only exist inside an actual Nuxt
 // build — importing it here would break plain-vitest unit tests of this same file
 // (see test/plugin.test.ts, which imports createPresencePlugin directly).
-interface PresenceNuxtApp {
+export interface PresenceNuxtApp {
   $config: {
     public: {
       presence?: {
@@ -152,10 +152,11 @@ interface PresenceNuxtApp {
   $router?: { currentRoute: Ref<{ path: string }> };
 }
 
-// Plain function export — Nuxt's plugin loader accepts this exactly like a
-// defineNuxtPlugin(fn) result (defineNuxtPlugin just returns `fn` unchanged when
-// given a function), so wrapping it adds nothing here.
-export default function presencePlugin(nuxtApp: PresenceNuxtApp): void {
+// Named, not default: the file actually registered with Nuxt is
+// presence.client.plugin.ts, which wraps this in defineNuxtPlugin. That import
+// needs "#app", a virtual alias that only resolves inside a Nuxt build — pulling
+// it in here would break plain-vitest tests that import this file directly.
+export function presencePlugin(nuxtApp: PresenceNuxtApp): void {
   const wall = usePresenceWall();
   const opts = nuxtApp.$config.public.presence ?? {};
   const combo = opts.combo ?? ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown"];
