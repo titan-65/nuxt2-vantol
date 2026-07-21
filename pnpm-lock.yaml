@@ -336,6 +336,9 @@ importers:
       vite-plugin-dts:
         specifier: ^4.5.4
         version: 4.5.4(@types/node@22.19.17)(rollup@4.62.2)(typescript@5.9.3)(vite@6.4.3(@types/node@22.19.17)(jiti@2.7.0)(lightningcss@1.32.0)(terser@5.46.1)(tsx@4.21.0)(yaml@2.9.0))
+      vue:
+        specifier: ^3.5.40
+        version: 3.5.40(typescript@5.9.3)
 
   packages/teacher-toolkit:
     devDependencies:
