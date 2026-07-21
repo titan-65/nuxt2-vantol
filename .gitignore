@@ -25,6 +25,9 @@ logs
 
 .superpowers
 /superpowers
+
+# Git worktrees (created by using-git-worktrees skill)
+.worktrees/
 # Vercel
 .vercel
 
