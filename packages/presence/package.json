@@ -1,0 +1,51 @@
+{
+  "name": "@vantol/presence",
+  "version": "0.0.0",
+  "description": "A hidden scratch board and signed build mark for Nuxt sites.",
+  "keywords": [
+    "ed25519",
+    "nuxt",
+    "nuxt-module",
+    "presence",
+    "scratchboard",
+    "signing"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/titan-65/nuxt2-vantol.git",
+    "directory": "packages/presence"
+  },
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "types": "./dist/module.d.ts",
+      "import": "./dist/module.mjs"
+    }
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build": "vp pack",
+    "test": "vp test run",
+    "test:watch": "vp test",
+    "check": "vp check"
+  },
+  "dependencies": {
+    "@nuxt/kit": "^4.0.0",
+    "@nuxt/schema": "^4.0.0"
+  },
+  "devDependencies": {
+    "@nuxt/test-utils": "^4.0.0",
+    "@types/node": "^22.0.0",
+    "typescript": "^5.6.0"
+  },
+  "peerDependencies": {
+    "nuxt": "^4.0.0"
+  }
+}
