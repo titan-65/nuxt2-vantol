@@ -29,6 +29,7 @@ export default defineNuxtConfig({
 Nothing to place in your templates — the module mounts the wall itself. Three ways in:
 
 - **The combo:** press `↑ ↑ ↓ ↓` on any page (configurable via `wall.combo`).
+- **Click anywhere** on the overlay, type, press Enter. Esc cancels.
 - **The console:** `$presence.open()`, `$presence.sign("was here")`, `$presence.close()`.
 - **The route:** visit `/presence` (configurable via `wall.mobilePath`) — for touch devices with no keyboard.
 
@@ -38,7 +39,7 @@ Nothing to place in your templates — the module mounts the wall itself. Three 
 |---|---|---|
 | `enabled` | `true` | Turns the whole module off — no plugin, no component, no routes. |
 | `wall.enabled` | `true` | Registers `<PresenceWall>`, the client plugin, and `window.$presence`. |
-| `wall.server` | `false` | Persists signatures server-side. Only then are the wall routes registered. |
+| `wall.server` | `false` | Registers the wall routes. **Not yet wired to the client** — see Caveats. |
 | `wall.ttlSeconds` | `3600` | How long a signature survives before it ages out. |
 | `wall.maxSignatures` | `50` | Cap on stored signatures. A full wall answers `429 wall_full`. |
 | `wall.combo` | `↑ ↑ ↓ ↓` | Key sequence that opens the wall. Matches either `key` or `code`. |
@@ -110,6 +111,10 @@ Removing the module from `modules` is a clean uninstall — no migrations, no st
 
 ## Caveats
 
+- **`wall.server` is server-side only so far.** The routes and the TTL store work and
+  are tested, but the composable still keeps signatures in local component state and
+  never calls them, so nothing is shared between visitors yet. Wiring the composable
+  to POST/GET is the remaining piece.
 - The wall is deliberately ephemeral. A server restart empties it.
 - Verification is server-side. Browser ed25519 via WebCrypto is still uneven,
   and the endpoint answers authoritatively anyway.
