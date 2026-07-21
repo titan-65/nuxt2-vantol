@@ -1,4 +1,10 @@
-import { addComponent, addPlugin, createResolver, defineNuxtModule } from "@nuxt/kit";
+import {
+  addComponent,
+  addPlugin,
+  addServerHandler,
+  createResolver,
+  defineNuxtModule,
+} from "@nuxt/kit";
 import { resolveOptions, type ModuleOptions } from "./options";
 
 export default defineNuxtModule<ModuleOptions>({
@@ -44,5 +50,21 @@ export default defineNuxtModule<ModuleOptions>({
       name: "PresenceWall",
       filePath: resolve("./runtime/components/PresenceWall.vue"),
     });
+
+    if (!resolved.wall.server) return;
+
+    // Private config — the routes need the TTL/cap, the browser does not.
+    nuxt.options.runtimeConfig.presence = {
+      ttlSeconds: resolved.wall.ttlSeconds,
+      maxSignatures: resolved.wall.maxSignatures,
+    };
+
+    for (const method of ["post", "get"] as const) {
+      addServerHandler({
+        route: "/api/_presence/wall",
+        method,
+        handler: resolve(`./server/api/wall.${method}`),
+      });
+    }
   },
 });

@@ -68,3 +68,12 @@ export function createWallStore(opts: WallStoreOptions): WallStore {
 
   return { add, list, clear };
 }
+
+// ponytail: one process-wide store, created on first request from runtime config.
+// The wall is explicitly ephemeral, so a restart wiping it is intended behavior.
+let shared: WallStore | undefined;
+
+export function getWallStore(opts: WallStoreOptions): WallStore {
+  shared ??= createWallStore(opts);
+  return shared;
+}
