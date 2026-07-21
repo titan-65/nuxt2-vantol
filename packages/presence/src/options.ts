@@ -7,6 +7,8 @@ export interface PresenceWallOptions {
   maxSignatures: number;
   combo: string[];
   mobilePath: string;
+  /** Mount <PresenceWall> automatically. Set false to place it yourself. */
+  autoMount: boolean;
   renderStyle: RenderStyle;
 }
 
@@ -47,6 +49,7 @@ export const defaults: ModuleOptions = {
     maxSignatures: 50,
     combo: ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown"],
     mobilePath: "/presence",
+    autoMount: true,
     renderStyle: "cursive",
   },
   mark: {

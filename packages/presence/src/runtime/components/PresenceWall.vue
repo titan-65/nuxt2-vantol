@@ -4,8 +4,9 @@ import { usePresenceWall } from "../composables/usePresenceWall";
 import { signatureStyle } from "../utils/renderStyle";
 import type { RenderStyle } from "../../options";
 
-// renderStyle is optional — omitted, it follows the module-configured default.
-const props = defineProps<{ open: boolean; renderStyle?: RenderStyle }>();
+// Both props are optional. When the module mounts this itself there is no
+// parent to pass them, and visibility comes from the shared wall instead.
+const props = defineProps<{ open?: boolean; renderStyle?: RenderStyle }>();
 const emit = defineEmits<{ (e: "update:open", value: boolean): void }>();
 
 const wall = usePresenceWall();
@@ -15,7 +16,8 @@ const wall = usePresenceWall();
 watch(
   () => props.open,
   (open) => {
-    wall.isOpen.value = open;
+    // Ignore the absent prop, or a self-mounted wall would clobber the shared state.
+    if (typeof open === "boolean") wall.isOpen.value = open;
   },
   { immediate: true },
 );

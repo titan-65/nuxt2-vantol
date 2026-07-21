@@ -24,6 +24,14 @@ export default defineNuxtConfig({
 });
 ```
 
+## Opening the wall
+
+Nothing to place in your templates — the module mounts the wall itself. Three ways in:
+
+- **The combo:** press `↑ ↑ ↓ ↓` on any page (configurable via `wall.combo`).
+- **The console:** `$presence.open()`, `$presence.sign("was here")`, `$presence.close()`.
+- **The route:** visit `/presence` (configurable via `wall.mobilePath`) — for touch devices with no keyboard.
+
 ## Options
 
 | Option | Default | What it does |
@@ -35,6 +43,7 @@ export default defineNuxtConfig({
 | `wall.maxSignatures` | `50` | Cap on stored signatures. A full wall answers `429 wall_full`. |
 | `wall.combo` | `↑ ↑ ↓ ↓` | Key sequence that opens the wall. Matches either `key` or `code`. |
 | `wall.mobilePath` | `/presence` | Route that auto-opens the wall, for devices with no keyboard. |
+| `wall.autoMount` | `true` | Mounts the wall onto `<body>` for you. Set `false` to place `<PresenceWall>` yourself. |
 | `wall.renderStyle` | `cursive` | `cursive`, `block`, or `monogram`. |
 | `mark.enabled` | `true` | Signs each build and stamps the mark into every page's head. |
 | `mark.handle` | `""` | Who the mark names. Empty falls back to the app's `package.json` author. |
