@@ -18,6 +18,11 @@ logs
 .fleet
 .idea
 
+# @vantol/presence signing keys. Never commit the private half; the public half
+# is regenerated with it on every machine that lacks the pair, so it is no use
+# to anyone either. Verification uses the key served in the page's runtime config.
+**/.presence/
+
 # Local env files
 .env
 .env.*

@@ -7,7 +7,10 @@ declare const process: {
 }
 
 export default defineNuxtConfig({
-  modules: ['@nuxt/content', '@nuxtjs/tailwindcss', '@nuxt/image', 'shadcn-nuxt'],
+  modules: ['@nuxt/content', '@nuxtjs/tailwindcss', '@nuxt/image', 'shadcn-nuxt', '@vantol/presence'],
+  presence: {
+    mark: { handle: 'vantolbennett' },
+  },
   app: {
     viewTransition: true,
     pageTransition: { name: 'page', mode: 'out-in' },
