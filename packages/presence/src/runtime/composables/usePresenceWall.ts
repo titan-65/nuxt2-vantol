@@ -74,7 +74,25 @@ export function createWall(): WallHandle {
   return { isOpen, signatures, open, close, add, clear };
 }
 
+let shared: WallHandle | undefined;
+
+/**
+ * The wall shared by the component, the plugin and the console API.
+ *
+ * It must be one instance: the combo listener and `$presence.sign()` live in
+ * the plugin, while the rendering lives in the component. Handing each caller
+ * its own wall means the combo opens something nobody draws.
+ *
+ * On the server every call gets a fresh wall, so nothing leaks between requests.
+ */
 export function usePresenceWall(): WallHandle {
-  // Singleton for now — replaced when server mode is added.
-  return createWall();
+  if (import.meta.server) return createWall();
+
+  shared ??= createWall();
+  return shared;
+}
+
+/** Test-only: drops the shared wall so cases cannot bleed into each other. */
+export function resetPresenceWall(): void {
+  shared = undefined;
 }

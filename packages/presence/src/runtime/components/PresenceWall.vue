@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { computed, watch } from "vue";
 import { usePresenceWall } from "../composables/usePresenceWall";
 import { signatureStyle } from "../utils/renderStyle";
 import type { RenderStyle } from "../../options";
@@ -9,15 +9,25 @@ const props = defineProps<{ open: boolean; renderStyle?: RenderStyle }>();
 const emit = defineEmits<{ (e: "update:open", value: boolean): void }>();
 
 const wall = usePresenceWall();
-wall.isOpen.value = props.open;
 
-const isVisible = computed(() => props.open);
+// v-model:open drives the shared wall, and the shared wall drives visibility —
+// so the plugin's key combo and $presence.open() reach this component too.
+watch(
+  () => props.open,
+  (open) => {
+    wall.isOpen.value = open;
+  },
+  { immediate: true },
+);
+
+const isVisible = computed(() => props.open || wall.isOpen.value);
 
 const styled = computed(() =>
   wall.signatures.value.map((sig) => ({ sig, style: signatureStyle(sig, props.renderStyle) })),
 );
 
 function close() {
+  wall.close();
   emit("update:open", false);
 }
 

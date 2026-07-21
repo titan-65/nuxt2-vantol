@@ -62,6 +62,23 @@ export function createWall(): WallHandle {
 
 Note `createWall()` is a plain factory, exported separately from the `usePresenceWall()` that the app consumes. That split costs one line and buys you a composable you can unit-test without mounting anything.
 
+`usePresenceWall()` then has one job — return **the same wall every time**:
+
+```ts
+let shared: WallHandle | undefined;
+
+export function usePresenceWall(): WallHandle {
+  if (import.meta.server) return createWall();
+
+  shared ??= createWall();
+  return shared;
+}
+```
+
+::BlogAlert{type="warning"}
+Get this wrong — return `createWall()` and let each caller have its own — and every piece still works in isolation while the feature is dead. The plugin's combo opens *its* wall; the component renders *its own*, which nothing ever opens. Unit tests pass, component tests pass, and pressing the combo does nothing. State two pieces share needs exactly one owner. The server branch matters too: a module-scoped singleton on the server is shared across every request.
+::
+
 ### 2. Register both pieces
 
 ```ts

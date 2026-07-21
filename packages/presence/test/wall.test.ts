@@ -1,5 +1,27 @@
-import { describe, it, expect, beforeEach } from "vite-plus/test";
-import { createWall } from "../src/runtime/composables/usePresenceWall";
+import { describe, it, expect, afterEach, beforeEach } from "vite-plus/test";
+import {
+  createWall,
+  resetPresenceWall,
+  usePresenceWall,
+} from "../src/runtime/composables/usePresenceWall";
+
+describe("usePresenceWall", () => {
+  afterEach(() => {
+    resetPresenceWall();
+  });
+
+  it("hands every caller the same wall", () => {
+    // The plugin owns the combo and $presence.sign(); the component owns the
+    // rendering. Separate instances mean the combo opens a wall nobody draws.
+    expect(usePresenceWall()).toBe(usePresenceWall());
+  });
+
+  it("shows one caller's signature to another", () => {
+    usePresenceWall().add({ text: "hello", x: 50, y: 50 });
+
+    expect(usePresenceWall().signatures.value.map((s) => s.text)).toEqual(["hello"]);
+  });
+});
 
 describe("createWall", () => {
   let wall: ReturnType<typeof createWall>;

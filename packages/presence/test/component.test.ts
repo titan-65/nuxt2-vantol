@@ -1,10 +1,18 @@
 // @vitest-environment happy-dom
-import { describe, it, expect } from "vite-plus/test";
+import { afterEach, describe, it, expect } from "vite-plus/test";
 import { mount } from "@vue/test-utils";
 import PresenceWall from "../src/runtime/components/PresenceWall.vue";
-import type { WallHandle } from "../src/runtime/composables/usePresenceWall";
+import {
+  resetPresenceWall,
+  usePresenceWall,
+  type WallHandle,
+} from "../src/runtime/composables/usePresenceWall";
 
 describe("<PresenceWall>", () => {
+  afterEach(() => {
+    resetPresenceWall();
+  });
+
   it("renders nothing when closed", () => {
     const wrapper = mount(PresenceWall, {
       props: { open: false },
@@ -35,6 +43,25 @@ describe("<PresenceWall>", () => {
     expect(exposed).not.toBeNull();
     exposed!.add({ text: "hello", x: 50, y: 50 });
     expect(exposed!.signatures.value.length).toBeGreaterThan(0);
+  });
+
+  it("opens when the shared wall opens, as the key combo does", async () => {
+    const wrapper = mount(PresenceWall, { props: { open: false } });
+    expect(wrapper.find("[data-presence-wall]").exists()).toBe(false);
+
+    // What the plugin's combo listener and $presence.open() actually call.
+    usePresenceWall().open();
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.find("[data-presence-wall]").exists()).toBe(true);
+  });
+
+  it("renders a signature added through the shared wall", async () => {
+    const wrapper = mount(PresenceWall, { props: { open: true } });
+    usePresenceWall().add({ text: "hello", x: 50, y: 50 });
+    await wrapper.vm.$nextTick();
+
+    expect(wrapper.find(".presence-wall__signature").exists()).toBe(true);
   });
 
   it("renders signatures through the requested renderStyle", async () => {
