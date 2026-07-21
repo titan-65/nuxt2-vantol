@@ -30,8 +30,7 @@ describe("signMark / verifyMark", () => {
     const { publicKey, privateKey } = generateKeypair();
     const result = verifyMark(signMark(payload, privateKey), publicKey);
 
-    expect(result.valid).toBe(true);
-    expect(result.payload).toEqual(payload);
+    expect(result).toEqual({ valid: true, payload });
   });
 
   it("produces a two-part token", () => {

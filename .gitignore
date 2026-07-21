@@ -18,6 +18,11 @@ logs
 .fleet
 .idea
 
+# @vantol/presence signing keys — the private half must never be committed
+.presence/private.pem
+# The playground's pair is a throwaway regenerated on any machine that runs it
+/packages/presence/playground/.presence/
+
 # Local env files
 .env
 .env.*
