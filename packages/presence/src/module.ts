@@ -1,4 +1,4 @@
-import { defineNuxtModule } from "@nuxt/kit";
+import { addComponent, addPlugin, createResolver, defineNuxtModule } from "@nuxt/kit";
 import { resolveOptions, type ModuleOptions } from "./options";
 
 export default defineNuxtModule<ModuleOptions>({
@@ -23,8 +23,26 @@ export default defineNuxtModule<ModuleOptions>({
       keyDir: ".presence/",
     },
   },
-  setup(_options, _nuxt) {
-    const resolved = resolveOptions(_options);
+  setup(options, nuxt) {
+    const resolved = resolveOptions(options);
     if (!resolved.enabled) return;
+    if (!resolved.wall.enabled) return;
+
+    const { resolve } = createResolver(import.meta.url);
+
+    nuxt.options.runtimeConfig.public.presence = {
+      combo: resolved.wall.combo,
+      mobilePath: resolved.wall.mobilePath,
+    };
+
+    addPlugin({
+      src: resolve("./runtime/plugins/presence.client"),
+      mode: "client",
+    });
+
+    addComponent({
+      name: "PresenceWall",
+      filePath: resolve("./runtime/components/PresenceWall.vue"),
+    });
   },
 });
