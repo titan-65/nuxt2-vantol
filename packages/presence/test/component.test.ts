@@ -64,6 +64,58 @@ describe("<PresenceWall>", () => {
     expect(wrapper.find(".presence-wall__signature").exists()).toBe(true);
   });
 
+  it("opens a caret where the canvas was clicked", async () => {
+    const wrapper = mount(PresenceWall, { props: { open: true }, attachTo: document.body });
+    expect(wrapper.find("[data-presence-input]").exists()).toBe(false);
+
+    await wrapper.find("[data-presence-canvas]").trigger("click", { clientX: 40, clientY: 30 });
+
+    expect(wrapper.find("[data-presence-input]").exists()).toBe(true);
+  });
+
+  it("signs the wall on enter and clears the caret", async () => {
+    const wrapper = mount(PresenceWall, { props: { open: true }, attachTo: document.body });
+    await wrapper.find("[data-presence-canvas]").trigger("click");
+
+    const input = wrapper.find("[data-presence-input]");
+    await input.setValue("vantol was here");
+    await input.trigger("keydown.enter");
+
+    expect(usePresenceWall().signatures.value.map((s) => s.text)).toEqual(["vantol was here"]);
+    expect(wrapper.find("[data-presence-input]").exists()).toBe(false);
+  });
+
+  it("discards the draft on escape", async () => {
+    const wrapper = mount(PresenceWall, { props: { open: true }, attachTo: document.body });
+    await wrapper.find("[data-presence-canvas]").trigger("click");
+
+    const input = wrapper.find("[data-presence-input]");
+    await input.setValue("never mind");
+    await input.trigger("keydown.esc");
+
+    expect(usePresenceWall().signatures.value).toEqual([]);
+    expect(wrapper.find("[data-presence-input]").exists()).toBe(false);
+  });
+
+  it("ignores an empty or whitespace-only signature", async () => {
+    const wrapper = mount(PresenceWall, { props: { open: true }, attachTo: document.body });
+    await wrapper.find("[data-presence-canvas]").trigger("click");
+
+    const input = wrapper.find("[data-presence-input]");
+    await input.setValue("   ");
+    await input.trigger("keydown.enter");
+
+    expect(usePresenceWall().signatures.value).toEqual([]);
+  });
+
+  it("tells the visitor what to do", async () => {
+    const wrapper = mount(PresenceWall, { props: { open: true }, attachTo: document.body });
+    expect(wrapper.text()).toContain("click anywhere");
+
+    await wrapper.find("[data-presence-canvas]").trigger("click");
+    expect(wrapper.text()).toContain("enter to sign");
+  });
+
   it("renders signatures through the requested renderStyle", async () => {
     const wrapper = mount(PresenceWall, {
       props: { open: true, renderStyle: "monogram" as const },
