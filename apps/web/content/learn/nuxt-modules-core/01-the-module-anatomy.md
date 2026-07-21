@@ -1,7 +1,7 @@
 ---
 title: "The Module Anatomy"
 description: "A Nuxt module is a function that runs once, while Nuxt is starting, and edits the app before it's built. Understanding that one sentence — and the boundary it implies — is most of what makes modules click."
-series: "nuxt-modules"
+series: "nuxt-modules-core"
 order: 1
 feature: "defineNuxtModule and the build/runtime boundary"
 sourceUrl: "https://nuxt.com/docs/4.x/guide/going-further/modules"

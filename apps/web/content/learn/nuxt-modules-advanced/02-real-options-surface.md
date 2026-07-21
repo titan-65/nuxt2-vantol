@@ -1,8 +1,8 @@
 ---
 title: "A Real Options Surface"
 description: "Typed module options, deep-merged defaults, and declaration merging so users get autocomplete on your config key — plus the rule for deciding what belongs in public runtime config."
-series: "nuxt-modules"
-order: 5
+series: "nuxt-modules-advanced"
+order: 2
 feature: "ModuleOptions, deep-merged defaults, runtimeConfig split"
 sourceUrl: "https://nuxt.com/docs/4.x/guide/going-further/modules"
 difficulty: "Intermediate"

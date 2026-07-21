@@ -1,8 +1,8 @@
 ---
 title: "Server Persistence & TTL"
 description: "Add Nitro routes behind an opt-in flag, back them with a store that forgets on a timer, and see why one shared instance is the difference between working and silently broken."
-series: "nuxt-modules"
-order: 4
+series: "nuxt-modules-advanced"
+order: 1
 feature: "addServerHandler, Nitro routes, in-memory TTL store"
 sourceUrl: "https://nuxt.com/docs/4.x/api/kit/nitro"
 difficulty: "Intermediate"

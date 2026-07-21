@@ -1,8 +1,8 @@
 ---
 title: "Testing the Module"
 description: "Three tiers of test — plain unit, mounted component, and a real Nuxt server — and a rule for deciding which tier a given behaviour belongs in."
-series: "nuxt-modules"
-order: 6
+series: "nuxt-modules-advanced"
+order: 3
 feature: "@nuxt/test-utils, unit vs e2e boundaries"
 sourceUrl: "https://nuxt.com/docs/4.x/getting-started/testing"
 difficulty: "Intermediate"
@@ -79,7 +79,7 @@ it("renders signatures through the requested renderStyle", async () => {
 });
 ```
 
-This test is only possible because the component avoids Nuxt-only imports. That constraint from step five pays off here — the whole component tier stays available.
+This test is only possible because the component avoids Nuxt-only imports. That constraint from the previous step pays off here — the whole component tier stays available.
 
 ### 3. e2e — a real server, with config
 
@@ -104,7 +104,7 @@ it("stores a signature and returns it from GET", async () => {
 });
 ```
 
-A `POST` followed by a `GET` in one test is the assertion that catches the two-stores bug from step four. Either route tested alone passes happily while the feature is broken.
+A `POST` followed by a `GET` in one test is the assertion that catches the two-stores bug from the first step of this series. Either route tested alone passes happily while the feature is broken.
 
 ### 4. What's worth asserting
 
@@ -125,4 +125,4 @@ Test the seams, not the framework:
 
 ## Recap
 
-Push logic down to the cheapest tier that can prove it, keep the component tier available by keeping components Nuxt-free, and reserve e2e for what only exists in a real build. Next: the half of the module that runs while Nuxt builds.
+Push logic down to the cheapest tier that can prove it, keep the component tier available by keeping components Nuxt-free, and reserve e2e for what only exists in a real build. Next: **[Nuxt Modules Capstone: The Signed Build](/learn/nuxt-modules-capstone)** — the half of the module that runs while Nuxt builds.

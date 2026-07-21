@@ -1,8 +1,8 @@
 ---
 title: "Deploy to the Blog"
 description: "Install the module in a real Nuxt app, build it, and verify the mark on production output — plus the packaging trap that only shows up once you consume the module from outside its own playground."
-series: "nuxt-modules"
-order: 8
+series: "nuxt-modules-capstone"
+order: 2
 feature: "Workspace install, production build, verification"
 sourceUrl: "https://nuxt.com/docs/4.x/getting-started/deployment"
 difficulty: "Advanced"
@@ -121,10 +121,10 @@ await $presence.verify()
 - **Check `git check-ignore` before the first push**, not after. A generated `private.pem` is one `git add -A` away from being public forever. If it ever lands in a commit, rotating the key is the only fix — a later deletion doesn't remove it from history.
 - **Native modules pin your Node version.** This build fails under Node 24 because `better-sqlite3` was compiled for Node 22's ABI. That's the app's constraint, not the module's, but it's your problem the moment you're building the app.
 - **Prerendered vs SSR changes what "runtime" means.** The mark is baked into static HTML at build; the verify endpoint still needs a server. Know which parts of your module survive `nuxi generate`.
-- **Uninstall should be one line.** Removing the module from `modules` leaves nothing behind — no migrations, no state to drain. Design for that from step one.
+- **Uninstall should be one line.** Removing the module from `modules` leaves nothing behind — no migrations, no state to drain. Design for that from the first line of setup().
 
 ## Recap
 
-Eight steps: a function that edits the app, a package Nuxt can load, a component and plugin registered by path, opt-in server routes over a shared store, typed options split by audience, tests at the cheapest tier that proves each thing, a build-time signature, and a real deploy.
+Eight steps across three series: a function that edits the app, a package Nuxt can load, a component and plugin registered by path, opt-in server routes over a shared store, typed options split by audience, tests at the cheapest tier that proves each thing, a build-time signature, and a real deploy.
 
 The module is running on this page. The mark in the source is signed by the build that published it — go check.
