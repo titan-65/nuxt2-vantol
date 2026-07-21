@@ -5,6 +5,7 @@ import { fileURLToPath } from "node:url";
 await setup({
   rootDir: fileURLToPath(new URL("../playground", import.meta.url)),
   server: true,
+  // server: true is required so $fetch('/') has a base URL. With server: false, $fetch throws "Failed to parse URL from /".
 });
 
 describe("@vantol/presence", () => {
