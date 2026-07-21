@@ -1,25 +1,43 @@
 # nuxt-presence
 
-[![npm](https://img.shields.io/npm/v/nuxt-presence.svg)](https://www.npmjs.com/package/nuxt-presence)
+[![npm version][npm-version-src]][npm-version-href]
+[![npm downloads][npm-downloads-src]][npm-downloads-href]
+[![License][license-src]][license-href]
+[![Nuxt][nuxt-src]][nuxt-href]
 
-A Nuxt module that gives any Nuxt site two ways to express the developer's presence:
+A hidden scratch board visitors can sign, and an ed25519 mark that proves who built the page — for any Nuxt 4 site.
 
-- **The Wall** — a hidden communal scratch board. Visitors click a spot, type their mark, and watch it age out and dissolve.
-- **The Mark** — a cryptographic token stamped invisibly into the page, proving the dev authored this build.
+- [📖 &nbsp;Options reference](#options)
+- [🔑 &nbsp;Signing keys](#the-signing-keys)
+- [🚀 &nbsp;Deployment](#deployment)
+- [🎓 &nbsp;Tutorial series](#the-tutorial-series)
 
-## Install
+## Features
+
+- 🖊️ &nbsp;**The Wall** — a hidden communal scratch board. Click a spot, type your mark, watch it age out and dissolve.
+- ⌨️ &nbsp;**Four ways in** — a key combo, a console API, a click, or a dedicated mobile route. No template markup required.
+- 🔏 &nbsp;**The Mark** — an ed25519 signature stamped into every page's `<head>`, proving who built this exact deploy.
+- 🌐 &nbsp;**Shared or solo** — the wall works client-only, or opt into a server-persisted, polled, multi-visitor board.
+- 🔓 &nbsp;**Zero setup** — install, add one line, done. Keys generate themselves; a stable identity is one env var away.
+
+## Quick Setup
+
+1. Add `nuxt-presence` to your project:
 
 ```bash
+# pnpm
 pnpm add nuxt-presence
-# npm i nuxt-presence · yarn add nuxt-presence
+
+# npm
+npm install nuxt-presence
+
+# yarn
+yarn add nuxt-presence
 ```
 
-Requires **Nuxt 4.x** and Node 18+.
-
-## Usage
+2. Add it to the `modules` section of `nuxt.config.ts`:
 
 ```ts
-// nuxt.config.ts
 export default defineNuxtConfig({
   modules: ["nuxt-presence"],
   presence: {
@@ -29,9 +47,13 @@ export default defineNuxtConfig({
 });
 ```
 
+That's it! Press <kbd>↑</kbd> <kbd>↑</kbd> <kbd>↓</kbd> <kbd>↓</kbd> on any page ✨
+
+Requires **Nuxt 4.x** and Node 18+.
+
 ## Opening the wall
 
-Nothing to place in your templates — the module mounts the wall itself. Three ways in:
+Nothing to place in your templates — the module mounts the wall itself. Four ways in:
 
 - **The combo:** press `↑ ↑ ↓ ↓` on any page (configurable via `wall.combo`).
 - **Click anywhere** on the overlay, type, press Enter. Esc cancels the caret, Esc again closes the wall.
@@ -125,21 +147,58 @@ Removing the module from `modules` is a clean uninstall — no migrations, no st
 - Verification is server-side. Browser ed25519 via WebCrypto is still uneven,
   and the endpoint answers authoritatively anyway.
 
-## Releasing
-
-```bash
-vp run build          # nuxt-module-build → dist/
-vp test               # 84 tests, three tiers
-npm publish           # prepack rebuilds dist first
-```
-
-The build compiles `src/runtime/` file-by-file and bundles `src/module.ts`. Anything
-the module resolves at runtime — components, plugins, composables, **server routes** —
-must live under `src/runtime/`, or it will not be in the tarball.
-
 ## The tutorial series
 
 This module is built step by step in a three-part series:
 [The Basics](https://vantolbennett.com/learn/nuxt-modules-core) ·
 [Going Further](https://vantolbennett.com/learn/nuxt-modules-advanced) ·
 [The Signed Build](https://vantolbennett.com/learn/nuxt-modules-capstone).
+
+## Contributing
+
+<details>
+  <summary>Local development</summary>
+
+  ```bash
+  # Install dependencies
+  vp install
+
+  # Generate type stubs
+  vp run build
+
+  # Develop with the playground
+  cd playground && vp dev
+
+  # Lint
+  vp lint
+
+  # Run the test suite (84 tests, three tiers)
+  vp test
+  vp run test:watch
+
+  # Publish (prepack rebuilds dist first)
+  npm publish
+  ```
+
+</details>
+
+The build compiles `src/runtime/` file-by-file and bundles `src/module.ts`. Anything
+the module resolves at runtime — components, plugins, composables, **server routes** —
+must live under `src/runtime/`, or it will not be in the published tarball.
+
+## License
+
+[MIT](./LICENSE) — © [Vantol Bennett](https://vantolbennett.com)
+
+<!-- Badges -->
+[npm-version-src]: https://img.shields.io/npm/v/nuxt-presence/latest.svg?style=flat&colorA=020420&colorB=00DC82
+[npm-version-href]: https://npmjs.com/package/nuxt-presence
+
+[npm-downloads-src]: https://img.shields.io/npm/dm/nuxt-presence.svg?style=flat&colorA=020420&colorB=00DC82
+[npm-downloads-href]: https://npmjs.com/package/nuxt-presence
+
+[license-src]: https://img.shields.io/npm/l/nuxt-presence.svg?style=flat&colorA=020420&colorB=00DC82
+[license-href]: https://npmjs.com/package/nuxt-presence
+
+[nuxt-src]: https://img.shields.io/badge/Nuxt-020420?logo=nuxt.js
+[nuxt-href]: https://nuxt.com
