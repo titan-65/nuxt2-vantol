@@ -1,36 +1,49 @@
 {
-  "name": "@vantol/presence",
-  "version": "0.0.0",
-  "description": "A hidden scratch board and signed build mark for Nuxt sites.",
+  "name": "nuxt-presence",
+  "version": "0.1.0",
+  "description": "A hidden scratch board visitors can sign, and an ed25519 mark that proves who built the page.",
   "keywords": [
     "ed25519",
+    "easter-egg",
+    "guestbook",
     "nuxt",
     "nuxt-module",
     "presence",
-    "scratchboard",
     "signing"
   ],
   "license": "MIT",
+  "author": "Vantol Bennett <vantolbennettclm@gmail.com> (https://vantolbennett.com)",
+  "homepage": "https://github.com/titan-65/nuxt2-vantol/tree/main/packages/presence#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/titan-65/nuxt2-vantol.git",
     "directory": "packages/presence"
   },
+  "bugs": {
+    "url": "https://github.com/titan-65/nuxt2-vantol/issues"
+  },
   "files": [
-    "src"
+    "dist"
   ],
   "type": "module",
   "sideEffects": false,
   "exports": {
     ".": {
-      "types": "./src/module.ts",
-      "import": "./src/module.ts"
+      "types": "./dist/types.d.mts",
+      "import": "./dist/module.mjs"
     }
   },
+  "main": "./dist/module.mjs",
+  "types": "./dist/types.d.mts",
   "publishConfig": {
     "access": "public"
   },
+  "engines": {
+    "node": ">=18.0.0"
+  },
   "scripts": {
+    "build": "nuxt-module-build build",
+    "prepack": "nuxt-module-build build",
     "test": "vp test run",
     "test:watch": "vp test",
     "check": "vp check"
@@ -40,6 +53,7 @@
     "@nuxt/schema": "^4.0.0"
   },
   "devDependencies": {
+    "@nuxt/module-builder": "^1.0.2",
     "@nuxt/test-utils": "^4.0.0",
     "@types/node": "^22.0.0",
     "@vitejs/plugin-vue": "^6.0.8",
@@ -47,9 +61,11 @@
     "h3": "^1.15.11",
     "happy-dom": "^20.11.0",
     "nitropack": "^2.13.4",
+    "nuxt": "^4.0.0",
     "typescript": "^5.6.0",
     "vite": "^6.4.3",
-    "vue": "^3.5.40"
+    "vue": "^3.5.40",
+    "vue-tsc": "^3.3.7"
   },
   "peerDependencies": {
     "nuxt": "^4.0.0"

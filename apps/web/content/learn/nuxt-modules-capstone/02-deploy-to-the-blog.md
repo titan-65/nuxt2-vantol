@@ -35,13 +35,13 @@ The module works in `packages/presence/playground`.
 ### 1. Install it
 
 ```bash
-vp add "@vantol/presence@workspace:*"
+vp add "nuxt-presence@workspace:*"
 ```
 
 ```ts
 // apps/web/nuxt.config.ts
 export default defineNuxtConfig({
-  modules: ['@nuxt/content', '@nuxtjs/tailwindcss', '@nuxt/image', 'shadcn-nuxt', '@vantol/presence'],
+  modules: ['@nuxt/content', '@nuxtjs/tailwindcss', '@nuxt/image', 'shadcn-nuxt', 'nuxt-presence'],
   presence: {
     mark: { handle: 'vantolbennett' },
   },
@@ -99,21 +99,30 @@ addPlugin({ src: resolve("./runtime/plugins/presence.client") });
 
 From `dist/module.mjs`, that resolves to `dist/runtime/plugins/presence.client` — which the bundle never emitted, because the build only had one entry. Inside the playground everything worked, because the playground aliased straight to `src/`.
 
-Two ways out. Either your build emits the runtime tree alongside the entry, preserving structure — or, for a module you're not publishing, skip the build and export source:
+Two ways out.
+
+If the module stays inside your workspace, skip the build entirely and export source — Nuxt loads modules through [jiti](https://github.com/unjs/jiti), which compiles the TypeScript for you:
 
 ```json
 {
   "files": ["src"],
-  "exports": {
-    ".": {
-      "types": "./src/module.ts",
-      "import": "./src/module.ts"
-    }
-  }
+  "exports": { ".": { "types": "./src/module.ts", "import": "./src/module.ts" } }
 }
 ```
 
-Nuxt loads modules through jiti, which compiles the TypeScript. One fewer build step, one fewer way to be wrong.
+If you intend to publish, use [`@nuxt/module-builder`](https://github.com/nuxt/module-builder), which exists for exactly this shape — an entry to bundle plus a runtime tree to compile file-by-file, `.vue` files included:
+
+```json
+{
+  "files": ["dist"],
+  "exports": { ".": { "types": "./dist/types.d.mts", "import": "./dist/module.mjs" } },
+  "scripts": { "build": "nuxt-module-build build", "prepack": "nuxt-module-build build" }
+}
+```
+
+::BlogAlert{type="warning"}
+It compiles **`src/runtime/` and nothing else.** Server routes under `src/server/` are silently left out of `dist`, and `addServerHandler` then points at files that were never published. Put them in `src/runtime/server/` — the convention exists for this reason. Nothing catches it locally, because a workspace install resolves to `src/`; it only breaks for the people who install your package.
+::
 
 ### 5. Build and verify
 

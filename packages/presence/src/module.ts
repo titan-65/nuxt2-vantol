@@ -12,7 +12,7 @@ import { buildMarkToken, MARK_META_NAME } from "./hooks/mark";
 
 export default defineNuxtModule<ModuleOptions>({
   meta: {
-    name: "@vantol/presence",
+    name: "nuxt-presence",
     configKey: "presence",
   },
   // One source of truth — a second copy here silently drifts from options.ts.
@@ -55,7 +55,7 @@ export default defineNuxtModule<ModuleOptions>({
           addServerHandler({
             route: "/api/_presence/wall",
             method,
-            handler: resolve(`./server/api/wall.${method}`),
+            handler: resolve(`./runtime/server/api/wall.${method}`),
           });
         }
       }
@@ -82,7 +82,7 @@ export default defineNuxtModule<ModuleOptions>({
     addServerHandler({
       route: "/api/_presence/verify",
       method: "post",
-      handler: resolve("./server/api/verify.post"),
+      handler: resolve("./runtime/server/api/verify.post"),
     });
 
     // ponytail: app.head rather than a nitro render:html hook. It is typed, and it

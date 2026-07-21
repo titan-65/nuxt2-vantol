@@ -1,22 +1,27 @@
-# @vantol/presence
+# nuxt-presence
+
+[![npm](https://img.shields.io/npm/v/nuxt-presence.svg)](https://www.npmjs.com/package/nuxt-presence)
 
 A Nuxt module that gives any Nuxt site two ways to express the developer's presence:
 
-- **The Wall** — a hidden communal scratch board. Visitors draw signatures that float, age, and dissolve.
+- **The Wall** — a hidden communal scratch board. Visitors click a spot, type their mark, and watch it age out and dissolve.
 - **The Mark** — a cryptographic token stamped invisibly into the page, proving the dev authored this build.
 
 ## Install
 
 ```bash
-pnpm add @vantol/presence
+pnpm add nuxt-presence
+# npm i nuxt-presence · yarn add nuxt-presence
 ```
+
+Requires **Nuxt 4.x** and Node 18+.
 
 ## Usage
 
 ```ts
 // nuxt.config.ts
 export default defineNuxtConfig({
-  modules: ["@vantol/presence"],
+  modules: ["nuxt-presence"],
   presence: {
     wall: { server: true },
     mark: { handle: "your-handle" },
@@ -120,4 +125,21 @@ Removing the module from `modules` is a clean uninstall — no migrations, no st
 - Verification is server-side. Browser ed25519 via WebCrypto is still uneven,
   and the endpoint answers authoritatively anyway.
 
-See `apps/web/content/learn/nuxt-modules-core/`, `-advanced/` and `-capstone/` for the tutorial series.
+## Releasing
+
+```bash
+vp run build          # nuxt-module-build → dist/
+vp test               # 84 tests, three tiers
+npm publish           # prepack rebuilds dist first
+```
+
+The build compiles `src/runtime/` file-by-file and bundles `src/module.ts`. Anything
+the module resolves at runtime — components, plugins, composables, **server routes** —
+must live under `src/runtime/`, or it will not be in the tarball.
+
+## The tutorial series
+
+This module is built step by step in a three-part series:
+[The Basics](https://vantolbennett.com/learn/nuxt-modules-core) ·
+[Going Further](https://vantolbennett.com/learn/nuxt-modules-advanced) ·
+[The Signed Build](https://vantolbennett.com/learn/nuxt-modules-capstone).

@@ -1,5 +1,5 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vite-plus/test";
-import { createWallStore, type StoredSignature } from "../src/server/utils/wallStore";
+import { createWallStore, type StoredSignature } from "../src/runtime/server/utils/wallStore";
 
 type SignatureInput = Omit<StoredSignature, "id" | "createdAt" | "expiresAt">;
 

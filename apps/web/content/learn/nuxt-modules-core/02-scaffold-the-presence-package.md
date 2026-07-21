@@ -44,7 +44,7 @@ packages/presence/
 
 ```json
 {
-  "name": "@vantol/presence",
+  "name": "nuxt-presence",
   "version": "0.0.0",
   "type": "module",
   "files": ["src"],
@@ -73,7 +73,7 @@ Pointing `exports` straight at TypeScript source looks wrong if you've published
 import { defineNuxtModule } from "@nuxt/kit";
 
 export default defineNuxtModule({
-  meta: { name: "@vantol/presence", configKey: "presence" },
+  meta: { name: "nuxt-presence", configKey: "presence" },
   setup() {
     // nothing yet — it just has to load
   },
@@ -86,9 +86,9 @@ export default defineNuxtModule({
 // playground/nuxt.config.ts
 export default defineNuxtConfig({
   alias: {
-    "@vantol/presence": "../src/module",
+    "nuxt-presence": "../src/module",
   },
-  modules: ["@vantol/presence"],
+  modules: ["nuxt-presence"],
 });
 ```
 
@@ -112,7 +112,7 @@ await setup({
   server: true,
 });
 
-describe("@vantol/presence", () => {
+describe("nuxt-presence", () => {
   it("installs without errors", async () => {
     const html = await $fetch("/");
     expect(html).toBeDefined();
@@ -126,7 +126,7 @@ describe("@vantol/presence", () => {
 
 - **`server: true` is required.** With `server: false` there's no base URL and `$fetch('/')` fails with `Failed to parse URL from /`.
 - **The first run is slow.** It's building a Nuxt app. Subsequent runs are cached.
-- **Source exports are a workspace convenience.** Publishing to npm means shipping compiled JS and `.d.ts` — and then your build has to emit `runtime/` too, not just the module entry, or the paths you register will point into an empty `dist`. That trap is easy to fall into and hard to diagnose.
+- **Source exports are a workspace convenience.** Publishing to npm means shipping compiled JS and `.d.ts`, and then your build has to emit the whole `runtime/` tree — not just the module entry — or the paths you register point into an empty `dist`. `@nuxt/module-builder` handles that shape; the capstone covers the switch, including the part it quietly leaves out.
 - **`alias` in the playground** is what lets the playground resolve the module without an install step.
 
 ## Recap

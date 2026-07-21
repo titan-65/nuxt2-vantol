@@ -10,7 +10,7 @@ await setup({
   // server: true is required so $fetch('/') has a base URL. With server: false, $fetch throws "Failed to parse URL from /".
 });
 
-describe("@vantol/presence", () => {
+describe("nuxt-presence", () => {
   it("installs without errors", async () => {
     const html = await $fetch("/");
     expect(html).toBeDefined();
