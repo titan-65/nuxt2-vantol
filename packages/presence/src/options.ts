@@ -22,7 +22,7 @@ export interface ModuleOptions {
   mark: PresenceMarkOptions;
 }
 
-type DeepPartial<T> = {
+export type DeepPartial<T> = {
   [K in keyof T]?: T[K] extends readonly unknown[]
     ? T[K]
     : T[K] extends object
@@ -75,4 +75,14 @@ function deepMerge<T extends object>(base: T, override: DeepPartial<T> | undefin
 
 export function resolveOptions(input: DeepPartial<ModuleOptions> = {}): ModuleOptions {
   return deepMerge(defaults, input);
+}
+
+// Gives consumers (and our own tests) a typed `presence:` key in nuxt.config.
+declare module "@nuxt/schema" {
+  interface NuxtConfig {
+    presence?: DeepPartial<ModuleOptions>;
+  }
+  interface NuxtOptions {
+    presence?: DeepPartial<ModuleOptions>;
+  }
 }

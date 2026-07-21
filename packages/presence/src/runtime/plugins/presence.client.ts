@@ -1,5 +1,7 @@
 import { watch, type Ref } from "vue";
 import { usePresenceWall, type WallHandle } from "../composables/usePresenceWall";
+import { setDefaultRenderStyle } from "../utils/renderStyle";
+import type { RenderStyle } from "../../options";
 
 export interface PresencePluginOptions {
   combo: string[];
@@ -68,7 +70,9 @@ export function createPresencePlugin(opts: PresencePluginOptions): () => void {
 // build — importing it here would break plain-vitest unit tests of this same file
 // (see test/plugin.test.ts, which imports createPresencePlugin directly).
 interface PresenceNuxtApp {
-  $config: { public: { presence?: { combo?: string[]; mobilePath?: string } } };
+  $config: {
+    public: { presence?: { combo?: string[]; mobilePath?: string; renderStyle?: RenderStyle } };
+  };
   $router?: { currentRoute: Ref<{ path: string }> };
 }
 
@@ -80,6 +84,7 @@ export default function presencePlugin(nuxtApp: PresenceNuxtApp): void {
   const opts = nuxtApp.$config.public.presence ?? {};
   const combo = opts.combo ?? ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown"];
   const mobilePath = opts.mobilePath ?? "/presence";
+  if (opts.renderStyle) setDefaultRenderStyle(opts.renderStyle);
 
   createPresencePlugin({ combo, mobilePath, wall });
 

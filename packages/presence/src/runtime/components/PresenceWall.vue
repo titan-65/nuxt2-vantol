@@ -1,14 +1,21 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { usePresenceWall } from "../composables/usePresenceWall";
+import { signatureStyle } from "../utils/renderStyle";
+import type { RenderStyle } from "../../options";
 
-const props = defineProps<{ open: boolean }>();
+// renderStyle is optional — omitted, it follows the module-configured default.
+const props = defineProps<{ open: boolean; renderStyle?: RenderStyle }>();
 const emit = defineEmits<{ (e: "update:open", value: boolean): void }>();
 
 const wall = usePresenceWall();
 wall.isOpen.value = props.open;
 
 const isVisible = computed(() => props.open);
+
+const styled = computed(() =>
+  wall.signatures.value.map((sig) => ({ sig, style: signatureStyle(sig, props.renderStyle) })),
+);
 
 function close() {
   emit("update:open", false);
@@ -36,7 +43,7 @@ defineExpose(wall);
     </button>
     <div class="presence-wall__canvas">
       <div
-        v-for="sig in wall.signatures.value"
+        v-for="{ sig, style } in styled"
         :key="sig.id"
         class="presence-wall__signature"
         :style="{
@@ -44,9 +51,10 @@ defineExpose(wall);
           top: sig.y + '%',
           color: sig.color,
           transform: `rotate(${sig.rotation}deg)`,
+          fontFamily: style.fontFamily,
         }"
       >
-        {{ sig.text }}
+        {{ style.text }}
       </div>
     </div>
   </div>
@@ -85,7 +93,6 @@ defineExpose(wall);
 .presence-wall__signature {
   position: absolute;
   font-size: 1.5rem;
-  font-family: "Caveat", cursive;
   pointer-events: none;
 }
 </style>

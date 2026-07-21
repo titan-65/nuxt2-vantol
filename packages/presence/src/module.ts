@@ -39,6 +39,7 @@ export default defineNuxtModule<ModuleOptions>({
     nuxt.options.runtimeConfig.public.presence = {
       combo: resolved.wall.combo,
       mobilePath: resolved.wall.mobilePath,
+      renderStyle: resolved.wall.renderStyle,
     };
 
     addPlugin({

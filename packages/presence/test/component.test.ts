@@ -36,4 +36,16 @@ describe("<PresenceWall>", () => {
     exposed!.add({ text: "hello", x: 50, y: 50 });
     expect(exposed!.signatures.value.length).toBeGreaterThan(0);
   });
+
+  it("renders signatures through the requested renderStyle", async () => {
+    const wrapper = mount(PresenceWall, {
+      props: { open: true, renderStyle: "monogram" as const },
+    });
+    (wrapper.vm.$.exposed as WallHandle).add({ text: "hello", x: 50, y: 50 });
+    await wrapper.vm.$nextTick();
+
+    const sig = wrapper.find(".presence-wall__signature");
+    expect(sig.text()).toBe("H");
+    expect(sig.attributes("style")).toContain("Georgia");
+  });
 });

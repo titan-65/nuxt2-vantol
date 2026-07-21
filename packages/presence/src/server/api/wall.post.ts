@@ -1,11 +1,12 @@
 import { defineEventHandler, readBody, setResponseStatus } from "h3";
-import { useRuntimeConfig } from "#imports";
-import { getWallStore } from "../utils/wallStore";
+import { useRuntimeConfig } from "nitropack/runtime";
+import { getWallStore, type WallStoreOptions } from "../utils/wallStore";
 
 const MAX_TEXT_LENGTH = 200;
 
 export default defineEventHandler(async (event) => {
-  const { ttlSeconds, maxSignatures } = useRuntimeConfig(event).presence;
+  // Annotated because Nitro's runtime config is index-signature typed.
+  const { ttlSeconds, maxSignatures }: WallStoreOptions = useRuntimeConfig(event).presence;
   const store = getWallStore({ ttlSeconds, maxSignatures });
 
   const body = await readBody<{

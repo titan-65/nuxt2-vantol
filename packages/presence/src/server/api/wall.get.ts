@@ -1,9 +1,10 @@
 import { defineEventHandler } from "h3";
-import { useRuntimeConfig } from "#imports";
-import { getWallStore } from "../utils/wallStore";
+import { useRuntimeConfig } from "nitropack/runtime";
+import { getWallStore, type WallStoreOptions } from "../utils/wallStore";
 
 export default defineEventHandler((event) => {
-  const { ttlSeconds, maxSignatures } = useRuntimeConfig(event).presence;
+  // Annotated because Nitro's runtime config is index-signature typed.
+  const opts: WallStoreOptions = useRuntimeConfig(event).presence;
 
-  return { signatures: getWallStore({ ttlSeconds, maxSignatures }).list() };
+  return { signatures: getWallStore(opts).list() };
 });

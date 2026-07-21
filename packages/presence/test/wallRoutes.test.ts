@@ -17,7 +17,7 @@ await setup({
 
 type PostResult = { ok: true; signature: StoredSignature } | { error: string };
 
-function post(body: unknown): Promise<PostResult> {
+function post(body: Record<string, unknown>): Promise<PostResult> {
   return $fetch<PostResult>("/api/_presence/wall", {
     method: "POST",
     body,
