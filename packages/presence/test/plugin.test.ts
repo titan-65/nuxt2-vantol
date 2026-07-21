@@ -1,6 +1,42 @@
 // @vitest-environment happy-dom
 import { afterEach, describe, it, expect, vi } from "vite-plus/test";
-import { createPresencePlugin, verifyMarkInPage } from "../src/runtime/plugins/presence.client";
+import {
+  createPresencePlugin,
+  mountWall,
+  verifyMarkInPage,
+  WALL_ROOT_SELECTOR,
+} from "../src/runtime/plugins/presence.client";
+import { resetPresenceWall, usePresenceWall } from "../src/runtime/composables/usePresenceWall";
+
+describe("mountWall", () => {
+  afterEach(() => {
+    document.body.innerHTML = "";
+    resetPresenceWall();
+  });
+
+  it("puts a wall on the page without the app placing the component", async () => {
+    const teardown = mountWall();
+    expect(document.querySelector(WALL_ROOT_SELECTOR)).not.toBeNull();
+
+    // Closed by default — it is an Easter egg, not a permanent overlay.
+    expect(document.querySelector("[data-presence-wall]")).toBeNull();
+
+    // Exactly what the key combo and $presence.open() do.
+    usePresenceWall().open();
+    await new Promise((r) => setTimeout(r, 0));
+    expect(document.querySelector("[data-presence-wall]")).not.toBeNull();
+
+    teardown();
+    expect(document.querySelector(WALL_ROOT_SELECTOR)).toBeNull();
+  });
+
+  it("does not mount a second wall over an existing one", () => {
+    mountWall();
+    mountWall();
+
+    expect(document.querySelectorAll(WALL_ROOT_SELECTOR)).toHaveLength(1);
+  });
+});
 
 describe("presence plugin", () => {
   it("listens for the combo and toggles open", () => {

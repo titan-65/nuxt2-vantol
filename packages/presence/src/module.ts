@@ -29,6 +29,7 @@ export default defineNuxtModule<ModuleOptions>({
       publicConfig.combo = resolved.wall.combo;
       publicConfig.mobilePath = resolved.wall.mobilePath;
       publicConfig.renderStyle = resolved.wall.renderStyle;
+      publicConfig.autoMount = resolved.wall.autoMount;
 
       addPlugin({
         src: resolve("./runtime/plugins/presence.client"),

@@ -1,4 +1,5 @@
-import { watch, type Ref } from "vue";
+import { createApp, watch, type Ref } from "vue";
+import PresenceWall from "../components/PresenceWall.vue";
 import { usePresenceWall, type WallHandle } from "../composables/usePresenceWall";
 import { setDefaultRenderStyle } from "../utils/renderStyle";
 import type { RenderStyle } from "../../options";
@@ -97,6 +98,34 @@ export function createPresencePlugin(opts: PresencePluginOptions): () => void {
   };
 }
 
+export const WALL_ROOT_SELECTOR = "[data-presence-wall-root]";
+
+/**
+ * Mounts <PresenceWall> into its own element on <body>.
+ *
+ * Without this, installing the module gives you a combo listener and a console
+ * API driving state that nothing renders — the consuming app has to remember to
+ * place the component, which defeats a one-line Easter egg.
+ *
+ * A standalone `createApp` works here only because the component avoids
+ * Nuxt-only imports; it needs no router, no runtime config, no Nuxt context.
+ */
+export function mountWall(): () => void {
+  if (document.querySelector(WALL_ROOT_SELECTOR)) return () => {};
+
+  const host = document.createElement("div");
+  host.setAttribute("data-presence-wall-root", "");
+  document.body.appendChild(host);
+
+  const app = createApp(PresenceWall);
+  app.mount(host);
+
+  return () => {
+    app.unmount();
+    host.remove();
+  };
+}
+
 // ponytail: typed as the minimal subset of NuxtApp this plugin touches, rather than
 // pulling in `nuxt/app` types. `nuxt/app` transitively imports Nuxt's generated
 // `#build/*` virtual modules at runtime, which only exist inside an actual Nuxt
@@ -104,7 +133,14 @@ export function createPresencePlugin(opts: PresencePluginOptions): () => void {
 // (see test/plugin.test.ts, which imports createPresencePlugin directly).
 interface PresenceNuxtApp {
   $config: {
-    public: { presence?: { combo?: string[]; mobilePath?: string; renderStyle?: RenderStyle } };
+    public: {
+      presence?: {
+        combo?: string[];
+        mobilePath?: string;
+        renderStyle?: RenderStyle;
+        autoMount?: boolean;
+      };
+    };
   };
   $router?: { currentRoute: Ref<{ path: string }> };
 }
@@ -120,6 +156,9 @@ export default function presencePlugin(nuxtApp: PresenceNuxtApp): void {
   if (opts.renderStyle) setDefaultRenderStyle(opts.renderStyle);
 
   createPresencePlugin({ combo, mobilePath, wall });
+
+  // Placing <PresenceWall> by hand instead? Set wall.autoMount: false.
+  if (opts.autoMount !== false) mountWall();
 
   // Auto-open on mobile hash route
   const currentRoute = nuxtApp.$router?.currentRoute;
