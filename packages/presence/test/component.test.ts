@@ -89,9 +89,11 @@ describe("<PresenceWall>", () => {
     const wrapper = mount(PresenceWall, { props: { open: true }, attachTo: document.body });
     await wrapper.find("[data-presence-canvas]").trigger("click");
 
-    const input = wrapper.find("[data-presence-input]");
-    await input.setValue("never mind");
-    await input.trigger("keydown.esc");
+    await wrapper.find("[data-presence-input]").setValue("never mind");
+    // In a browser the keypress bubbles from the input up to window, where the
+    // single Escape handler lives.
+    window.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
+    await wrapper.vm.$nextTick();
 
     expect(usePresenceWall().signatures.value).toEqual([]);
     expect(wrapper.find("[data-presence-input]").exists()).toBe(false);
@@ -114,6 +116,48 @@ describe("<PresenceWall>", () => {
 
     await wrapper.find("[data-presence-canvas]").trigger("click");
     expect(wrapper.text()).toContain("enter to sign");
+  });
+
+  it("allows only one signature per visitor", async () => {
+    const wrapper = mount(PresenceWall, { props: { open: true }, attachTo: document.body });
+
+    await wrapper.find("[data-presence-canvas]").trigger("click");
+    await wrapper.find("[data-presence-input]").setValue("first");
+    await wrapper.find("[data-presence-input]").trigger("keydown.enter");
+
+    // A second click must not offer another caret — this is also what made the
+    // close button unusable, since every stray click reopened the input.
+    await wrapper.find("[data-presence-canvas]").trigger("click");
+
+    expect(wrapper.find("[data-presence-input]").exists()).toBe(false);
+    expect(usePresenceWall().signatures.value).toHaveLength(1);
+    expect(wrapper.text()).toContain("you left your mark");
+  });
+
+  it("closes when the close button is clicked, even after signing", async () => {
+    const wrapper = mount(PresenceWall, { props: { open: true }, attachTo: document.body });
+    await wrapper.find("[data-presence-canvas]").trigger("click");
+    await wrapper.find("[data-presence-input]").setValue("mark");
+    await wrapper.find("[data-presence-input]").trigger("keydown.enter");
+
+    await wrapper.find("[data-presence-close]").trigger("click");
+
+    expect(wrapper.emitted("update:open")?.at(-1)).toEqual([false]);
+    expect(usePresenceWall().isOpen.value).toBe(false);
+  });
+
+  it("escape cancels the caret first, then closes the wall", async () => {
+    const wrapper = mount(PresenceWall, { props: { open: true }, attachTo: document.body });
+    await wrapper.find("[data-presence-canvas]").trigger("click");
+
+    window.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
+    await wrapper.vm.$nextTick();
+    expect(wrapper.find("[data-presence-input]").exists()).toBe(false);
+    expect(usePresenceWall().isOpen.value).toBe(true);
+
+    window.dispatchEvent(new KeyboardEvent("keydown", { key: "Escape" }));
+    await wrapper.vm.$nextTick();
+    expect(usePresenceWall().isOpen.value).toBe(false);
   });
 
   it("renders signatures through the requested renderStyle", async () => {

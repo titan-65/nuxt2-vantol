@@ -1,4 +1,5 @@
 import { ref, type Ref } from "vue";
+import type { WallTransport } from "../utils/wallSync";
 
 export interface Signature {
   id: string;
@@ -14,6 +15,8 @@ export interface Signature {
 export interface WallHandle {
   isOpen: Ref<boolean>;
   signatures: Ref<Signature[]>;
+  /** True once this visitor has left their mark, so the UI stops offering a caret. */
+  hasSigned: Ref<boolean>;
   open: () => void;
   close: () => void;
   add: (input: {
@@ -23,6 +26,8 @@ export interface WallHandle {
     rotation?: number;
     color?: string;
   }) => Signature;
+  /** Replaces the list wholesale — the server is the source of truth when it answers. */
+  replace: (signatures: Signature[]) => void;
   clear: () => void;
 }
 
@@ -39,6 +44,7 @@ function makeId(): string {
 export function createWall(): WallHandle {
   const isOpen = ref(false);
   const signatures = ref<Signature[]>([]);
+  const hasSigned = ref(false);
 
   function open() {
     isOpen.value = true;
@@ -65,13 +71,34 @@ export function createWall(): WallHandle {
       expiresAt: now + 3600_000,
     };
     signatures.value = [...signatures.value, sig];
+    hasSigned.value = true;
+
+    // Fire-and-forget: the signature is already on screen, and a failed POST
+    // must not lose it or block the UI.
+    void transport?.push(sig).catch(() => {});
+
     return sig;
+  }
+  function replace(next: Signature[]) {
+    signatures.value = next;
   }
   function clear() {
     signatures.value = [];
   }
 
-  return { isOpen, signatures, open, close, add, clear };
+  return { isOpen, signatures, hasSigned, open, close, add, replace, clear };
+}
+
+/**
+ * Set once by the client plugin when `wall.server` is on.
+ *
+ * Same shape as setDefaultRenderStyle: the composable stays free of Nuxt and of
+ * `fetch` wiring, so it is still unit-testable on its own.
+ */
+let transport: WallTransport | undefined;
+
+export function configureWallTransport(next: WallTransport | undefined): void {
+  transport = next;
 }
 
 let shared: WallHandle | undefined;
@@ -95,4 +122,5 @@ export function usePresenceWall(): WallHandle {
 /** Test-only: drops the shared wall so cases cannot bleed into each other. */
 export function resetPresenceWall(): void {
   shared = undefined;
+  transport = undefined;
 }
