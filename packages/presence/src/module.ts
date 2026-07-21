@@ -5,7 +5,5 @@ export default defineNuxtModule({
     name: "@vantol/presence",
     configKey: "presence",
   },
-  setup() {
-    // intentionally empty for now
-  },
+  setup() {},
 });
