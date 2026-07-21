@@ -43,6 +43,7 @@
   },
   "scripts": {
     "build": "nuxt-module-build build",
+    "prepare": "nuxt-module-build build",
     "prepack": "nuxt-module-build build",
     "test": "vp test run",
     "test:watch": "vp test",
