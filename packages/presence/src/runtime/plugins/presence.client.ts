@@ -9,10 +9,42 @@ export interface PresencePluginOptions {
   wall: Pick<WallHandle, "open" | "close" | "add">;
 }
 
+export const MARK_META_SELECTOR = 'meta[name="presence-mark"]';
+
+/**
+ * Reads the mark out of the page and asks the server to check it.
+ *
+ * ponytail: server-side verification only. Verifying in the browser would mean
+ * ed25519 via WebCrypto, which is still uneven across browsers, to answer a
+ * question the endpoint already answers authoritatively.
+ */
+export async function verifyMarkInPage(): Promise<MarkVerification> {
+  const token = document.querySelector(MARK_META_SELECTOR)?.getAttribute("content");
+  if (!token) return { valid: false, reason: "no_mark" };
+
+  try {
+    const response = await fetch("/api/_presence/verify", {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify({ token }),
+    });
+    return (await response.json()) as MarkVerification;
+  } catch (error) {
+    return { valid: false, reason: error instanceof Error ? error.message : "verify_failed" };
+  }
+}
+
+export interface MarkVerification {
+  valid: boolean;
+  payload?: unknown;
+  reason?: string;
+}
+
 interface PresenceConsole {
   open: () => void;
   close: () => void;
   sign: (text: string) => void;
+  verify: () => Promise<MarkVerification>;
 }
 
 declare global {
@@ -53,6 +85,7 @@ export function createPresencePlugin(opts: PresencePluginOptions): () => void {
     sign: (text: string) => {
       opts.wall.add({ text, x: 50, y: 50 });
     },
+    verify: verifyMarkInPage,
   };
   window.$presence = consoleApi;
 

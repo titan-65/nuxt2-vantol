@@ -89,6 +89,12 @@ export default defineNuxtModule<ModuleOptions>({
     publicConfig.publicKey = keypair.publicKey;
     publicConfig.mark = token;
 
+    addServerHandler({
+      route: "/api/_presence/verify",
+      method: "post",
+      handler: resolve("./server/api/verify.post"),
+    });
+
     // ponytail: app.head rather than a nitro render:html hook. It is typed, and it
     // bakes the mark into prerendered pages as well as SSR responses.
     nuxt.options.app.head.meta ??= [];
