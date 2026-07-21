@@ -1,7 +1,7 @@
 ---
 title: "First Wall — Client-Only"
 description: "Register an auto-imported component and a client plugin, wire a key combo and a window.$presence console API, and get a working scratch board with no server involved."
-series: "nuxt-modules"
+series: "nuxt-modules-core"
 order: 3
 feature: "addComponent, addPlugin, client-only state"
 sourceUrl: "https://nuxt.com/docs/4.x/api/kit/components"
@@ -164,4 +164,6 @@ const open = ref(false);
 
 ## Recap
 
-`addComponent` and `addPlugin` register paths; the plugin owns the DOM listener and the console API; the composable owns state and stays testable. You have a working module. Next: make the signatures outlive a refresh.
+`addComponent` and `addPlugin` register paths; the plugin owns the DOM listener and the console API; the composable owns state and stays testable. You have a working module — that's the end of the beginner series.
+
+Next: **[Building a Nuxt Module: Going Further](/learn/nuxt-modules-advanced)**, where the signatures outlive a refresh.

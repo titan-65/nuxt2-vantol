@@ -1,8 +1,8 @@
 ---
 title: "The Signed Mark"
 description: "Generate an ed25519 keypair on first build, sign a payload describing the build, stamp it into every page's head, and add a verify endpoint that can't be tricked into validating a forgery."
-series: "nuxt-modules"
-order: 7
+series: "nuxt-modules-capstone"
+order: 1
 feature: "ed25519, build-time signing, verify endpoint"
 sourceUrl: "https://nodejs.org/api/crypto.html#cryptosignalgorithm-data-key-callback"
 difficulty: "Advanced"

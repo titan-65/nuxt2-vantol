@@ -1,7 +1,7 @@
 ---
 title: "Scaffold the Presence Package"
 description: "Build the smallest package Nuxt will accept as a module, wire it into a monorepo, and prove it loads with a playground app and one test."
-series: "nuxt-modules"
+series: "nuxt-modules-core"
 order: 2
 feature: "packages/presence, @nuxt/kit, workspace wiring"
 sourceUrl: "https://nuxt.com/docs/4.x/guide/going-further/modules"
