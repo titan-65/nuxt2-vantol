@@ -30,6 +30,9 @@ export default defineNuxtModule<ModuleOptions>({
       publicConfig.mobilePath = resolved.wall.mobilePath;
       publicConfig.renderStyle = resolved.wall.renderStyle;
       publicConfig.autoMount = resolved.wall.autoMount;
+      // The client needs to know whether the routes exist before it calls them.
+      publicConfig.server = resolved.wall.server;
+      publicConfig.pollMs = resolved.wall.pollMs;
 
       addPlugin({
         src: resolve("./runtime/plugins/presence.client"),

@@ -29,7 +29,7 @@ export default defineNuxtConfig({
 Nothing to place in your templates — the module mounts the wall itself. Three ways in:
 
 - **The combo:** press `↑ ↑ ↓ ↓` on any page (configurable via `wall.combo`).
-- **Click anywhere** on the overlay, type, press Enter. Esc cancels.
+- **Click anywhere** on the overlay, type, press Enter. Esc cancels the caret, Esc again closes the wall.
 - **The console:** `$presence.open()`, `$presence.sign("was here")`, `$presence.close()`.
 - **The route:** visit `/presence` (configurable via `wall.mobilePath`) — for touch devices with no keyboard.
 
@@ -39,7 +39,8 @@ Nothing to place in your templates — the module mounts the wall itself. Three 
 |---|---|---|
 | `enabled` | `true` | Turns the whole module off — no plugin, no component, no routes. |
 | `wall.enabled` | `true` | Registers `<PresenceWall>`, the client plugin, and `window.$presence`. |
-| `wall.server` | `false` | Registers the wall routes. **Not yet wired to the client** — see Caveats. |
+| `wall.server` | `false` | Shares signatures between visitors: the client POSTs on sign and polls while open. |
+| `wall.pollMs` | `5000` | How often the open wall re-reads the shared list. |
 | `wall.ttlSeconds` | `3600` | How long a signature survives before it ages out. |
 | `wall.maxSignatures` | `50` | Cap on stored signatures. A full wall answers `429 wall_full`. |
 | `wall.combo` | `↑ ↑ ↓ ↓` | Key sequence that opens the wall. Matches either `key` or `code`. |
@@ -111,10 +112,10 @@ Removing the module from `modules` is a clean uninstall — no migrations, no st
 
 ## Caveats
 
-- **`wall.server` is server-side only so far.** The routes and the TTL store work and
-  are tested, but the composable still keeps signatures in local component state and
-  never calls them, so nothing is shared between visitors yet. Wiring the composable
-  to POST/GET is the remaining piece.
+- **One signature per visitor per page load.** Reloading grants another turn; the
+  server cap is what actually bounds a determined visitor.
+- **Polling runs only while the wall is open**, on `wall.pollMs`. A signature you
+  make appears instantly and is replaced by the server copy on the next tick.
 - The wall is deliberately ephemeral. A server restart empties it.
 - Verification is server-side. Browser ed25519 via WebCrypto is still uneven,
   and the endpoint answers authoritatively anyway.

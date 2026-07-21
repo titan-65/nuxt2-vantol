@@ -9,6 +9,8 @@ export interface PresenceWallOptions {
   mobilePath: string;
   /** Mount <PresenceWall> automatically. Set false to place it yourself. */
   autoMount: boolean;
+  /** How often the client re-reads the shared wall while it is open. */
+  pollMs: number;
   renderStyle: RenderStyle;
 }
 
@@ -50,6 +52,7 @@ export const defaults: ModuleOptions = {
     combo: ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown"],
     mobilePath: "/presence",
     autoMount: true,
+    pollMs: 5000,
     renderStyle: "cursive",
   },
   mark: {

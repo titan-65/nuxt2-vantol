@@ -1,6 +1,11 @@
 import { createApp, watch, type Ref } from "vue";
 import PresenceWall from "../components/PresenceWall.vue";
-import { usePresenceWall, type WallHandle } from "../composables/usePresenceWall";
+import {
+  configureWallTransport,
+  usePresenceWall,
+  type WallHandle,
+} from "../composables/usePresenceWall";
+import { createHttpTransport, startPolling } from "../utils/wallSync";
 import { setDefaultRenderStyle } from "../utils/renderStyle";
 import type { RenderStyle } from "../../options";
 
@@ -139,6 +144,8 @@ interface PresenceNuxtApp {
         mobilePath?: string;
         renderStyle?: RenderStyle;
         autoMount?: boolean;
+        server?: boolean;
+        pollMs?: number;
       };
     };
   };
@@ -159,6 +166,23 @@ export default function presencePlugin(nuxtApp: PresenceNuxtApp): void {
 
   // Placing <PresenceWall> by hand instead? Set wall.autoMount: false.
   if (opts.autoMount !== false) mountWall();
+
+  if (opts.server) {
+    const transport = createHttpTransport();
+    configureWallTransport(transport);
+
+    // Poll only while the wall is on screen — nobody is watching it otherwise.
+    let stop: (() => void) | undefined;
+    watch(wall.isOpen, (open) => {
+      stop?.();
+      stop = open
+        ? startPolling(transport, {
+            intervalMs: opts.pollMs ?? 5000,
+            onSignatures: wall.replace,
+          })
+        : undefined;
+    });
+  }
 
   // Auto-open on mobile hash route
   const currentRoute = nuxtApp.$router?.currentRoute;

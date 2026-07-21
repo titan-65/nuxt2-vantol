@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, nextTick, ref, useTemplateRef, watch } from "vue";
+import { computed, nextTick, onMounted, onUnmounted, ref, useTemplateRef, watch } from "vue";
 import { usePresenceWall } from "../composables/usePresenceWall";
 import { signatureStyle } from "../utils/renderStyle";
 import type { RenderStyle } from "../../options";
@@ -35,7 +35,18 @@ const input = useTemplateRef<HTMLInputElement>("input");
 
 const MAX_TEXT_LENGTH = 200;
 
+const hint = computed(() => {
+  if (caret.value) return "enter to sign · esc to cancel";
+  if (wall.hasSigned.value) return "you left your mark · esc to close";
+
+  return "click anywhere to leave your mark";
+});
+
 async function placeCaret(event: MouseEvent) {
+  // One mark each. Otherwise the wall fills with one loud visitor, and every
+  // stray click — including one aimed at the close button — opens a new caret.
+  if (wall.hasSigned.value) return;
+
   const box = (event.currentTarget as HTMLElement).getBoundingClientRect();
 
   caret.value = {
@@ -67,6 +78,22 @@ function close() {
   emit("update:open", false);
 }
 
+/**
+ * Esc backs out one level: the caret first, then the wall.
+ *
+ * Handled here rather than on the input as well — two handlers would cancel the
+ * caret and close the wall on a single press.
+ */
+function onWindowKeydown(event: KeyboardEvent) {
+  if (event.key !== "Escape" || !isVisible.value) return;
+
+  if (caret.value) cancel();
+  else close();
+}
+
+onMounted(() => window.addEventListener("keydown", onWindowKeydown));
+onUnmounted(() => window.removeEventListener("keydown", onWindowKeydown));
+
 defineExpose(wall);
 </script>
 
@@ -87,7 +114,12 @@ defineExpose(wall);
     >
       ×
     </button>
-    <div class="presence-wall__canvas" data-presence-canvas @click="placeCaret">
+    <div
+      class="presence-wall__canvas"
+      :class="{ 'presence-wall__canvas--done': wall.hasSigned.value }"
+      data-presence-canvas
+      @click="placeCaret"
+    >
       <div
         v-for="{ sig, style } in styled"
         :key="sig.id"
@@ -114,15 +146,12 @@ defineExpose(wall);
         placeholder="type…"
         aria-label="Your signature"
         @keydown.enter.prevent="commit"
-        @keydown.esc.prevent="cancel"
         @blur="commit"
         @click.stop
       />
     </div>
 
-    <p class="presence-wall__hint">
-      {{ caret ? "enter to sign · esc to cancel" : "click anywhere to leave your mark" }}
-    </p>
+    <p class="presence-wall__hint">{{ hint }}</p>
   </div>
 </template>
 
@@ -142,6 +171,9 @@ defineExpose(wall);
   position: absolute;
   top: 1rem;
   right: 1rem;
+  /* Above the canvas: both are positioned, and the canvas comes later in the
+     DOM, so without this it paints on top and eats every click on the ×. */
+  z-index: 1;
   background: transparent;
   border: 1px solid rgba(255, 255, 255, 0.3);
   color: white;
@@ -156,6 +188,9 @@ defineExpose(wall);
   width: 100%;
   height: 100%;
   cursor: text;
+}
+.presence-wall__canvas--done {
+  cursor: default;
 }
 .presence-wall__input {
   position: absolute;
