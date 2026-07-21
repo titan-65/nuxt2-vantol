@@ -39,6 +39,7 @@ export default defineNuxtConfig({
 | `mark.enabled` | `true` | Signs each build and stamps the mark into every page's head. |
 | `mark.handle` | `""` | Who the mark names. Empty falls back to the app's `package.json` author. |
 | `mark.keyDir` | `.presence/` | Where the keypair lives, relative to the app root. |
+| `mark.privateKey` | `$NUXT_PRESENCE_PRIVATE_KEY` | PEM key for an identity that survives deploys. Empty generates one per build. |
 
 ## Endpoints
 
@@ -52,20 +53,48 @@ Registered only when the matching feature is on.
 
 ## The signing keys
 
-On the first build, the module writes an ed25519 keypair to `mark.keyDir`.
+**You don't have to set anything up.** On the first build the module generates an
+ed25519 keypair into `mark.keyDir` (`.presence/` by default) and signs with it. No
+env var, no secret, nothing to create by hand.
 
-- **`private.pem` must never be committed.** Add `**/.presence/` to `.gitignore`.
-- A build host with no keypair generates a fresh one, so the mark identifies
-  *that build*. This is the intended semantic: the mark signs a build, not a request.
-- Only the public half reaches the browser, via `runtimeConfig.public`. That is
-  all a visitor needs to check the mark against the endpoint.
+What that costs: a host with no persistent disk — Vercel, Netlify, most CI — builds
+from a clean checkout every time, so it generates a **new keypair per deploy**. The
+mark still verifies, but the public key changes and nobody can pin "this is my key"
+across builds.
+
+### For an identity that survives deploys
+
+Generate a key once:
+
+```bash
+node -e "const {generateKeyPairSync}=require('crypto');const {privateKey}=generateKeyPairSync('ed25519');console.log(privateKey.export({type:'pkcs8',format:'pem'}).toString())"
+```
+
+Store it in your host's environment as `NUXT_PRESENCE_PRIVATE_KEY` (Vercel: Project
+→ Settings → Environment Variables). Every deploy then signs with the same key, the
+public half is derived from it, and nothing is written to disk. Escaped `\n`
+newlines are handled, since env vars mangle multi-line values.
+
+### Rules
+
+- **Never commit `private.pem` or the env value.** Add `**/.presence/` to
+  `.gitignore` and verify with `git check-ignore -v <path>` — a pattern like
+  `.presence/private.pem` contains a slash, so git anchors it to the repo root and
+  silently misses nested apps.
+- If a private key ever lands in a commit, **rotate it**. Deleting it later does not
+  remove it from history.
+- Only the public half reaches the browser, via `runtimeConfig.public`. That's all a
+  visitor needs to check the mark.
+- Rotating invalidates marks from earlier builds — those builds are gone anyway.
 
 ## Deployment
 
 1. Add the module to `modules` and set `presence.mark.handle`.
 2. Set `NUXT_PUBLIC_SITE_URL` — it is signed into the payload.
-3. Deploy. Nothing else to provision: the wall is in-memory and the keys are generated on build.
-4. Confirm it shipped: view source and look for `<meta name="presence-mark">`, then
+3. *(Optional)* Set `NUXT_PRESENCE_PRIVATE_KEY` for a stable identity. Skip it and
+   each deploy signs with its own generated key.
+4. Deploy. Nothing else to provision: the wall is in-memory, the keys sort themselves out.
+5. Confirm it shipped: view source and look for `<meta name="presence-mark">`, then
    run `await $presence.verify()` in devtools. It should answer `{ valid: true }`.
 
 Removing the module from `modules` is a clean uninstall — no migrations, no state to drain.
@@ -76,4 +105,4 @@ Removing the module from `modules` is a clean uninstall — no migrations, no st
 - Verification is server-side. Browser ed25519 via WebCrypto is still uneven,
   and the endpoint answers authoritatively anyway.
 
-See `apps/web/content/learn/nuxt-modules/` for the tutorial series.
+See `apps/web/content/learn/nuxt-modules-core/`, `-advanced/` and `-capstone/` for the tutorial series.

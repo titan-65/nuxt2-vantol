@@ -14,6 +14,14 @@ export interface PresenceMarkOptions {
   enabled: boolean;
   handle: string;
   keyDir: string;
+  /**
+   * PEM private key, for a signing identity that survives deploys.
+   *
+   * Defaults to `NUXT_PRESENCE_PRIVATE_KEY`. Left empty, the module generates a
+   * pair in `keyDir` — which on a host with no persistent disk means a fresh
+   * identity every deploy. Never commit this value.
+   */
+  privateKey: string;
 }
 
 export interface ModuleOptions {
@@ -45,6 +53,7 @@ export const defaults: ModuleOptions = {
     enabled: true,
     handle: "",
     keyDir: ".presence/",
+    privateKey: process.env.NUXT_PRESENCE_PRIVATE_KEY ?? "",
   },
 };
 

@@ -6,7 +6,7 @@ import {
   defineNuxtModule,
 } from "@nuxt/kit";
 import { resolve as resolvePath } from "node:path";
-import { resolveOptions, type ModuleOptions } from "./options";
+import { defaults, resolveOptions, type ModuleOptions } from "./options";
 import { ensureKeypair } from "./hooks/keypair";
 import { buildMarkToken, MARK_META_NAME } from "./hooks/mark";
 
@@ -15,23 +15,8 @@ export default defineNuxtModule<ModuleOptions>({
     name: "@vantol/presence",
     configKey: "presence",
   },
-  defaults: {
-    enabled: true,
-    wall: {
-      enabled: true,
-      server: false,
-      ttlSeconds: 3600,
-      maxSignatures: 50,
-      combo: ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown"],
-      mobilePath: "/presence",
-      renderStyle: "cursive",
-    },
-    mark: {
-      enabled: true,
-      handle: "",
-      keyDir: ".presence/",
-    },
-  },
+  // One source of truth — a second copy here silently drifts from options.ts.
+  defaults,
   setup(options, nuxt) {
     const resolved = resolveOptions(options);
     if (!resolved.enabled) return;
@@ -77,6 +62,7 @@ export default defineNuxtModule<ModuleOptions>({
     // Signed once per build, so every page of a build carries the same mark.
     const keypair = ensureKeypair({
       keyDir: resolvePath(nuxt.options.rootDir, resolved.mark.keyDir),
+      privateKey: resolved.mark.privateKey,
     });
     const token = buildMarkToken({
       handle: resolved.mark.handle,
