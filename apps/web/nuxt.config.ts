@@ -7,7 +7,7 @@ declare const process: {
 }
 
 export default defineNuxtConfig({
-  modules: ['@nuxt/content', '@nuxtjs/tailwindcss', '@nuxt/image', 'shadcn-nuxt', '@vantol/presence'],
+  modules: ['@nuxt/content', '@nuxtjs/tailwindcss', '@nuxt/image', 'shadcn-nuxt', 'nuxt-presence'],
   presence: {
     mark: { handle: 'vantolbennett' },
   },

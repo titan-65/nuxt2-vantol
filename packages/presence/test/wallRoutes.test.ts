@@ -1,7 +1,7 @@
 import { $fetch, setup } from "@nuxt/test-utils/e2e";
 import { describe, expect, it } from "vite-plus/test";
 import { fileURLToPath } from "node:url";
-import type { StoredSignature } from "../src/server/utils/wallStore";
+import type { StoredSignature } from "../src/runtime/server/utils/wallStore";
 
 const MAX = 3;
 

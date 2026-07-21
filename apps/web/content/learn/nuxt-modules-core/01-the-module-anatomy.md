@@ -20,7 +20,7 @@ A Nuxt module is a function. Nuxt calls it once at startup, hands it your option
 
 ```ts
 export default defineNuxtModule({
-  meta: { name: "@vantol/presence", configKey: "presence" },
+  meta: { name: "nuxt-presence", configKey: "presence" },
   defaults: { enabled: true },
   setup(options, nuxt) {
     // runs once, at build time, in Node
@@ -61,7 +61,7 @@ One line in `nuxt.config.ts`, and the component auto-imports, the plugin registe
 
 ```ts
 export default defineNuxtConfig({
-  modules: ["@vantol/presence"],
+  modules: ["nuxt-presence"],
 });
 ```
 

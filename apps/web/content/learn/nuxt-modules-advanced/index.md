@@ -14,7 +14,7 @@ author:
   website: "https://vantolbennett.com"
 ---
 
-Picking up from **[The Basics](/learn/nuxt-modules-core)**, where `@vantol/presence` got a component, a composable and a client plugin — a wall that works until you refresh.
+Picking up from **[The Basics](/learn/nuxt-modules-core)**, where `nuxt-presence` got a component, a composable and a client plugin — a wall that works until you refresh.
 
 Three steps to make it a module you'd let someone else install. Server routes that don't exist unless they're asked for. Options that are typed, deep-merged, and split by who's allowed to read them. Tests at the cheapest tier that can actually prove each thing.
 

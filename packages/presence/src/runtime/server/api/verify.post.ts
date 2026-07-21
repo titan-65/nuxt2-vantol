@@ -1,6 +1,6 @@
 import { defineEventHandler, readBody } from "h3";
 import { useRuntimeConfig } from "nitropack/runtime";
-import { verifyMark, type VerifyResult } from "../../runtime/utils/crypto";
+import { verifyMark, type VerifyResult } from "../../utils/crypto";
 
 /**
  * Authoritative check of a presence mark.

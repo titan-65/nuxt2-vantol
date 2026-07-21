@@ -16,7 +16,7 @@ author:
 
 You know Nuxt. You've installed a dozen modules and never written one. That's the gap this series closes.
 
-We build one real module across three series, `@vantol/presence`, and it does two things that pull in opposite directions — which is exactly why it teaches well:
+We build one real module across three series, `nuxt-presence`, and it does two things that pull in opposite directions — which is exactly why it teaches well:
 
 - **The Wall** — a hidden scratch board. A key combo opens it, visitors leave a signature, the signature ages out and dissolves.
 - **The Mark** — an ed25519 token signed at build time and stamped into every page's `<head>`. Anyone can read the source and check it.
