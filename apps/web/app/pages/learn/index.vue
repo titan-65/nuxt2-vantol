@@ -28,13 +28,36 @@ function formatDate(date: string | undefined) {
   <div class="min-h-screen bg-[#0a0a0a] text-white font-sans">
     <div class="max-w-[1088px] mx-auto px-6 py-12">
       <!-- Header -->
-      <div class="mb-10 border-b border-white/10 pb-6">
-        <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Learn</p>
+      <div class="mb-10 border-b border-white/10 pb-8">
+        <p class="text-[10px] font-bold uppercase tracking-widest text-[#f5c542] mb-2">Learn & Build</p>
         <h1 class="text-4xl font-semibold tracking-tight">Learning, one release at a time</h1>
-        <p class="text-sm text-zinc-500 mt-3 max-w-2xl leading-relaxed">
-          I build with these tools every day — but new releases ship features I've never touched.
-          These are hands-on tutorials where we learn them together, step by step, straight from the source.
+        <p class="text-sm text-zinc-400 mt-3 max-w-2xl leading-relaxed">
+          I build with these tools every day — hands-on tutorials where we learn new framework features step by step, straight from the source.
         </p>
+
+        <!-- Eve Agent Feature Card -->
+        <div class="mt-6 p-6 rounded-2xl bg-gradient-to-r from-zinc-900 via-[#111] to-black border border-[#f5c542]/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-xl">
+          <div>
+            <div class="flex items-center gap-2 mb-2">
+              <span class="px-2 py-0.5 bg-[#f5c542] text-black font-bold text-[10px] uppercase tracking-widest rounded-md">LIVE AGENT</span>
+              <span class="text-xs text-zinc-400 font-mono">Vercel Eve Framework</span>
+            </div>
+            <h3 class="text-xl font-bold text-white">Eve AI Agent Studio</h3>
+            <p class="text-xs text-zinc-400 mt-1 max-w-xl">
+              Interact with the live EVE Agent built for this site. Chat with the agent or inspect its underlying instructions, tools, skills, subagents, and schedules.
+            </p>
+          </div>
+
+          <NuxtLink
+            to="/eve"
+            class="px-5 py-2.5 bg-[#f5c542] hover:bg-[#e0b13a] text-black font-bold text-xs rounded-xl shadow-lg shadow-[#f5c542]/20 transition-all shrink-0 flex items-center gap-2"
+          >
+            Launch Eve Agent Studio
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M5 12h14M12 5l7 7-7 7" />
+            </svg>
+          </NuxtLink>
+        </div>
       </div>
 
       <div v-if="!series?.length" class="text-center py-20 border border-dashed border-white/10 bg-[#111] rounded-xl">
