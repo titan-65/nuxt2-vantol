@@ -10,6 +10,21 @@ export default defineNuxtConfig({
   modules: ['@nuxt/content', '@nuxtjs/tailwindcss', '@nuxt/image', 'shadcn-nuxt', 'nuxt-presence'],
   presence: {
     mark: { handle: 'vantolbennett' },
+    wall: {
+      enabled: true,
+      server: true,
+      autoMount: true,
+      bodyLimit: 240,
+      pinCap: 5,
+      policy: {
+        filter: {
+          extraHardBlocklist: [],
+          extraSoftBlocklist: [],
+          extraDenyRegex: [],
+        },
+        rateLimit: { perIpHour: 5, perUserTenMin: 1 },
+      },
+    },
   },
   app: {
     viewTransition: true,

@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { Menu, Github, Twitter, Command, Search } from "lucide-vue-next";
+import { authClient } from "../../utils/auth-client";
 
 const route = useRoute();
 
@@ -25,6 +26,13 @@ const secondaryLinks = [
 const allLinks = [...primaryLinks, ...secondaryLinks];
 
 const isOpen = ref(false);
+const { data: session } = await authClient.useSession(useFetch);
+const authUser = computed(() => session.value?.user ?? null);
+
+async function handleSignOut() {
+  await authClient.signOut();
+  isOpen.value = false;
+}
 
 const isActive = (to: string) => {
   if (to === "/") return route.path === "/";
@@ -137,6 +145,12 @@ watch(
             >
               {{ link.name }}
             </NuxtLink>
+            <p
+              class="border-t border-black/10 px-4 py-2.5 text-center font-mono text-xs tracking-[0.3em] text-zinc-400 dark:border-white/10 dark:text-zinc-600"
+              title="Try this key sequence anywhere"
+            >
+              ↑ ↑ ↓ ↓
+            </p>
           </div>
         </div>
       </nav>
@@ -144,11 +158,22 @@ watch(
       <!-- Desktop Right Actions -->
       <div class="hidden lg:flex items-center gap-3 shrink-0">
         <NuxtLink
-          to="/contact"
-          class="text-sm font-medium text-zinc-500 hover:text-[#171717] transition-colors dark:text-zinc-400 dark:hover:text-white"
+          v-if="!authUser"
+          to="/login"
+          class="text-sm font-medium text-zinc-500 hover:text-[#171717] dark:text-zinc-400 dark:hover:text-white"
         >
-          Contact
+          Sign in
         </NuxtLink>
+        <button
+          v-else
+          type="button"
+          class="size-8 overflow-hidden rounded-full border border-black/10 bg-black/5 dark:border-white/10 dark:bg-white/5"
+          :title="`Signed in as ${authUser.name}. Click to sign out.`"
+          @click="handleSignOut"
+        >
+          <img v-if="authUser.image" :src="authUser.image" :alt="authUser.name" class="size-full object-cover" />
+          <span v-else class="text-xs font-bold">{{ authUser.name?.charAt(0) }}</span>
+        </button>
         <button
           @click="openCommandPalette"
           class="flex items-center gap-1.5 border border-black/10 px-2.5 py-1.5 text-xs font-mono text-zinc-500 hover:border-black/30 hover:text-[#171717] transition-colors rounded-lg dark:border-white/10 dark:hover:border-white/30 dark:hover:text-white"
@@ -158,24 +183,6 @@ watch(
           <Search class="w-3.5 h-3.5" />
           <span class="hidden xl:inline">⌘K</span>
         </button>
-        <a
-          href="https://github.com/titan-65"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="text-zinc-500 hover:text-[#171717] transition-colors p-1.5 hover:bg-black/5 rounded-lg dark:text-zinc-400 dark:hover:text-white dark:hover:bg-white/5"
-          aria-label="GitHub"
-        >
-          <Github class="w-4 h-4" />
-        </a>
-        <a
-          href="https://twitter.com/vantolbennett"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="text-zinc-500 hover:text-[#171717] transition-colors p-1.5 hover:bg-black/5 rounded-lg dark:text-zinc-400 dark:hover:text-white dark:hover:bg-white/5"
-          aria-label="Twitter"
-        >
-          <Twitter class="w-4 h-4" />
-        </a>
         <DarkModeToggle />
       </div>
 
@@ -276,11 +283,34 @@ watch(
                     <path d="M5 12h14M12 5l7 7-7 7" />
                   </svg>
                 </NuxtLink>
+                <p
+                  class="mt-4 border-t border-black/10 px-3 pt-4 text-center font-mono text-xs tracking-[0.3em] text-zinc-400 dark:border-white/10 dark:text-zinc-600"
+                  title="Try this key sequence anywhere"
+                >
+                  ↑ ↑ ↓ ↓
+                </p>
               </div>
             </nav>
 
             <!-- Sheet Footer -->
             <div class="px-6 py-5 border-t border-black/10 shrink-0 dark:border-white/10">
+              <NuxtLink
+                v-if="!authUser"
+                to="/login"
+                class="mb-4 block text-sm font-medium text-zinc-500 hover:text-[#171717] dark:text-zinc-400 dark:hover:text-white"
+                @click="handleLinkClick"
+              >
+                Sign in with GitHub
+              </NuxtLink>
+              <button
+                v-else
+                type="button"
+                class="mb-4 flex w-full items-center gap-2 text-left text-sm text-zinc-500 dark:text-zinc-400"
+                @click="handleSignOut"
+              >
+                <img v-if="authUser.image" :src="authUser.image" :alt="authUser.name" class="size-7 rounded-full object-cover" />
+                <span class="truncate">{{ authUser.name }} · Sign out</span>
+              </button>
               <div class="flex items-center justify-between">
                 <div class="flex items-center gap-4">
                   <a
