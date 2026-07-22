@@ -42,3 +42,6 @@ logs
 AGENTS.md
 CLAUDE.md
 GEMINI.md
+
+# Local Better Auth SQLite DB
+.data/

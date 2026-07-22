@@ -8,7 +8,9 @@ const selectedIndex = ref(0)
 const pages = [
   { name: 'Home', to: '/', icon: Home, group: 'Navigation' },
   { name: 'Blog', to: '/blog', icon: FileText, group: 'Navigation' },
+  { name: 'Learn', to: '/learn', icon: BookOpen, group: 'Navigation' },
   { name: 'Projects', to: '/projects', icon: FolderOpen, group: 'Navigation' },
+  { name: 'Publications', to: '/publications', icon: FileText, group: 'Navigation' },
   { name: 'Gallery', to: '/gallery', icon: Image, group: 'Navigation' },
   { name: 'Explore', to: '/explore', icon: Compass, group: 'Navigation' },
   { name: 'About', to: '/about', icon: User, group: 'Navigation' },

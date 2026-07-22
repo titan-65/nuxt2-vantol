@@ -1,4 +1,15 @@
-import { createApp, watch, type Ref } from "vue";
+/**
+ * V1 client plugin (per T13).
+ *
+ *   - Combo key sequence opens/closes the wall (e.g. ↑↑↓↓).
+ *   - `console.$presence` exposes open/close/sign/verify on `window` for tooling.
+ *   - The SSR boolean `presence.isAdmin` is mirrored to `window.__PRESENCE_ADMIN__`
+ *     so the component renders the admin tab without re-fetching.
+ *   - Transport is registered once via `configureWallTransport`.
+ *   - Polling runs only while the wall is open.
+ */
+
+import { createApp, watch } from "vue";
 import PresenceWall from "../components/PresenceWall.vue";
 import {
   configureWallTransport,
@@ -6,24 +17,9 @@ import {
   type WallHandle,
 } from "../composables/usePresenceWall";
 import { createHttpTransport, startPolling } from "../utils/wallSync";
-import { setDefaultRenderStyle } from "../utils/renderStyle";
-import type { RenderStyle } from "../../options";
-
-export interface PresencePluginOptions {
-  combo: string[];
-  mobilePath: string;
-  wall: Pick<WallHandle, "open" | "close" | "add">;
-}
 
 export const MARK_META_SELECTOR = 'meta[name="presence-mark"]';
 
-/**
- * Reads the mark out of the page and asks the server to check it.
- *
- * ponytail: server-side verification only. Verifying in the browser would mean
- * ed25519 via WebCrypto, which is still uneven across browsers, to answer a
- * question the endpoint already answers authoritatively.
- */
 export async function verifyMarkInPage(): Promise<MarkVerification> {
   const token = document.querySelector(MARK_META_SELECTOR)?.getAttribute("content");
   if (!token) return { valid: false, reason: "no_mark" };
@@ -36,7 +32,10 @@ export async function verifyMarkInPage(): Promise<MarkVerification> {
     });
     return (await response.json()) as MarkVerification;
   } catch (error) {
-    return { valid: false, reason: error instanceof Error ? error.message : "verify_failed" };
+    return {
+      valid: false,
+      reason: error instanceof Error ? error.message : "verify_failed",
+    };
   }
 }
 
@@ -56,6 +55,7 @@ interface PresenceConsole {
 declare global {
   interface Window {
     $presence?: PresenceConsole;
+    __PRESENCE_ADMIN__?: boolean;
   }
 }
 
@@ -64,7 +64,19 @@ interface BufferedKey {
   code: string;
 }
 
+export interface PresencePluginOptions {
+  combo: string[];
+  isAdmin: boolean;
+  pageKey?: string;
+  pollMs: number;
+  wall: Pick<WallHandle, "open" | "close" | "add">;
+}
+
 export function createPresencePlugin(opts: PresencePluginOptions): () => void {
+  // ponytail: SSR hands the admin boolean here. Setting `window.__PRESENCE_ADMIN__`
+  // once at startup keeps the component free of Nuxt-only imports.
+  window.__PRESENCE_ADMIN__ = opts.isAdmin;
+
   let buffer: BufferedKey[] = [];
   let lastTs = 0;
 
@@ -74,8 +86,6 @@ export function createPresencePlugin(opts: PresencePluginOptions): () => void {
     lastTs = now;
     buffer.push({ key: e.key, code: e.code });
     if (buffer.length > opts.combo.length) buffer = buffer.slice(-opts.combo.length);
-    // Match against either the logical key ("ArrowUp") or the physical code
-    // ("KeyK"), since callers may configure a combo using either style.
     if (
       buffer.length === opts.combo.length &&
       buffer.every((k, i) => k.key === opts.combo[i] || k.code === opts.combo[i])
@@ -89,7 +99,7 @@ export function createPresencePlugin(opts: PresencePluginOptions): () => void {
     open: () => opts.wall.open(),
     close: () => opts.wall.close(),
     sign: (text: string) => {
-      opts.wall.add({ text, x: 50, y: 50 });
+      void opts.wall.add({ body: text, ...(opts.pageKey ? { pageKey: opts.pageKey } : {}) });
     },
     verify: verifyMarkInPage,
   };
@@ -105,16 +115,6 @@ export function createPresencePlugin(opts: PresencePluginOptions): () => void {
 
 export const WALL_ROOT_SELECTOR = "[data-presence-wall-root]";
 
-/**
- * Mounts <PresenceWall> into its own element on <body>.
- *
- * Without this, installing the module gives you a combo listener and a console
- * API driving state that nothing renders — the consuming app has to remember to
- * place the component, which defeats a one-line Easter egg.
- *
- * A standalone `createApp` works here only because the component avoids
- * Nuxt-only imports; it needs no router, no runtime config, no Nuxt context.
- */
 export function mountWall(): () => void {
   if (document.querySelector(WALL_ROOT_SELECTOR)) return () => {};
 
@@ -131,71 +131,53 @@ export function mountWall(): () => void {
   };
 }
 
-// ponytail: typed as the minimal subset of NuxtApp this plugin touches, rather than
-// pulling in `nuxt/app` types. `nuxt/app` transitively imports Nuxt's generated
-// `#build/*` virtual modules at runtime, which only exist inside an actual Nuxt
-// build — importing it here would break plain-vitest unit tests of this same file
-// (see test/plugin.test.ts, which imports createPresencePlugin directly).
+// ponytail: typed as the minimal subset of NuxtApp this plugin touches, rather
+// than importing `nuxt/app` types (which transitively pull Nuxt's generated
+// `#build/*` virtual modules).
 export interface PresenceNuxtApp {
   $config: {
     public: {
       presence?: {
-        combo?: string[];
-        mobilePath?: string;
-        renderStyle?: RenderStyle;
-        autoMount?: boolean;
-        server?: boolean;
-        pollMs?: number;
+        enabled?: boolean;
+        wall?: {
+          combo?: string[];
+          pageKey?: string;
+          autoMount?: boolean;
+          pollMs?: number;
+          isAdmin?: boolean;
+        };
       };
     };
   };
-  $router?: { currentRoute: Ref<{ path: string }> };
 }
 
-// Named, not default: the file actually registered with Nuxt is
-// presence.client.plugin.ts, which wraps this in defineNuxtPlugin. That import
-// needs "#app", a virtual alias that only resolves inside a Nuxt build — pulling
-// it in here would break plain-vitest tests that import this file directly.
 export function presencePlugin(nuxtApp: PresenceNuxtApp): void {
+  const opts = nuxtApp.$config.public.presence;
+  if (opts?.enabled === false) return;
+
   const wall = usePresenceWall();
-  const opts = nuxtApp.$config.public.presence ?? {};
-  const combo = opts.combo ?? ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown"];
-  const mobilePath = opts.mobilePath ?? "/presence";
-  if (opts.renderStyle) setDefaultRenderStyle(opts.renderStyle);
+  const wallOpts = opts?.wall ?? {};
+  const combo = wallOpts.combo ?? ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown"];
+  const isAdmin = wallOpts.isAdmin === true;
+  const pageKey = typeof wallOpts.pageKey === "string" ? wallOpts.pageKey : undefined;
+  const pollMs = wallOpts.pollMs ?? 5000;
 
-  createPresencePlugin({ combo, mobilePath, wall });
+  createPresencePlugin({ combo, isAdmin, pageKey, pollMs, wall });
 
-  // Placing <PresenceWall> by hand instead? Set wall.autoMount: false.
-  if (opts.autoMount !== false) mountWall();
+  if (wallOpts.autoMount !== false) mountWall();
 
-  if (opts.server) {
-    const transport = createHttpTransport();
-    configureWallTransport(transport);
-
-    // Poll only while the wall is on screen — nobody is watching it otherwise.
-    let stop: (() => void) | undefined;
-    watch(wall.isOpen, (open) => {
-      stop?.();
-      stop = open
-        ? startPolling(transport, {
-            intervalMs: opts.pollMs ?? 5000,
-            onSignatures: wall.replace,
-          })
-        : undefined;
-    });
-  }
-
-  // Auto-open on mobile hash route
-  const currentRoute = nuxtApp.$router?.currentRoute;
-  if (currentRoute) {
-    watch(
-      () => currentRoute.value.path,
-      (path) => {
-        if (path === mobilePath) {
-          wall.open();
-        }
-      },
-      { immediate: true },
-    );
-  }
+  const transport = createHttpTransport();
+  configureWallTransport(transport);
+  let stop: (() => void) | undefined;
+  watch(wall.isOpen, (open) => {
+    stop?.();
+    stop = open
+      ? startPolling(
+          transport,
+          { intervalMs: pollMs, onSignatures: wall.replace },
+          // Admin sees pending entries too — the gate runs server-side.
+          isAdmin ? { includePending: true } : undefined,
+        )
+      : undefined;
+  });
 }

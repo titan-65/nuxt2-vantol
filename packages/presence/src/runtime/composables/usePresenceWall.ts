@@ -1,49 +1,65 @@
-import { ref, type Ref } from "vue";
-import type { WallTransport } from "../utils/wallSync";
+/**
+ * V1 client shape (per T13).
+ *
+ *   - A signature is `{ id, author, body, createdAt, state }` — no x/y/rotation/color
+ *     from V0. The wall renders cards, not positional marks.
+ *   - Transport is set once by the client plugin via `configureWallTransport`.
+ *   - `wall.signatures` is the source of truth that the component renders.
+ */
 
-export interface Signature {
+import { ref, type Ref } from "vue";
+import type { PresenceSignature } from "../server/storage";
+
+export interface WallPushInput {
+  body: string;
+  pageKey?: string;
+  renderHint?: "default" | "compact" | "signature";
+}
+
+export interface WallPullInput {
+  pageKey?: string;
+  includePending?: boolean;
+  adminToken?: string;
+}
+
+export interface AdminInput {
+  action: "pin" | "unpin" | "approve" | "delete";
   id: string;
-  text: string;
-  x: number;
-  y: number;
-  rotation: number;
-  color: string;
-  createdAt: number;
-  expiresAt: number;
+  pinRank?: number;
+  pageKey?: string;
+  adminToken: string;
+}
+
+export interface WallTransport {
+  push: (input: WallPushInput) => Promise<PresenceSignature>;
+  pull: (
+    input?: WallPullInput,
+  ) => Promise<{ signatures: PresenceSignature[]; nextCursor?: string }>;
+  admin: (input: AdminInput) => Promise<unknown>;
 }
 
 export interface WallHandle {
   isOpen: Ref<boolean>;
-  signatures: Ref<Signature[]>;
-  /** True once this visitor has left their mark, so the UI stops offering a caret. */
+  signatures: Ref<PresenceSignature[]>;
+  /** UI-side flag — server still dedups via the resolved identity. */
   hasSigned: Ref<boolean>;
   open: () => void;
   close: () => void;
-  add: (input: {
-    text: string;
-    x: number;
-    y: number;
-    rotation?: number;
-    color?: string;
-  }) => Signature;
-  /** Replaces the list wholesale — the server is the source of truth when it answers. */
-  replace: (signatures: Signature[]) => void;
+  add: (input: WallPushInput) => Promise<PresenceSignature>;
+  replace: (signatures: PresenceSignature[]) => void;
   clear: () => void;
 }
 
-const COLORS = ["#f5c542", "#7dd3fc", "#fda4af", "#a7f3d0", "#c4b5fd"];
+let transport: WallTransport | undefined;
 
-function randomColor(): string {
-  return COLORS[Math.floor(Math.random() * COLORS.length)]!;
+/** Set once by the client plugin. The composable stays Nuxt-free for unit tests. */
+export function configureWallTransport(next: WallTransport | undefined): void {
+  transport = next;
 }
 
-function makeId(): string {
-  return Math.random().toString(36).slice(2) + Date.now().toString(36);
-}
-
-export function createWall(): WallHandle {
+function createWall(): WallHandle {
   const isOpen = ref(false);
-  const signatures = ref<Signature[]>([]);
+  const signatures = ref<PresenceSignature[]>([]);
   const hasSigned = ref(false);
 
   function open() {
@@ -52,34 +68,14 @@ export function createWall(): WallHandle {
   function close() {
     isOpen.value = false;
   }
-  function add(input: {
-    text: string;
-    x: number;
-    y: number;
-    rotation?: number;
-    color?: string;
-  }): Signature {
-    const now = Date.now();
-    const sig: Signature = {
-      id: makeId(),
-      text: input.text,
-      x: input.x,
-      y: input.y,
-      rotation: input.rotation ?? Math.floor(Math.random() * 30) - 15,
-      color: input.color ?? randomColor(),
-      createdAt: now,
-      expiresAt: now + 3600_000,
-    };
-    signatures.value = [...signatures.value, sig];
+  async function add(input: WallPushInput): Promise<PresenceSignature> {
+    if (!transport) throw new Error("presence: no transport configured");
+    const sig = await transport.push(input);
+    signatures.value = [sig, ...signatures.value];
     hasSigned.value = true;
-
-    // Fire-and-forget: the signature is already on screen, and a failed POST
-    // must not lose it or block the UI.
-    void transport?.push(sig).catch(() => {});
-
     return sig;
   }
-  function replace(next: Signature[]) {
+  function replace(next: PresenceSignature[]) {
     signatures.value = next;
   }
   function clear() {
@@ -89,37 +85,16 @@ export function createWall(): WallHandle {
   return { isOpen, signatures, hasSigned, open, close, add, replace, clear };
 }
 
-/**
- * Set once by the client plugin when `wall.server` is on.
- *
- * Same shape as setDefaultRenderStyle: the composable stays free of Nuxt and of
- * `fetch` wiring, so it is still unit-testable on its own.
- */
-let transport: WallTransport | undefined;
-
-export function configureWallTransport(next: WallTransport | undefined): void {
-  transport = next;
-}
-
 let shared: WallHandle | undefined;
 
-/**
- * The wall shared by the component, the plugin and the console API.
- *
- * It must be one instance: the combo listener and `$presence.sign()` live in
- * the plugin, while the rendering lives in the component. Handing each caller
- * its own wall means the combo opens something nobody draws.
- *
- * On the server every call gets a fresh wall, so nothing leaks between requests.
- */
+/** On the server every call gets a fresh wall — nothing leaks between requests. */
 export function usePresenceWall(): WallHandle {
   if (import.meta.server) return createWall();
-
   shared ??= createWall();
   return shared;
 }
 
-/** Test-only: drops the shared wall so cases cannot bleed into each other. */
+/** Test-only. */
 export function resetPresenceWall(): void {
   shared = undefined;
   transport = undefined;
