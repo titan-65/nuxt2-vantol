@@ -7,9 +7,21 @@ declare const process: {
 }
 
 export default defineNuxtConfig({
-  modules: ['@nuxt/content', '@nuxtjs/tailwindcss', '@nuxt/image', 'shadcn-nuxt', 'nuxt-presence'],
+  modules: ['@nuxt/content', '@nuxtjs/tailwindcss', '@nuxt/image', 'shadcn-nuxt', 'nuxt-presence', 'nuxt-assistant'],
   presence: {
     mark: { handle: 'vantolbennett' },
+  },
+  assistant: {
+    enabled: true,
+    autoMount: true,
+    shortcut: ['Cmd+K', 'Ctrl+K', 'Meta+K'],
+    position: 'bottom-right',
+    persona: {
+      name: 'Nox',
+      avatar: '/eve.png',
+      title: 'Portfolio & Developer Assistant',
+      greeting: 'Hi! I am Nox, Vantol\'s assistant. Ask me anything about projects, articles, tutorials, or site navigation!'
+    }
   },
   app: {
     viewTransition: true,
