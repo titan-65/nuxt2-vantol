@@ -6,8 +6,9 @@ const route = useRoute();
 
 const primaryLinks = [
   { name: "HOME", to: "/" },
-  { name: "BLOG", to: "/blog" },
+  { name: "EVE AGENT", to: "/eve" },
   { name: "LEARN", to: "/learn" },
+  { name: "BLOG", to: "/blog" },
   { name: "PROJECTS", to: "/projects" },
   { name: "ABOUT", to: "/about" },
 ];
