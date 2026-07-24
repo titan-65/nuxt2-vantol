@@ -30,7 +30,7 @@ export default defineNuxtConfig({
     enabled: true,
     autoMount: true,
     shortcut: ['Cmd+K', 'Ctrl+K', 'Meta+K'],
-    position: 'bottom-right',
+    position: 'bottom-left',
     persona: {
       name: 'Nox',
       avatar: '/eve.png',
