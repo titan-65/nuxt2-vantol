@@ -174,7 +174,10 @@ const inputQuery = ref("");
 const inputRef = ref<HTMLInputElement | null>(null);
 const chatContainer = ref<HTMLElement | null>(null);
 const avatarUrl = ref("/eve.png");
-const positionClass = ref("bottom-right");
+const runtimeConfig = useRuntimeConfig();
+const positionClass = ref(
+  (runtimeConfig.public.assistant?.position as string) || "bottom-right",
+);
 
 function handleAvatarError() {
   avatarUrl.value = "https://ui-avatars.com/api/?name=Nox+AI&background=059669&color=fff";
