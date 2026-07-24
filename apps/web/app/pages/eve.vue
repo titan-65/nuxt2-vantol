@@ -57,12 +57,12 @@ useSeoMeta({
       <!-- Main Studio Grid -->
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 h-[calc(100vh-220px)] min-h-[700px]">
         <!-- Left: Interactive Chat Agent (7 cols) -->
-        <div class="lg:col-span-7 h-full">
+        <div class="lg:col-span-7 lg:order-1 h-full">
           <EveAgentChat />
         </div>
 
         <!-- Right: Filesystem Inspector (5 cols) -->
-        <div class="lg:col-span-5 h-full flex flex-col bg-[#111] border border-white/10 rounded-2xl overflow-hidden shadow-2xl">
+        <div class="lg:col-span-5 lg:order-2 h-full flex flex-col bg-[#111] border border-white/10 rounded-2xl overflow-hidden shadow-2xl">
           <!-- Inspector Header -->
           <div class="px-5 py-4 bg-black/60 border-b border-white/10 flex items-center justify-between">
             <div class="flex items-center gap-2 text-sm font-semibold text-white">
