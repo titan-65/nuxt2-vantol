@@ -1,4 +1,4 @@
-import type { EnvSchema, ValidatedEnv, ValidationError } from './types';
+import type { EnvSchema, ValidatedEnv, ValidationError } from "./types";
 import {
   isNonEmpty,
   isValidUrl,
@@ -7,7 +7,7 @@ import {
   isBoolean,
   parseBoolean,
   isEnum,
-} from './validators';
+} from "./validators";
 
 export function validateEnv<T extends EnvSchema>(
   schema: T,
@@ -39,11 +39,11 @@ export function validateEnv<T extends EnvSchema>(
 
     // Validate based on type
     switch (field.type) {
-      case 'string': {
+      case "string": {
         result[key] = raw;
         break;
       }
-      case 'url': {
+      case "url": {
         if (!isValidUrl(raw)) {
           errors.push({
             key,
@@ -55,7 +55,7 @@ export function validateEnv<T extends EnvSchema>(
         }
         break;
       }
-      case 'number': {
+      case "number": {
         if (!isNumber(raw)) {
           errors.push({
             key,
@@ -67,7 +67,7 @@ export function validateEnv<T extends EnvSchema>(
         }
         break;
       }
-      case 'email': {
+      case "email": {
         if (!isEmail(raw)) {
           errors.push({
             key,
@@ -79,7 +79,7 @@ export function validateEnv<T extends EnvSchema>(
         }
         break;
       }
-      case 'boolean': {
+      case "boolean": {
         if (!isBoolean(raw)) {
           errors.push({
             key,
@@ -91,11 +91,11 @@ export function validateEnv<T extends EnvSchema>(
         }
         break;
       }
-      case 'enum': {
+      case "enum": {
         if (!field.values || !isEnum(raw, field.values)) {
           errors.push({
             key,
-            message: `${key} must be one of: ${field.values?.join(', ')} (got "${raw}")`,
+            message: `${key} must be one of: ${field.values?.join(", ")} (got "${raw}")`,
             value: raw,
           });
         } else {
@@ -110,7 +110,7 @@ export function validateEnv<T extends EnvSchema>(
   }
 
   if (errors.length > 0) {
-    const messages = errors.map((e) => `  ✗ ${e.message}`).join('\n');
+    const messages = errors.map((e) => `  ✗ ${e.message}`).join("\n");
     throw new Error(`env-check failed:\n${messages}`);
   }
 

@@ -1,6 +1,6 @@
 <script setup lang="ts">
-import DotField from '~/components/backgrounds/DotField.vue'
-import ColorBends from '~/components/backgrounds/ColorBends.vue'
+import DotField from "~/components/backgrounds/DotField.vue";
+import ColorBends from "~/components/backgrounds/ColorBends.vue";
 </script>
 
 <template>

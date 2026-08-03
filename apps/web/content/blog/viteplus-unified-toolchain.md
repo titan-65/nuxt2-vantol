@@ -88,7 +88,9 @@ vp build         # Build for production
 You can also run `vp` on its own for an interactive command picker.
 
 ::BlogCard
+
 ### Why This Matters
+
 Instead of configuring `nvm`, `npm`, `vitest`, `eslint`, `prettier`, and build scripts separately, `vp` handles all of it with a consistent interface across every project.
 ::
 
@@ -169,4 +171,4 @@ Build once with `vp build` and deploy anywhere — Nitro handles the server runt
 
 Vite+ isn't reinventing the wheel — it's putting high-performance tires on it. By unifying your runtime, package manager, linter, formatter, test runner, and bundler into a single CLI, it removes the tooling tax that slows down every new project.
 
-If Vite was the upgrade from Webpack, Vite+ is the upgrade from *tool fatigue*.
+If Vite was the upgrade from Webpack, Vite+ is the upgrade from _tool fatigue_.

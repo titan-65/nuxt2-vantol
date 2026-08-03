@@ -1,6 +1,6 @@
-const fs = require('fs');
+const fs = require("fs");
 
-let content = fs.readFileSync('apps/zhyjen/convex/lessons.ts', 'utf-8');
+let content = fs.readFileSync("apps/zhyjen/convex/lessons.ts", "utf-8");
 
 // Insert the new lesson before zero-intro-and-graph
 const newLesson = `      {
@@ -41,7 +41,9 @@ const newLesson = `      {
       },
 `;
 
-const insertIndex = content.indexOf('      {\n        title: "Introduction to Zero & Graph Architecture",');
+const insertIndex = content.indexOf(
+  '      {\n        title: "Introduction to Zero & Graph Architecture",',
+);
 if (insertIndex === -1) {
   console.error("Could not find insertion point!");
   process.exit(1);
@@ -51,14 +53,14 @@ content = content.slice(0, insertIndex) + newLesson + content.slice(insertIndex)
 
 // Bump orders
 const orderBumps = [
-  { slug: 'zero-intro-and-graph', old: 7, new: 8 },
-  { slug: 'zero-daily-loop', old: 8, new: 9 },
-  { slug: 'zero-graph-editing', old: 9, new: 10 },
-  { slug: 'zero-projections', old: 10, new: 11 },
-  { slug: 'zero-diagnostics', old: 11, new: 12 },
-  { slug: 'zero-compilation', old: 12, new: 13 },
-  { slug: 'zero-stdlib-and-system', old: 13, new: 14 },
-  { slug: 'zero-collaboration', old: 14, new: 15 },
+  { slug: "zero-intro-and-graph", old: 7, new: 8 },
+  { slug: "zero-daily-loop", old: 8, new: 9 },
+  { slug: "zero-graph-editing", old: 9, new: 10 },
+  { slug: "zero-projections", old: 10, new: 11 },
+  { slug: "zero-diagnostics", old: 11, new: 12 },
+  { slug: "zero-compilation", old: 12, new: 13 },
+  { slug: "zero-stdlib-and-system", old: 13, new: 14 },
+  { slug: "zero-collaboration", old: 14, new: 15 },
 ];
 
 for (const bump of orderBumps) {
@@ -68,10 +70,10 @@ for (const bump of orderBumps) {
     console.error(`Could not uniquely find slug ${bump.slug}`);
     process.exit(1);
   }
-  
+
   const modifiedRight = split[1].replace(`order: ${bump.old},`, `order: ${bump.new},`);
   content = split[0] + target + modifiedRight;
 }
 
-fs.writeFileSync('apps/zhyjen/convex/lessons.ts', content);
-console.log('Successfully updated lessons.ts');
+fs.writeFileSync("apps/zhyjen/convex/lessons.ts", content);
+console.log("Successfully updated lessons.ts");

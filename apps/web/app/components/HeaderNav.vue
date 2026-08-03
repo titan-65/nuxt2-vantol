@@ -172,7 +172,12 @@ watch(
           :title="`Signed in as ${authUser.name}. Click to sign out.`"
           @click="handleSignOut"
         >
-          <img v-if="authUser.image" :src="authUser.image" :alt="authUser.name" class="size-full object-cover" />
+          <img
+            v-if="authUser.image"
+            :src="authUser.image"
+            :alt="authUser.name"
+            class="size-full object-cover"
+          />
           <span v-else class="text-xs font-bold">{{ authUser.name?.charAt(0) }}</span>
         </button>
         <button
@@ -190,166 +195,171 @@ watch(
       <!-- Mobile -->
       <ClientOnly>
         <div class="flex lg:hidden items-center gap-2">
-        <button
-          @click="openCommandPalette"
-          class="p-2 text-zinc-500 hover:text-[#171717] transition-colors dark:text-zinc-400 dark:hover:text-white"
-          aria-label="Search"
-        >
-          <Search class="w-5 h-5" />
-        </button>
-
-        <Sheet v-model:open="isOpen">
-          <SheetTrigger as-child>
-            <button
-              class="p-2 text-zinc-500 hover:text-[#171717] transition-colors dark:text-zinc-400 dark:hover:text-white"
-              aria-label="Open navigation menu"
-              :aria-expanded="isOpen"
-            >
-              <Menu class="h-5 w-5" />
-            </button>
-          </SheetTrigger>
-
-          <SheetContent
-            side="right"
-            class="w-[300px] bg-white text-[#171717] border-l border-black/10 flex flex-col p-0 dark:bg-[#0a0a0a] dark:text-white dark:border-white/10"
+          <button
+            @click="openCommandPalette"
+            class="p-2 text-zinc-500 hover:text-[#171717] transition-colors dark:text-zinc-400 dark:hover:text-white"
+            aria-label="Search"
           >
-            <!-- Sheet Header -->
-            <div
-              class="flex items-center justify-between px-6 h-16 border-b border-black/10 shrink-0 dark:border-white/10"
-            >
-              <NuxtLink
-                to="/"
-                class="flex items-center gap-2 text-[#171717] dark:text-white"
-                @click="handleLinkClick"
-              >
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                  class="text-[#f5c542]"
-                >
-                  <path
-                    d="M12 2L2 7L12 12L22 7L12 2Z"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                  <path
-                    d="M2 17L12 22L22 17"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                  <path
-                    d="M2 12L12 17L22 12"
-                    stroke="currentColor"
-                    stroke-width="2"
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                  />
-                </svg>
-                <span class="font-bold tracking-tight">Vantol</span>
-              </NuxtLink>
-            </div>
+            <Search class="w-5 h-5" />
+          </button>
 
-            <!-- Nav Links -->
-            <nav class="flex-1 overflow-y-auto px-6 py-6">
-              <div class="flex flex-col gap-1">
+          <Sheet v-model:open="isOpen">
+            <SheetTrigger as-child>
+              <button
+                class="p-2 text-zinc-500 hover:text-[#171717] transition-colors dark:text-zinc-400 dark:hover:text-white"
+                aria-label="Open navigation menu"
+                :aria-expanded="isOpen"
+              >
+                <Menu class="h-5 w-5" />
+              </button>
+            </SheetTrigger>
+
+            <SheetContent
+              side="right"
+              class="w-[300px] bg-white text-[#171717] border-l border-black/10 flex flex-col p-0 dark:bg-[#0a0a0a] dark:text-white dark:border-white/10"
+            >
+              <!-- Sheet Header -->
+              <div
+                class="flex items-center justify-between px-6 h-16 border-b border-black/10 shrink-0 dark:border-white/10"
+              >
                 <NuxtLink
-                  v-for="link in allLinks"
-                  :key="link.to"
-                  :to="link.to"
-                  class="flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-lg transition-colors"
-                  :class="
-                    isActive(link.to)
-                      ? 'text-[#171717] bg-black/5 dark:text-white dark:bg-white/10'
-                      : 'text-zinc-500 hover:text-[#171717] hover:bg-black/5 dark:text-zinc-400 dark:hover:text-white dark:hover:bg-white/5'
-                  "
+                  to="/"
+                  class="flex items-center gap-2 text-[#171717] dark:text-white"
                   @click="handleLinkClick"
                 >
-                  <span>{{ link.name }}</span>
                   <svg
-                    v-if="isActive(link.to)"
-                    width="16"
-                    height="16"
+                    width="20"
+                    height="20"
                     viewBox="0 0 24 24"
                     fill="none"
-                    stroke="currentColor"
-                    stroke-width="2"
+                    xmlns="http://www.w3.org/2000/svg"
+                    class="text-[#f5c542]"
                   >
-                    <path d="M5 12h14M12 5l7 7-7 7" />
+                    <path
+                      d="M12 2L2 7L12 12L22 7L12 2Z"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M2 17L12 22L22 17"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
+                    <path
+                      d="M2 12L12 17L22 12"
+                      stroke="currentColor"
+                      stroke-width="2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                    />
                   </svg>
+                  <span class="font-bold tracking-tight">Vantol</span>
                 </NuxtLink>
-                <p
-                  class="mt-4 border-t border-black/10 px-3 pt-4 text-center font-mono text-xs tracking-[0.3em] text-zinc-400 dark:border-white/10 dark:text-zinc-600"
-                  title="Try this key sequence anywhere"
-                >
-                  ↑ ↑ ↓ ↓
-                </p>
               </div>
-            </nav>
 
-            <!-- Sheet Footer -->
-            <div class="px-6 py-5 border-t border-black/10 shrink-0 dark:border-white/10">
-              <NuxtLink
-                v-if="!authUser"
-                to="/login"
-                class="mb-4 block text-sm font-medium text-zinc-500 hover:text-[#171717] dark:text-zinc-400 dark:hover:text-white"
-                @click="handleLinkClick"
-              >
-                Sign in with GitHub
-              </NuxtLink>
-              <button
-                v-else
-                type="button"
-                class="mb-4 flex w-full items-center gap-2 text-left text-sm text-zinc-500 dark:text-zinc-400"
-                @click="handleSignOut"
-              >
-                <img v-if="authUser.image" :src="authUser.image" :alt="authUser.name" class="size-7 rounded-full object-cover" />
-                <span class="truncate">{{ authUser.name }} · Sign out</span>
-              </button>
-              <div class="flex items-center justify-between">
-                <div class="flex items-center gap-4">
-                  <a
-                    href="https://github.com/titan-65"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="text-zinc-500 hover:text-[#171717] transition-colors dark:text-zinc-400 dark:hover:text-white"
-                    aria-label="GitHub"
+              <!-- Nav Links -->
+              <nav class="flex-1 overflow-y-auto px-6 py-6">
+                <div class="flex flex-col gap-1">
+                  <NuxtLink
+                    v-for="link in allLinks"
+                    :key="link.to"
+                    :to="link.to"
+                    class="flex items-center justify-between px-3 py-2.5 text-sm font-medium rounded-lg transition-colors"
+                    :class="
+                      isActive(link.to)
+                        ? 'text-[#171717] bg-black/5 dark:text-white dark:bg-white/10'
+                        : 'text-zinc-500 hover:text-[#171717] hover:bg-black/5 dark:text-zinc-400 dark:hover:text-white dark:hover:bg-white/5'
+                    "
+                    @click="handleLinkClick"
                   >
-                    <Github class="w-5 h-5" />
-                  </a>
-                  <a
-                    href="https://twitter.com/vantolbennett"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="text-zinc-500 hover:text-[#171717] transition-colors dark:text-zinc-400 dark:hover:text-white"
-                    aria-label="Twitter"
+                    <span>{{ link.name }}</span>
+                    <svg
+                      v-if="isActive(link.to)"
+                      width="16"
+                      height="16"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2"
+                    >
+                      <path d="M5 12h14M12 5l7 7-7 7" />
+                    </svg>
+                  </NuxtLink>
+                  <p
+                    class="mt-4 border-t border-black/10 px-3 pt-4 text-center font-mono text-xs tracking-[0.3em] text-zinc-400 dark:border-white/10 dark:text-zinc-600"
+                    title="Try this key sequence anywhere"
                   >
-                    <Twitter class="w-5 h-5" />
-                  </a>
+                    ↑ ↑ ↓ ↓
+                  </p>
                 </div>
-                <button
-                  @click="
-                    openCommandPalette();
-                    isOpen = false;
-                  "
-                  class="flex items-center gap-1.5 border border-black/10 px-3 py-1.5 text-xs font-mono text-zinc-500 hover:border-black/30 hover:text-[#171717] transition-colors rounded-lg dark:border-white/10 dark:hover:border-white/30 dark:hover:text-white"
-                  aria-label="Open search"
+              </nav>
+
+              <!-- Sheet Footer -->
+              <div class="px-6 py-5 border-t border-black/10 shrink-0 dark:border-white/10">
+                <NuxtLink
+                  v-if="!authUser"
+                  to="/login"
+                  class="mb-4 block text-sm font-medium text-zinc-500 hover:text-[#171717] dark:text-zinc-400 dark:hover:text-white"
+                  @click="handleLinkClick"
                 >
-                  <Command class="w-3 h-3" />
-                  <span>Search</span>
+                  Sign in with GitHub
+                </NuxtLink>
+                <button
+                  v-else
+                  type="button"
+                  class="mb-4 flex w-full items-center gap-2 text-left text-sm text-zinc-500 dark:text-zinc-400"
+                  @click="handleSignOut"
+                >
+                  <img
+                    v-if="authUser.image"
+                    :src="authUser.image"
+                    :alt="authUser.name"
+                    class="size-7 rounded-full object-cover"
+                  />
+                  <span class="truncate">{{ authUser.name }} · Sign out</span>
                 </button>
+                <div class="flex items-center justify-between">
+                  <div class="flex items-center gap-4">
+                    <a
+                      href="https://github.com/titan-65"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="text-zinc-500 hover:text-[#171717] transition-colors dark:text-zinc-400 dark:hover:text-white"
+                      aria-label="GitHub"
+                    >
+                      <Github class="w-5 h-5" />
+                    </a>
+                    <a
+                      href="https://twitter.com/vantolbennett"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      class="text-zinc-500 hover:text-[#171717] transition-colors dark:text-zinc-400 dark:hover:text-white"
+                      aria-label="Twitter"
+                    >
+                      <Twitter class="w-5 h-5" />
+                    </a>
+                  </div>
+                  <button
+                    @click="
+                      openCommandPalette();
+                      isOpen = false;
+                    "
+                    class="flex items-center gap-1.5 border border-black/10 px-3 py-1.5 text-xs font-mono text-zinc-500 hover:border-black/30 hover:text-[#171717] transition-colors rounded-lg dark:border-white/10 dark:hover:border-white/30 dark:hover:text-white"
+                    aria-label="Open search"
+                  >
+                    <Command class="w-3 h-3" />
+                    <span>Search</span>
+                  </button>
+                </div>
+                <div class="mt-5">
+                  <DarkModeToggle />
+                </div>
               </div>
-              <div class="mt-5">
-                <DarkModeToggle />
-              </div>
-            </div>
-          </SheetContent>
+            </SheetContent>
           </Sheet>
         </div>
       </ClientOnly>

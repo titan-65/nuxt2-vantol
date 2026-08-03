@@ -1,10 +1,8 @@
 {
   "name": "vantolbennett-monorepo",
+  "version": "0.1.0",
   "private": true,
   "type": "module",
-  "devDependencies": {
-    "vite-plus": "^0.1.14"
-  },
   "scripts": {
     "dev": "pnpm --filter @vvantol2000/web dev",
     "generate": "pnpm --filter @vvantol2000/web generate",
@@ -14,6 +12,10 @@
     "pack:env-check": "pnpm --filter @vvantol2000/env-check build",
     "pack:deploy-hooks": "pnpm --filter @vvantol2000/vercel-deploy-hooks build"
   },
+  "devDependencies": {
+    "vite-plus": "^0.1.14"
+  },
+  "packageManager": "pnpm@10.33.0",
   "pnpm": {
     "catalog": {
       "vite": "^6.3.0",
@@ -38,7 +40,5 @@
       "protobufjs",
       "vue-demi"
     ]
-  },
-  "packageManager": "pnpm@10.33.0",
-  "version": "0.1.0"
+  }
 }

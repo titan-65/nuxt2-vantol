@@ -21,10 +21,10 @@ npm install @vvantol2000/vercel-deploy-hooks
 ```
 
 ```ts
-import { triggerDeploy } from '@vvantol2000/vercel-deploy-hooks';
+import { triggerDeploy } from "@vvantol2000/vercel-deploy-hooks";
 
 const result = await triggerDeploy({
-  hookUrl: 'https://api.vercel.com/v1/integrations/deploy/prj_ABC123/your-hook-token',
+  hookUrl: "https://api.vercel.com/v1/integrations/deploy/prj_ABC123/your-hook-token",
 });
 
 console.log(result);
@@ -78,13 +78,13 @@ npx @vvantol2000/vercel-deploy-hooks
 
 ### All CLI options
 
-| Flag | Description |
-|---|---|
-| `--url <url>` | Vercel deploy hook URL |
-| `--config <path>` | Path to a JSON config file |
-| `--dry-run` | Validate the URL and print what would happen, without deploying |
-| `--no-build-cache` | Append `?buildCache=false` to skip Vercel's build cache |
-| `--help` | Show help |
+| Flag               | Description                                                     |
+| ------------------ | --------------------------------------------------------------- |
+| `--url <url>`      | Vercel deploy hook URL                                          |
+| `--config <path>`  | Path to a JSON config file                                      |
+| `--dry-run`        | Validate the URL and print what would happen, without deploying |
+| `--no-build-cache` | Append `?buildCache=false` to skip Vercel's build cache         |
+| `--help`           | Show help                                                       |
 
 ### Example output
 
@@ -105,29 +105,29 @@ vercel-deploy-hooks: deployed successfully
 Triggers a Vercel deployment and returns the job details.
 
 ```ts
-import { triggerDeploy } from '@vvantol2000/vercel-deploy-hooks';
+import { triggerDeploy } from "@vvantol2000/vercel-deploy-hooks";
 
 const result = await triggerDeploy({
-  hookUrl: 'https://api.vercel.com/v1/integrations/deploy/prj_ABC123/token',
-  noBuildCache: false,     // optional
-  timeoutMs: 30_000,       // optional (default: 30s)
+  hookUrl: "https://api.vercel.com/v1/integrations/deploy/prj_ABC123/token",
+  noBuildCache: false, // optional
+  timeoutMs: 30_000, // optional (default: 30s)
 });
 ```
 
 #### `DeployConfig`
 
-| Property | Type | Required | Description |
-|---|---|---|---|
-| `hookUrl` | `string` | Yes | Vercel deploy hook URL |
-| `noBuildCache` | `boolean` | No | Append `?buildCache=false` to skip Vercel build cache |
-| `timeoutMs` | `number` | No | Request timeout in ms (default: `30000`) |
+| Property       | Type      | Required | Description                                           |
+| -------------- | --------- | -------- | ----------------------------------------------------- |
+| `hookUrl`      | `string`  | Yes      | Vercel deploy hook URL                                |
+| `noBuildCache` | `boolean` | No       | Append `?buildCache=false` to skip Vercel build cache |
+| `timeoutMs`    | `number`  | No       | Request timeout in ms (default: `30000`)              |
 
 #### `DeployResult`
 
 ```ts
 interface DeployResult {
-  jobId: string;     // Vercel job ID (e.g., "jwx6PaurTs7K19Q9SZ4K")
-  state: string;     // "PENDING", "QUEUED", etc.
+  jobId: string; // Vercel job ID (e.g., "jwx6PaurTs7K19Q9SZ4K")
+  state: string; // "PENDING", "QUEUED", etc.
   createdAt: string; // ISO 8601 timestamp (e.g., "2026-04-01T20:32:17.240Z")
 }
 ```
@@ -175,17 +175,17 @@ try {
 
 ### Errors thrown
 
-| Scenario | Error message |
-|---|---|
-| Missing `hookUrl` | `vercel-deploy-hooks: hookUrl is required` |
-| Invalid URL | `vercel-deploy-hooks: hookUrl must be a valid URL (got "...")` |
-| Non-Vercel URL | `vercel-deploy-hooks: hookUrl must be a Vercel deploy hook URL` |
-| HTTP error (401, 404, etc.) | `vercel-deploy-hooks: deploy failed with status 404` |
-| Vercel returns error body | `vercel-deploy-hooks: <Vercel error message>` |
-| Response is not JSON | `vercel-deploy-hooks: expected JSON response from Vercel, got: ...` |
-| Response missing `job` field | `vercel-deploy-hooks: unexpected response format — no "job" field` |
-| Request timeout | `vercel-deploy-hooks: request timed out after 30s` |
-| Network failure | `vercel-deploy-hooks: network error — ECONNREFUSED` |
+| Scenario                     | Error message                                                       |
+| ---------------------------- | ------------------------------------------------------------------- |
+| Missing `hookUrl`            | `vercel-deploy-hooks: hookUrl is required`                          |
+| Invalid URL                  | `vercel-deploy-hooks: hookUrl must be a valid URL (got "...")`      |
+| Non-Vercel URL               | `vercel-deploy-hooks: hookUrl must be a Vercel deploy hook URL`     |
+| HTTP error (401, 404, etc.)  | `vercel-deploy-hooks: deploy failed with status 404`                |
+| Vercel returns error body    | `vercel-deploy-hooks: <Vercel error message>`                       |
+| Response is not JSON         | `vercel-deploy-hooks: expected JSON response from Vercel, got: ...` |
+| Response missing `job` field | `vercel-deploy-hooks: unexpected response format — no "job" field`  |
+| Request timeout              | `vercel-deploy-hooks: request timed out after 30s`                  |
+| Network failure              | `vercel-deploy-hooks: network error — ECONNREFUSED`                 |
 
 ---
 
@@ -195,7 +195,7 @@ try {
 
 ```ts
 // In your CMS webhook handler (e.g., Contentful, Sanity, Strapi)
-import { triggerDeploy } from '@vvantol2000/vercel-deploy-hooks';
+import { triggerDeploy } from "@vvantol2000/vercel-deploy-hooks";
 
 export async function onContentPublished() {
   await triggerDeploy({
@@ -208,7 +208,7 @@ export async function onContentPublished() {
 
 ```ts
 // Run daily at 6am via cron or GitHub Actions
-import { triggerDeploy } from '@vvantol2000/vercel-deploy-hooks';
+import { triggerDeploy } from "@vvantol2000/vercel-deploy-hooks";
 
 const result = await triggerDeploy({
   hookUrl: process.env.VERCEL_DEPLOY_HOOK_URL,
@@ -235,13 +235,13 @@ jobs:
 
 ```ts
 // server/api/rebuild.post.ts
-import { triggerDeploy } from '@vvantol2000/vercel-deploy-hooks';
+import { triggerDeploy } from "@vvantol2000/vercel-deploy-hooks";
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
 
   if (body.secret !== process.env.REBUILD_SECRET) {
-    throw createError({ statusCode: 401, message: 'Unauthorized' });
+    throw createError({ statusCode: 401, message: "Unauthorized" });
   }
 
   const result = await triggerDeploy({

@@ -1,34 +1,34 @@
 <script setup lang="ts">
 useHead({
-  title: 'Admin - VantolBennett'
-})
+  title: "Admin - VantolBennett",
+});
 
 definePageMeta({
-  middleware: ['admin-auth']
-})
+  middleware: ["admin-auth"],
+});
 
-const { subscribers, loading, totalCount, fetchSubscribers, exportCSV } = useNewsletter()
+const { subscribers, loading, totalCount, fetchSubscribers, exportCSV } = useNewsletter();
 const {
   totalViews,
   totalComments,
   totalSubscribers: analyticsSubscribers,
   popularPosts,
   loading: analyticsLoading,
-  fetchAnalytics
-} = useAnalytics()
+  fetchAnalytics,
+} = useAnalytics();
 
 onMounted(() => {
-  fetchSubscribers()
-  fetchAnalytics()
-})
+  fetchSubscribers();
+  fetchAnalytics();
+});
 
 function formatDate(timestamp: number) {
-  if (!timestamp) return ''
-  return new Date(timestamp).toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric'
-  })
+  if (!timestamp) return "";
+  return new Date(timestamp).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  });
 }
 </script>
 
@@ -36,7 +36,9 @@ function formatDate(timestamp: number) {
   <div class="min-h-screen bg-[#0a0a0a] text-white font-sans">
     <div class="max-w-4xl mx-auto px-6 py-20">
       <div class="max-w-3xl mx-auto text-center mb-16">
-        <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-4">Administration</p>
+        <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-4">
+          Administration
+        </p>
         <h1 class="text-4xl md:text-5xl font-semibold tracking-tight mb-6">Content Management</h1>
         <p class="text-xl text-zinc-400 font-light leading-relaxed">
           Manage your blog posts and site content using Nuxt Studio.
@@ -46,15 +48,21 @@ function formatDate(timestamp: number) {
       <!-- Analytics Stats Row -->
       <div class="grid gap-4 md:grid-cols-3 max-w-4xl mx-auto mb-8">
         <div class="bg-[#111] border border-white/10 rounded-xl p-6 text-center">
-          <div class="text-3xl font-bold mb-1">{{ analyticsLoading ? '...' : totalViews.toLocaleString() }}</div>
+          <div class="text-3xl font-bold mb-1">
+            {{ analyticsLoading ? "..." : totalViews.toLocaleString() }}
+          </div>
           <div class="text-xs text-zinc-500 uppercase tracking-widest">Total Views</div>
         </div>
         <div class="bg-[#111] border border-white/10 rounded-xl p-6 text-center">
-          <div class="text-3xl font-bold mb-1">{{ analyticsLoading ? '...' : totalComments.toLocaleString() }}</div>
+          <div class="text-3xl font-bold mb-1">
+            {{ analyticsLoading ? "..." : totalComments.toLocaleString() }}
+          </div>
           <div class="text-xs text-zinc-500 uppercase tracking-widest">Total Comments</div>
         </div>
         <div class="bg-[#111] border border-white/10 rounded-xl p-6 text-center">
-          <div class="text-3xl font-bold mb-1">{{ analyticsLoading ? '...' : analyticsSubscribers.toLocaleString() }}</div>
+          <div class="text-3xl font-bold mb-1">
+            {{ analyticsLoading ? "..." : analyticsSubscribers.toLocaleString() }}
+          </div>
           <div class="text-xs text-zinc-500 uppercase tracking-widest">Subscribers</div>
         </div>
       </div>
@@ -92,10 +100,13 @@ function formatDate(timestamp: number) {
 
       <div class="grid gap-8 md:grid-cols-2 max-w-4xl mx-auto mb-12">
         <!-- Local Content Card -->
-        <div class="bg-[#111] border border-white/10 rounded-xl p-8 hover:border-white/20 transition-colors flex flex-col md:col-span-2">
+        <div
+          class="bg-[#111] border border-white/10 rounded-xl p-8 hover:border-white/20 transition-colors flex flex-col md:col-span-2"
+        >
           <h2 class="text-xl font-semibold mb-3 uppercase tracking-wide">Local Content</h2>
           <p class="text-sm text-zinc-500 mb-6 flex-grow">
-            Edit markdown files directly in your local environment. Changes in <code class="text-[#f5c542]">content/</code> are reflected immediately.
+            Edit markdown files directly in your local environment. Changes in
+            <code class="text-[#f5c542]">content/</code> are reflected immediately.
           </p>
           <div class="mt-auto">
             <a
@@ -129,7 +140,9 @@ function formatDate(timestamp: number) {
 
           <!-- Loading State -->
           <div v-if="loading" class="text-center py-8">
-            <div class="inline-block w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin"></div>
+            <div
+              class="inline-block w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin"
+            ></div>
           </div>
 
           <!-- Subscribers List -->
@@ -141,7 +154,9 @@ function formatDate(timestamp: number) {
             >
               <div class="flex items-center gap-3">
                 <span class="text-sm">{{ sub.email }}</span>
-                <span class="text-[10px] text-zinc-500 uppercase bg-white/5 px-2 py-0.5 rounded">{{ sub.source }}</span>
+                <span class="text-[10px] text-zinc-500 uppercase bg-white/5 px-2 py-0.5 rounded">{{
+                  sub.source
+                }}</span>
               </div>
               <span class="text-xs text-zinc-600">{{ formatDate(sub.subscribedAt) }}</span>
             </div>

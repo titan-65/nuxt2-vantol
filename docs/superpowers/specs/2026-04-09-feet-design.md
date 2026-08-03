@@ -43,11 +43,13 @@ src/
 **Purpose:** Auto-detect available scripts from project files.
 
 **Supported sources:**
+
 - `package.json` → `scripts` field
 - `Makefile` → targets (first word of each line without colons)
 - `*.cmake` → cmake targets (if found)
 
 **Implementation:**
+
 ```typescript
 interface DetectedScript {
   name: string;
@@ -56,7 +58,7 @@ interface DetectedScript {
   description?: string;
 }
 
-export async function detectScripts(projectDir: string): Promise<DetectedScript[]>
+export async function detectScripts(projectDir: string): Promise<DetectedScript[]>;
 ```
 
 ### 2. Script Runner (`script_run`)
@@ -64,6 +66,7 @@ export async function detectScripts(projectDir: string): Promise<DetectedScript[
 **Purpose:** Execute a detected script with configurable output.
 
 **Parameters:**
+
 ```typescript
 {
   script: string;           // Script name or full command
@@ -73,11 +76,13 @@ export async function detectScripts(projectDir: string): Promise<DetectedScript[
 ```
 
 **Modes:**
+
 - `stream`: Real-time output streaming via tool result chunks
 - `summary`: Return output after completion
 - `both`: Stream while running, include summary at end
 
 **Behavior:**
+
 1. If script name provided, look up via script detector
 2. If full command provided, execute directly
 3. Stream output based on mode
@@ -90,13 +95,14 @@ export async function detectScripts(projectDir: string): Promise<DetectedScript[
 **State stored in-memory** - `ProcessManager` class with Map of active processes.
 
 **Process interface:**
+
 ```typescript
 interface ManagedProcess {
-  id: string;              // UUID
+  id: string; // UUID
   name: string;
   command: string;
   cwd: string;
-  pid: number;             // OS process ID
+  pid: number; // OS process ID
   startedAt: number;
   status: "running" | "stopped" | "exited";
   exitCode?: number;
@@ -106,6 +112,7 @@ interface ManagedProcess {
 **Tools:**
 
 #### `process_start`
+
 ```typescript
 {
   command: string;         // Command to run
@@ -116,6 +123,7 @@ interface ManagedProcess {
 ```
 
 #### `process_stop`
+
 ```typescript
 {
   id: string;              // Process ID from process_start
@@ -125,12 +133,14 @@ interface ManagedProcess {
 ```
 
 #### `process_list`
+
 ```typescript
 // No parameters
 // Returns: Array of ManagedProcess
 ```
 
 #### `process_logs`
+
 ```typescript
 {
   id: string;
@@ -144,6 +154,7 @@ interface ManagedProcess {
 **Purpose:** Create persistent terminal sessions that survive across tool calls.
 
 **Session interface:**
+
 ```typescript
 interface TerminalSession {
   id: string;
@@ -159,6 +170,7 @@ interface TerminalSession {
 **Tools:**
 
 #### `session_create`
+
 ```typescript
 {
   name?: string;           // Optional friendly name
@@ -168,6 +180,7 @@ interface TerminalSession {
 ```
 
 #### `session_attach`
+
 ```typescript
 {
   id: string;
@@ -192,6 +205,7 @@ interface TerminalSession {
 ```
 
 **Behavior:**
+
 1. Start agent loop with max iterations based on timeout estimate
 2. Every N iterations, checkpoint progress to shared state
 3. If timeout reached, stop agent and return current state

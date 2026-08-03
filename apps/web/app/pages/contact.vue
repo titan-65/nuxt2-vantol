@@ -1,52 +1,52 @@
 <script setup lang="ts">
-import { Mail, Twitter, Github, Linkedin } from 'lucide-vue-next'
+import { Mail, Twitter, Github, Linkedin } from "lucide-vue-next";
 
 useSeoMeta({
-  title: 'Contact - VantolBennett',
-  description: 'Get in touch with Vantol R. Bennett',
-})
+  title: "Contact - VantolBennett",
+  description: "Get in touch with Vantol R. Bennett",
+});
 
 const socials = [
   {
-    name: 'Email',
+    name: "Email",
     icon: Mail,
-    href: 'mailto:vantolbennett@gmail.com',
-    label: 'vantolbennettclm@gmail.com',
-    description: 'Send me an email'
+    href: "mailto:vantolbennett@gmail.com",
+    label: "vantolbennettclm@gmail.com",
+    description: "Send me an email",
   },
   {
-    name: 'Bluesky',
+    name: "Bluesky",
     icon: Twitter,
-    href: 'https://bsky.app/profile/vantolbennett.bsky.social',
-    label: '@vantolbennett.bsky.social',
-    description: 'Follow me on Twitter'
+    href: "https://bsky.app/profile/vantolbennett.bsky.social",
+    label: "@vantolbennett.bsky.social",
+    description: "Follow me on Twitter",
   },
   {
-    name: 'GitHub',
+    name: "GitHub",
     icon: Github,
-    href: 'https://github.com/titan-65',
-    label: 'titan-65',
-    description: 'Check out my projects'
+    href: "https://github.com/titan-65",
+    label: "titan-65",
+    description: "Check out my projects",
   },
   {
-    name: 'LinkedIn',
+    name: "LinkedIn",
     icon: Linkedin,
-    href: 'https://linkedin.com/in/vantolbennett',
-    label: 'vantolbennett',
-    description: 'Connect on LinkedIn'
-  }
-]
+    href: "https://linkedin.com/in/vantolbennett",
+    label: "vantolbennett",
+    description: "Connect on LinkedIn",
+  },
+];
 
 const formData = ref({
-  name: '',
-  email: '',
-  subject: '',
-  message: ''
-})
+  name: "",
+  email: "",
+  subject: "",
+  message: "",
+});
 
 const handleSubmit = () => {
-  console.log('Form submitted:', formData.value)
-}
+  console.log("Form submitted:", formData.value);
+};
 </script>
 
 <template>
@@ -55,9 +55,13 @@ const handleSubmit = () => {
     <section class="py-20 border-b border-white/10">
       <div class="max-w-[1088px] mx-auto px-6">
         <div class="max-w-3xl">
-          <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-4">Get In Touch</p>
+          <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-4">
+            Get In Touch
+          </p>
           <h1 class="text-5xl md:text-6xl font-semibold tracking-tight mb-8">Contact Me</h1>
-          <p class="text-xl text-zinc-400 font-light leading-relaxed border-l-2 border-white/10 pl-6">
+          <p
+            class="text-xl text-zinc-400 font-light leading-relaxed border-l-2 border-white/10 pl-6"
+          >
             Have a question or want to work together? Feel free to reach out!
           </p>
         </div>
@@ -72,12 +76,21 @@ const handleSubmit = () => {
           <div>
             <div class="mb-8">
               <h2 class="text-2xl font-semibold mb-2">Send a Message</h2>
-              <p class="text-zinc-500 font-light">Fill out the form below and I'll get back to you.</p>
+              <p class="text-zinc-500 font-light">
+                Fill out the form below and I'll get back to you.
+              </p>
             </div>
 
-            <form @submit.prevent="handleSubmit" class="space-y-6 border border-white/10 p-8 bg-[#111] rounded-xl">
+            <form
+              @submit.prevent="handleSubmit"
+              class="space-y-6 border border-white/10 p-8 bg-[#111] rounded-xl"
+            >
               <div class="space-y-2">
-                <label for="name" class="text-[11px] font-bold uppercase tracking-widest text-zinc-500">Name</label>
+                <label
+                  for="name"
+                  class="text-[11px] font-bold uppercase tracking-widest text-zinc-500"
+                  >Name</label
+                >
                 <input
                   id="name"
                   v-model="formData.name"
@@ -88,7 +101,11 @@ const handleSubmit = () => {
               </div>
 
               <div class="space-y-2">
-                <label for="email" class="text-[11px] font-bold uppercase tracking-widest text-zinc-500">Email</label>
+                <label
+                  for="email"
+                  class="text-[11px] font-bold uppercase tracking-widest text-zinc-500"
+                  >Email</label
+                >
                 <input
                   id="email"
                   v-model="formData.email"
@@ -100,7 +117,11 @@ const handleSubmit = () => {
               </div>
 
               <div class="space-y-2">
-                <label for="subject" class="text-[11px] font-bold uppercase tracking-widest text-zinc-500">Subject</label>
+                <label
+                  for="subject"
+                  class="text-[11px] font-bold uppercase tracking-widest text-zinc-500"
+                  >Subject</label
+                >
                 <input
                   id="subject"
                   v-model="formData.subject"
@@ -111,7 +132,11 @@ const handleSubmit = () => {
               </div>
 
               <div class="space-y-2">
-                <label for="message" class="text-[11px] font-bold uppercase tracking-widest text-zinc-500">Message</label>
+                <label
+                  for="message"
+                  class="text-[11px] font-bold uppercase tracking-widest text-zinc-500"
+                  >Message</label
+                >
                 <textarea
                   id="message"
                   v-model="formData.message"
@@ -122,7 +147,10 @@ const handleSubmit = () => {
                 ></textarea>
               </div>
 
-              <button type="submit" class="w-full bg-[#f5c542] text-black py-4 text-xs font-bold uppercase tracking-widest hover:bg-[#e0b13a] transition-colors rounded-lg">
+              <button
+                type="submit"
+                class="w-full bg-[#f5c542] text-black py-4 text-xs font-bold uppercase tracking-widest hover:bg-[#e0b13a] transition-colors rounded-lg"
+              >
                 Send Message
               </button>
             </form>
@@ -132,7 +160,9 @@ const handleSubmit = () => {
           <div class="space-y-8">
             <div>
               <h2 class="text-2xl font-semibold mb-2">Connect With Me</h2>
-              <p class="text-zinc-500 font-light">Prefer social media? You can find me on these platforms.</p>
+              <p class="text-zinc-500 font-light">
+                Prefer social media? You can find me on these platforms.
+              </p>
             </div>
 
             <div class="grid gap-4">
@@ -144,7 +174,9 @@ const handleSubmit = () => {
                 rel="noopener noreferrer"
                 class="group flex items-center gap-6 p-6 border border-white/10 bg-[#111] rounded-xl hover:border-white/20 transition-all"
               >
-                <div class="p-3 bg-zinc-900 rounded-lg group-hover:bg-[#f5c542] group-hover:text-black transition-colors">
+                <div
+                  class="p-3 bg-zinc-900 rounded-lg group-hover:bg-[#f5c542] group-hover:text-black transition-colors"
+                >
                   <component :is="social.icon" class="h-6 w-6" />
                 </div>
                 <div>

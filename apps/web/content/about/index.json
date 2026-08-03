@@ -1,7 +1,22 @@
 {
   "skills": [
-    { "category": "Frontend", "items": ["Vue.js", "Nuxt.js", "React.js", "Tanstack Start", "TypeScript", "Tailwind CSS"] },
-    { "category": "Backend", "items": ["Node.js", "Express", "Supabase", "PostgreSQL", "Firebase", "H3", "Nuxt/Nitro", "Pinia"] },
+    {
+      "category": "Frontend",
+      "items": ["Vue.js", "Nuxt.js", "React.js", "Tanstack Start", "TypeScript", "Tailwind CSS"]
+    },
+    {
+      "category": "Backend",
+      "items": [
+        "Node.js",
+        "Express",
+        "Supabase",
+        "PostgreSQL",
+        "Firebase",
+        "H3",
+        "Nuxt/Nitro",
+        "Pinia"
+      ]
+    },
     { "category": "Tools", "items": ["Git", "Docker", "WebStorm", "VS Code", "Figma"] }
   ],
   "experience": [

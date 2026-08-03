@@ -2,6 +2,26 @@
   "name": "@vvantol2000/env-check",
   "version": "1.0.1",
   "description": "Validate environment variables against a schema with clear error messages",
+  "keywords": [
+    "cli",
+    "config",
+    "env",
+    "environment",
+    "typescript",
+    "validation"
+  ],
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/titan-65/nuxt2-vantol.git",
+    "directory": "packages/env-check"
+  },
+  "bin": {
+    "env-check": "dist/cli.js"
+  },
+  "files": [
+    "dist"
+  ],
   "type": "module",
   "main": "dist/index.cjs",
   "module": "dist/index.js",
@@ -16,12 +36,9 @@
       "import": "./dist/cli.js"
     }
   },
-  "bin": {
-    "env-check": "dist/cli.js"
+  "publishConfig": {
+    "access": "public"
   },
-  "files": [
-    "dist"
-  ],
   "scripts": {
     "build": "vite build",
     "test": "vitest run",
@@ -34,22 +51,5 @@
     "vite": "^6.3.0",
     "vite-plugin-dts": "^4.5.0",
     "vitest": "^3.1.0"
-  },
-  "license": "MIT",
-  "publishConfig": {
-    "access": "public"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/titan-65/nuxt2-vantol.git",
-    "directory": "packages/env-check"
-  },
-  "keywords": [
-    "env",
-    "environment",
-    "validation",
-    "config",
-    "typescript",
-    "cli"
-  ]
+  }
 }

@@ -44,6 +44,7 @@ apps/immutable/src/
 ## Task 1: Remove Demo Code and Update Root Layout
 
 **Files:**
+
 - Delete: `src/routes/api.$.ts`, `src/routes/api.rpc.$.ts`, `src/routes/mcp.ts`
 - Delete: `src/components/demo-AIAssistant.tsx`, `src/components/demo-GuitarRecommendation.tsx`, `src/components/demo.FormComponents.tsx`
 - Delete: `src/hooks/demo-useAudioRecorder.ts`, `src/hooks/demo-useTTS.ts`, `src/hooks/demo.form-context.ts`, `src/hooks/demo.form.ts`
@@ -167,10 +168,18 @@ export default function Header() {
           <Link to="/" className="nav-link" activeProps={{ className: "nav-link is-active" }}>
             Home
           </Link>
-          <Link to="/null-agent" className="nav-link" activeProps={{ className: "nav-link is-active" }}>
+          <Link
+            to="/null-agent"
+            className="nav-link"
+            activeProps={{ className: "nav-link is-active" }}
+          >
             null-agent
           </Link>
-          <Link to="/packages" className="nav-link" activeProps={{ className: "nav-link is-active" }}>
+          <Link
+            to="/packages"
+            className="nav-link"
+            activeProps={{ className: "nav-link is-active" }}
+          >
             Packages
           </Link>
           <Link to="/about" className="nav-link" activeProps={{ className: "nav-link is-active" }}>
@@ -226,6 +235,7 @@ Expected: No import errors from removed files
 ## Task 2: Create Package Data and Shared Components
 
 **Files:**
+
 - Create: `src/data/packages.ts`
 - Create: `src/components/TerminalAnimation.tsx`
 - Create: `src/components/PackageCard.tsx`
@@ -252,7 +262,8 @@ export const packages: PackageInfo[] = [
   {
     name: "null-agent",
     npmName: "null-agent",
-    description: "Interactive coding assistant library with multi-provider LLM support, tool system, and multi-agent orchestration.",
+    description:
+      "Interactive coding assistant library with multi-provider LLM support, tool system, and multi-agent orchestration.",
     version: "0.0.0",
     installCmd: "npm install null-agent",
     githubUrl: "https://github.com/vantolbennett/vantolbennett-blog/tree/main/packages/null-agent",
@@ -269,7 +280,8 @@ export const packages: PackageInfo[] = [
   {
     name: "env-check",
     npmName: "env-check",
-    description: "Validates environment variables against a typed schema at startup with clear error messages.",
+    description:
+      "Validates environment variables against a typed schema at startup with clear error messages.",
     version: "0.0.0",
     installCmd: "npm install env-check",
     githubUrl: "https://github.com/vantolbennett/vantolbennett-blog/tree/main/packages/env-check",
@@ -278,19 +290,23 @@ export const packages: PackageInfo[] = [
   {
     name: "teacher-toolkit",
     npmName: "teacher-toolkit",
-    description: "Grade calculation utilities — letter grades, GPA conversion, weighted averages, score curving, and class statistics.",
+    description:
+      "Grade calculation utilities — letter grades, GPA conversion, weighted averages, score curving, and class statistics.",
     version: "0.0.0",
     installCmd: "npm install teacher-toolkit",
-    githubUrl: "https://github.com/vantolbennett/vantolbennett-blog/tree/main/packages/teacher-toolkit",
+    githubUrl:
+      "https://github.com/vantolbennett/vantolbennett-blog/tree/main/packages/teacher-toolkit",
     npmUrl: "https://www.npmjs.com/package/teacher-toolkit",
   },
   {
     name: "vercel-deploy-hooks",
     npmName: "vercel-deploy-hooks",
-    description: "Trigger Vercel deployments programmatically via deploy hooks. Works as both a library and CLI.",
+    description:
+      "Trigger Vercel deployments programmatically via deploy hooks. Works as both a library and CLI.",
     version: "0.0.0",
     installCmd: "npm install vercel-deploy-hooks",
-    githubUrl: "https://github.com/vantolbennett/vantolbennett-blog/tree/main/packages/vercel-deploy-hooks",
+    githubUrl:
+      "https://github.com/vantolbennett/vantolbennett-blog/tree/main/packages/vercel-deploy-hooks",
     npmUrl: "https://www.npmjs.com/package/vercel-deploy-hooks",
   },
 ];
@@ -333,9 +349,12 @@ export default function TerminalAnimation() {
 
   useEffect(() => {
     if (visibleCount >= lines.length) return;
-    const timer = setTimeout(() => {
-      setVisibleCount((c) => c + 1);
-    }, lines[visibleCount].delay - (visibleCount > 0 ? lines[visibleCount - 1].delay : 0));
+    const timer = setTimeout(
+      () => {
+        setVisibleCount((c) => c + 1);
+      },
+      lines[visibleCount].delay - (visibleCount > 0 ? lines[visibleCount - 1].delay : 0),
+    );
     return () => clearTimeout(timer);
   }, [visibleCount]);
 
@@ -515,6 +534,7 @@ Expected: No errors
 ## Task 3: Build the Landing Page
 
 **Files:**
+
 - Modify: `src/routes/index.tsx`
 
 - [ ] **Step 1: Write the landing page**
@@ -531,11 +551,31 @@ import { packages } from "../data/packages";
 export const Route = createFileRoute("/")({ component: LandingPage });
 
 const features = [
-  { icon: "🤖", title: "Multi-Provider LLM", description: "Connect to OpenAI, Anthropic, or any provider. Streaming responses by default." },
-  { icon: "🔧", title: "Built-in Tools", description: "File read/write, shell execution, git operations — 10 tools ready to go." },
-  { icon: "🖥️", title: "Four Interfaces", description: "Terminal UI, readline REPL, HTTP API server, or one-shot CLI." },
-  { icon: "🔀", title: "Orchestrator", description: "Spawn parallel sub-agents with concurrency limits and task management." },
-  { icon: "🔍", title: "Project Scanning", description: "Auto-detect language, framework, package manager, and conventions." },
+  {
+    icon: "🤖",
+    title: "Multi-Provider LLM",
+    description: "Connect to OpenAI, Anthropic, or any provider. Streaming responses by default.",
+  },
+  {
+    icon: "🔧",
+    title: "Built-in Tools",
+    description: "File read/write, shell execution, git operations — 10 tools ready to go.",
+  },
+  {
+    icon: "🖥️",
+    title: "Four Interfaces",
+    description: "Terminal UI, readline REPL, HTTP API server, or one-shot CLI.",
+  },
+  {
+    icon: "🔀",
+    title: "Orchestrator",
+    description: "Spawn parallel sub-agents with concurrency limits and task management.",
+  },
+  {
+    icon: "🔍",
+    title: "Project Scanning",
+    description: "Auto-detect language, framework, package manager, and conventions.",
+  },
 ];
 
 const codeExamples = [
@@ -605,8 +645,8 @@ function LandingPage() {
               null-agent
             </h1>
             <p className="mb-8 max-w-2xl text-base text-[var(--sea-ink-soft)] sm:text-lg">
-              Multi-provider LLM support, built-in tools, multi-agent orchestration.
-              TUI, REPL, HTTP server, or CLI — your choice of interface.
+              Multi-provider LLM support, built-in tools, multi-agent orchestration. TUI, REPL, HTTP
+              server, or CLI — your choice of interface.
             </p>
             <div className="flex flex-wrap gap-3">
               <Link
@@ -634,7 +674,13 @@ function LandingPage() {
         <p className="island-kicker mb-4 text-center">Features</p>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
           {features.map((f, i) => (
-            <FeatureCard key={f.title} title={f.title} description={f.description} icon={f.icon} index={i} />
+            <FeatureCard
+              key={f.title}
+              title={f.title}
+              description={f.description}
+              icon={f.icon}
+              index={i}
+            />
           ))}
         </div>
       </section>
@@ -658,7 +704,10 @@ function LandingPage() {
             </button>
           ))}
         </div>
-        <CodeBlock code={codeExamples[activeTab].code} filename={codeExamples[activeTab].filename} />
+        <CodeBlock
+          code={codeExamples[activeTab].code}
+          filename={codeExamples[activeTab].filename}
+        />
       </section>
 
       {/* Interface Showcase */}
@@ -666,11 +715,29 @@ function LandingPage() {
         <p className="island-kicker mb-4 text-center">Interfaces</p>
         <div className="grid gap-4 sm:grid-cols-3">
           {[
-            { title: "Terminal UI", desc: "Full interactive TUI with Ink — status bar, chat panel, animated mascot, slash commands.", icon: "🖥️" },
-            { title: "REPL", desc: "Lightweight readline interface with colored output. Quick and simple.", icon: "⌨️" },
-            { title: "HTTP Server", desc: "REST API on port 3737 with streaming SSE. Integrate with any frontend.", icon: "🌐" },
+            {
+              title: "Terminal UI",
+              desc: "Full interactive TUI with Ink — status bar, chat panel, animated mascot, slash commands.",
+              icon: "🖥️",
+            },
+            {
+              title: "REPL",
+              desc: "Lightweight readline interface with colored output. Quick and simple.",
+              icon: "⌨️",
+            },
+            {
+              title: "HTTP Server",
+              desc: "REST API on port 3737 with streaming SSE. Integrate with any frontend.",
+              icon: "🌐",
+            },
           ].map((iface, i) => (
-            <FeatureCard key={iface.title} title={iface.title} description={iface.desc} icon={iface.icon} index={i} />
+            <FeatureCard
+              key={iface.title}
+              title={iface.title}
+              description={iface.desc}
+              icon={iface.icon}
+              index={i}
+            />
           ))}
         </div>
       </section>
@@ -711,6 +778,7 @@ Expected: Typecheck passes
 ## Task 4: Build Package Listing and Detail Pages
 
 **Files:**
+
 - Create: `src/routes/packages/index.tsx`
 - Create: `src/routes/packages/env-check.tsx`
 - Create: `src/routes/packages/teacher-toolkit.tsx`
@@ -842,19 +910,20 @@ function About() {
           Immutable
         </h1>
         <p className="mb-4 max-w-3xl text-base leading-8 text-[var(--sea-ink-soft)]">
-          A package registry and showcase for open-source developer tools. Built with
-          TanStack Start, Tailwind CSS, and shadcn/ui.
+          A package registry and showcase for open-source developer tools. Built with TanStack
+          Start, Tailwind CSS, and shadcn/ui.
         </p>
         <p className="max-w-3xl text-base leading-8 text-[var(--sea-ink-soft)]">
           The flagship package is{" "}
           <Link to="/null-agent" className="text-[var(--lagoon-deep)]">
             null-agent
           </Link>
-          , an interactive coding assistant library with multi-provider LLM support.
-          Browse all packages on the{" "}
+          , an interactive coding assistant library with multi-provider LLM support. Browse all
+          packages on the{" "}
           <Link to="/packages" className="text-[var(--lagoon-deep)]">
             packages page
-          </Link>.
+          </Link>
+          .
         </p>
       </section>
     </main>
@@ -872,6 +941,7 @@ Expected: Typecheck passes, no broken imports
 ## Task 5: Build the Null-Agent Dedicated Page
 
 **Files:**
+
 - Create: `src/routes/null-agent.tsx`
 
 - [ ] **Step 1: Create `src/routes/null-agent.tsx`**
@@ -946,25 +1016,29 @@ const interfaces = [
   {
     title: "Terminal UI",
     icon: "🖥️",
-    description: "Full interactive terminal interface built with Ink (React for terminal). Features status bar showing provider/model/project info, chat panel with message bubbles, animated NullFace mascot, slash commands (/help, /clear, /context, /tasks, /config), and formatted tool call display.",
+    description:
+      "Full interactive terminal interface built with Ink (React for terminal). Features status bar showing provider/model/project info, chat panel with message bubbles, animated NullFace mascot, slash commands (/help, /clear, /context, /tasks, /config), and formatted tool call display.",
     code: "null-agent",
   },
   {
     title: "Readline REPL",
     icon: "⌨️",
-    description: "Lightweight readline-based REPL with colored output. No dependencies beyond Node.js. Perfect for quick interactions or environments where Ink isn't available.",
+    description:
+      "Lightweight readline-based REPL with colored output. No dependencies beyond Node.js. Perfect for quick interactions or environments where Ink isn't available.",
     code: "null-agent --plain",
   },
   {
     title: "HTTP API Server",
     icon: "🌐",
-    description: "REST API server (default port 3737) with streaming SSE support. Integrate null-agent into any frontend or service. Endpoints for chat, history, tasks, config, and health.",
+    description:
+      "REST API server (default port 3737) with streaming SSE support. Integrate null-agent into any frontend or service. Endpoints for chat, history, tasks, config, and health.",
     code: "null-agent --server --port 3737",
   },
   {
     title: "One-Shot CLI",
     icon: "⚡",
-    description: "Send a single message and get a response. Perfect for scripting, CI/CD pipelines, or quick one-off tasks without entering interactive mode.",
+    description:
+      "Send a single message and get a response. Perfect for scripting, CI/CD pipelines, or quick one-off tasks without entering interactive mode.",
     code: 'null-agent "explain the auth module"',
   },
 ];
@@ -989,8 +1063,8 @@ function NullAgentPage() {
           null-agent
         </h1>
         <p className="mb-8 max-w-2xl text-base text-[var(--sea-ink-soft)] sm:text-lg">
-          Interactive coding assistant library with multi-provider LLM support, a built-in
-          tool system, conversation persistence, project awareness, and multi-agent orchestration.
+          Interactive coding assistant library with multi-provider LLM support, a built-in tool
+          system, conversation persistence, project awareness, and multi-agent orchestration.
         </p>
         <InstallTabs packageName="null-agent" />
       </section>
@@ -1000,17 +1074,68 @@ function NullAgentPage() {
         <p className="island-kicker mb-4">Core Capabilities</p>
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {[
-            { icon: "🤖", title: "Multi-Provider LLM", description: "OpenAI and Anthropic providers with streaming. Extensible provider interface for custom backends." },
-            { icon: "🔧", title: "10 Built-in Tools", description: "File read/write, shell execution, and 7 git operations. Register custom tools with JSON Schema parameters." },
-            { icon: "🔀", title: "Orchestrator", description: "Spawn parallel sub-agents for complex tasks. Concurrency limits, task tracking, and result aggregation." },
-            { icon: "💾", title: "Memory & Persistence", description: "File-based conversation storage at ~/.null-agent/memory/. Resume conversations across sessions." },
-            { icon: "🔍", title: "Project Scanning", description: "Auto-detect language, framework, package manager, monorepo status, test/build commands, and conventions." },
-            { icon: "🔒", title: "Permission System", description: "Mode-based permissions (auto/confirm/plan). Risk classification, deny patterns, and allow-always overrides." },
-            { icon: "📡", title: "Awareness", description: "Real-time git monitoring and file watching. Events for git changes, branch switches, conflicts, and file modifications." },
-            { icon: "🧩", title: "Plugin System", description: "Extend with custom plugins that add tools and listen to events. Built-in plugins for file, shell, and git." },
-            { icon: "↩️", title: "Command Undo/Redo", description: "Command history with undo support. File writes automatically snapshot for undo capability." },
+            {
+              icon: "🤖",
+              title: "Multi-Provider LLM",
+              description:
+                "OpenAI and Anthropic providers with streaming. Extensible provider interface for custom backends.",
+            },
+            {
+              icon: "🔧",
+              title: "10 Built-in Tools",
+              description:
+                "File read/write, shell execution, and 7 git operations. Register custom tools with JSON Schema parameters.",
+            },
+            {
+              icon: "🔀",
+              title: "Orchestrator",
+              description:
+                "Spawn parallel sub-agents for complex tasks. Concurrency limits, task tracking, and result aggregation.",
+            },
+            {
+              icon: "💾",
+              title: "Memory & Persistence",
+              description:
+                "File-based conversation storage at ~/.null-agent/memory/. Resume conversations across sessions.",
+            },
+            {
+              icon: "🔍",
+              title: "Project Scanning",
+              description:
+                "Auto-detect language, framework, package manager, monorepo status, test/build commands, and conventions.",
+            },
+            {
+              icon: "🔒",
+              title: "Permission System",
+              description:
+                "Mode-based permissions (auto/confirm/plan). Risk classification, deny patterns, and allow-always overrides.",
+            },
+            {
+              icon: "📡",
+              title: "Awareness",
+              description:
+                "Real-time git monitoring and file watching. Events for git changes, branch switches, conflicts, and file modifications.",
+            },
+            {
+              icon: "🧩",
+              title: "Plugin System",
+              description:
+                "Extend with custom plugins that add tools and listen to events. Built-in plugins for file, shell, and git.",
+            },
+            {
+              icon: "↩️",
+              title: "Command Undo/Redo",
+              description:
+                "Command history with undo support. File writes automatically snapshot for undo capability.",
+            },
           ].map((f, i) => (
-            <FeatureCard key={f.title} title={f.title} description={f.description} icon={f.icon} index={i} />
+            <FeatureCard
+              key={f.title}
+              title={f.title}
+              description={f.description}
+              icon={f.icon}
+              index={i}
+            />
           ))}
         </div>
       </section>
@@ -1102,6 +1227,7 @@ Expected: Build succeeds
 
 Run: `vp dev --port 3000`
 Verify routes:
+
 - `/` — Landing page with hero, features, code examples, installation, other packages
 - `/null-agent` — Full documentation page
 - `/packages` — Package listing

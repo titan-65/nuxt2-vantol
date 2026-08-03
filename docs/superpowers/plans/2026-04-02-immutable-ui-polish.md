@@ -12,13 +12,13 @@
 
 ## File Map
 
-| File | Change |
-|------|--------|
-| `apps/immutable/src/components/FeatureCard.tsx` | Change `icon` prop from `string` to `React.ReactNode`; add icon container div with teal bg |
-| `apps/immutable/src/routes/index.tsx` | Replace emoji in `features` and `interfaces` arrays with Lucide icon imports; update grid cols |
-| `apps/immutable/src/routes/null-agent.tsx` | Replace emoji in interfaces array and feature list with Lucide icon imports |
-| `apps/immutable/src/components/Header.tsx` | Replace inline GitHub SVG with Lucide `Github` icon |
-| `apps/immutable/src/components/Footer.tsx` | Replace inline GitHub SVG with Lucide `Github` icon; clean up footer text |
+| File                                            | Change                                                                                         |
+| ----------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `apps/immutable/src/components/FeatureCard.tsx` | Change `icon` prop from `string` to `React.ReactNode`; add icon container div with teal bg     |
+| `apps/immutable/src/routes/index.tsx`           | Replace emoji in `features` and `interfaces` arrays with Lucide icon imports; update grid cols |
+| `apps/immutable/src/routes/null-agent.tsx`      | Replace emoji in interfaces array and feature list with Lucide icon imports                    |
+| `apps/immutable/src/components/Header.tsx`      | Replace inline GitHub SVG with Lucide `Github` icon                                            |
+| `apps/immutable/src/components/Footer.tsx`      | Replace inline GitHub SVG with Lucide `Github` icon; clean up footer text                      |
 
 ---
 
@@ -27,6 +27,7 @@
 ### Task 1: Refactor FeatureCard — icon prop type and container
 
 **Files:**
+
 - Modify: `apps/immutable/src/components/FeatureCard.tsx`
 
 - [ ] **Step 1: Update FeatureCard component**
@@ -64,6 +65,7 @@ export default function FeatureCard({ title, description, icon, index = 0 }: Fea
 ### Task 2: Update Landing Page — replace emoji with Lucide icons, fix grid
 
 **Files:**
+
 - Modify: `apps/immutable/src/routes/index.tsx`
 
 - [ ] **Step 1: Update imports and features array**
@@ -115,31 +117,33 @@ const features = [
 - [ ] **Step 2: Update interfaces array (Interfaces section)**
 
 ```tsx
-          {[
-            {
-              title: "Terminal UI",
-              desc: "Full interactive TUI with Ink — status bar, chat panel, animated mascot, slash commands.",
-              icon: <Monitor size={18} strokeWidth={1.75} />,
-            },
-            {
-              title: "REPL",
-              desc: "Lightweight readline interface with colored output. Quick and simple.",
-              icon: <Keyboard size={18} strokeWidth={1.75} />,
-            },
-            {
-              title: "HTTP Server",
-              desc: "REST API on port 3737 with streaming SSE. Integrate with any frontend.",
-              icon: <Globe size={18} strokeWidth={1.75} />,
-            },
-          ].map((iface, i) => (
-            <FeatureCard
-              key={iface.title}
-              title={iface.title}
-              description={iface.desc}
-              icon={iface.icon}
-              index={i}
-            />
-          ))}
+{
+  [
+    {
+      title: "Terminal UI",
+      desc: "Full interactive TUI with Ink — status bar, chat panel, animated mascot, slash commands.",
+      icon: <Monitor size={18} strokeWidth={1.75} />,
+    },
+    {
+      title: "REPL",
+      desc: "Lightweight readline interface with colored output. Quick and simple.",
+      icon: <Keyboard size={18} strokeWidth={1.75} />,
+    },
+    {
+      title: "HTTP Server",
+      desc: "REST API on port 3737 with streaming SSE. Integrate with any frontend.",
+      icon: <Globe size={18} strokeWidth={1.75} />,
+    },
+  ].map((iface, i) => (
+    <FeatureCard
+      key={iface.title}
+      title={iface.title}
+      description={iface.desc}
+      icon={iface.icon}
+      index={i}
+    />
+  ));
+}
 ```
 
 - [ ] **Step 3: Update the Features grid columns from 5 to 3**
@@ -155,6 +159,7 @@ In the Features section, change `lg:grid-cols-5` to `lg:grid-cols-3`:
 ### Task 3: Update Null-Agent Page — replace emoji with Lucide icons
 
 **Files:**
+
 - Modify: `apps/immutable/src/routes/null-agent.tsx`
 
 - [ ] **Step 1: Update imports and interfaces array**
@@ -288,6 +293,7 @@ const interfaces = [
 ### Task 4: Replace inline GitHub SVGs with Lucide icons
 
 **Files:**
+
 - Modify: `apps/immutable/src/components/Header.tsx`
 - Modify: `apps/immutable/src/components/Footer.tsx`
 
@@ -365,9 +371,7 @@ export default function Footer() {
   return (
     <footer className="mt-20 border-t border-[var(--line)] px-4 pb-14 pt-10 text-[var(--sea-ink-soft)]">
       <div className="page-wrap flex flex-col items-center justify-between gap-4 text-center sm:flex-row sm:text-left">
-        <p className="m-0 text-sm">
-          &copy; {year} Immutable
-        </p>
+        <p className="m-0 text-sm">&copy; {year} Immutable</p>
         <p className="island-kicker m-0">TanStack Start</p>
       </div>
       <div className="mt-4 flex justify-center gap-4">

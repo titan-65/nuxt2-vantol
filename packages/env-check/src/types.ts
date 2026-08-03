@@ -1,4 +1,4 @@
-export type EnvType = 'string' | 'url' | 'number' | 'email' | 'boolean' | 'enum';
+export type EnvType = "string" | "url" | "number" | "email" | "boolean" | "enum";
 
 export interface EnvField {
   type: EnvType;
@@ -11,13 +11,13 @@ export interface EnvField {
 export type EnvSchema = Record<string, EnvField>;
 
 export type ValidatedEnv<T extends EnvSchema> = {
-  [K in keyof T]: T[K]['type'] extends 'number'
+  [K in keyof T]: T[K]["type"] extends "number"
     ? number
-    : T[K]['type'] extends 'boolean'
+    : T[K]["type"] extends "boolean"
       ? boolean
-      : T[K]['required'] extends true
+      : T[K]["required"] extends true
         ? string
-        : T[K]['default'] extends string | number | boolean
+        : T[K]["default"] extends string | number | boolean
           ? string | number | boolean
           : string | undefined;
 };

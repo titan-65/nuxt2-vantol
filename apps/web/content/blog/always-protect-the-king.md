@@ -7,24 +7,24 @@ tag: Founder
 rating: 0
 date: 2026-07-20
 readTime: 12
-img: 'https://res.cloudinary.com/ddszyeplg/image/upload/v1642350413/vantol/black-text_emxagi.png'
+img: "https://res.cloudinary.com/ddszyeplg/image/upload/v1642350413/vantol/black-text_emxagi.png"
 author:
   name: Vantol Bennett
   website: www.teammps.com
-  img: 'https://res.cloudinary.com/ddszyeplg/image/upload/v1636919468/DSC_0988_zsfhgy.jpg'
+  img: "https://res.cloudinary.com/ddszyeplg/image/upload/v1636919468/DSC_0988_zsfhgy.jpg"
 ---
 
 # Always Protect the King
 
-I started coding around my early twenties. The first company I put a name to was **Teckare Online** - not a software shop, not really. We were hardware-and-software people. We'd go around to different schools and see if we could beef up their systems, so to speak. It was a good learning experience, and it taught me the first half of a mantra I still carry: *keep evolving, keep adapting to the situation.*
+I started coding around my early twenties. The first company I put a name to was **Teckare Online** - not a software shop, not really. We were hardware-and-software people. We'd go around to different schools and see if we could beef up their systems, so to speak. It was a good learning experience, and it taught me the first half of a mantra I still carry: _keep evolving, keep adapting to the situation._
 
 Then came the web work - WordPress at first, then more. And in 2015, at twenty-nine, I started **Mashed Potato Studios**.
 
-If you'd asked me then what I was searching for, I'd have had a hundred answers and none of them right. That's the thing about starting young. You think the struggle is *finding the thing*. It isn't. The struggle is everything that happens after you've already decided to build.
+If you'd asked me then what I was searching for, I'd have had a hundred answers and none of them right. That's the thing about starting young. You think the struggle is _finding the thing_. It isn't. The struggle is everything that happens after you've already decided to build.
 
 ## The struggle was never the code
 
-At Mashed Potato Studios we have a rule: *you must evolve with code.* That came straight out of Teckare. The technology moves, so you move. Easy to say about frameworks. Harder to say about people.
+At Mashed Potato Studios we have a rule: _you must evolve with code._ That came straight out of Teckare. The technology moves, so you move. Easy to say about frameworks. Harder to say about people.
 
 Because the real struggle of building a company young wasn't technical. It was two things.
 
@@ -32,7 +32,7 @@ Because the real struggle of building a company young wasn't technical. It was t
 
 **The second was betrayal.** Me and my partners - we've had people who should have been in our corner turn and stab us in the back. More than once. The friend cycle. People change over the course of years, and some of them changed right out of your life. That's part of business, I guess. You learn it the hard way, and then you keep walking.
 
-There's a particular kind of tired that *isn't* exhaustion. It's the realization that sometimes it isn't what you know - it's who you know. The shadiness of business. The politics. The rooms you aren't in. That's essentially what betrayal is: someone choosing the room you aren't in over the one you built together.
+There's a particular kind of tired that _isn't_ exhaustion. It's the realization that sometimes it isn't what you know - it's who you know. The shadiness of business. The politics. The rooms you aren't in. That's essentially what betrayal is: someone choosing the room you aren't in over the one you built together.
 
 I won't pretend it didn't sting. But here's what I'll tell you plainly: the never-quit attitude didn't hurt me. It's been in my family for years. It's been a driving factor for the Bennett name. My name is important. Family is important. The track stayed the same for me while the company changed, while friends changed, while business partners changed. I kept on going.
 
@@ -66,7 +66,7 @@ That's the creed I try to lead with at all times. It goes past core values. It's
 
 The mantra evolved. It had to.
 
-**King in the moment.** Different times, different points in your life - in that moment, you are the King. You are the person. You are *him* - the one who did what you did. Not the one who *will* act, not the one who *should have.* The one who acted, right there, in the moment that already happened.
+**King in the moment.** Different times, different points in your life - in that moment, you are the King. You are the person. You are _him_ - the one who did what you did. Not the one who _will_ act, not the one who _should have._ The one who acted, right there, in the moment that already happened.
 
 That's the difference between the twenty-nine-year-old who started Mashed Potato Studios and the forty-year-old writing this. The young one was protecting a King he thought was out there somewhere - a future, a unicorn, a version of himself he hadn't met. The older one knows the King was the person in front of him the whole time, and that in each moment he was already the King who had to show up.
 
@@ -76,4 +76,4 @@ Protect the person in front of you. Be the King in the moment.
 
 That's the whole post. That's the whole company. That's the whole life, if you let it be.
 
-*Now we just need the luck to put it forward. And I've got time.*
+_Now we just need the luck to put it forward. And I've got time._

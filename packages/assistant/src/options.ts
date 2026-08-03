@@ -39,7 +39,8 @@ export const defaults: ModuleOptions = {
     name: "Nox",
     avatar: "/eve.png",
     title: "Portfolio & Developer Assistant",
-    greeting: "Hi! I'm Nox, Vantol's assistant. Ask me about articles, projects, tutorials, or navigating the site!",
+    greeting:
+      "Hi! I'm Nox, Vantol's assistant. Ask me about articles, projects, tutorials, or navigating the site!",
   },
   suggestedQueries: [
     "Who is Vantol Bennett?",

@@ -1,0 +1,31 @@
+{
+  "name": "@vvantol2000/learn-layer",
+  "version": "0.1.0",
+  "description": "Nuxt 4 layer that owns the interactive learning platform (/learn) for vantolbennett.com",
+  "license": "MIT",
+  "files": [
+    "app",
+    "server",
+    "content",
+    "content.config.ts",
+    "nuxt.config.ts"
+  ],
+  "type": "module",
+  "main": "./nuxt.config.ts",
+  "exports": {
+    ".": "./nuxt.config.ts"
+  },
+  "scripts": {
+    "build": "vp check",
+    "test": "vp test run",
+    "check": "vp check"
+  },
+  "dependencies": {
+    "@nuxt/content": "^3.15.0",
+    "@nuxt/kit": "^4.0.0"
+  },
+  "devDependencies": {
+    "nuxt": "^4.0.0",
+    "typescript": "^5.6.0"
+  }
+}

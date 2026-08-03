@@ -38,11 +38,11 @@ Let's build a complete auth system for our BrewStop application.
 
 Before we write code, let's understand the three main authentication strategies:
 
-| Strategy | Best For | Pros | Cons |
-|----------|----------|------|------|
-| **Session** | Traditional web apps | Simple, familiar UX | CSRF concerns, server state |
-| **JWT** | SPAs, APIs, mobile | Stateless, scalable | Token management complexity |
-| **OAuth** | Social login | Frictionless, trusted | Third-party dependency |
+| Strategy    | Best For             | Pros                  | Cons                        |
+| ----------- | -------------------- | --------------------- | --------------------------- |
+| **Session** | Traditional web apps | Simple, familiar UX   | CSRF concerns, server state |
+| **JWT**     | SPAs, APIs, mobile   | Stateless, scalable   | Token management complexity |
+| **OAuth**   | Social login         | Frictionless, trusted | Third-party dependency      |
 
 ::BlogAlert{type="info"}
 For most Nuxt applications, a hybrid approach works best: JWT for API authentication, OAuth for social login, and session-like behavior via cookies.
@@ -82,7 +82,7 @@ Create `nuxt.config.ts`:
 ```ts [nuxt.config.ts]
 export default defineNuxtConfig({
   modules: ["@sidebase/nuxt-auth"],
-  
+
   auth: {
     provider: {
       type: "authjs",
@@ -90,7 +90,7 @@ export default defineNuxtConfig({
     },
     globalAppMiddleware: true,
   },
-  
+
   runtimeConfig: {
     authSecret: process.env.AUTH_SECRET,
     public: {
@@ -123,9 +123,7 @@ Create `server/utils/auth.ts`:
 import { SignJWT, jwtVerify } from "jose";
 import { hash, verify } from "@node-rs/argon2";
 
-const secret = new TextEncoder().encode(
-  process.env.AUTH_SECRET || "fallback-secret"
-);
+const secret = new TextEncoder().encode(process.env.AUTH_SECRET || "fallback-secret");
 
 export async function hashPassword(password: string): Promise<string> {
   return hash(password, {
@@ -148,7 +146,9 @@ export async function createToken(userId: string, email: string): Promise<string
     .sign(secret);
 }
 
-export async function verifyToken(token: string): Promise<{ userId: string; email: string } | null> {
+export async function verifyToken(
+  token: string,
+): Promise<{ userId: string; email: string } | null> {
   try {
     const { payload } = await jwtVerify(token, secret);
     return payload as { userId: string; email: string };
@@ -184,7 +184,7 @@ interface CreateUserInput {
 
 export async function createUser(input: CreateUserInput) {
   const hashedPassword = await hashPassword(input.password);
-  
+
   await db.insert(users).values({
     id: crypto.randomUUID(),
     email: input.email,
@@ -199,17 +199,17 @@ export async function findUserByEmail(email: string) {
 
 export async function validateUserCredentials(email: string, password: string) {
   const user = await findUserByEmail(email);
-  
+
   if (!user) {
     return null;
   }
-  
+
   const isValid = await verifyPassword(user.password, password);
-  
+
   if (!isValid) {
     return null;
   }
-  
+
   return { id: user.id, email: user.email, name: user.name };
 }
 ```
@@ -244,7 +244,7 @@ import { createToken } from "../../utils/auth";
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
-  
+
   // Validate input
   if (!body.email || !body.password || !body.name) {
     throw createError({
@@ -252,34 +252,34 @@ export default defineEventHandler(async (event) => {
       statusMessage: "Email, password, and name are required",
     });
   }
-  
+
   // Check if user exists
   const existing = await findUserByEmail(body.email);
-  
+
   if (existing) {
     throw createError({
       statusCode: 400,
       statusMessage: "User already exists",
     });
   }
-  
+
   // Create user
   await createUser({
     email: body.email,
     password: body.password,
     name: body.name,
   });
-  
+
   // Generate token
   const token = await createToken(body.email, body.email);
-  
+
   setCookie(event, "auth_token", token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
     maxAge: 60 * 60 * 24 * 7, // 7 days
   });
-  
+
   return { success: true, email: body.email };
 });
 ```
@@ -294,32 +294,32 @@ import { createToken } from "../../utils/auth";
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
-  
+
   if (!body.email || !body.password) {
     throw createError({
       statusCode: 400,
       statusMessage: "Email and password are required",
     });
   }
-  
+
   const user = await validateUserCredentials(body.email, body.password);
-  
+
   if (!user) {
     throw createError({
       statusCode: 401,
       statusMessage: "Invalid credentials",
     });
   }
-  
+
   const token = await createToken(user.id, user.email);
-  
+
   setCookie(event, "auth_token", token, {
     httpOnly: true,
     secure: process.env.NODE_ENV === "production",
     sameSite: "lax",
     maxAge: 60 * 60 * 24 * 7, // 7 days
   });
-  
+
   return { success: true, user: { email: user.email, name: user.name } };
 });
 ```
@@ -345,32 +345,32 @@ import { findUserByEmail } from "../../utils/db";
 
 export default defineEventHandler(async (event) => {
   const token = getCookie(event, "auth_token");
-  
+
   if (!token) {
     throw createError({
       statusCode: 401,
       statusMessage: "Not authenticated",
     });
   }
-  
+
   const payload = await verifyToken(token);
-  
+
   if (!payload) {
     throw createError({
       statusCode: 401,
       statusMessage: "Invalid token",
     });
   }
-  
+
   const user = await findUserByEmail(payload.email);
-  
+
   if (!user) {
     throw createError({
       statusCode: 401,
       statusMessage: "User not found",
     });
   }
-  
+
   return {
     id: user.id,
     email: user.email,
@@ -395,38 +395,32 @@ import { verifyToken } from "../utils/auth";
 export default defineEventHandler(async (event) => {
   // Authentication check
   const token = getCookie(event, "auth_token");
-  
+
   if (!token) {
     throw createError({
       statusCode: 401,
       statusMessage: "Authentication required",
     });
   }
-  
+
   const payload = await verifyToken(token);
-  
+
   if (!payload) {
     throw createError({
       statusCode: 401,
       statusMessage: "Invalid token",
     });
   }
-  
-  const allOrders = await db
-    .select()
-    .from(orders)
-    .orderBy(orders.createdAt);
-  
+
+  const allOrders = await db.select().from(orders).orderBy(orders.createdAt);
+
   const ordersWithItems = await Promise.all(
     allOrders.map(async (order) => {
-      const items = await db
-        .select()
-        .from(orderItems)
-        .where(orderItems.orderId.equals(order.id));
+      const items = await db.select().from(orderItems).where(orderItems.orderId.equals(order.id));
       return { ...order, items };
-    })
+    }),
   );
-  
+
   return { orders: ordersWithItems };
 });
 ```
@@ -461,7 +455,7 @@ export default defineNuxtConfig({
     },
     globalAppMiddleware: true,
   },
-  
+
   runtimeConfig: {
     authSecret: process.env.AUTH_SECRET,
     github: {
@@ -502,30 +496,28 @@ Create `pages/login.vue`:
 <template>
   <div class="auth-page">
     <h1>Login to BrewStop</h1>
-    
+
     <form @submit.prevent="handleLogin">
       <div class="form-group">
         <label>Email</label>
         <input v-model="email" type="email" required />
       </div>
-      
+
       <div class="form-group">
         <label>Password</label>
         <input v-model="password" type="password" required />
       </div>
-      
+
       <button type="submit" :disabled="loading">
         {{ loading ? "Logging in..." : "Login" }}
       </button>
-      
+
       <p v-if="error" class="error">{{ error }}</p>
     </form>
-    
+
     <p class="oauth-separator">or</p>
-    
-    <button @click="loginWithGithub" class="github-btn">
-      Continue with GitHub
-    </button>
+
+    <button @click="loginWithGithub" class="github-btn">Continue with GitHub</button>
   </div>
 </template>
 
@@ -538,13 +530,13 @@ const error = ref("");
 async function handleLogin() {
   loading.value = true;
   error.value = "";
-  
+
   try {
     await $fetch("/api/auth/login", {
       method: "POST",
       body: { email: email.value, password: password.value },
     });
-    
+
     navigateTo("/dashboard");
   } catch (e: any) {
     error.value = e.data?.statusMessage || "Login failed";
@@ -565,27 +557,27 @@ Create `pages/register.vue`:
 <template>
   <div class="auth-page">
     <h1>Create an Account</h1>
-    
+
     <form @submit.prevent="handleRegister">
       <div class="form-group">
         <label>Name</label>
         <input v-model="name" type="text" required />
       </div>
-      
+
       <div class="form-group">
         <label>Email</label>
         <input v-model="email" type="email" required />
       </div>
-      
+
       <div class="form-group">
         <label>Password</label>
         <input v-model="password" type="password" required />
       </div>
-      
+
       <button type="submit" :disabled="loading">
         {{ loading ? "Creating account..." : "Register" }}
       </button>
-      
+
       <p v-if="error" class="error">{{ error }}</p>
     </form>
   </div>
@@ -601,13 +593,13 @@ const error = ref("");
 async function handleRegister() {
   loading.value = true;
   error.value = "";
-  
+
   try {
     await $fetch("/api/auth/register", {
       method: "POST",
       body: { name: name.value, email: email.value, password: password.value },
     });
-    
+
     navigateTo("/dashboard");
   } catch (e: any) {
     error.value = e.data?.statusMessage || "Registration failed";
@@ -628,7 +620,7 @@ Nuxt provides a composable for easy auth state management.
 export const useAuth = () => {
   const user = useState("auth-user", () => null);
   const loading = useState("auth-loading", () => true);
-  
+
   const fetchUser = async () => {
     loading.value = true;
     try {
@@ -639,13 +631,13 @@ export const useAuth = () => {
       loading.value = false;
     }
   };
-  
+
   const logout = async () => {
     await $fetch("/api/auth/logout", { method: "POST" });
     user.value = null;
     navigateTo("/login");
   };
-  
+
   return { user, loading, fetchUser, logout };
 };
 ```
@@ -657,6 +649,7 @@ export const useAuth = () => {
 Before going to production, verify:
 
 ::BlogAlert{type="warning"}
+
 - [ ] HTTPS enabled
 - [ ] AUTH_SECRET is set and secure
 - [ ] Passwords are hashed with Argon2 or bcrypt
@@ -664,19 +657,19 @@ Before going to production, verify:
 - [ ] Rate limiting on login/register endpoints
 - [ ] Email validation implemented
 - [ ] Password strength requirements enforced
-::
+      ::
 
 ---
 
 ## API Routes Summary
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| POST | `/api/auth/register` | Create new account |
-| POST | `/api/auth/login` | Authenticate user |
-| POST | `/api/auth/logout` | Clear session |
-| GET | `/api/auth/me` | Get current user |
-| GET | `/api/auth/[...]` | OAuth handlers |
+| Method | Endpoint             | Description        |
+| ------ | -------------------- | ------------------ |
+| POST   | `/api/auth/register` | Create new account |
+| POST   | `/api/auth/login`    | Authenticate user  |
+| POST   | `/api/auth/logout`   | Clear session      |
+| GET    | `/api/auth/me`       | Get current user   |
+| GET    | `/api/auth/[...]`    | OAuth handlers     |
 
 ---
 
@@ -698,6 +691,7 @@ The key takeaways:
 4. **Use established libraries** rather than rolling your own
 
 In production, consider adding:
+
 - Rate limiting on auth endpoints
 - Email verification flow
 - Password reset functionality

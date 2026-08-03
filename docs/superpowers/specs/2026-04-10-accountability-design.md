@@ -19,15 +19,15 @@ Transform null-agent from a coding assistant into a **developer day companion** 
 
 ```typescript
 type ActivityType =
-  | "coding"        // file_read, file_write, shell commands
-  | "review"        // code review, PR review
-  | "debugging"     // error investigation, shell debugging
-  | "testing"       // running tests, test frameworks
-  | "docs"          // README, comments, design docs
-  | "meeting"       // calendar events
-  | "planning"      // task boards, Jira tickets
-  | "standup"       // daily standup
-  | "break"         // no activity detected
+  | "coding" // file_read, file_write, shell commands
+  | "review" // code review, PR review
+  | "debugging" // error investigation, shell debugging
+  | "testing" // running tests, test frameworks
+  | "docs" // README, comments, design docs
+  | "meeting" // calendar events
+  | "planning" // task boards, Jira tickets
+  | "standup" // daily standup
+  | "break" // no activity detected
   | "other";
 ```
 
@@ -63,7 +63,7 @@ interface Activity {
   description: string;
   startTime: Date;
   endTime?: Date;
-  duration?: number;       // seconds
+  duration?: number; // seconds
   source: "explicit" | "inferred" | "calendar" | "task-board";
   metadata?: {
     toolName?: string;
@@ -76,7 +76,7 @@ interface Activity {
 }
 
 interface DayReport {
-  date: string;            // YYYY-MM-DD
+  date: string; // YYYY-MM-DD
   activities: Activity[];
   summary: ActivitySummary;
   goals?: Goal[];
@@ -85,7 +85,7 @@ interface DayReport {
 }
 
 interface ActivitySummary {
-  totalCoding: number;     // seconds
+  totalCoding: number; // seconds
   totalMeetings: number;
   totalReviews: number;
   totalDebugging: number;
@@ -105,7 +105,7 @@ interface Goal {
   status: "pending" | "in-progress" | "completed" | "missed";
   dueDate?: Date;
   completedDate?: Date;
-  activities?: string[];   // Activity IDs linked to this goal
+  activities?: string[]; // Activity IDs linked to this goal
 }
 
 interface CalendarEvent {
@@ -127,6 +127,7 @@ interface CalendarEvent {
 ### 1. Activity Tracker (`tracker.ts`)
 
 **Core responsibilities:**
+
 - Maintain current session state
 - Record explicit activities ("I'm starting a meeting")
 - Collect inferred activities from tool hooks
@@ -169,7 +170,7 @@ const TOOL_ACTIVITY_MAP: Record<string, ActivityType> = {
   file_copy: "coding",
   file_delete: "coding",
   file_glob: "coding",
-  shell: "coding",         // context-dependent
+  shell: "coding", // context-dependent
   git_status: "coding",
   git_diff: "review",
   git_add: "coding",
@@ -177,8 +178,8 @@ const TOOL_ACTIVITY_MAP: Record<string, ActivityType> = {
   git_log: "review",
   git_branch: "planning",
   git_show: "review",
-  shell_test: "testing",   // if command contains "test" or "jest"
-  shell_build: "coding",   // if command contains "build"
+  shell_test: "testing", // if command contains "test" or "jest"
+  shell_build: "coding", // if command contains "build"
   shell_debug: "debugging", // if command contains "debug" or "log"
 };
 
@@ -195,6 +196,7 @@ function inferShellActivity(command: string): ActivityType {
 ```
 
 **Activity grouping logic:**
+
 - Group consecutive tool calls of the same type into one activity
 - If tool calls are within 5 minutes, consider them the same activity
 - If no tool calls for 30+ minutes, infer "break" or "meeting"
@@ -202,17 +204,20 @@ function inferShellActivity(command: string): ActivityType {
 ### 3. Google Calendar Integration (`calendar.ts`)
 
 **OAuth 2.0 Setup:**
+
 - User runs `null-agent auth google`
 - Agent guides through OAuth flow
 - Stores access token + refresh token in credential system
 - Token refresh handled automatically
 
 **API calls:**
+
 - `getEvents(date: Date): Promise<CalendarEvent[]>`
 - `getEventsInRange(start: Date, end: Date): Promise<CalendarEvent[]>`
 - `watchCalendar(): void` (polling-based, check every 5 minutes)
 
 **Usage:**
+
 - Agent checks calendar every 5 minutes for upcoming events
 - Before meeting: "You have a standup in 5 minutes"
 - After meeting: "Meeting ended. What did you work on?"
@@ -226,7 +231,7 @@ function inferShellActivity(command: string): ActivityType {
 class Reporter {
   // Daily reports
   generateDailyReport(date: string): DayReport;
-  formatDailyReport(report: DayReport): string;  // Markdown
+  formatDailyReport(report: DayReport): string; // Markdown
 
   // Weekly reports
   generateWeeklyReport(weekStart: string): WeeklyReport;
@@ -247,7 +252,7 @@ interface SessionStats {
   currentActivity: Activity | null;
   activitiesToday: number;
   timeByType: Record<ActivityType, number>;
-  longestStreak: number;    // longest coding session without break
+  longestStreak: number; // longest coding session without break
   breaksToday: number;
   calendarEventsToday: number;
 }
@@ -259,22 +264,25 @@ interface SessionStats {
 # Daily Report - April 10, 2026
 
 ## Summary
+
 - **Active time:** 6h 45m
 - **Activities:** 12
 - **Commits:** 3
 - **Code reviews:** 2
 
 ## Time Breakdown
-| Activity | Time | % |
-|----------|------|---|
-| Coding | 3h 20m | 49% |
-| Meetings | 1h 30m | 22% |
-| Reviews | 45m | 11% |
-| Debugging | 30m | 7% |
-| Docs | 20m | 5% |
-| Other | 20m | 6% |
+
+| Activity  | Time   | %   |
+| --------- | ------ | --- |
+| Coding    | 3h 20m | 49% |
+| Meetings  | 1h 30m | 22% |
+| Reviews   | 45m    | 11% |
+| Debugging | 30m    | 7%  |
+| Docs      | 20m    | 5%  |
+| Other     | 20m    | 6%  |
 
 ## Activities
+
 - 9:00 AM - 9:15 AM: Morning standup
 - 9:15 AM - 10:30 AM: Feature implementation (auth module)
 - 10:30 AM - 11:00 AM: Code review (PR #42)
@@ -286,6 +294,7 @@ interface SessionStats {
 - 4:30 PM - 5:00 PM: Code review (PR #38)
 
 ## Goals
+
 - [x] Complete auth module refactor
 - [ ] Review PR #42 (pending)
 - [x] Fix API timeout issue
@@ -298,15 +307,15 @@ interface SessionStats {
 ```typescript
 class Accountant {
   // Check schedule and remind
-  checkUpcomingMeetings(): Notification[];   // "Standup in 5 minutes"
-  checkGoalProgress(): Notification[];       // "You haven't committed yet today"
-  checkActivityPatterns(): Notification[];   // "You've been debugging for 2 hours"
-  checkDailyRituals(): Notification[];       // "Time to check Slack messages"
+  checkUpcomingMeetings(): Notification[]; // "Standup in 5 minutes"
+  checkGoalProgress(): Notification[]; // "You haven't committed yet today"
+  checkActivityPatterns(): Notification[]; // "You've been debugging for 2 hours"
+  checkDailyRituals(): Notification[]; // "Time to check Slack messages"
 
   // Accountability
-  challengeUser(goal: Goal): string;         // "You said you'd review code today, haven't seen any yet"
-  celebrateWin(activity: Activity): string;  // "Great job! You resolved 3 issues today"
-  suggestBreak(): string;                    // "You've been coding for 2 hours straight"
+  challengeUser(goal: Goal): string; // "You said you'd review code today, haven't seen any yet"
+  celebrateWin(activity: Activity): string; // "Great job! You resolved 3 issues today"
+  suggestBreak(): string; // "You've been coding for 2 hours straight"
 
   // Goal tracking
   createGoal(description: string, type: GoalType): Goal;
@@ -317,6 +326,7 @@ class Accountant {
 ```
 
 **Notification types:**
+
 - `time:milestone` - "You've been coding for 1 hour"
 - `time:threshold` - "Consider taking a break (2+ hours active)"
 - `goal:reminder` - "Your goal was to review 3 PRs today"
@@ -361,15 +371,15 @@ class Accountant {
 
 ### Face Mood by Activity
 
-| Activity | Face Mood |
-|----------|-----------|
-| coding | executing |
-| meeting | waiting |
-| review | thinking |
-| debugging | confused |
-| testing | loading |
-| break | sleeping |
-| standup | idle |
+| Activity  | Face Mood |
+| --------- | --------- |
+| coding    | executing |
+| meeting   | waiting   |
+| review    | thinking  |
+| debugging | confused  |
+| testing   | loading   |
+| break     | sleeping  |
+| standup   | idle      |
 
 ### Daily Summary on Startup
 
@@ -437,6 +447,7 @@ class Accountant {
 ## Implementation Phases
 
 ### Phase 1: Core Tracking (Week 1)
+
 - Activity types and interfaces
 - ActivityTracker class
 - ActivityInferencer (tool hooks integration)
@@ -444,6 +455,7 @@ class Accountant {
 - Basic explicit tracking commands
 
 ### Phase 2: Reporting (Week 2)
+
 - Reporter class
 - Daily reports (Markdown, CSV)
 - Weekly reports
@@ -451,6 +463,7 @@ class Accountant {
 - TUI integration (StatusBar, startup summary)
 
 ### Phase 3: Accountability (Week 3)
+
 - Accountant class
 - Goal tracking
 - Proactive reminders
@@ -458,6 +471,7 @@ class Accountant {
 - Notification system integration
 
 ### Phase 4: External Integrations (Week 4)
+
 - Google Calendar OAuth
 - Calendar sync and event awareness
 - Meeting reminders

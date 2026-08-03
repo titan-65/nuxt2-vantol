@@ -1,16 +1,16 @@
 <script setup lang="ts">
 defineProps<{
   prev: {
-    title: string
-    path: string
-  } | null
+    title: string;
+    path: string;
+  } | null;
   next: {
-    title: string
-    path: string
-  } | null
-}>()
+    title: string;
+    path: string;
+  } | null;
+}>();
 
-const getSlug = (path: string | undefined) => path?.split('/').pop() || ''
+const getSlug = (path: string | undefined) => path?.split("/").pop() || "";
 </script>
 
 <template>
@@ -21,7 +21,7 @@ const getSlug = (path: string | undefined) => path?.split('/').pop() || ''
       class="flex items-center gap-1 text-[#f5c542] hover:underline transition-colors"
     >
       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
       </svg>
       <span class="font-medium line-clamp-1">{{ prev.title }}</span>
     </NuxtLink>
@@ -33,7 +33,7 @@ const getSlug = (path: string | undefined) => path?.split('/').pop() || ''
     >
       <span class="font-medium line-clamp-1">{{ next.title }}</span>
       <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/>
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
       </svg>
     </NuxtLink>
     <span v-else>&nbsp;</span>

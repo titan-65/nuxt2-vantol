@@ -1,11 +1,11 @@
 export function isNonEmpty(value: string | undefined): value is string {
-  return typeof value === 'string' && value.length > 0;
+  return typeof value === "string" && value.length > 0;
 }
 
 export function isValidUrl(value: string): boolean {
   try {
     const url = new URL(value);
-    return url.protocol === 'http:' || url.protocol === 'https:';
+    return url.protocol === "http:" || url.protocol === "https:";
   } catch {
     return false;
   }
@@ -21,11 +21,11 @@ export function isEmail(value: string): boolean {
 }
 
 export function isBoolean(value: string): boolean {
-  return ['true', 'false', '1', '0'].includes(value.toLowerCase());
+  return ["true", "false", "1", "0"].includes(value.toLowerCase());
 }
 
 export function parseBoolean(value: string): boolean {
-  return value.toLowerCase() === 'true' || value === '1';
+  return value.toLowerCase() === "true" || value === "1";
 }
 
 export function isEnum(value: string, values: string[]): boolean {

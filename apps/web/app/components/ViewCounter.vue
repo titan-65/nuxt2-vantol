@@ -1,18 +1,18 @@
 <script setup lang="ts">
 const props = defineProps<{
-  slug: string
-}>()
+  slug: string;
+}>();
 
-const { views, loading, init, trackView } = useRealtimeViews(props.slug)
+const { views, loading, init, trackView } = useRealtimeViews(props.slug);
 
 onMounted(async () => {
-  init()
-  await trackView()
-})
+  init();
+  await trackView();
+});
 
 onUnmounted(() => {
   // Cleanup handled by composable
-})
+});
 </script>
 
 <template>
@@ -33,6 +33,8 @@ onUnmounted(() => {
       <circle cx="12" cy="12" r="3" />
     </svg>
     <span v-if="loading" class="animate-pulse">...</span>
-    <span v-else class="tabular-nums">{{ views.toLocaleString() }} {{ views === 1 ? 'view' : 'views' }}</span>
+    <span v-else class="tabular-nums"
+      >{{ views.toLocaleString() }} {{ views === 1 ? "view" : "views" }}</span
+    >
   </div>
 </template>

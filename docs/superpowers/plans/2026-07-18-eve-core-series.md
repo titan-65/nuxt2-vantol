@@ -23,6 +23,7 @@ All files live under `apps/web/content/learn/eve-core/`:
 - `06-run-and-recap.md` — durable sessions, recap, pointers to advanced docs
 
 Shared author block (reuse in every frontmatter):
+
 ```yaml
 author:
   name: "Vantol Bennett"
@@ -35,6 +36,7 @@ author:
 ### Task 0: Series landing (`index.md`)
 
 **Files:**
+
 - Create: `apps/web/content/learn/eve-core/index.md`
 
 - [ ] **Step 1: Write `index.md`**
@@ -58,7 +60,7 @@ author:
 Think of Eve as "Next.js for agents." Instead of one giant config object, your agent is a **folder of ordinary files**: instructions in Markdown, tools in TypeScript. Eve discovers the structure and turns it into an agent that runs locally, serves HTTP, connects to other platforms, and keeps working across many turns.
 
 ::BlogAlert{type="info"}
-Based on the official [Eve introduction](https://eve.dev/docs/introduction). We're learning to *use* what it ships, not restating the docs.
+Based on the official [Eve introduction](https://eve.dev/docs/introduction). We're learning to _use_ what it ships, not restating the docs.
 ::
 
 ## What we're building
@@ -89,11 +91,12 @@ git commit -m "content: add Eve core series landing page"
 ### Task 1: Instructions & first run (`01-instructions.md`)
 
 **Files:**
+
 - Create: `apps/web/content/learn/eve-core/01-instructions.md`
 
 - [ ] **Step 1: Write the lesson**
 
-```markdown
+````markdown
 ---
 title: "Instructions: Your Agent's Brain"
 description: "Start an Eve project with npx eve init and write instructions.md — the always-on Markdown that defines who your agent is and how it behaves."
@@ -123,13 +126,16 @@ Scaffold the project and write your first instructions:
 npx eve@latest init my-agent
 cd my-agent
 ```
+````
 
 ```md [agent/instructions.md]
 # Identity
+
 You are a personal research assistant. You help the user understand
 topics by giving grounded, citation-friendly answers.
 
 # Guardrails
+
 - Never invent facts. If you don't know, say so.
 - Prefer primary sources and clearly separate facts from opinion.
 ```
@@ -140,7 +146,7 @@ Run it:
 eve
 ```
 
-Then ask: *"What's the difference between durable and ephemeral execution?"* — the agent answers from its instructions.
+Then ask: _"What's the difference between durable and ephemeral execution?"_ — the agent answers from its instructions.
 
 ## Do it yourself
 
@@ -157,7 +163,8 @@ Then ask: *"What's the difference between durable and ephemeral execution?"* —
 ## Recap
 
 `instructions.md` is your agent's brain. One file, one `npx eve init`, and you have a talking agent. Next, we choose its model.
-```
+
+````
 
 - [ ] **Step 2: Verify it builds** — `vp check`; no frontmatter errors.
 - [ ] **Step 3: Commit** — `git add apps/web/content/learn/eve-core/01-instructions.md && git commit -m "content: Eve lesson 1 — instructions"`
@@ -201,7 +208,7 @@ import { defineAgent } from "eve";
 export default defineAgent({
   model: "openai/gpt-5.4-mini",
 });
-```
+````
 
 Eve now routes calls through the chosen model. Runtime options (timeouts, retries, streaming) live here too, powered by the AI Gateway.
 
@@ -219,7 +226,8 @@ Eve now routes calls through the chosen model. Runtime options (timeouts, retrie
 ## Recap
 
 `agent.ts` + `defineAgent` is your control panel: choose the model and tune the runtime. Next, we give the agent something to do — tools.
-```
+
+````
 
 - [ ] **Step 2: Verify** — `vp check`.
 - [ ] **Step 3: Commit** — `git commit -m "content: Eve lesson 2 — agent config"`
@@ -272,14 +280,14 @@ export default defineTool({
     return data.current_condition[0];
   },
 });
-```
+````
 
 Name the file `get_weather.ts` and the tool is `get_weather`. The Zod `inputSchema` types the arguments the model must provide.
 
 ## Do it yourself
 
 1. Create `agent/tools/get_weather.ts` with the code above.
-2. Run `eve` and ask *"What's the weather in Lisbon?"*
+2. Run `eve` and ask _"What's the weather in Lisbon?"_
 3. Confirm the model called the tool and returned typed data.
 4. Add a second tool (e.g. a calculator) and call it.
 
@@ -291,7 +299,8 @@ Name the file `get_weather.ts` and the tool is `get_weather`. The Zod `inputSche
 ## Recap
 
 `tools/` turns a talking agent into a doing agent. Filename = tool name, Zod = typed input. Next, reusable playbooks via skills.
-```
+
+````
 
 - [ ] **Step 2: Verify** — `vp check`.
 - [ ] **Step 3: Commit** — `git commit -m "content: Eve lesson 3 — tools"`
@@ -338,7 +347,7 @@ When the task is novel or ambiguous, gather evidence first, then answer.
 1. Identify the smallest set of questions that resolve the ambiguity.
 2. Search primary sources; note where each fact comes from.
 3. Summarize findings before drawing conclusions.
-```
+````
 
 The agent pulls in `deep_research` only when a research-shaped task arrives.
 
@@ -350,13 +359,14 @@ The agent pulls in `deep_research` only when a research-shaped task arrives.
 
 ## Gotchas
 
-- The `description` is how Eve decides relevance — write it for *discovery*, not just humans.
+- The `description` is how Eve decides relevance — write it for _discovery_, not just humans.
 - Skills are not always in context; they're loaded on demand.
 
 ## Recap
 
 `skills/` gives the agent on-demand expertise without inflating the prompt. Next, we let people actually talk to it.
-```
+
+````
 
 - [ ] **Step 2: Verify** — `vp check`.
 - [ ] **Step 3: Commit** — `git commit -m "content: Eve lesson 4 — skills"`
@@ -403,7 +413,7 @@ import { slackChannel } from "eve/channels/slack";
 export default slackChannel({
   credentials: connectSlackCredentials("slack/my-agent"),
 });
-```
+````
 
 The same agent now answers in Slack. Web chat, Discord, and the rest follow the same pattern from `eve/channels/*`.
 
@@ -421,7 +431,8 @@ The same agent now answers in Slack. Web chat, Discord, and the rest follow the 
 ## Recap
 
 Channels surface one agent everywhere. The CLI works out of the box; add a file to reach Slack, Discord, or web chat. Next: run it for real and see durability.
-```
+
+````
 
 - [ ] **Step 2: Verify** — `vp check`.
 - [ ] **Step 3: Commit** — `git commit -m "content: Eve lesson 5 — channels"`
@@ -480,7 +491,7 @@ You built a Personal Research Assistant from an empty folder:
 ## Go further
 
 This series covered the core path. Eve also ships: `connections/` (MCP/OpenAPI tools), `sandbox/` (isolated compute), `subagents/` (delegation), `schedules/` (recurring work), hooks, human-in-the-loop, evaluations, and one-command deploy to Vercel. Start with the [Eve docs](https://eve.dev/docs/introduction).
-```
+````
 
 - [ ] **Step 2: Verify** — `vp check`.
 - [ ] **Step 3: Commit** — `git commit -m "content: Eve lesson 6 — run & recap"`

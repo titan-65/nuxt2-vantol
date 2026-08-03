@@ -62,31 +62,31 @@ Nothing to place in your templates — the module mounts the wall itself. Four w
 
 ## Options
 
-| Option | Default | What it does |
-|---|---|---|
-| `enabled` | `true` | Turns the whole module off — no plugin, no component, no routes. |
-| `wall.enabled` | `true` | Registers `<PresenceWall>`, the client plugin, and `window.$presence`. |
-| `wall.server` | `false` | Shares signatures between visitors: the client POSTs on sign and polls while open. |
-| `wall.pollMs` | `5000` | How often the open wall re-reads the shared list. |
-| `wall.ttlSeconds` | `3600` | How long a signature survives before it ages out. |
-| `wall.maxSignatures` | `50` | Cap on stored signatures. A full wall answers `429 wall_full`. |
-| `wall.combo` | `↑ ↑ ↓ ↓` | Key sequence that opens the wall. Matches either `key` or `code`. |
-| `wall.mobilePath` | `/presence` | Route that auto-opens the wall, for devices with no keyboard. |
-| `wall.autoMount` | `true` | Mounts the wall onto `<body>` for you. Set `false` to place `<PresenceWall>` yourself. |
-| `wall.renderStyle` | `cursive` | `cursive`, `block`, or `monogram`. |
-| `mark.enabled` | `true` | Signs each build and stamps the mark into every page's head. |
-| `mark.handle` | `""` | Who the mark names. Empty falls back to the app's `package.json` author. |
-| `mark.keyDir` | `.presence/` | Where the keypair lives, relative to the app root. |
-| `mark.privateKey` | `$NUXT_PRESENCE_PRIVATE_KEY` | PEM key for an identity that survives deploys. Empty generates one per build. |
+| Option               | Default                      | What it does                                                                           |
+| -------------------- | ---------------------------- | -------------------------------------------------------------------------------------- |
+| `enabled`            | `true`                       | Turns the whole module off — no plugin, no component, no routes.                       |
+| `wall.enabled`       | `true`                       | Registers `<PresenceWall>`, the client plugin, and `window.$presence`.                 |
+| `wall.server`        | `false`                      | Shares signatures between visitors: the client POSTs on sign and polls while open.     |
+| `wall.pollMs`        | `5000`                       | How often the open wall re-reads the shared list.                                      |
+| `wall.ttlSeconds`    | `3600`                       | How long a signature survives before it ages out.                                      |
+| `wall.maxSignatures` | `50`                         | Cap on stored signatures. A full wall answers `429 wall_full`.                         |
+| `wall.combo`         | `↑ ↑ ↓ ↓`                    | Key sequence that opens the wall. Matches either `key` or `code`.                      |
+| `wall.mobilePath`    | `/presence`                  | Route that auto-opens the wall, for devices with no keyboard.                          |
+| `wall.autoMount`     | `true`                       | Mounts the wall onto `<body>` for you. Set `false` to place `<PresenceWall>` yourself. |
+| `wall.renderStyle`   | `cursive`                    | `cursive`, `block`, or `monogram`.                                                     |
+| `mark.enabled`       | `true`                       | Signs each build and stamps the mark into every page's head.                           |
+| `mark.handle`        | `""`                         | Who the mark names. Empty falls back to the app's `package.json` author.               |
+| `mark.keyDir`        | `.presence/`                 | Where the keypair lives, relative to the app root.                                     |
+| `mark.privateKey`    | `$NUXT_PRESENCE_PRIVATE_KEY` | PEM key for an identity that survives deploys. Empty generates one per build.          |
 
 ## Endpoints
 
 Registered only when the matching feature is on.
 
-| Method | Path | Notes |
-|---|---|---|
-| `POST` | `/api/_presence/wall` | `wall.server` only. `400 invalid_signature`, `429 wall_full`. |
-| `GET` | `/api/_presence/wall` | `wall.server` only. Returns the unexpired signatures. |
+| Method | Path                    | Notes                                                                  |
+| ------ | ----------------------- | ---------------------------------------------------------------------- |
+| `POST` | `/api/_presence/wall`   | `wall.server` only. `400 invalid_signature`, `429 wall_full`.          |
+| `GET`  | `/api/_presence/wall`   | `wall.server` only. Returns the unexpired signatures.                  |
 | `POST` | `/api/_presence/verify` | `mark` only. Body `{ token? }`; omit it to check the build's own mark. |
 
 ## The signing keys
@@ -129,7 +129,7 @@ newlines are handled, since env vars mangle multi-line values.
 
 1. Add the module to `modules` and set `presence.mark.handle`.
 2. Set `NUXT_PUBLIC_SITE_URL` — it is signed into the payload.
-3. *(Optional)* Set `NUXT_PRESENCE_PRIVATE_KEY` for a stable identity. Skip it and
+3. _(Optional)_ Set `NUXT_PRESENCE_PRIVATE_KEY` for a stable identity. Skip it and
    each deploy signs with its own generated key.
 4. Deploy. Nothing else to provision: the wall is in-memory, the keys sort themselves out.
 5. Confirm it shipped: view source and look for `<meta name="presence-mark">`, then
@@ -159,26 +159,26 @@ This module is built step by step in a three-part series:
 <details>
   <summary>Local development</summary>
 
-  ```bash
-  # Install dependencies
-  vp install
+```bash
+# Install dependencies
+vp install
 
-  # Generate type stubs
-  vp run build
+# Generate type stubs
+vp run build
 
-  # Develop with the playground
-  cd playground && vp dev
+# Develop with the playground
+cd playground && vp dev
 
-  # Lint
-  vp lint
+# Lint
+vp lint
 
-  # Run the test suite (84 tests, three tiers)
-  vp test
-  vp run test:watch
+# Run the test suite (84 tests, three tiers)
+vp test
+vp run test:watch
 
-  # Publish (prepack rebuilds dist first)
-  npm publish
-  ```
+# Publish (prepack rebuilds dist first)
+npm publish
+```
 
 </details>
 
@@ -191,14 +191,12 @@ must live under `src/runtime/`, or it will not be in the published tarball.
 [MIT](./LICENSE) — © [Vantol Bennett](https://vantolbennett.com)
 
 <!-- Badges -->
+
 [npm-version-src]: https://img.shields.io/npm/v/nuxt-presence/latest.svg?style=flat&colorA=020420&colorB=00DC82
 [npm-version-href]: https://npmjs.com/package/nuxt-presence
-
 [npm-downloads-src]: https://img.shields.io/npm/dm/nuxt-presence.svg?style=flat&colorA=020420&colorB=00DC82
 [npm-downloads-href]: https://npmjs.com/package/nuxt-presence
-
 [license-src]: https://img.shields.io/npm/l/nuxt-presence.svg?style=flat&colorA=020420&colorB=00DC82
 [license-href]: https://npmjs.com/package/nuxt-presence
-
 [nuxt-src]: https://img.shields.io/badge/Nuxt-020420?logo=nuxt.js
 [nuxt-href]: https://nuxt.com

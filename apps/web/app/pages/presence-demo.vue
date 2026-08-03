@@ -4,8 +4,7 @@ useHead({
 });
 
 const route = useRoute();
-const { identity, refresh, signInWithGitHub, signOut } =
-  usePresenceDemoIdentity();
+const { identity, refresh, signInWithGitHub, signOut } = usePresenceDemoIdentity();
 
 onMounted(() => {
   void refresh();
@@ -25,7 +24,6 @@ function signSample(text: string) {
   const w = window as unknown as { $presence?: { sign: (t: string) => void } };
   w.$presence?.sign(text);
 }
-
 </script>
 
 <template>
@@ -36,27 +34,21 @@ function signSample(text: string) {
         <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-4">
           nuxt-presence · better-auth
         </p>
-        <h1 class="text-4xl md:text-5xl font-semibold tracking-tight mb-4">
-          Presence Demo
-        </h1>
+        <h1 class="text-4xl md:text-5xl font-semibold tracking-tight mb-4">Presence Demo</h1>
         <p class="text-lg text-zinc-400 font-light">
-          A signed guestbook backed by GitHub OAuth. Sign in below to leave a
-          mark with your real avatar + handle, then open the wall with the
-          Konami prefix <code class="text-[#f5c542]">↑ ↑ ↓ ↓</code> or the
-          button.
+          A signed guestbook backed by GitHub OAuth. Sign in below to leave a mark with your real
+          avatar + handle, then open the wall with the Konami prefix
+          <code class="text-[#f5c542]">↑ ↑ ↓ ↓</code> or the button.
         </p>
       </div>
 
       <!-- Identity card -->
       <div class="bg-[#111] border border-white/10 rounded-xl p-6 mb-8">
         <div v-if="!identity">
-          <p class="text-[10px] uppercase tracking-widest text-zinc-500 mb-4">
-            Sign in
-          </p>
+          <p class="text-[10px] uppercase tracking-widest text-zinc-500 mb-4">Sign in</p>
           <p class="text-sm text-zinc-400 mb-4">
-            GitHub provides your avatar and handle. Better Auth stores the
-            session server-side; nuxt-presence only receives the identity
-            fields needed to render your card.
+            GitHub provides your avatar and handle. Better Auth stores the session server-side;
+            nuxt-presence only receives the identity fields needed to render your card.
           </p>
           <button
             type="button"
@@ -68,9 +60,7 @@ function signSample(text: string) {
         </div>
 
         <div v-else>
-          <p class="text-[10px] uppercase tracking-widest text-zinc-500 mb-4">
-            Signed in
-          </p>
+          <p class="text-[10px] uppercase tracking-widest text-zinc-500 mb-4">Signed in</p>
           <div class="flex items-center gap-3 mb-4">
             <img
               :src="identity.avatarUrl"
@@ -96,13 +86,10 @@ function signSample(text: string) {
 
       <!-- Wall launcher -->
       <div class="bg-[#111] border border-white/10 rounded-xl p-6 mb-8">
-        <p class="text-[10px] uppercase tracking-widest text-zinc-500 mb-4">
-          The wall
-        </p>
+        <p class="text-[10px] uppercase tracking-widest text-zinc-500 mb-4">The wall</p>
         <p class="text-sm text-zinc-400 mb-4">
-          Press <code class="text-[#f5c542]">↑ ↑ ↓ ↓</code> anywhere on the
-          page, or use the button. Posts you make appear with the GitHub
-          identity above.
+          Press <code class="text-[#f5c542]">↑ ↑ ↓ ↓</code> anywhere on the page, or use the button.
+          Posts you make appear with the GitHub identity above.
         </p>
         <button
           type="button"
@@ -116,12 +103,10 @@ function signSample(text: string) {
 
       <!-- Quick sign -->
       <div class="bg-[#111] border border-white/10 rounded-xl p-6">
-        <p class="text-[10px] uppercase tracking-widest text-zinc-500 mb-4">
-          Quick sign
-        </p>
+        <p class="text-[10px] uppercase tracking-widest text-zinc-500 mb-4">Quick sign</p>
         <p class="text-sm text-zinc-400 mb-4">
-          Each button posts a sample signature through the wall — visible to
-          anyone else looking at the same scope.
+          Each button posts a sample signature through the wall — visible to anyone else looking at
+          the same scope.
         </p>
         <div class="flex flex-wrap gap-2">
           <button

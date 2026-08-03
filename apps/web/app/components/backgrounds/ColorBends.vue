@@ -7,8 +7,8 @@
 </template>
 
 <script setup lang="ts">
-import * as THREE from 'three';
-import { onBeforeUnmount, onMounted, ref, watch, type CSSProperties } from 'vue';
+import * as THREE from "three";
+import { onBeforeUnmount, onMounted, ref, watch, type CSSProperties } from "vue";
 
 interface ColorBendsProps {
   className?: string;
@@ -43,7 +43,7 @@ const props = withDefaults(defineProps<ColorBendsProps>(), {
   noise: 0.15,
   iterations: 1,
   intensity: 1.5,
-  bandWidth: 6
+  bandWidth: 6,
 });
 
 const MAX_COLORS = 8 as const;
@@ -190,10 +190,10 @@ const init = () => {
       uNoise: { value: props.noise },
       uIterations: { value: props.iterations },
       uIntensity: { value: props.intensity },
-      uBandWidth: { value: props.bandWidth }
+      uBandWidth: { value: props.bandWidth },
     },
     premultipliedAlpha: true,
-    transparent: true
+    transparent: true,
   });
   materialRef.value = material;
 
@@ -202,16 +202,16 @@ const init = () => {
 
   const renderer = new THREE.WebGLRenderer({
     antialias: false,
-    powerPreference: 'high-performance',
-    alpha: true
+    powerPreference: "high-performance",
+    alpha: true,
   });
   rendererRef.value = renderer;
   renderer.outputColorSpace = THREE.SRGBColorSpace;
   renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
   renderer.setClearColor(0x000000, props.transparent ? 0 : 1);
-  renderer.domElement.style.width = '100%';
-  renderer.domElement.style.height = '100%';
-  renderer.domElement.style.display = 'block';
+  renderer.domElement.style.width = "100%";
+  renderer.domElement.style.height = "100%";
+  renderer.domElement.style.display = "block";
   container.appendChild(renderer.domElement);
 
   const clock = new THREE.Timer();
@@ -225,12 +225,12 @@ const init = () => {
 
   handleResize();
 
-  if ('ResizeObserver' in window) {
+  if ("ResizeObserver" in window) {
     const ro = new ResizeObserver(handleResize);
     ro.observe(container);
     resizeObserverRef.value = ro;
   } else {
-    (window as Window).addEventListener('resize', handleResize);
+    (window as Window).addEventListener("resize", handleResize);
   }
 
   const loop = () => {
@@ -262,12 +262,12 @@ const init = () => {
     pointerTargetRef.value.set(x, y);
   };
 
-  container.addEventListener('pointermove', handlePointerMove);
+  container.addEventListener("pointermove", handlePointerMove);
 
   cleanup = () => {
     if (rafRef.value !== null) cancelAnimationFrame(rafRef.value);
     if (resizeObserverRef.value) resizeObserverRef.value.disconnect();
-    else (window as Window).removeEventListener('resize', handleResize);
+    else (window as Window).removeEventListener("resize", handleResize);
     geometry.dispose();
     material.dispose();
     renderer.dispose();
@@ -275,7 +275,7 @@ const init = () => {
     if (renderer.domElement && renderer.domElement.parentElement === container) {
       container.removeChild(renderer.domElement);
     }
-    container.removeEventListener('pointermove', handlePointerMove);
+    container.removeEventListener("pointermove", handlePointerMove);
   };
 };
 
@@ -298,7 +298,7 @@ const applyProps = () => {
   material.uniforms.uBandWidth.value = props.bandWidth;
 
   const toVec3 = (hex: string) => {
-    const h = hex.replace('#', '').trim();
+    const h = hex.replace("#", "").trim();
     const v =
       h.length === 3
         ? [parseInt(h[0] + h[0], 16), parseInt(h[1] + h[1], 16), parseInt(h[2] + h[2], 16)]
@@ -342,11 +342,11 @@ watch(
     props.intensity,
     props.bandWidth,
     props.colors,
-    props.transparent
+    props.transparent,
   ],
   () => {
     applyProps();
   },
-  { deep: true }
+  { deep: true },
 );
 </script>

@@ -72,13 +72,13 @@ Every module is independently importable. You can use the agent loop without the
 
 null-agent doesn't pick sides. It supports five providers and auto-detects which one you have configured:
 
-| Provider | Env Variable | Default Model | Free Tier |
-|----------|-------------|---------------|-----------|
-| OpenAI | `OPENAI_API_KEY` | `gpt-5.4` | — |
-| Anthropic | `ANTHROPIC_API_KEY` | `claude-sonnet-4-6` | — |
-| Google Gemini | `GEMINI_API_KEY` | `gemini-3.1-flash` | `gemini-3.1-flash` |
-| OpenRouter | `OPENROUTER_API_KEY` | `anthropic/claude-sonnet-4-6` | `google/gemini-3.1-flash`, `llama-3.1` |
-| Tavily | `TAVILY_API_KEY` | — | 1000 searches/month |
+| Provider      | Env Variable         | Default Model                 | Free Tier                              |
+| ------------- | -------------------- | ----------------------------- | -------------------------------------- |
+| OpenAI        | `OPENAI_API_KEY`     | `gpt-5.4`                     | —                                      |
+| Anthropic     | `ANTHROPIC_API_KEY`  | `claude-sonnet-4-6`           | —                                      |
+| Google Gemini | `GEMINI_API_KEY`     | `gemini-3.1-flash`            | `gemini-3.1-flash`                     |
+| OpenRouter    | `OPENROUTER_API_KEY` | `anthropic/claude-sonnet-4-6` | `google/gemini-3.1-flash`, `llama-3.1` |
+| Tavily        | `TAVILY_API_KEY`     | —                             | 1000 searches/month                    |
 
 ## Using Providers as a Library
 
@@ -123,24 +123,24 @@ Tools are the core of what makes null-agent useful. They're organized into three
 
 The foundational trio every agent needs:
 
-| Tool | Name | Description |
-|------|------|-------------|
-| `fileReadTool` | `file_read` | Read file contents |
-| `fileWriteTool` | `file_write` | Write file contents (creates parent dirs) |
-| `shellTool` | `shell` | Run shell commands (30s timeout, 1MB buffer) |
+| Tool            | Name         | Description                                  |
+| --------------- | ------------ | -------------------------------------------- |
+| `fileReadTool`  | `file_read`  | Read file contents                           |
+| `fileWriteTool` | `file_write` | Write file contents (creates parent dirs)    |
+| `shellTool`     | `shell`      | Run shell commands (30s timeout, 1MB buffer) |
 
 ## Hand — File Manipulation
 
 Advanced file operations with safety features:
 
-| Tool | Name | Description |
-|------|------|-------------|
-| `fileMoveTool` | `file_move` | Move files with undo support |
-| `fileCopyTool` | `file_copy` | Copy files |
-| `fileDeleteTool` | `file_delete` | Delete files (moves to trash, supports restore) |
-| `fileGlobTool` | `file_glob` | Find files matching glob patterns |
-| `fileRestoreTool` | `file_restore` | List/restore files from trash |
-| `fileBulkTool` | `file_bulk` | Execute batch file operations |
+| Tool              | Name           | Description                                     |
+| ----------------- | -------------- | ----------------------------------------------- |
+| `fileMoveTool`    | `file_move`    | Move files with undo support                    |
+| `fileCopyTool`    | `file_copy`    | Copy files                                      |
+| `fileDeleteTool`  | `file_delete`  | Delete files (moves to trash, supports restore) |
+| `fileGlobTool`    | `file_glob`    | Find files matching glob patterns               |
+| `fileRestoreTool` | `file_restore` | List/restore files from trash                   |
+| `fileBulkTool`    | `file_bulk`    | Execute batch file operations                   |
 
 **Safety features built in:**
 
@@ -152,16 +152,16 @@ Advanced file operations with safety features:
 
 Script execution, process management, and terminal sessions:
 
-| Tool | Name | Description |
-|------|------|-------------|
-| `scriptDetectTool` | `script_detect` | Auto-detect scripts from package.json/Makefile |
-| `scriptRunTool` | `script_run` | Run detected or custom scripts |
-| `processStartTool` | `process_start` | Start background processes |
-| `processStopTool` | `process_stop` | Stop background processes |
-| `processListTool` | `process_list` | List running processes |
-| `sessionCreateTool` | `session_create` | Create persistent terminal sessions |
-| `sessionAttachTool` | `session_attach` | Attach to existing sessions |
-| `taskSprintTool` | `task_sprint` | Run concurrent tasks with progress |
+| Tool                | Name             | Description                                    |
+| ------------------- | ---------------- | ---------------------------------------------- |
+| `scriptDetectTool`  | `script_detect`  | Auto-detect scripts from package.json/Makefile |
+| `scriptRunTool`     | `script_run`     | Run detected or custom scripts                 |
+| `processStartTool`  | `process_start`  | Start background processes                     |
+| `processStopTool`   | `process_stop`   | Stop background processes                      |
+| `processListTool`   | `process_list`   | List running processes                         |
+| `sessionCreateTool` | `session_create` | Create persistent terminal sessions            |
+| `sessionAttachTool` | `session_attach` | Attach to existing sessions                    |
+| `taskSprintTool`    | `task_sprint`    | Run concurrent tasks with progress             |
 
 ## Git, Workflow, Review, Testing, and Web
 
@@ -401,7 +401,9 @@ console.log(reporter.formatDailyReport(report));
 ```
 
 ::BlogCard
+
 ### Why Accountability in a Coding Assistant?
+
 Because the terminal is where developers spend most of their time. Putting time tracking, goal management, and daily reports there removes friction — no context switching to another app.
 ::
 
@@ -415,10 +417,10 @@ null-agent doesn't just chat — it understands your project.
 import { scanProject } from "null-agent";
 
 const knowledge = await scanProject("./my-project");
-console.log(knowledge.language);      // "typescript"
-console.log(knowledge.framework);     // "react"
+console.log(knowledge.language); // "typescript"
+console.log(knowledge.framework); // "react"
 console.log(knowledge.packageManager); // "pnpm"
-console.log(knowledge.testCommand);   // "vitest"
+console.log(knowledge.testCommand); // "vitest"
 ```
 
 It detects Next.js, Nuxt, React, Vue, Express, Fastify, Hono, NestJS, and more.

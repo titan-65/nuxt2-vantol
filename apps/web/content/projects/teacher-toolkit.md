@@ -2,11 +2,11 @@
 title: teacher-toolkit
 preview: Grade calculation utilities for teachers — letter grades, GPA conversion, weighted averages, score curving, and class statistics.
 active: true
-url: 'https://www.npmjs.com/package/teacher-toolkit'
+url: "https://www.npmjs.com/package/teacher-toolkit"
 tag: Education, Library, TypeScript
-image: 'https://picsum.photos/seed/teacher-toolkit/800/450'
+image: "https://picsum.photos/seed/teacher-toolkit/800/450"
 git: https://github.com/titan-65/nuxt2-vantol/tree/main/packages/teacher-toolkit
-stack: 
+stack:
   language: TypeScript
   Backend: N/A
   Frontend: N/A
@@ -27,7 +27,7 @@ Grade calculation utilities for teachers. Calculate letter grades, GPA conversio
 - **Class Statistics** — Mean, median, standard deviation, and distribution
 
 ::Flex{gap="4"}
-  ::StatBox{label="Grade Scales" value="3+"}
-  ::StatBox{label="Curve Methods" value="4"}
-  ::StatBox{label="Dependencies" value="0"}
+::StatBox{label="Grade Scales" value="3+"}
+::StatBox{label="Curve Methods" value="4"}
+::StatBox{label="Dependencies" value="0"}
 ::

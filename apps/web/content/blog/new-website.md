@@ -7,14 +7,14 @@ tag: New Stack
 rating: 0
 date: 2021-12-01
 readTime: 5
-img: 'https://res.cloudinary.com/ddszyeplg/image/upload/v1642350413/vantol/black-text_emxagi.png'
+img: "https://res.cloudinary.com/ddszyeplg/image/upload/v1642350413/vantol/black-text_emxagi.png"
 author:
   name: Vantol Bennett
   website: www.teammps.com
-  img: 'https://res.cloudinary.com/ddszyeplg/image/upload/v1636919468/DSC_0988_zsfhgy.jpg'
+  img: "https://res.cloudinary.com/ddszyeplg/image/upload/v1636919468/DSC_0988_zsfhgy.jpg"
 ---
 
-## Performance 
+## Performance
 
 Nuxt.js provides some unique advantages which allowed for it to be the main choice when creating my website.
 

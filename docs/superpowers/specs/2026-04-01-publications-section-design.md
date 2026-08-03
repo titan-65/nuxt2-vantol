@@ -37,10 +37,7 @@ Add a dedicated `/publications` page to the portfolio showcasing published books
           "source": "..."
         }
       ],
-      "toc": [
-        "Chapter 1: ...",
-        "Chapter 2: ..."
-      ],
+      "toc": ["Chapter 1: ...", "Chapter 2: ..."],
       "relatedPosts": ["slug-1", "slug-2"]
     }
   ]
@@ -53,41 +50,49 @@ Add `publications` collection:
 
 ```ts
 publications: defineCollection({
-  type: 'data',
-  source: 'publications/*.json',
+  type: "data",
+  source: "publications/*.json",
   schema: z.object({
-    items: z.array(z.object({
-      title: z.string(),
-      subtitle: z.string().optional(),
-      cover: z.string(),
-      publisher: z.string().optional(),
-      isbn: z.string().optional(),
-      format: z.enum(['ebook', 'paperback', 'hardcover']).optional(),
-      pages: z.number().optional(),
-      date: z.string().optional(),
-      description: z.string(),
-      amazonUrl: z.string(),
-      previewUrl: z.string().optional(),
-      reviews: z.array(z.object({
-        quote: z.string(),
-        author: z.string(),
-        source: z.string()
-      })).optional(),
-      toc: z.array(z.string()).optional(),
-      relatedPosts: z.array(z.string()).optional()
-    }))
-  })
-})
+    items: z.array(
+      z.object({
+        title: z.string(),
+        subtitle: z.string().optional(),
+        cover: z.string(),
+        publisher: z.string().optional(),
+        isbn: z.string().optional(),
+        format: z.enum(["ebook", "paperback", "hardcover"]).optional(),
+        pages: z.number().optional(),
+        date: z.string().optional(),
+        description: z.string(),
+        amazonUrl: z.string(),
+        previewUrl: z.string().optional(),
+        reviews: z
+          .array(
+            z.object({
+              quote: z.string(),
+              author: z.string(),
+              source: z.string(),
+            }),
+          )
+          .optional(),
+        toc: z.array(z.string()).optional(),
+        relatedPosts: z.array(z.string()).optional(),
+      }),
+    ),
+  }),
+});
 ```
 
 ## Page: `app/pages/publications.vue`
 
 ### Section 1: Hero
+
 - Red dot badge + "PUBLICATIONS" uppercase label
 - Page title: "Published Works"
 - Subtitle describing the publications section
 
 ### Section 2: Book Feature (per item)
+
 - Two-column grid (image left, details right)
 - Cover image with bordered frame treatment + rotation hover (matches homepage/about image style)
 - Title, subtitle, metadata badges (format, pages, date)
@@ -96,40 +101,45 @@ publications: defineCollection({
 - Preview link if available
 
 ### Section 3: Reviews & Quotes
+
 - Styled blockquotes with left accent bar (matches homepage Testimonials section)
 - Quote text, author name, source attribution
 
 ### Section 4: Table of Contents Excerpt
+
 - Clean numbered/bulleted list of chapters
 - Border-separated from other sections
 
 ### Section 5: Related Posts
+
 - Link to related blog posts if configured
 - Uses existing PostCard or simple link format
 
 ## New Components
 
 ### `app/components/PublicationCard.vue`
+
 The main book feature component. Props: publication object. Renders the hero book layout.
 
 ### `app/components/ReviewCard.vue`
+
 Individual review/quote block. Props: quote, author, source. Styled blockquote with attribution.
 
 ## Modified Files
 
-| File | Change |
-|------|--------|
-| `content.config.ts` | Add `publications` collection definition |
+| File                           | Change                                                      |
+| ------------------------------ | ----------------------------------------------------------- |
+| `content.config.ts`            | Add `publications` collection definition                    |
 | `app/components/HeaderNav.vue` | Add `PUBLICATIONS` link after `PROJECTS` in nav links array |
 
 ## New Files
 
-| File | Purpose |
-|------|---------|
-| `content/publications/publications.json` | Publication data |
-| `app/pages/publications.vue` | Publications page |
-| `app/components/PublicationCard.vue` | Book feature component |
-| `app/components/ReviewCard.vue` | Review/quote component |
+| File                                     | Purpose                |
+| ---------------------------------------- | ---------------------- |
+| `content/publications/publications.json` | Publication data       |
+| `app/pages/publications.vue`             | Publications page      |
+| `app/components/PublicationCard.vue`     | Book feature component |
+| `app/components/ReviewCard.vue`          | Review/quote component |
 
 ## Design Tokens (matching existing site)
 

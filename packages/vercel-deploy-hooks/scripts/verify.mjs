@@ -6,8 +6,8 @@
  *
  * This does NOT trigger a deploy. It only lists existing hooks.
  */
-import { readFileSync, existsSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { readFileSync, existsSync } from "node:fs";
+import { resolve } from "node:path";
 
 const TOKEN = process.env.VERCEL_TOKEN;
 const PROJECT_ID = process.env.VERCEL_PROJECT_ID;
@@ -26,14 +26,11 @@ Required env vars:
 async function main() {
   console.log(`Checking deploy hooks for project: ${PROJECT_ID}\n`);
 
-  const res = await fetch(
-    `https://api.vercel.com/v9/projects/${PROJECT_ID}/deploy-hooks`,
-    {
-      headers: {
-        Authorization: `Bearer ${TOKEN}`,
-      },
+  const res = await fetch(`https://api.vercel.com/v9/projects/${PROJECT_ID}/deploy-hooks`, {
+    headers: {
+      Authorization: `Bearer ${TOKEN}`,
     },
-  );
+  });
 
   if (!res.ok) {
     console.error(`API error: ${res.status} ${res.statusText}`);
@@ -45,8 +42,8 @@ async function main() {
   const data = await res.json();
 
   if (!data.deployHooks || data.deployHooks.length === 0) {
-    console.log('No deploy hooks found for this project.');
-    console.log('\nCreate one at: https://vercel.com/[team]/[project]/settings/git');
+    console.log("No deploy hooks found for this project.");
+    console.log("\nCreate one at: https://vercel.com/[team]/[project]/settings/git");
     process.exit(0);
   }
 
@@ -55,15 +52,15 @@ async function main() {
   for (const hook of data.deployHooks) {
     console.log(`  Name:    ${hook.name}`);
     console.log(`  Branch:  ${hook.ref}`);
-    console.log(`  URL:     ${hook.url || '(use vercel-deploy-hooks --url <url>)'}`);
+    console.log(`  URL:     ${hook.url || "(use vercel-deploy-hooks --url <url>)"}`);
     console.log(`  Created: ${new Date(hook.createdAt).toISOString()}`);
-    console.log('');
+    console.log("");
   }
 
   // Quick test: fetch without triggering
   const testUrl = data.deployHooks[0].url;
   if (testUrl) {
-    console.log('To test deployment, run:');
+    console.log("To test deployment, run:");
     console.log(`  npx @vvantol2000/vercel-deploy-hooks --url "${testUrl}" --dry-run`);
   }
 }

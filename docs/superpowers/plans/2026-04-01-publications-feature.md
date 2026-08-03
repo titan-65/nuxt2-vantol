@@ -12,20 +12,21 @@
 
 ## File Map
 
-| File | Action | Purpose |
-|------|--------|---------|
-| `content.config.ts` | Modify | Add `publications` collection |
-| `content/publications/publications.json` | Create | Publication data |
-| `app/components/ReviewCard.vue` | Create | Review/quote block component |
-| `app/components/PublicationCard.vue` | Create | Book feature hero component |
-| `app/pages/publications.vue` | Create | Publications page |
-| `app/components/HeaderNav.vue` | Modify | Add nav link |
+| File                                     | Action | Purpose                       |
+| ---------------------------------------- | ------ | ----------------------------- |
+| `content.config.ts`                      | Modify | Add `publications` collection |
+| `content/publications/publications.json` | Create | Publication data              |
+| `app/components/ReviewCard.vue`          | Create | Review/quote block component  |
+| `app/components/PublicationCard.vue`     | Create | Book feature hero component   |
+| `app/pages/publications.vue`             | Create | Publications page             |
+| `app/components/HeaderNav.vue`           | Modify | Add nav link                  |
 
 ---
 
 ### Task 1: Add publications content collection
 
 **Files:**
+
 - Modify: `apps/web/content.config.ts`
 - Create: `apps/web/content/publications/publications.json`
 
@@ -109,6 +110,7 @@ Run: `cd apps/web && npx nuxt dev` and check `/_nuxt/content/publications` or in
 ### Task 2: Create ReviewCard component
 
 **Files:**
+
 - Create: `apps/web/app/components/ReviewCard.vue`
 
 - [ ] **Step 1: Create ReviewCard component**
@@ -118,15 +120,19 @@ Create `apps/web/app/components/ReviewCard.vue`:
 ```vue
 <script setup lang="ts">
 defineProps<{
-  quote: string
-  author: string
-  source: string
-}>()
+  quote: string;
+  author: string;
+  source: string;
+}>();
 </script>
 
 <template>
-  <div class="bg-white border border-black/10 p-8 relative overflow-hidden group hover:border-black transition-colors">
-    <div class="absolute top-0 left-0 w-2 h-full bg-black/5 group-hover:bg-[#FF4F4F] transition-colors"></div>
+  <div
+    class="bg-white border border-black/10 p-8 relative overflow-hidden group hover:border-black transition-colors"
+  >
+    <div
+      class="absolute top-0 left-0 w-2 h-full bg-black/5 group-hover:bg-[#FF4F4F] transition-colors"
+    ></div>
     <blockquote class="text-xl md:text-2xl font-medium leading-tight mb-6 relative z-10">
       "{{ quote }}"
     </blockquote>
@@ -147,6 +153,7 @@ This matches the Testimonials section style from `apps/web/app/pages/index.vue:3
 ### Task 3: Create PublicationCard component
 
 **Files:**
+
 - Create: `apps/web/app/components/PublicationCard.vue`
 
 - [ ] **Step 1: Create PublicationCard component**
@@ -157,28 +164,28 @@ Create `apps/web/app/components/PublicationCard.vue`:
 <script setup lang="ts">
 defineProps<{
   item: {
-    title: string
-    subtitle?: string
-    cover: string
-    publisher?: string
-    isbn?: string
-    format?: string
-    pages?: number
-    date?: string
-    description: string
-    amazonUrl: string
-    previewUrl?: string | null
-    reviews?: Array<{ quote: string; author: string; source: string }>
-    toc?: string[]
-    relatedPosts?: string[]
-  }
-}>()
+    title: string;
+    subtitle?: string;
+    cover: string;
+    publisher?: string;
+    isbn?: string;
+    format?: string;
+    pages?: number;
+    date?: string;
+    description: string;
+    amazonUrl: string;
+    previewUrl?: string | null;
+    reviews?: Array<{ quote: string; author: string; source: string }>;
+    toc?: string[];
+    relatedPosts?: string[];
+  };
+}>();
 
 const formatDate = (dateStr?: string) => {
-  if (!dateStr) return ''
-  const date = new Date(dateStr)
-  return date.toLocaleDateString('en-US', { year: 'numeric', month: 'long' })
-}
+  if (!dateStr) return "";
+  const date = new Date(dateStr);
+  return date.toLocaleDateString("en-US", { year: "numeric", month: "long" });
+};
 </script>
 
 <template>
@@ -187,13 +194,11 @@ const formatDate = (dateStr?: string) => {
     <div class="grid lg:grid-cols-2 gap-12 lg:gap-20 items-start">
       <!-- Cover Image -->
       <div class="relative">
-        <div class="relative z-10 border border-black/20 bg-white p-2 shadow-sm transform rotate-2 hover:rotate-0 transition-transform duration-500">
+        <div
+          class="relative z-10 border border-black/20 bg-white p-2 shadow-sm transform rotate-2 hover:rotate-0 transition-transform duration-500"
+        >
           <div class="aspect-[3/4] overflow-hidden bg-gray-100 border border-black/10">
-            <img
-              :src="item.cover"
-              :alt="item.title"
-              class="w-full h-full object-cover"
-            />
+            <img :src="item.cover" :alt="item.title" class="w-full h-full object-cover" />
           </div>
           <div class="mt-2 flex justify-between items-center px-1">
             <div class="flex gap-1">
@@ -201,10 +206,14 @@ const formatDate = (dateStr?: string) => {
               <div class="w-2 h-2 rounded-full bg-yellow-400/20"></div>
               <div class="w-2 h-2 rounded-full bg-green-400/20"></div>
             </div>
-            <span class="text-[10px] font-mono text-gray-400 uppercase">{{ item.format || 'BOOK' }}</span>
+            <span class="text-[10px] font-mono text-gray-400 uppercase">{{
+              item.format || "BOOK"
+            }}</span>
           </div>
         </div>
-        <div class="absolute -top-4 -right-4 w-full h-full border border-dashed border-black/20 z-0"></div>
+        <div
+          class="absolute -top-4 -right-4 w-full h-full border border-dashed border-black/20 z-0"
+        ></div>
       </div>
 
       <!-- Details -->
@@ -218,16 +227,28 @@ const formatDate = (dateStr?: string) => {
 
         <!-- Metadata Badges -->
         <div class="flex flex-wrap gap-3 mb-8">
-          <span v-if="item.format" class="inline-block px-2 py-1 text-xs font-mono bg-black text-white uppercase">
+          <span
+            v-if="item.format"
+            class="inline-block px-2 py-1 text-xs font-mono bg-black text-white uppercase"
+          >
             {{ item.format }}
           </span>
-          <span v-if="item.pages" class="inline-block px-2 py-1 text-xs font-mono border border-black/20 text-gray-600 uppercase">
+          <span
+            v-if="item.pages"
+            class="inline-block px-2 py-1 text-xs font-mono border border-black/20 text-gray-600 uppercase"
+          >
             {{ item.pages }} pages
           </span>
-          <span v-if="item.date" class="inline-block px-2 py-1 text-xs font-mono border border-black/20 text-gray-600 uppercase">
+          <span
+            v-if="item.date"
+            class="inline-block px-2 py-1 text-xs font-mono border border-black/20 text-gray-600 uppercase"
+          >
             {{ formatDate(item.date) }}
           </span>
-          <span v-if="item.publisher" class="inline-block px-2 py-1 text-xs font-mono border border-black/20 text-gray-600 uppercase">
+          <span
+            v-if="item.publisher"
+            class="inline-block px-2 py-1 text-xs font-mono border border-black/20 text-gray-600 uppercase"
+          >
             {{ item.publisher }}
           </span>
         </div>
@@ -246,7 +267,14 @@ const formatDate = (dateStr?: string) => {
             class="inline-flex items-center gap-2 bg-black text-white px-6 py-3 text-sm font-bold uppercase tracking-widest hover:bg-gray-800 transition-colors"
           >
             Buy on Amazon
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <svg
+              width="16"
+              height="16"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
               <path d="M5 12h14M12 5l7 7-7 7" />
             </svg>
           </a>
@@ -284,7 +312,9 @@ const formatDate = (dateStr?: string) => {
     <div v-if="item.toc && item.toc.length > 0">
       <div class="flex items-center gap-2 mb-8">
         <span class="w-2 h-2 bg-[#FF4F4F] rounded-full"></span>
-        <span class="text-xs font-medium tracking-widest text-gray-500 uppercase">TABLE OF CONTENTS</span>
+        <span class="text-xs font-medium tracking-widest text-gray-500 uppercase"
+          >TABLE OF CONTENTS</span
+        >
       </div>
       <div class="bg-white border border-black/10 p-8">
         <ol class="space-y-3">
@@ -293,7 +323,9 @@ const formatDate = (dateStr?: string) => {
             :key="index"
             class="flex items-start gap-4 text-gray-600 font-mono text-sm"
           >
-            <span class="text-xs font-bold text-gray-400 mt-0.5 w-6 text-right">{{ String(index + 1).padStart(2, '0') }}</span>
+            <span class="text-xs font-bold text-gray-400 mt-0.5 w-6 text-right">{{
+              String(index + 1).padStart(2, "0")
+            }}</span>
             <span class="font-light">{{ chapter }}</span>
           </li>
         </ol>
@@ -304,7 +336,9 @@ const formatDate = (dateStr?: string) => {
     <div v-if="item.relatedPosts && item.relatedPosts.length > 0">
       <div class="flex items-center gap-2 mb-8">
         <span class="w-2 h-2 bg-[#FF4F4F] rounded-full"></span>
-        <span class="text-xs font-medium tracking-widest text-gray-500 uppercase">RELATED POSTS</span>
+        <span class="text-xs font-medium tracking-widest text-gray-500 uppercase"
+          >RELATED POSTS</span
+        >
       </div>
       <div class="flex flex-wrap gap-3">
         <NuxtLink
@@ -326,6 +360,7 @@ const formatDate = (dateStr?: string) => {
 ### Task 4: Create publications page
 
 **Files:**
+
 - Create: `apps/web/app/pages/publications.vue`
 
 - [ ] **Step 1: Create the publications page**
@@ -335,15 +370,15 @@ Create `apps/web/app/pages/publications.vue`:
 ```vue
 <script setup lang="ts">
 useSeoMeta({
-  title: 'Publications - VantolBennett',
-  description: 'Published books and written works by Vantol R. Bennett.',
-})
+  title: "Publications - VantolBennett",
+  description: "Published books and written works by Vantol R. Bennett.",
+});
 
-const { data: publicationsData } = await useAsyncData('publications-data', () => {
-  return queryCollection('publications').first()
-})
+const { data: publicationsData } = await useAsyncData("publications-data", () => {
+  return queryCollection("publications").first();
+});
 
-const publications = computed(() => publicationsData.value?.items || [])
+const publications = computed(() => publicationsData.value?.items || []);
 </script>
 
 <template>
@@ -354,15 +389,18 @@ const publications = computed(() => publicationsData.value?.items || [])
         <div class="max-w-3xl">
           <div class="flex items-center gap-2 mb-4">
             <span class="w-2 h-2 bg-[#FF4F4F] rounded-full"></span>
-            <span class="text-xs font-medium tracking-widest text-gray-500 uppercase">PUBLICATIONS</span>
+            <span class="text-xs font-medium tracking-widest text-gray-500 uppercase"
+              >PUBLICATIONS</span
+            >
           </div>
 
-          <h1 class="text-5xl md:text-6xl font-medium tracking-tight mb-8">
-            Published Works
-          </h1>
+          <h1 class="text-5xl md:text-6xl font-medium tracking-tight mb-8">Published Works</h1>
 
-          <p class="text-xl text-gray-600 font-light leading-relaxed border-l-2 border-black/10 pl-6">
-            Books and written works exploring modern web development, frameworks, and the craft of building software.
+          <p
+            class="text-xl text-gray-600 font-light leading-relaxed border-l-2 border-black/10 pl-6"
+          >
+            Books and written works exploring modern web development, frameworks, and the craft of
+            building software.
           </p>
         </div>
       </div>
@@ -417,6 +455,7 @@ const publications = computed(() => publicationsData.value?.items || [])
 ### Task 5: Add nav link
 
 **Files:**
+
 - Modify: `apps/web/app/components/HeaderNav.vue:6-17`
 
 - [ ] **Step 1: Add PUBLICATIONS to nav links**
@@ -425,35 +464,35 @@ Edit the `links` array in `apps/web/app/components/HeaderNav.vue`. Change from:
 
 ```ts
 const links = [
-  { name: 'HOME', to: '/' },
-  { name: 'BLOG', to: '/blog' },
-  { name: 'PROJECTS', to: '/projects' },
-  { name: 'GALLERY', to: '/gallery' },
-  { name: 'EXPLORE', to: '/explore' },
-  { name: 'ABOUT', to: '/about' },
-  { name: 'STATS', to: '/stats' },
-  { name: 'GUESTBOOK', to: '/guestbook' },
-  { name: 'USES', to: '/uses' },
-  { name: 'CONTACT', to: '/contact' },
-]
+  { name: "HOME", to: "/" },
+  { name: "BLOG", to: "/blog" },
+  { name: "PROJECTS", to: "/projects" },
+  { name: "GALLERY", to: "/gallery" },
+  { name: "EXPLORE", to: "/explore" },
+  { name: "ABOUT", to: "/about" },
+  { name: "STATS", to: "/stats" },
+  { name: "GUESTBOOK", to: "/guestbook" },
+  { name: "USES", to: "/uses" },
+  { name: "CONTACT", to: "/contact" },
+];
 ```
 
 To:
 
 ```ts
 const links = [
-  { name: 'HOME', to: '/' },
-  { name: 'BLOG', to: '/blog' },
-  { name: 'PROJECTS', to: '/projects' },
-  { name: 'PUBLICATIONS', to: '/publications' },
-  { name: 'GALLERY', to: '/gallery' },
-  { name: 'EXPLORE', to: '/explore' },
-  { name: 'ABOUT', to: '/about' },
-  { name: 'STATS', to: '/stats' },
-  { name: 'GUESTBOOK', to: '/guestbook' },
-  { name: 'USES', to: '/uses' },
-  { name: 'CONTACT', to: '/contact' },
-]
+  { name: "HOME", to: "/" },
+  { name: "BLOG", to: "/blog" },
+  { name: "PROJECTS", to: "/projects" },
+  { name: "PUBLICATIONS", to: "/publications" },
+  { name: "GALLERY", to: "/gallery" },
+  { name: "EXPLORE", to: "/explore" },
+  { name: "ABOUT", to: "/about" },
+  { name: "STATS", to: "/stats" },
+  { name: "GUESTBOOK", to: "/guestbook" },
+  { name: "USES", to: "/uses" },
+  { name: "CONTACT", to: "/contact" },
+];
 ```
 
 ---

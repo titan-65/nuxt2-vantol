@@ -45,16 +45,18 @@ author:
 ## Task 0: Research pass — pin the Vue Vapor Mode version
 
 **Files:**
+
 - Create: `docs/superpowers/specs/2026-07-19-vue-vapor-pin.md`
 
 - [ ] **Step 1: Confirm the current Vapor Mode enablement path**
 
 Run a web research pass (Vue blog, `vuejs/core` repo, Vapor Mode RFC/discussions) to determine, as of today, how to enable Vapor Mode in a Vue + Vite project. Record the **exact** answers:
-  - The npm package + version to install (e.g. `vue@<version>` canary, or `@vue/vapor`, or a build flag).
-  - The exact enablement mechanism (runtime entry import such as `vue/vapor`, or a Vite/`@vitejs/plugin-vue` option).
-  - How to verify it compiled to Vapor (build output signal, devtools, or a runtime check per that version).
-  - Known supported/unsupported feature list for that version (for lessons 6 & 7).
-  - Authoritative source URLs (for `sourceUrl`/`sourcePRs` in lessons 4–7).
+
+- The npm package + version to install (e.g. `vue@<version>` canary, or `@vue/vapor`, or a build flag).
+- The exact enablement mechanism (runtime entry import such as `vue/vapor`, or a Vite/`@vitejs/plugin-vue` option).
+- How to verify it compiled to Vapor (build output signal, devtools, or a runtime check per that version).
+- Known supported/unsupported feature list for that version (for lessons 6 & 7).
+- Authoritative source URLs (for `sourceUrl`/`sourcePRs` in lessons 4–7).
 
 - [ ] **Step 2: Write the pinned reference file**
 
@@ -72,6 +74,7 @@ git commit -m "docs: pin Vue Vapor Mode version for tutorial series"
 ## Task 1: `01-what-is-vapor-mode.md`
 
 **Files:**
+
 - Create: `apps/web/content/learn/vue-vapor/01-what-is-vapor-mode.md`
 
 - [ ] **Step 1: Write the lesson**
@@ -104,7 +107,7 @@ Think of it as the same template, a different output: less JavaScript to ship an
 Two wins, both about scale:
 
 - **Smaller runtime.** Vapor components don't need the vdom renderer machinery per component, so the framework footprint drops.
-- **Cheaper updates.** No vnode objects allocated and no tree walked on update — the work is proportional only to the *dynamic* parts of your template.
+- **Cheaper updates.** No vnode objects allocated and no tree walked on update — the work is proportional only to the _dynamic_ parts of your template.
 
 If you've never felt the vdom "tax" (lesson 2), this is foreshadowing. If you have — huge lists, many tiny components, high-frequency updates — this is the lever.
 
@@ -123,7 +126,7 @@ None yet — this is the conceptual setup. Lesson 4 gets your hands on the actua
 ## Gotchas
 
 - Vapor Mode is **not** a replacement for the virtual DOM yet. It's an opt-in mode you enable deliberately.
-- It does **not** change Vue's reactivity (Proxies). It changes what happens *after* reactivity fires — where the DOM writes go.
+- It does **not** change Vue's reactivity (Proxies). It changes what happens _after_ reactivity fires — where the DOM writes go.
 - Because it's experimental, the enablement API and supported surface shift between versions. This series pins one version (see the setup lesson).
 
 ## Recap
@@ -143,6 +146,7 @@ git commit -m "content(learn): add Vue Vapor Mode lesson 1 — what is it"
 ## Task 2: `02-virtual-dom-tax.md`
 
 **Files:**
+
 - Create: `apps/web/content/learn/vue-vapor/02-virtual-dom-tax.md`
 
 - [ ] **Step 1: Write the lesson**
@@ -170,7 +174,7 @@ Every Vue component renders through the same three-stage pipeline:
 
 1. **Compile** — the template becomes a render function that returns a virtual DOM tree.
 2. **Mount** — the renderer calls that function, walks the returned vnode tree, and builds real DOM. This runs as a reactive effect, so it remembers every piece of state it touched.
-3. **Patch** — when touched state changes, the effect re-runs, a *new* vnode tree is built, diffed against the old one, and only the differences are applied to the DOM.
+3. **Patch** — when touched state changes, the effect re-runs, a _new_ vnode tree is built, diffed against the old one, and only the differences are applied to the DOM.
 
 The virtual DOM is the in-memory tree of plain objects (`{ type, props, children }`) standing in for the real UI.
 
@@ -183,7 +187,7 @@ The vdom buys you declarativeness: you describe UI as a function of state and ne
 - The new tree is diffed against the old one.
 - Patches are applied.
 
-Vue alreadyOptimizes this hard — **patch flags** (the compiler tags each dynamic node with what *kind* of update it needs, checked with fast bitwise ops) and **tree flattening** (only dynamic descendants are tracked, static parts skipped). That's "compiler-informed virtual DOM." It's genuinely fast. But the machinery still exists: vnode objects, block arrays, an effect re-run.
+Vue alreadyOptimizes this hard — **patch flags** (the compiler tags each dynamic node with what _kind_ of update it needs, checked with fast bitwise ops) and **tree flattening** (only dynamic descendants are tracked, static parts skipped). That's "compiler-informed virtual DOM." It's genuinely fast. But the machinery still exists: vnode objects, block arrays, an effect re-run.
 
 ## Before
 
@@ -191,7 +195,7 @@ A list of 1,000 rows re-renders. Even with patch flags, the update allocates vno
 
 ## After
 
-Conceptually, the same update could skip the vnode layer entirely: the dynamic text node already has a reference, so a state change just sets `textContent`. No allocation, no diff, no walk. (Vapor Mode makes this real — lesson 3 shows how.) The point of this lesson is just to *see* the tax so the savings are legible.
+Conceptually, the same update could skip the vnode layer entirely: the dynamic text node already has a reference, so a state change just sets `textContent`. No allocation, no diff, no walk. (Vapor Mode makes this real — lesson 3 shows how.) The point of this lesson is just to _see_ the tax so the savings are legible.
 
 ## Do it yourself
 
@@ -199,7 +203,7 @@ None — conceptual. If you want to feel it, open the [Template Explorer](https:
 
 ## Gotchas
 
-- The vdom is **not "slow."** For most apps the tax is invisible. It compounds with *scale and frequency*: many leaf components, high update rates.
+- The vdom is **not "slow."** For most apps the tax is invisible. It compounds with _scale and frequency_: many leaf components, high update rates.
 - Patch flags and tree flattening already remove most of the cost for typical apps. Vapor Mode is the next step, not a fix for a broken default.
 
 ## Recap
@@ -219,11 +223,12 @@ git commit -m "content(learn): add Vue Vapor Mode lesson 2 — vdom tax"
 ## Task 3: `03-how-vapor-compiles.md`
 
 **Files:**
+
 - Create: `apps/web/content/learn/vue-vapor/03-how-vapor-compiles.md`
 
 - [ ] **Step 1: Write the lesson**
 
-```markdown
+````markdown
 ---
 title: "How Vapor Compiles"
 description: "Templates are statically analyzed: dynamic parts are found at compile time and emitted as direct DOM operations instead of a render function returning vnodes. A side-by-side look at the two outputs."
@@ -252,7 +257,7 @@ There is no vnode tree produced at runtime and no diff pass. Static parts are cr
 
 ## Why you'd care
 
-This is why the "tax" from lesson 2 disappears: the update cost is now proportional only to your *dynamic* bindings, and there's nothing to allocate or walk. The compiler did the structural analysis so the runtime doesn't have to.
+This is why the "tax" from lesson 2 disappears: the update cost is now proportional only to your _dynamic_ bindings, and there's nothing to allocate or walk. The compiler did the structural analysis so the runtime doesn't have to.
 
 ## Before (virtual DOM)
 
@@ -261,10 +266,11 @@ A render function returns vnodes every time; the runtime diffs and patches:
 ```js
 // conceptual vdom output
 function render() {
-  return h('div', { id: _ctx.id }, _ctx.message)
+  return h("div", { id: _ctx.id }, _ctx.message);
 }
 // on update: new vnode -> diff vs old -> patch text + id
 ```
+````
 
 ## After (Vapor)
 
@@ -273,17 +279,21 @@ The compiler emits mount + targeted mutations. Logically:
 ```js
 // conceptual Vapor output
 function mount(el) {
-  const root = document.createElement('div')
-  const text = document.createTextNode('')
-  root.appendChild(text)
+  const root = document.createElement("div");
+  const text = document.createTextNode("");
+  root.appendChild(text);
   // store refs; bind effects
-  effect(() => { root.id = state.id })
-  effect(() => { text.nodeValue = state.message })
+  effect(() => {
+    root.id = state.id;
+  });
+  effect(() => {
+    text.nodeValue = state.message;
+  });
 }
 // on update: only the changed effect runs — no vnodes, no diff
 ```
 
-The real compiler works on **templates**, not hand-written `h()` calls — the snippet above is the *logical* shape, not something you author.
+The real compiler works on **templates**, not hand-written `h()` calls — the snippet above is the _logical_ shape, not something you author.
 
 ## Do it yourself
 
@@ -293,25 +303,27 @@ None — conceptual. Lesson 4 sets up a real project so you can see Vapor's actu
 
 - Vapor changes the **output of the compiler**, not how you write templates. Your `<template>` and `<script setup>` stay the same.
 - Static parts are hoisted and created once. Only dynamic bindings get a tracked effect.
-- This is a *different* compilation target than the vdom path — both ship from the same source template.
+- This is a _different_ compilation target than the vdom path — both ship from the same source template.
 
 ## Recap
 
 Compiler finds dynamic parts → emits one-time DOM creation + per-binding effects. No vnodes, no diff. Lesson 4 turns this on for real.
-```
+
+````
 
 - [ ] **Step 2: Commit**
 
 ```bash
 git add apps/web/content/learn/vue-vapor/03-how-vapor-compiles.md
 git commit -m "content(learn): add Vue Vapor Mode lesson 3 — how it compiles"
-```
+````
 
 ---
 
 ## Task 4: `04-setting-up-vapor-mode.md` (hands-on, version-pinned)
 
 **Files:**
+
 - Create: `apps/web/content/learn/vue-vapor/04-setting-up-vapor-mode.md`
 - Read: `docs/superpowers/specs/2026-07-19-vue-vapor-pin.md` (Task 0 output)
 
@@ -355,14 +367,18 @@ The same app compiles through Vapor Mode. Replace the snippets below with the **
 ### 1. Scaffold
 
 \`\`\`bash
+
 # from the pinned reference: scaffold or init a Vue + Vite project
+
 <paste pinned scaffold/create command>
 \`\`\`
 
 ### 2. Install the pinned Vue build
 
 \`\`\`bash
+
 # exact package + version from docs/superpowers/specs/2026-07-19-vue-vapor-pin.md
+
 <paste pinned install command>
 \`\`\`
 
@@ -376,6 +392,7 @@ The same app compiles through Vapor Mode. Replace the snippets below with the **
 ### 4. Minimal App
 
 \`\`\`vue [App.vue]
+
 <script setup lang="ts">
 import { ref } from 'vue'   // or the vapor entry per pinned reference
 const count = ref(0)
@@ -422,11 +439,12 @@ git commit -m "content(learn): add Vue Vapor Mode lesson 4 — setup (pinned)"
 ## Task 5: `05-block-tree-and-reactivity.md`
 
 **Files:**
+
 - Create: `apps/web/content/learn/vue-vapor/05-block-tree-and-reactivity.md`
 
 - [ ] **Step 1: Write the lesson**
 
-```markdown
+````markdown
 ---
 title: "Block Tree & Fine-Grained Reactivity"
 description: "Inside Vapor: how a block tracks its dynamic parts, how Vue's Proxy reactivity drives targeted DOM mutations, and why leaf Vapor components shed per-instance overhead."
@@ -449,18 +467,21 @@ A **block** is a unit of template with a stable inner structure — the same "bl
 
 ## Why you'd care
 
-This is where the performance comes from. Each dynamic binding is its own reactive effect bound straight to a DOM write. When the underlying `ref` or reactive property changes, *only that one effect runs* — no parent re-render, no sibling involvement.
+This is where the performance comes from. Each dynamic binding is its own reactive effect bound straight to a DOM write. When the underlying `ref` or reactive property changes, _only that one effect runs_ — no parent re-render, no sibling involvement.
 
 ## Reactivity is unchanged
 
 Vapor does **not** replace Vue's reactivity. It's still Proxy-based `@vue/reactivity`:
 
 ```js
-import { ref, effect } from '@vue/reactivity' // conceptual
-const count = ref(0)
-effect(() => { button.textContent = `Clicked ${count.value} times` })
-count.value++ // only this effect re-runs
+import { ref, effect } from "@vue/reactivity"; // conceptual
+const count = ref(0);
+effect(() => {
+  button.textContent = `Clicked ${count.value} times`;
+});
+count.value++; // only this effect re-runs
 ```
+````
 
 What Vapor changes is **where the effects attach** — to individual DOM operations instead of to a whole-component render-function re-run. The engine is the same; the granularity is finer.
 
@@ -484,20 +505,22 @@ None — conceptual. Lesson 6 makes this concrete by porting a component.
 ## Recap
 
 Blocks = one-time DOM + per-binding effects. Reactivity unchanged, just finer-grained. That's the mechanism behind the vdom-tax disappearing.
-```
+
+````
 
 - [ ] **Step 2: Commit**
 
 ```bash
 git add apps/web/content/learn/vue-vapor/05-block-tree-and-reactivity.md
 git commit -m "content(learn): add Vue Vapor Mode lesson 5 — blocks & reactivity"
-```
+````
 
 ---
 
 ## Task 6: `06-porting-a-component.md` (light hands-on, version-pinned)
 
 **Files:**
+
 - Create: `apps/web/content/learn/vue-vapor/06-porting-a-component.md`
 - Read: `docs/superpowers/specs/2026-07-19-vue-vapor-pin.md`
 
@@ -524,7 +547,7 @@ author:
 
 ## What it is
 
-Porting to Vapor is mostly *not porting* — you write the same SFC. The difference is the compilation target, enabled in lesson 4.
+Porting to Vapor is mostly _not porting_ — you write the same SFC. The difference is the compilation target, enabled in lesson 4.
 
 ## Why you'd care
 
@@ -533,6 +556,7 @@ Confirms the big promise: your existing component authoring barely changes. The 
 ## Before (standard vdom SFC)
 
 \`\`\`vue [Counter.vue]
+
 <script setup lang="ts">
 import { ref } from 'vue'
 const count = ref(0)
@@ -580,6 +604,7 @@ git commit -m "content(learn): add Vue Vapor Mode lesson 6 — porting a compone
 ## Task 7: `07-limitations.md`
 
 **Files:**
+
 - Create: `apps/web/content/learn/vue-vapor/07-limitations.md`
 - Read: `docs/superpowers/specs/2026-07-19-vue-vapor-pin.md` (support matrix)
 
@@ -620,15 +645,15 @@ Knowing the edges keeps you from fighting the compiler. If a feature isn't suppo
 
 For the pinned version **<VERSION>**, the support picture is (fill from the Task 0 pinned reference — representative shape below):
 
-| Area | Status in pinned version |
-|------|--------------------------|
-| Basic bindings (`{{ }}`, `:prop`, `@event`) | Supported |
-| `v-if` / `v-for` / `v-show` | <from pinned reference> |
-| `<component :is>` (dynamic components) | <from pinned reference> |
-| Slots / scoped slots | <from pinned reference> |
-| SSR / hydration | <from pinned reference> |
-| Devtools | <from pinned reference> |
-| Third-party component libs | <from pinned reference> |
+| Area                                        | Status in pinned version |
+| ------------------------------------------- | ------------------------ |
+| Basic bindings (`{{ }}`, `:prop`, `@event`) | Supported                |
+| `v-if` / `v-for` / `v-show`                 | <from pinned reference>  |
+| `<component :is>` (dynamic components)      | <from pinned reference>  |
+| Slots / scoped slots                        | <from pinned reference>  |
+| SSR / hydration                             | <from pinned reference>  |
+| Devtools                                    | <from pinned reference>  |
+| Third-party component libs                  | <from pinned reference>  |
 
 Replace every `<from pinned reference>` cell with the actual status from `docs/superpowers/specs/2026-07-19-vue-vapor-pin.md`.
 
@@ -660,6 +685,7 @@ git commit -m "content(learn): add Vue Vapor Mode lesson 7 — limitations"
 ## Task 8: `08-roadmap-and-when-to-use.md`
 
 **Files:**
+
 - Create: `apps/web/content/learn/vue-vapor/08-roadmap-and-when-to-use.md`
 
 - [ ] **Step 1: Write the lesson**
@@ -741,6 +767,7 @@ git commit -m "content(learn): add Vue Vapor Mode lesson 8 — roadmap & when to
 ## Task 9: `index.md` (series landing)
 
 **Files:**
+
 - Create: `apps/web/content/learn/vue-vapor/index.md`
 
 - [ ] **Step 1: Write the landing**
@@ -763,7 +790,7 @@ author:
 
 Here's the honest setup: if you write Vue, you know the virtual DOM — templates compile to render functions, the runtime diffs and patches. Vapor Mode is Vue's experimental bet that, for a lot of UIs, you can skip that layer entirely and write to the DOM directly. Smaller runtime, cheaper updates.
 
-So this series is me learning it properly, and you're coming with me. We know Vue 3; we just haven't gone deep on *this* feature yet.
+So this series is me learning it properly, and you're coming with me. We know Vue 3; we just haven't gone deep on _this_ feature yet.
 
 ::BlogAlert{type="warning"}
 Vapor Mode is **experimental** and version-sensitive. This series pins one specific Vue version (see the setup lesson) so every command stays reproducible. Treat other versions' APIs as potentially different.
@@ -799,6 +826,7 @@ git commit -m "content(learn): add Vue Vapor Mode series landing"
 ## Task 10: Verify the series builds and renders
 
 **Files:**
+
 - Verify: `apps/web/content/learn/vue-vapor/*.md`
 
 - [ ] **Step 1: Generate the site and check for content/schema errors**
@@ -808,6 +836,7 @@ vp run generate
 ```
 
 Expected: the static build completes. Watch specifically for:
+
 - No `@nuxt/content` schema validation errors referencing the `tutorials` collection (would indicate a bad frontmatter field).
 - No errors mentioning `learn/vue-vapor`.
 
@@ -838,5 +867,5 @@ git commit -m "content(learn): fix Vue Vapor series build/schema issues"
 ## Self-Review Notes
 
 - **Spec coverage:** All 8 lessons + index present (Tasks 1–9); version-pinning constraint satisfied by Task 0 feeding Tasks 4/6/7; "light code / conceptual" discipline held (only lessons 4 & 6 are hands-on). Out-of-scope items (Reactivity Transform, Vue Macros, Nuxt integration) are explicitly referenced in lesson 8.
-- **Placeholder scan:** Lessons 4, 6, 7 intentionally carry `<...>` tokens in the *plan* but the task instructions require replacing them verbatim from the Task 0 pinned file before committing — no placeholder brackets may remain in committed files.
+- **Placeholder scan:** Lessons 4, 6, 7 intentionally carry `<...>` tokens in the _plan_ but the task instructions require replacing them verbatim from the Task 0 pinned file before committing — no placeholder brackets may remain in committed files.
 - **Type/name consistency:** `series: "vue-vapor"` is identical across all 9 files; `difficulty: "Intermediate"` consistent; author block copied verbatim; `order` 1–8 unique.

@@ -7,13 +7,12 @@ tag: Nuxt3
 rating: 0
 date: 2022-01-15
 readTime: 10
-img: 'https://res.cloudinary.com/ddszyeplg/image/upload/v1642350413/vantol/black-text_emxagi.png'
+img: "https://res.cloudinary.com/ddszyeplg/image/upload/v1642350413/vantol/black-text_emxagi.png"
 author:
   name: Vantol Bennett
   website: www.teammps.com
-  img: 'https://res.cloudinary.com/ddszyeplg/image/upload/v1636919468/DSC_0988_zsfhgy.jpg'
+  img: "https://res.cloudinary.com/ddszyeplg/image/upload/v1636919468/DSC_0988_zsfhgy.jpg"
 ---
-
 
 # Runtime Config in Nuxt 3
 
@@ -48,16 +47,15 @@ export default defineNuxtConfig({
 
 The publicRuntimeConfig property will be added to Nuxt pages through the apiUrl allowing for universal access for apiUrl to both client and server.
 
-
 ## Environmental Variables - Using Supabase
 
 Ok so, whether you are a new developer or a experienced one environment variables are common way to access configuration. We add a .env file to the root directory, Nuxt will added these variables to process.env and is accessible in nuxt.config.js. Let see what how to add Supabase url and key.
 
 `npm install @supabase/supabase-js`
 
-***
+---
 
-Example: 
+Example:
 
 ```
 .env

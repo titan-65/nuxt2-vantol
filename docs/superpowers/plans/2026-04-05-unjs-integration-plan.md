@@ -13,6 +13,7 @@
 ### Task 1: confbox — YAML/TOML config support
 
 **Files:**
+
 - Modify: `packages/null-agent/src/config/index.ts`
 - Modify: `packages/null-agent/src/agent/personality.ts`
 
@@ -171,6 +172,7 @@ git -C packages/null-agent commit -m "feat: add YAML/TOML config support via con
 ### Task 2: ofetch — Replace raw fetch in web tools and providers
 
 **Files:**
+
 - Modify: `packages/null-agent/src/tools/web.ts`
 - Modify: `packages/null-agent/src/providers/openai.ts`
 - Modify: `packages/null-agent/src/providers/anthropic.ts`
@@ -271,6 +273,7 @@ git -C packages/null-agent add -A && git -C packages/null-agent commit -m "feat:
 ### Task 3: perfect-debounce — Replace hand-rolled debouncing in FileWatcher
 
 **Files:**
+
 - Modify: `packages/null-agent/src/awareness/watcher.ts`
 
 - [ ] **Step 1: Install perfect-debounce**
@@ -361,6 +364,7 @@ git -C packages/null-agent add -A && git -C packages/null-agent commit -m "feat:
 ### Task 4: c12 — Replace config loading system
 
 **Files:**
+
 - Rewrite: `packages/null-agent/src/config/index.ts`
 
 - [ ] **Step 1: Install c12 and defu**
@@ -481,6 +485,7 @@ git -C packages/null-agent add -A && git -C packages/null-agent commit -m "feat:
 ### Task 5: consola — Replace console.log calls
 
 **Files:**
+
 - Create: `packages/null-agent/src/lib/logger.ts`
 - Modify: `packages/null-agent/src/cli/index.ts`
 - Modify: `packages/null-agent/src/cli/repl.ts`
@@ -576,6 +581,7 @@ git -C packages/null-agent add -A && git -C packages/null-agent commit -m "feat:
 ### Task 6: unstorage — Replace MemoryStore
 
 **Files:**
+
 - Rewrite: `packages/null-agent/src/memory/store.ts`
 - Modify: `packages/null-agent/src/memory/index.ts`
 
@@ -746,12 +752,57 @@ function generateSummary(messages: Message[]): string {
 }
 
 const commonWords = new Set([
-  "about", "after", "again", "also", "been", "being", "could", "does", "each",
-  "from", "have", "help", "here", "just", "like", "make", "more", "most", "much",
-  "only", "other", "over", "should", "some", "such", "than", "that", "their", "them",
-  "then", "there", "these", "they", "this", "those", "very", "what", "when", "which",
-  "while", "will", "with", "would", "your", "file", "files", "code", "what's", "tell",
-  "show", "give",
+  "about",
+  "after",
+  "again",
+  "also",
+  "been",
+  "being",
+  "could",
+  "does",
+  "each",
+  "from",
+  "have",
+  "help",
+  "here",
+  "just",
+  "like",
+  "make",
+  "more",
+  "most",
+  "much",
+  "only",
+  "other",
+  "over",
+  "should",
+  "some",
+  "such",
+  "than",
+  "that",
+  "their",
+  "them",
+  "then",
+  "there",
+  "these",
+  "they",
+  "this",
+  "those",
+  "very",
+  "what",
+  "when",
+  "which",
+  "while",
+  "will",
+  "with",
+  "would",
+  "your",
+  "file",
+  "files",
+  "code",
+  "what's",
+  "tell",
+  "show",
+  "give",
 ]);
 ```
 

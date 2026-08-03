@@ -48,11 +48,11 @@ export default createNitro({
   handlers: [
     {
       route: "/api/hello",
-      handler: () => ({ message: "Hello from Nitro!" })
-    }
-  ]
+      handler: () => ({ message: "Hello from Nitro!" }),
+    },
+  ],
 });
-````
+```
 
 Nitro becomes the backbone of your backend layer, powering APIs consistently across environments. ([UnJS][1])
 
@@ -101,7 +101,7 @@ export default Unplugin(() => ({
   name: "example-plugin",
   transform(code) {
     return code.replace(/ENV_VAR/g, JSON.stringify(process.env.NODE_ENV));
-  }
+  },
 }));
 ```
 
@@ -142,8 +142,8 @@ It improves readability of logs in production and development environments. ([Un
 
 ### **defu** and **destr** — Defaults & Safe Parsing
 
-* `defu` lets you merge objects with recursive defaults — perfect for configs. ([UnJS][1])
-* `destr` safely parses JSON with better performance and security than `JSON.parse`. ([UnJS][1])
+- `defu` lets you merge objects with recursive defaults — perfect for configs. ([UnJS][1])
+- `destr` safely parses JSON with better performance and security than `JSON.parse`. ([UnJS][1])
 
 ```ts
 import { defu } from "defu";
@@ -192,8 +192,8 @@ export default createNitro({
         route: "/api/hello",
         handler: () => ({
           message: "Hello from UnJS App!",
-          env: config.NODE_ENV
-        })
+          env: config.NODE_ENV,
+        }),
       },
       {
         route: "/api/user",
@@ -201,10 +201,10 @@ export default createNitro({
           const user = await ofetch("https://jsonplaceholder.typicode.com/users/1");
           consola.info("Fetched user:", user);
           return user;
-        }
-      }
+        },
+      },
     ];
-  }
+  },
 });
 ```
 
@@ -216,7 +216,7 @@ This sample shows how **Nitro, c12, ofetch, and consola** can power a flexible, 
 
 The **UnJS ecosystem** offers a rich — yet modular — toolkit for modern JavaScript applications. By adopting packages like **Nitro, c12, ofetch, unplugin, jiti, consola, defu, and destr**, you can assemble a highly productive development environment while keeping your dependencies lean. ([UnJS][3])
 
-Whether you're building servers, tooling, or full-stack apps, UnJS packages empower you to choose *exactly the components you need* — embracing composability and simplicity in equal measure. 🚀
+Whether you're building servers, tooling, or full-stack apps, UnJS packages empower you to choose _exactly the components you need_ — embracing composability and simplicity in equal measure. 🚀
 
 [1]: https://unjs.io/packages/ "Packages · UnJS"
 [2]: https://unjs.io/packages/c12 "c12 · Packages · UnJS"

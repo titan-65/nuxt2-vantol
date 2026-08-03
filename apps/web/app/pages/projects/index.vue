@@ -1,36 +1,38 @@
 <script setup lang="ts">
-const { data: projects } = await useAsyncData('projects', async () => {
-  const items = await queryCollection('projects').all() as any[]
-  return items.map((p: any) => ({ ...p, _path: p.path, slug: p.path.split('/').pop() }))
-})
+const { data: projects } = await useAsyncData("projects", async () => {
+  const items = (await queryCollection("projects").all()) as any[];
+  return items.map((p: any) => ({ ...p, _path: p.path, slug: p.path.split("/").pop() }));
+});
 
 const allTechnologies = computed(() => {
-  const techs = new Set<string>()
+  const techs = new Set<string>();
   projects.value?.forEach((project: any) => {
-    if (project.stack?.Frontend) techs.add(project.stack.Frontend)
-    if (project.stack?.Backend) techs.add(project.stack.Backend)
-    if (project.stack?.Framework) techs.add(project.stack.Framework)
-  })
-  return Array.from(techs).sort()
-})
+    if (project.stack?.Frontend) techs.add(project.stack.Frontend);
+    if (project.stack?.Backend) techs.add(project.stack.Backend);
+    if (project.stack?.Framework) techs.add(project.stack.Framework);
+  });
+  return Array.from(techs).sort();
+});
 
-const selectedTech = ref<string | null>(null)
-const viewMode = ref<'grid' | 'list'>('grid')
+const selectedTech = ref<string | null>(null);
+const viewMode = ref<"grid" | "list">("grid");
 
 const filteredProjects = computed(() => {
-  if (!selectedTech.value) return projects.value || []
+  if (!selectedTech.value) return projects.value || [];
 
   return (projects.value || []).filter((project: any) => {
-    const stack = project.stack || {}
-    return stack.Frontend === selectedTech.value ||
-           stack.Backend === selectedTech.value ||
-           stack.Framework === selectedTech.value
-  })
-})
+    const stack = project.stack || {};
+    return (
+      stack.Frontend === selectedTech.value ||
+      stack.Backend === selectedTech.value ||
+      stack.Framework === selectedTech.value
+    );
+  });
+});
 
 const clearFilter = () => {
-  selectedTech.value = null
-}
+  selectedTech.value = null;
+};
 </script>
 
 <template>
@@ -40,12 +42,15 @@ const clearFilter = () => {
         <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-4">Portfolio</p>
         <h1 class="text-4xl md:text-5xl font-semibold tracking-tight mb-4">Projects</h1>
         <p class="text-zinc-500 font-light max-w-2xl mx-auto">
-          A collection of projects built with various technologies including Vue.js, Nuxt.js, React, and more.
+          A collection of projects built with various technologies including Vue.js, Nuxt.js, React,
+          and more.
         </p>
       </div>
 
       <!-- Controls -->
-      <div class="flex flex-col md:flex-row items-center justify-between gap-6 mb-12 border-b border-white/10 pb-6">
+      <div
+        class="flex flex-col md:flex-row items-center justify-between gap-6 mb-12 border-b border-white/10 pb-6"
+      >
         <div class="flex flex-wrap justify-center gap-2">
           <button
             @click="clearFilter"
@@ -53,7 +58,7 @@ const clearFilter = () => {
               'px-4 py-2 text-xs font-bold uppercase tracking-widest border rounded-lg transition-colors',
               !selectedTech
                 ? 'bg-[#f5c542] text-black border-[#f5c542]'
-                : 'bg-transparent text-zinc-500 border-white/10 hover:border-white/30 hover:text-white'
+                : 'bg-transparent text-zinc-500 border-white/10 hover:border-white/30 hover:text-white',
             ]"
           >
             All
@@ -66,26 +71,33 @@ const clearFilter = () => {
               'px-4 py-2 text-xs font-bold uppercase tracking-widest border rounded-lg transition-colors',
               selectedTech === tech
                 ? 'bg-[#f5c542] text-black border-[#f5c542]'
-                : 'bg-transparent text-zinc-500 border-white/10 hover:border-white/30 hover:text-white'
+                : 'bg-transparent text-zinc-500 border-white/10 hover:border-white/30 hover:text-white',
             ]"
           >
             {{ tech }}
           </button>
         </div>
 
-        <div class="flex items-center gap-0 border border-white/10 rounded-lg overflow-hidden bg-[#111]">
+        <div
+          class="flex items-center gap-0 border border-white/10 rounded-lg overflow-hidden bg-[#111]"
+        >
           <button
             @click="viewMode = 'grid'"
             :class="[
               'p-2 transition-colors border-r border-white/10',
               viewMode === 'grid'
                 ? 'bg-white/10 text-white'
-                : 'bg-transparent text-zinc-500 hover:text-white'
+                : 'bg-transparent text-zinc-500 hover:text-white',
             ]"
             aria-label="Grid view"
           >
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/>
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"
+              />
             </svg>
           </button>
           <button
@@ -94,30 +106,40 @@ const clearFilter = () => {
               'p-2 transition-colors',
               viewMode === 'list'
                 ? 'bg-white/10 text-white'
-                : 'bg-transparent text-zinc-500 hover:text-white'
+                : 'bg-transparent text-zinc-500 hover:text-white',
             ]"
             aria-label="List view"
           >
             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/>
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M4 6h16M4 10h16M4 14h16M4 18h16"
+              />
             </svg>
           </button>
         </div>
       </div>
 
-      <div v-if="filteredProjects.length === 0" class="text-center py-20 border border-dashed border-white/10 bg-[#111] rounded-xl">
+      <div
+        v-if="filteredProjects.length === 0"
+        class="text-center py-20 border border-dashed border-white/10 bg-[#111] rounded-xl"
+      >
         <p class="text-zinc-500 text-sm mb-4">No projects found</p>
-        <button @click="clearFilter" class="text-zinc-400 hover:text-[#f5c542] text-xs font-bold uppercase tracking-widest transition-colors">
+        <button
+          @click="clearFilter"
+          class="text-zinc-400 hover:text-[#f5c542] text-xs font-bold uppercase tracking-widest transition-colors"
+        >
           Clear filter
         </button>
       </div>
 
-      <div v-else-if="viewMode === 'grid'" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        <ProjectCard
-          v-for="project in filteredProjects"
-          :key="project.slug"
-          :item="project"
-        />
+      <div
+        v-else-if="viewMode === 'grid'"
+        class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+      >
+        <ProjectCard v-for="project in filteredProjects" :key="project.slug" :item="project" />
       </div>
 
       <div v-else class="space-y-4">

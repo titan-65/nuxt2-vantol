@@ -11,10 +11,7 @@ import type { PresenceIdentity } from "nuxt-presence/runtime/server/storage";
 import { authClient } from "../../utils/auth-client";
 
 export const usePresenceDemoIdentity = () => {
-  const identity = useState<PresenceIdentity | null>(
-    "presence-demo-identity",
-    () => null,
-  );
+  const identity = useState<PresenceIdentity | null>("presence-demo-identity", () => null);
 
   async function refresh() {
     try {

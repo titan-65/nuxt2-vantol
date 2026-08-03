@@ -1,0 +1,69 @@
+{
+  "name": "@vvantol2000/nuxt-eve",
+  "version": "0.1.0",
+  "description": "Filesystem-First Durable AI Agents for Nuxt 4 & The Modern Web",
+  "keywords": [
+    "agent",
+    "ai-agent",
+    "eve",
+    "llm",
+    "nitro",
+    "nuxt",
+    "nuxt-module",
+    "unstorage"
+  ],
+  "license": "MIT",
+  "author": "Vantol Bennett <vantolbennettclm@gmail.com>",
+  "files": [
+    "dist"
+  ],
+  "type": "module",
+  "main": "./dist/module.mjs",
+  "types": "./dist/types.d.mts",
+  "exports": {
+    ".": {
+      "types": "./dist/types.d.mts",
+      "import": "./dist/module.mjs"
+    },
+    "./runtime": {
+      "types": "./dist/runtime/index.d.ts",
+      "import": "./dist/runtime/index.js"
+    },
+    "./server": {
+      "types": "./dist/runtime/server/index.d.ts",
+      "import": "./dist/runtime/server/index.js"
+    }
+  },
+  "scripts": {
+    "build": "nuxt-module-build build",
+    "prepare": "nuxt-module-build build",
+    "prepack": "nuxt-module-build build",
+    "test": "vp test run",
+    "check": "vp check"
+  },
+  "dependencies": {
+    "@nuxt/kit": "^4.0.0",
+    "@nuxt/schema": "^4.0.0",
+    "h3": "^1.15.11",
+    "unstorage": "^1.15.0",
+    "zod": "^3.24.0"
+  },
+  "devDependencies": {
+    "@nuxt/module-builder": "^1.0.2",
+    "@nuxt/test-utils": "^4.0.0",
+    "@types/node": "^22.0.0",
+    "happy-dom": "^20.11.0",
+    "nitropack": "^2.13.4",
+    "nuxt": "^4.0.0",
+    "typescript": "^5.6.0",
+    "vite": "^6.4.3",
+    "vue": "^3.5.40",
+    "vue-tsc": "^3.3.7"
+  },
+  "peerDependencies": {
+    "nuxt": "^4.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

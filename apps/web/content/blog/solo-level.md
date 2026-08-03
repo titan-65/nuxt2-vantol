@@ -34,18 +34,20 @@ With seamless VS Code integration and real-time visual stats, you don’t just w
 
 Getting started is simple:
 
-1. **Install the Solo Level VS Code extension** — your editor becomes your dashboard as you code. :contentReference[oaicite:2]{index=2}  
-2. **Write & Commit Code** — every commit earns you XP and tracks your progress. :contentReference[oaicite:3]{index=3}  
-3. **Earn Badges & Climb the Leaderboards** — unlock achievements, compete globally, and celebrate your wins with the community. :contentReference[oaicite:4]{index=4}  
+1. **Install the Solo Level VS Code extension** — your editor becomes your dashboard as you code. :contentReference[oaicite:2]{index=2}
+2. **Write & Commit Code** — every commit earns you XP and tracks your progress. :contentReference[oaicite:3]{index=3}
+3. **Earn Badges & Climb the Leaderboards** — unlock achievements, compete globally, and celebrate your wins with the community. :contentReference[oaicite:4]{index=4}
 
 ::BlogCard
+
 ### Core Gameplay Features
-- ✔ XP for commits and daily streaks  
-- ✔ Visual progress dashboards  
-- ✔ Global and guild leaderboards  
-- ✔ Bounty system for challenges  
+
+- ✔ XP for commits and daily streaks
+- ✔ Visual progress dashboards
+- ✔ Global and guild leaderboards
+- ✔ Bounty system for challenges
 - ✔ Team management and competitions  
-::
+  ::
 
 Whether you’re coding solo or rallying a guild of teammates, Solo Level turns your codebase into a world of quests and rewards.
 
@@ -75,7 +77,7 @@ Solo Level isn’t just another tool — it’s a **motivation engine**. Whether
 
 # Conclusion
 
-The Solo Level turns coding into something you *want* to come back to every day. It blends **game mechanics**, **AI-powered challenges**, and **community engagement** to make improving your craft both fun and measurable. If you’re ready to level up your skills and join a growing guild of developers, there’s never been a better time to start your journey. 🎮🚀
+The Solo Level turns coding into something you _want_ to come back to every day. It blends **game mechanics**, **AI-powered challenges**, and **community engagement** to make improving your craft both fun and measurable. If you’re ready to level up your skills and join a growing guild of developers, there’s never been a better time to start your journey. 🎮🚀
 
 👉 Check it out at https://www.thesololevel.com/ and begin your own coding adventure.
 ::contentReference[oaicite:9]{index=9}

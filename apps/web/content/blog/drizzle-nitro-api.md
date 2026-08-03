@@ -47,6 +47,7 @@ Drizzle is designed to feel like you're writing SQL—but with full type safety 
 ## Prerequisites
 
 This guide assumes you have:
+
 - Node.js 18+ installed
 - Basic knowledge of TypeScript
 - A PostgreSQL or SQLite database (we'll use SQLite for simplicity, but the code is mostly identical)
@@ -116,8 +117,7 @@ export const menuItems = sqliteTable("menu_items", {
   price: real("price").notNull(),
   category: text("category").notNull(), // coffee, tea, food
   available: integer("available", { mode: "boolean" }).default(true),
-  createdAt: integer("created_at", { mode: "timestamp" })
-    .default(sql`CURRENT_TIMESTAMP`),
+  createdAt: integer("created_at", { mode: "timestamp" }).default(sql`CURRENT_TIMESTAMP`),
 });
 
 // Orders Table
@@ -126,10 +126,8 @@ export const orders = sqliteTable("orders", {
   status: text("status").notNull().default("pending"), // pending, preparing, ready, completed
   customerName: text("customer_name"),
   total: real("total").notNull(),
-  createdAt: integer("created_at", { mode: "timestamp" })
-    .default(sql`CURRENT_TIMESTAMP`),
-  updatedAt: integer("updated_at", { mode: "timestamp" })
-    .default(sql`CURRENT_TIMESTAMP`),
+  createdAt: integer("created_at", { mode: "timestamp" }).default(sql`CURRENT_TIMESTAMP`),
+  updatedAt: integer("updated_at", { mode: "timestamp" }).default(sql`CURRENT_TIMESTAMP`),
 });
 
 // Order Items Table (junction table)
@@ -204,7 +202,7 @@ export function initializeDatabase() {
       FOREIGN KEY (menu_item_id) REFERENCES menu_items(id)
     );
   `);
-  
+
   console.log("✅ Database initialized");
 }
 ```
@@ -222,21 +220,75 @@ import { db } from "../db";
 import { menuItems } from "../db/schema";
 
 const defaultMenuItems = [
-  { id: "latte", name: "Latte", description: "Smooth espresso with steamed milk", price: 4.5, category: "coffee" },
-  { id: "espresso", name: "Espresso", description: "Rich, bold espresso shot", price: 3.0, category: "coffee" },
-  { id: "americano", name: "Americano", description: "Espresso with hot water", price: 3.5, category: "coffee" },
-  { id: "cappuccino", name: "Cappuccino", description: "Espresso with equal parts milk foam", price: 4.5, category: "coffee" },
-  { id: "chai", name: "Chai Tea", description: "Spiced black tea with milk", price: 4.0, category: "tea" },
-  { id: "green-tea", name: "Green Tea", description: "Organic Japanese green tea", price: 3.5, category: "tea" },
-  { id: "croissant", name: "Croissant", description: "Buttery French pastry", price: 3.5, category: "food" },
-  { id: "muffin", name: "Blueberry Muffin", description: "Freshly baked muffin", price: 3.0, category: "food" },
-  { id: "bagel", name: "Bagel with Cream Cheese", description: "Toasted bagel with cream cheese", price: 4.0, category: "food" },
+  {
+    id: "latte",
+    name: "Latte",
+    description: "Smooth espresso with steamed milk",
+    price: 4.5,
+    category: "coffee",
+  },
+  {
+    id: "espresso",
+    name: "Espresso",
+    description: "Rich, bold espresso shot",
+    price: 3.0,
+    category: "coffee",
+  },
+  {
+    id: "americano",
+    name: "Americano",
+    description: "Espresso with hot water",
+    price: 3.5,
+    category: "coffee",
+  },
+  {
+    id: "cappuccino",
+    name: "Cappuccino",
+    description: "Espresso with equal parts milk foam",
+    price: 4.5,
+    category: "coffee",
+  },
+  {
+    id: "chai",
+    name: "Chai Tea",
+    description: "Spiced black tea with milk",
+    price: 4.0,
+    category: "tea",
+  },
+  {
+    id: "green-tea",
+    name: "Green Tea",
+    description: "Organic Japanese green tea",
+    price: 3.5,
+    category: "tea",
+  },
+  {
+    id: "croissant",
+    name: "Croissant",
+    description: "Buttery French pastry",
+    price: 3.5,
+    category: "food",
+  },
+  {
+    id: "muffin",
+    name: "Blueberry Muffin",
+    description: "Freshly baked muffin",
+    price: 3.0,
+    category: "food",
+  },
+  {
+    id: "bagel",
+    name: "Bagel with Cream Cheese",
+    description: "Toasted bagel with cream cheese",
+    price: 4.0,
+    category: "food",
+  },
 ];
 
 export default defineEventHandler(async () => {
   // Clear existing menu items
   await db.delete(menuItems).run();
-  
+
   // Insert default items
   for (const item of defaultMenuItems) {
     await db.insert(menuItems).values({
@@ -244,7 +296,7 @@ export default defineEventHandler(async () => {
       available: true,
     });
   }
-  
+
   return { message: "Menu seeded successfully", count: defaultMenuItems.length };
 });
 ```
@@ -277,23 +329,23 @@ import { menuItems } from "../db/schema";
 
 export default defineEventHandler(async (event) => {
   const id = getRouterParam(event, "id");
-  
+
   if (!id) {
     throw createError({
       statusCode: 400,
       statusMessage: "Menu item ID is required",
     });
   }
-  
+
   const item = await db.select().from(menuItems).where(menuItems.id.equals(id)).get();
-  
+
   if (!item) {
     throw createError({
       statusCode: 404,
       statusMessage: "Menu item not found",
     });
   }
-  
+
   return item;
 });
 ```
@@ -316,7 +368,7 @@ interface OrderItemInput {
 
 export default defineEventHandler(async (event) => {
   const body = await readBody(event);
-  
+
   // Validate input
   if (!body.items || !Array.isArray(body.items) || body.items.length === 0) {
     throw createError({
@@ -324,43 +376,43 @@ export default defineEventHandler(async (event) => {
       statusMessage: "Order must contain at least one item",
     });
   }
-  
+
   // Calculate total and fetch menu item prices
   let total = 0;
   const orderItemInputs: OrderItemInput[] = [];
-  
+
   for (const item of body.items) {
     const menuItem = await db
       .select()
       .from(menuItems)
       .where(eq(menuItems.id, item.menuItemId))
       .get();
-    
+
     if (!menuItem) {
       throw createError({
         statusCode: 400,
         statusMessage: `Menu item ${item.menuItemId} not found`,
       });
     }
-    
+
     if (!menuItem.available) {
       throw createError({
         statusCode: 400,
         statusMessage: `Menu item ${menuItem.name} is not available`,
       });
     }
-    
+
     total += menuItem.price * item.quantity;
     orderItemInputs.push({
       menuItemId: item.menuItemId,
       quantity: item.quantity,
     });
   }
-  
+
   // Create the order
   const orderId = crypto.randomUUID();
   const now = Date.now();
-  
+
   await db.insert(orders).values({
     id: orderId,
     customerName: body.customerName || "Guest",
@@ -369,7 +421,7 @@ export default defineEventHandler(async (event) => {
     createdAt: new Date(now),
     updatedAt: new Date(now),
   });
-  
+
   // Create order items
   for (const input of orderItemInputs) {
     const menuItem = await db
@@ -377,7 +429,7 @@ export default defineEventHandler(async (event) => {
       .from(menuItems)
       .where(eq(menuItems.id, input.menuItemId))
       .get();
-    
+
     await db.insert(orderItems).values({
       id: crypto.randomUUID(),
       orderId,
@@ -386,19 +438,12 @@ export default defineEventHandler(async (event) => {
       unitPrice: menuItem!.price,
     });
   }
-  
+
   // Fetch the complete order
-  const createdOrder = await db
-    .select()
-    .from(orders)
-    .where(eq(orders.id, orderId))
-    .get();
-  
-  const items = await db
-    .select()
-    .from(orderItems)
-    .where(eq(orderItems.orderId, orderId));
-  
+  const createdOrder = await db.select().from(orders).where(eq(orders.id, orderId)).get();
+
+  const items = await db.select().from(orderItems).where(eq(orderItems.orderId, orderId));
+
   return {
     ...createdOrder,
     items,
@@ -420,34 +465,30 @@ const validStatuses = ["pending", "preparing", "ready", "completed", "cancelled"
 export default defineEventHandler(async (event) => {
   const id = getRouterParam(event, "id");
   const body = await readBody(event);
-  
+
   if (!id) {
     throw createError({
       statusCode: 400,
       statusMessage: "Order ID is required",
     });
   }
-  
+
   if (!body.status || !validStatuses.includes(body.status)) {
     throw createError({
       statusCode: 400,
       statusMessage: `Invalid status. Must be one of: ${validStatuses.join(", ")}`,
     });
   }
-  
-  const existingOrder = await db
-    .select()
-    .from(orders)
-    .where(eq(orders.id, id))
-    .get();
-  
+
+  const existingOrder = await db.select().from(orders).where(eq(orders.id, id)).get();
+
   if (!existingOrder) {
     throw createError({
       statusCode: 404,
       statusMessage: "Order not found",
     });
   }
-  
+
   // Update the order
   await db
     .update(orders)
@@ -456,13 +497,9 @@ export default defineEventHandler(async (event) => {
       updatedAt: new Date(),
     })
     .where(eq(orders.id, id));
-  
-  const updatedOrder = await db
-    .select()
-    .from(orders)
-    .where(eq(orders.id, id))
-    .get();
-  
+
+  const updatedOrder = await db.select().from(orders).where(eq(orders.id, id)).get();
+
   return updatedOrder;
 });
 ```
@@ -476,22 +513,16 @@ import { db } from "../db";
 import { orders, orderItems } from "../db/schema";
 
 export default defineEventHandler(async () => {
-  const allOrders = await db
-    .select()
-    .from(orders)
-    .orderBy(orders.createdAt);
-  
+  const allOrders = await db.select().from(orders).orderBy(orders.createdAt);
+
   // Fetch items for each order
   const ordersWithItems = await Promise.all(
     allOrders.map(async (order) => {
-      const items = await db
-        .select()
-        .from(orderItems)
-        .where(orderItems.orderId.equals(order.id));
+      const items = await db.select().from(orderItems).where(orderItems.orderId.equals(order.id));
       return { ...order, items };
-    })
+    }),
   );
-  
+
   return { orders: ordersWithItems };
 });
 ```
@@ -572,14 +603,14 @@ By the end of this guide, you have:
 
 ### API Endpoints Summary
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/menu` | Get available menu items |
-| GET | `/api/menu/:id` | Get single menu item |
-| POST | `/api/orders` | Create new order |
-| GET | `/api/orders` | Get all orders |
-| PATCH | `/api/orders/:id` | Update order status |
-| POST | `/api/seed` | Seed menu data |
+| Method | Endpoint          | Description              |
+| ------ | ----------------- | ------------------------ |
+| GET    | `/api/menu`       | Get available menu items |
+| GET    | `/api/menu/:id`   | Get single menu item     |
+| POST   | `/api/orders`     | Create new order         |
+| GET    | `/api/orders`     | Get all orders           |
+| PATCH  | `/api/orders/:id` | Update order status      |
+| POST   | `/api/seed`       | Seed menu data           |
 
 ---
 

@@ -1,10 +1,10 @@
 <script setup lang="ts">
 defineProps<{
   author: {
-    name: string
-    img: string
-  }
-}>()
+    name: string;
+    img: string;
+  };
+}>();
 </script>
 
 <template>

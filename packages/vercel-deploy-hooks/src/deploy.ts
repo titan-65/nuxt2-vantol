@@ -1,11 +1,11 @@
-import type { DeployConfig, DeployResult, VercelJobResponse } from './types';
+import type { DeployConfig, DeployResult, VercelJobResponse } from "./types";
 
 const TIMEOUT_MS = 30_000;
 
 function getDeployUrl(config: DeployConfig): string {
   let url = config.hookUrl;
   if (config.noBuildCache) {
-    const separator = url.includes('?') ? '&' : '?';
+    const separator = url.includes("?") ? "&" : "?";
     url = `${url}${separator}buildCache=false`;
   }
   return url;
@@ -23,7 +23,7 @@ async function fetchWithTimeout(
     const response = await fetch(url, { ...options, signal: controller.signal });
     return response;
   } catch (err) {
-    if (err instanceof DOMException && err.name === 'AbortError') {
+    if (err instanceof DOMException && err.name === "AbortError") {
       throw new Error(`vercel-deploy-hooks: request timed out after ${timeoutMs / 1000}s`);
     }
     throw err;
@@ -35,17 +35,17 @@ async function fetchWithTimeout(
 export async function triggerDeploy(config: DeployConfig): Promise<DeployResult> {
   const { hookUrl } = config;
 
-  if (!hookUrl || typeof hookUrl !== 'string') {
-    throw new Error('vercel-deploy-hooks: hookUrl is required');
+  if (!hookUrl || typeof hookUrl !== "string") {
+    throw new Error("vercel-deploy-hooks: hookUrl is required");
   }
 
   try {
     const url = new URL(hookUrl);
-    if (!url.hostname.includes('vercel.com')) {
-      throw new Error('vercel-deploy-hooks: hookUrl must be a Vercel deploy hook URL');
+    if (!url.hostname.includes("vercel.com")) {
+      throw new Error("vercel-deploy-hooks: hookUrl must be a Vercel deploy hook URL");
     }
   } catch (err) {
-    if (err instanceof Error && err.message.startsWith('vercel-deploy-hooks:')) throw err;
+    if (err instanceof Error && err.message.startsWith("vercel-deploy-hooks:")) throw err;
     throw new Error(`vercel-deploy-hooks: hookUrl must be a valid URL (got "${hookUrl}")`);
   }
 
@@ -58,13 +58,13 @@ export async function triggerDeploy(config: DeployConfig): Promise<DeployResult>
     response = await fetchWithTimeout(
       targetUrl,
       {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
       },
       timeoutMs,
     );
   } catch (err) {
-    if (err instanceof Error && err.message.startsWith('vercel-deploy-hooks:')) throw err;
+    if (err instanceof Error && err.message.startsWith("vercel-deploy-hooks:")) throw err;
     throw new Error(
       `vercel-deploy-hooks: network error — ${err instanceof Error ? err.message : err}`,
     );
@@ -102,9 +102,7 @@ export async function triggerDeploy(config: DeployConfig): Promise<DeployResult>
 
   return {
     jobId: job.id,
-    state: job.state || 'UNKNOWN',
-    createdAt: job.createdAt
-      ? new Date(job.createdAt).toISOString()
-      : new Date().toISOString(),
+    state: job.state || "UNKNOWN",
+    createdAt: job.createdAt ? new Date(job.createdAt).toISOString() : new Date().toISOString(),
   };
 }

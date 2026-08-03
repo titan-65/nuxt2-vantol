@@ -60,6 +60,7 @@ apps/web/nuxt.config.ts            # adds '@vantol/presence' to modules (last ta
 ### Task 1: Create `packages/presence/` package skeleton
 
 **Files:**
+
 - Create: `packages/presence/package.json`
 - Create: `packages/presence/tsconfig.json`
 - Create: `packages/presence/README.md`
@@ -139,7 +140,7 @@ If `../../tsconfig.json` does not exist or does not match this shape, use a self
 
 - [ ] **Step 3: Create `packages/presence/README.md`**
 
-```markdown
+````markdown
 # @vantol/presence
 
 A Nuxt module that gives any Nuxt site two ways to express the developer's presence:
@@ -152,22 +153,24 @@ A Nuxt module that gives any Nuxt site two ways to express the developer's prese
 ```bash
 pnpm add @vantol/presence
 ```
+````
 
 ## Usage
 
 ```ts
 // nuxt.config.ts
 export default defineNuxtConfig({
-  modules: ['@vantol/presence'],
+  modules: ["@vantol/presence"],
   presence: {
     wall: { server: true },
-    mark: { handle: 'your-handle' }
-  }
-})
+    mark: { handle: "your-handle" },
+  },
+});
 ```
 
 See `apps/web/content/learn/nuxt-modules/` for the tutorial series.
-```
+
+````
 
 - [ ] **Step 4: Verify workspace recognizes the package**
 
@@ -181,13 +184,14 @@ If not listed, check `pnpm-workspace.yaml` contains `packages/*`.
 ```bash
 git add packages/presence/package.json packages/presence/tsconfig.json packages/presence/README.md
 git commit -m "feat(presence): scaffold package skeleton"
-```
+````
 
 ---
 
 ### Task 2: Minimal module entry that installs
 
 **Files:**
+
 - Create: `packages/presence/src/module.ts`
 - Create: `packages/presence/test/module.test.ts`
 - Create: `packages/presence/vitest.config.ts`
@@ -197,21 +201,21 @@ git commit -m "feat(presence): scaffold package skeleton"
 Create `packages/presence/test/module.test.ts`:
 
 ```ts
-import { describe, it, expect } from 'vitest'
-import { setup, $fetch } from '@nuxt/test-utils/e2e'
-import { fileURLToPath } from 'node:url'
+import { describe, it, expect } from "vitest";
+import { setup, $fetch } from "@nuxt/test-utils/e2e";
+import { fileURLToPath } from "node:url";
 
 await setup({
-  rootDir: fileURLToPath(new URL('../playground', import.meta.url)),
+  rootDir: fileURLToPath(new URL("../playground", import.meta.url)),
   server: false,
-})
+});
 
-describe('@vantol/presence', () => {
-  it('installs without errors', async () => {
-    const html = await $fetch('/')
-    expect(html).toBeDefined()
-  })
-})
+describe("@vantol/presence", () => {
+  it("installs without errors", async () => {
+    const html = await $fetch("/");
+    expect(html).toBeDefined();
+  });
+});
 ```
 
 - [ ] **Step 2: Create a minimal playground**
@@ -228,21 +232,21 @@ Create `packages/presence/playground/nuxt.config.ts`:
 
 ```ts
 export default defineNuxtConfig({
-  modules: ['@vantol/presence'],
-})
+  modules: ["@vantol/presence"],
+});
 ```
 
 - [ ] **Step 3: Create `packages/presence/vitest.config.ts`**
 
 ```ts
-import { defineConfig } from 'vitest/config'
+import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   test: {
-    environment: 'node',
-    include: ['test/**/*.test.ts'],
+    environment: "node",
+    include: ["test/**/*.test.ts"],
   },
-})
+});
 ```
 
 - [ ] **Step 4: Create the minimal module entry**
@@ -250,17 +254,17 @@ export default defineConfig({
 Create `packages/presence/src/module.ts`:
 
 ```ts
-import { defineNuxtModule } from '@nuxt/kit'
+import { defineNuxtModule } from "@nuxt/kit";
 
 export default defineNuxtModule({
   meta: {
-    name: '@vantol/presence',
-    configKey: 'presence',
+    name: "@vantol/presence",
+    configKey: "presence",
   },
   setup() {
     // intentionally empty for now
   },
-})
+});
 ```
 
 - [ ] **Step 5: Install workspace dependency**
@@ -285,21 +289,22 @@ git commit -m "feat(presence): minimal installable module + test"
 ### Task 3: Library build configuration
 
 **Files:**
+
 - Create: `packages/presence/tsdown.config.ts`
 - Modify: `packages/presence/package.json`
 
 - [ ] **Step 1: Create `packages/presence/tsdown.config.ts`**
 
 ```ts
-import { defineConfig } from 'tsdown'
+import { defineConfig } from "tsdown";
 
 export default defineConfig({
-  entry: ['src/module.ts'],
-  format: ['esm'],
+  entry: ["src/module.ts"],
+  format: ["esm"],
   dts: true,
   clean: true,
-  external: ['nuxt', '@nuxt/kit', '@nuxt/schema'],
-})
+  external: ["nuxt", "@nuxt/kit", "@nuxt/schema"],
+});
 ```
 
 - [ ] **Step 2: Update `package.json` scripts to use `vp pack`**
@@ -330,6 +335,7 @@ git commit -m "feat(presence): tsdown build configuration"
 ### Task 4: Define `ModuleOptions` interface and defaults
 
 **Files:**
+
 - Modify: `packages/presence/src/module.ts`
 
 - [ ] **Step 1: Add `ModuleOptions` types and a test**
@@ -337,36 +343,36 @@ git commit -m "feat(presence): tsdown build configuration"
 Create `packages/presence/test/options.test.ts`:
 
 ```ts
-import { describe, it, expect } from 'vitest'
-import { resolveOptions } from '../src/options'
+import { describe, it, expect } from "vitest";
+import { resolveOptions } from "../src/options";
 
-describe('resolveOptions', () => {
-  it('returns defaults when given empty input', () => {
-    const opts = resolveOptions({})
-    expect(opts.enabled).toBe(true)
-    expect(opts.wall.enabled).toBe(true)
-    expect(opts.wall.server).toBe(false)
-    expect(opts.wall.ttlSeconds).toBe(3600)
-    expect(opts.wall.maxSignatures).toBe(50)
-    expect(opts.wall.combo).toEqual(['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown'])
-    expect(opts.wall.mobilePath).toBe('/presence')
-    expect(opts.wall.renderStyle).toBe('cursive')
-    expect(opts.mark.enabled).toBe(true)
-    expect(opts.mark.handle).toBe('')
-    expect(opts.mark.keyDir).toBe('.presence/')
-  })
+describe("resolveOptions", () => {
+  it("returns defaults when given empty input", () => {
+    const opts = resolveOptions({});
+    expect(opts.enabled).toBe(true);
+    expect(opts.wall.enabled).toBe(true);
+    expect(opts.wall.server).toBe(false);
+    expect(opts.wall.ttlSeconds).toBe(3600);
+    expect(opts.wall.maxSignatures).toBe(50);
+    expect(opts.wall.combo).toEqual(["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown"]);
+    expect(opts.wall.mobilePath).toBe("/presence");
+    expect(opts.wall.renderStyle).toBe("cursive");
+    expect(opts.mark.enabled).toBe(true);
+    expect(opts.mark.handle).toBe("");
+    expect(opts.mark.keyDir).toBe(".presence/");
+  });
 
-  it('respects user overrides', () => {
+  it("respects user overrides", () => {
     const opts = resolveOptions({
       enabled: false,
       wall: { server: true, ttlSeconds: 60 },
-    })
-    expect(opts.enabled).toBe(false)
-    expect(opts.wall.server).toBe(true)
-    expect(opts.wall.ttlSeconds).toBe(60)
-    expect(opts.wall.maxSignatures).toBe(50)
-  })
-})
+    });
+    expect(opts.enabled).toBe(false);
+    expect(opts.wall.server).toBe(true);
+    expect(opts.wall.ttlSeconds).toBe(60);
+    expect(opts.wall.maxSignatures).toBe(50);
+  });
+});
 ```
 
 - [ ] **Step 2: Run test — expect FAIL**
@@ -377,28 +383,28 @@ Expected: FAIL — `resolveOptions` not exported.
 - [ ] **Step 3: Create `packages/presence/src/options.ts`**
 
 ```ts
-export type RenderStyle = 'cursive' | 'block' | 'monogram'
+export type RenderStyle = "cursive" | "block" | "monogram";
 
 export interface PresenceWallOptions {
-  enabled: boolean
-  server: boolean
-  ttlSeconds: number
-  maxSignatures: number
-  combo: string[]
-  mobilePath: string
-  renderStyle: RenderStyle
+  enabled: boolean;
+  server: boolean;
+  ttlSeconds: number;
+  maxSignatures: number;
+  combo: string[];
+  mobilePath: string;
+  renderStyle: RenderStyle;
 }
 
 export interface PresenceMarkOptions {
-  enabled: boolean
-  handle: string
-  keyDir: string
+  enabled: boolean;
+  handle: string;
+  keyDir: string;
 }
 
 export interface ModuleOptions {
-  enabled: boolean
-  wall: PresenceWallOptions
-  mark: PresenceMarkOptions
+  enabled: boolean;
+  wall: PresenceWallOptions;
+  mark: PresenceMarkOptions;
 }
 
 export const defaults: ModuleOptions = {
@@ -408,33 +414,33 @@ export const defaults: ModuleOptions = {
     server: false,
     ttlSeconds: 3600,
     maxSignatures: 50,
-    combo: ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown'],
-    mobilePath: '/presence',
-    renderStyle: 'cursive',
+    combo: ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown"],
+    mobilePath: "/presence",
+    renderStyle: "cursive",
   },
   mark: {
     enabled: true,
-    handle: '',
-    keyDir: '.presence/',
+    handle: "",
+    keyDir: ".presence/",
   },
-}
+};
 
 function deepMerge<T extends Record<string, any>>(base: T, override: Partial<T> | undefined): T {
-  if (!override) return base
-  const out: Record<string, any> = { ...base }
+  if (!override) return base;
+  const out: Record<string, any> = { ...base };
   for (const k of Object.keys(override)) {
-    const v = (override as any)[k]
-    if (v && typeof v === 'object' && !Array.isArray(v) && typeof (base as any)[k] === 'object') {
-      out[k] = deepMerge((base as any)[k], v)
+    const v = (override as any)[k];
+    if (v && typeof v === "object" && !Array.isArray(v) && typeof (base as any)[k] === "object") {
+      out[k] = deepMerge((base as any)[k], v);
     } else {
-      out[k] = v
+      out[k] = v;
     }
   }
-  return out as T
+  return out as T;
 }
 
 export function resolveOptions(input: Partial<ModuleOptions> = {}): ModuleOptions {
-  return deepMerge(defaults, input)
+  return deepMerge(defaults, input);
 }
 ```
 
@@ -448,13 +454,13 @@ Expected: `2 passed`.
 Modify `packages/presence/src/module.ts`:
 
 ```ts
-import { defineNuxtModule } from '@nuxt/kit'
-import { resolveOptions, type ModuleOptions } from './options'
+import { defineNuxtModule } from "@nuxt/kit";
+import { resolveOptions, type ModuleOptions } from "./options";
 
 export default defineNuxtModule<ModuleOptions>({
   meta: {
-    name: '@vantol/presence',
-    configKey: 'presence',
+    name: "@vantol/presence",
+    configKey: "presence",
   },
   defaults: {
     enabled: true,
@@ -463,22 +469,22 @@ export default defineNuxtModule<ModuleOptions>({
       server: false,
       ttlSeconds: 3600,
       maxSignatures: 50,
-      combo: ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown'],
-      mobilePath: '/presence',
-      renderStyle: 'cursive',
+      combo: ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown"],
+      mobilePath: "/presence",
+      renderStyle: "cursive",
     },
     mark: {
       enabled: true,
-      handle: '',
-      keyDir: '.presence/',
+      handle: "",
+      keyDir: ".presence/",
     },
   },
   setup(_options, _nuxt) {
-    const resolved = resolveOptions(_options)
-    if (!resolved.enabled) return
+    const resolved = resolveOptions(_options);
+    if (!resolved.enabled) return;
     // wiring continues in later tasks
   },
-})
+});
 ```
 
 - [ ] **Step 6: Commit**
@@ -493,6 +499,7 @@ git commit -m "feat(presence): typed module options with deep-merge defaults"
 ### Task 5: `usePresenceWall` composable (in-memory)
 
 **Files:**
+
 - Create: `packages/presence/src/runtime/composables/usePresenceWall.ts`
 - Create: `packages/presence/test/wall.test.ts`
 
@@ -501,48 +508,48 @@ git commit -m "feat(presence): typed module options with deep-merge defaults"
 In `packages/presence/test/wall.test.ts`:
 
 ```ts
-import { describe, it, expect, beforeEach } from 'vitest'
-import { createWall } from '../src/runtime/composables/usePresenceWall'
+import { describe, it, expect, beforeEach } from "vitest";
+import { createWall } from "../src/runtime/composables/usePresenceWall";
 
-describe('createWall', () => {
-  let wall: ReturnType<typeof createWall>
+describe("createWall", () => {
+  let wall: ReturnType<typeof createWall>;
 
   beforeEach(() => {
-    wall = createWall()
-  })
+    wall = createWall();
+  });
 
-  it('starts empty and closed', () => {
-    expect(wall.signatures.value).toEqual([])
-    expect(wall.isOpen.value).toBe(false)
-  })
+  it("starts empty and closed", () => {
+    expect(wall.signatures.value).toEqual([]);
+    expect(wall.isOpen.value).toBe(false);
+  });
 
-  it('opens and closes', () => {
-    wall.open()
-    expect(wall.isOpen.value).toBe(true)
-    wall.close()
-    expect(wall.isOpen.value).toBe(false)
-  })
+  it("opens and closes", () => {
+    wall.open();
+    expect(wall.isOpen.value).toBe(true);
+    wall.close();
+    expect(wall.isOpen.value).toBe(false);
+  });
 
-  it('adds a signature', () => {
-    wall.add({ text: 'hello', x: 50, y: 50 })
-    expect(wall.signatures.value).toHaveLength(1)
-    expect(wall.signatures.value[0]!.text).toBe('hello')
-  })
+  it("adds a signature", () => {
+    wall.add({ text: "hello", x: 50, y: 50 });
+    expect(wall.signatures.value).toHaveLength(1);
+    expect(wall.signatures.value[0]!.text).toBe("hello");
+  });
 
-  it('clears signatures', () => {
-    wall.add({ text: 'a', x: 0, y: 0 })
-    wall.add({ text: 'b', x: 0, y: 0 })
-    wall.clear()
-    expect(wall.signatures.value).toEqual([])
-  })
+  it("clears signatures", () => {
+    wall.add({ text: "a", x: 0, y: 0 });
+    wall.add({ text: "b", x: 0, y: 0 });
+    wall.clear();
+    expect(wall.signatures.value).toEqual([]);
+  });
 
-  it('generates unique ids', () => {
-    wall.add({ text: 'a', x: 0, y: 0 })
-    wall.add({ text: 'b', x: 0, y: 0 })
-    const ids = wall.signatures.value.map(s => s.id)
-    expect(new Set(ids).size).toBe(2)
-  })
-})
+  it("generates unique ids", () => {
+    wall.add({ text: "a", x: 0, y: 0 });
+    wall.add({ text: "b", x: 0, y: 0 });
+    const ids = wall.signatures.value.map((s) => s.id);
+    expect(new Set(ids).size).toBe(2);
+  });
+});
 ```
 
 - [ ] **Step 2: Run test — expect FAIL**
@@ -553,50 +560,62 @@ Expected: FAIL — `createWall` not exported.
 - [ ] **Step 3: Create `packages/presence/src/runtime/composables/usePresenceWall.ts`**
 
 ```ts
-import { ref, type Ref } from 'vue'
+import { ref, type Ref } from "vue";
 
 export interface Signature {
-  id: string
-  text: string
-  x: number
-  y: number
-  rotation: number
-  color: string
-  createdAt: number
-  expiresAt: number
+  id: string;
+  text: string;
+  x: number;
+  y: number;
+  rotation: number;
+  color: string;
+  createdAt: number;
+  expiresAt: number;
 }
 
 export interface WallHandle {
-  isOpen: Ref<boolean>
-  signatures: Ref<Signature[]>
-  open: () => void
-  close: () => void
-  add: (input: { text: string; x: number; y: number; rotation?: number; color?: string }) => Signature
-  clear: () => void
+  isOpen: Ref<boolean>;
+  signatures: Ref<Signature[]>;
+  open: () => void;
+  close: () => void;
+  add: (input: {
+    text: string;
+    x: number;
+    y: number;
+    rotation?: number;
+    color?: string;
+  }) => Signature;
+  clear: () => void;
 }
 
-const COLORS = ['#f5c542', '#7dd3fc', '#fda4af', '#a7f3d0', '#c4b5fd']
+const COLORS = ["#f5c542", "#7dd3fc", "#fda4af", "#a7f3d0", "#c4b5fd"];
 
 function randomColor(): string {
-  return COLORS[Math.floor(Math.random() * COLORS.length)]!
+  return COLORS[Math.floor(Math.random() * COLORS.length)]!;
 }
 
 function makeId(): string {
-  return Math.random().toString(36).slice(2) + Date.now().toString(36)
+  return Math.random().toString(36).slice(2) + Date.now().toString(36);
 }
 
 export function createWall(): WallHandle {
-  const isOpen = ref(false)
-  const signatures = ref<Signature[]>([])
+  const isOpen = ref(false);
+  const signatures = ref<Signature[]>([]);
 
   function open() {
-    isOpen.value = true
+    isOpen.value = true;
   }
   function close() {
-    isOpen.value = false
+    isOpen.value = false;
   }
-  function add(input: { text: string; x: number; y: number; rotation?: number; color?: string }): Signature {
-    const now = Date.now()
+  function add(input: {
+    text: string;
+    x: number;
+    y: number;
+    rotation?: number;
+    color?: string;
+  }): Signature {
+    const now = Date.now();
     const sig: Signature = {
       id: makeId(),
       text: input.text,
@@ -606,20 +625,20 @@ export function createWall(): WallHandle {
       color: input.color ?? randomColor(),
       createdAt: now,
       expiresAt: now + 3600_000,
-    }
-    signatures.value = [...signatures.value, sig]
-    return sig
+    };
+    signatures.value = [...signatures.value, sig];
+    return sig;
   }
   function clear() {
-    signatures.value = []
+    signatures.value = [];
   }
 
-  return { isOpen, signatures, open, close, add, clear }
+  return { isOpen, signatures, open, close, add, clear };
 }
 
 export function usePresenceWall(): WallHandle {
   // Singleton for now — replaced when server mode is added.
-  return createWall()
+  return createWall();
 }
 ```
 
@@ -640,6 +659,7 @@ git commit -m "feat(presence): usePresenceWall composable with in-memory store"
 ### Task 6: `<PresenceWall>` component
 
 **Files:**
+
 - Create: `packages/presence/src/runtime/components/PresenceWall.vue`
 - Create: `packages/presence/test/component.test.ts`
 
@@ -648,43 +668,43 @@ git commit -m "feat(presence): usePresenceWall composable with in-memory store"
 In `packages/presence/test/component.test.ts`:
 
 ```ts
-import { describe, it, expect } from 'vitest'
-import { mount } from '@vue/test-utils'
-import { ref } from 'vue'
-import PresenceWall from '../src/runtime/components/PresenceWall.vue'
+import { describe, it, expect } from "vitest";
+import { mount } from "@vue/test-utils";
+import { ref } from "vue";
+import PresenceWall from "../src/runtime/components/PresenceWall.vue";
 
-describe('<PresenceWall>', () => {
-  it('renders nothing when closed', () => {
+describe("<PresenceWall>", () => {
+  it("renders nothing when closed", () => {
     const wrapper = mount(PresenceWall, {
       props: { open: false },
-    })
-    expect(wrapper.find('[data-presence-wall]').exists()).toBe(false)
-  })
+    });
+    expect(wrapper.find("[data-presence-wall]").exists()).toBe(false);
+  });
 
-  it('renders the wall when open', () => {
+  it("renders the wall when open", () => {
     const wrapper = mount(PresenceWall, {
       props: { open: true },
-    })
-    expect(wrapper.find('[data-presence-wall]').exists()).toBe(true)
-  })
+    });
+    expect(wrapper.find("[data-presence-wall]").exists()).toBe(true);
+  });
 
-  it('emits update:open when close is clicked', async () => {
+  it("emits update:open when close is clicked", async () => {
     const wrapper = mount(PresenceWall, {
       props: { open: true },
-    })
-    await wrapper.find('[data-presence-close]').trigger('click')
-    expect(wrapper.emitted('update:open')?.[0]).toEqual([false])
-  })
+    });
+    await wrapper.find("[data-presence-close]").trigger("click");
+    expect(wrapper.emitted("update:open")?.[0]).toEqual([false]);
+  });
 
-  it('exposes signatures via the wall composable', async () => {
+  it("exposes signatures via the wall composable", async () => {
     const wrapper = mount(PresenceWall, {
       props: { open: true },
-    })
-    const wall = wrapper.vm.$.exposed as { add: (i: any) => void; signatures: { value: any[] } }
-    wall.add({ text: 'hello', x: 50, y: 50 })
-    expect(wall.signatures.value.length).toBeGreaterThan(0)
-  })
-})
+    });
+    const wall = wrapper.vm.$.exposed as { add: (i: any) => void; signatures: { value: any[] } };
+    wall.add({ text: "hello", x: 50, y: 50 });
+    expect(wall.signatures.value.length).toBeGreaterThan(0);
+  });
+});
 ```
 
 - [ ] **Step 2: Run test — expect FAIL**
@@ -696,22 +716,22 @@ Expected: FAIL — `PresenceWall.vue` missing.
 
 ```vue
 <script setup lang="ts">
-import { computed } from 'vue'
-import { usePresenceWall } from '../composables/usePresenceWall'
+import { computed } from "vue";
+import { usePresenceWall } from "../composables/usePresenceWall";
 
-const props = defineProps<{ open: boolean }>()
-const emit = defineEmits<{ (e: 'update:open', value: boolean): void }>()
+const props = defineProps<{ open: boolean }>();
+const emit = defineEmits<{ (e: "update:open", value: boolean): void }>();
 
-const wall = usePresenceWall()
-wall.isOpen.value = props.open
+const wall = usePresenceWall();
+wall.isOpen.value = props.open;
 
-const isVisible = computed(() => props.open)
+const isVisible = computed(() => props.open);
 
 function close() {
-  emit('update:open', false)
+  emit("update:open", false);
 }
 
-defineExpose(wall)
+defineExpose(wall);
 </script>
 
 <template>
@@ -782,7 +802,7 @@ defineExpose(wall)
 .presence-wall__signature {
   position: absolute;
   font-size: 1.5rem;
-  font-family: 'Caveat', cursive;
+  font-family: "Caveat", cursive;
   pointer-events: none;
 }
 </style>
@@ -799,14 +819,14 @@ Run: `pnpm add -D @vue/test-utils happy-dom`
 Then add `happy-dom` to the vitest environment for component tests. Update `packages/presence/vitest.config.ts`:
 
 ```ts
-import { defineConfig } from 'vitest/config'
+import { defineConfig } from "vitest/config";
 
 export default defineConfig({
   test: {
-    environment: 'happy-dom',
-    include: ['test/**/*.test.ts'],
+    environment: "happy-dom",
+    include: ["test/**/*.test.ts"],
   },
-})
+});
 ```
 
 If any prior tests (e.g. `wallStore.test.ts`) relied on `node` environment, split them into a project config or set `environmentMatchGlobs`:
@@ -841,6 +861,7 @@ git commit -m "feat(presence): PresenceWall component with scoped styles"
 ### Task 7: Client plugin — combo listener + console API
 
 **Files:**
+
 - Create: `packages/presence/src/runtime/plugins/presence.client.ts`
 - Modify: `packages/presence/src/module.ts`
 - Create: `packages/presence/test/plugin.test.ts`
@@ -850,65 +871,63 @@ git commit -m "feat(presence): PresenceWall component with scoped styles"
 In `packages/presence/test/plugin.test.ts`:
 
 ```ts
-import { describe, it, expect, vi } from 'vitest'
-import { createPresencePlugin } from '../src/runtime/plugins/presence.client'
+import { describe, it, expect, vi } from "vitest";
+import { createPresencePlugin } from "../src/runtime/plugins/presence.client";
 
-describe('presence plugin', () => {
-  it('listens for the combo and toggles open', () => {
-    const wall = { open: vi.fn(), close: vi.fn() }
+describe("presence plugin", () => {
+  it("listens for the combo and toggles open", () => {
+    const wall = { open: vi.fn(), close: vi.fn() };
     const teardown = createPresencePlugin({
-      combo: ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown'],
-      mobilePath: '/presence',
+      combo: ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown"],
+      mobilePath: "/presence",
       wall,
-    })
+    });
 
     // Simulate the combo
-    const events = ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown']
+    const events = ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown"];
     for (const key of events) {
-      window.dispatchEvent(new KeyboardEvent('keydown', { key }))
+      window.dispatchEvent(new KeyboardEvent("keydown", { key }));
     }
-    expect(wall.open).toHaveBeenCalled()
+    expect(wall.open).toHaveBeenCalled();
 
-    teardown()
-  })
+    teardown();
+  });
 
-  it('exposes window.$presence', () => {
-    const wall = { open: vi.fn(), close: vi.fn(), add: vi.fn() }
+  it("exposes window.$presence", () => {
+    const wall = { open: vi.fn(), close: vi.fn(), add: vi.fn() };
     const teardown = createPresencePlugin({
-      combo: ['ArrowUp'],
-      mobilePath: '/presence',
+      combo: ["ArrowUp"],
+      mobilePath: "/presence",
       wall,
-    })
+    });
 
-    expect((window as any).$presence).toBeDefined()
-    expect((window as any).$presence.open).toBeInstanceOf(Function)
-    expect((window as any).$presence.close).toBeInstanceOf(Function)
-    expect((window as any).$presence.sign).toBeInstanceOf(Function)
+    expect((window as any).$presence).toBeDefined();
+    expect((window as any).$presence.open).toBeInstanceOf(Function);
+    expect((window as any).$presence.close).toBeInstanceOf(Function);
+    expect((window as any).$presence.sign).toBeInstanceOf(Function);
+    (window as any).$presence.open();
+    expect(wall.open).toHaveBeenCalled();
+    (window as any).$presence.close();
+    expect(wall.close).toHaveBeenCalled();
 
-    ;(window as any).$presence.open()
-    expect(wall.open).toHaveBeenCalled()
+    teardown();
+  });
 
-    ;(window as any).$presence.close()
-    expect(wall.close).toHaveBeenCalled()
-
-    teardown()
-  })
-
-  it('respects custom combo', () => {
-    const wall = { open: vi.fn(), close: vi.fn() }
+  it("respects custom combo", () => {
+    const wall = { open: vi.fn(), close: vi.fn() };
     const teardown = createPresencePlugin({
-      combo: ['KeyK', 'KeyK'],
-      mobilePath: '/presence',
+      combo: ["KeyK", "KeyK"],
+      mobilePath: "/presence",
       wall,
-    })
+    });
 
-    window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', code: 'KeyK' }))
-    window.dispatchEvent(new KeyboardEvent('keydown', { key: 'k', code: 'KeyK' }))
-    expect(wall.open).toHaveBeenCalled()
+    window.dispatchEvent(new KeyboardEvent("keydown", { key: "k", code: "KeyK" }));
+    window.dispatchEvent(new KeyboardEvent("keydown", { key: "k", code: "KeyK" }));
+    expect(wall.open).toHaveBeenCalled();
 
-    teardown()
-  })
-})
+    teardown();
+  });
+});
 ```
 
 - [ ] **Step 2: Run test — expect FAIL**
@@ -919,39 +938,39 @@ Expected: FAIL — `createPresencePlugin` not exported.
 - [ ] **Step 3: Create `packages/presence/src/runtime/plugins/presence.client.ts`**
 
 ```ts
-import type { WallHandle } from '../composables/usePresenceWall'
+import type { WallHandle } from "../composables/usePresenceWall";
 
 export interface PresencePluginOptions {
-  combo: string[]
-  mobilePath: string
-  wall: Pick<WallHandle, 'open' | 'close' | 'add'>
+  combo: string[];
+  mobilePath: string;
+  wall: Pick<WallHandle, "open" | "close" | "add">;
 }
 
 interface PresenceConsole {
-  open: () => void
-  close: () => void
-  sign: (text: string) => void
+  open: () => void;
+  close: () => void;
+  sign: (text: string) => void;
 }
 
 declare global {
   interface Window {
-    $presence?: PresenceConsole
+    $presence?: PresenceConsole;
   }
 }
 
 export function createPresencePlugin(opts: PresencePluginOptions): () => void {
-  let buffer: string[] = []
-  let lastTs = 0
+  let buffer: string[] = [];
+  let lastTs = 0;
 
   function onKeydown(e: KeyboardEvent) {
-    const now = Date.now()
-    if (now - lastTs > 1500) buffer = []
-    lastTs = now
-    buffer.push(e.key)
-    if (buffer.length > opts.combo.length) buffer = buffer.slice(-opts.combo.length)
+    const now = Date.now();
+    if (now - lastTs > 1500) buffer = [];
+    lastTs = now;
+    buffer.push(e.key);
+    if (buffer.length > opts.combo.length) buffer = buffer.slice(-opts.combo.length);
     if (buffer.length === opts.combo.length && buffer.every((k, i) => k === opts.combo[i])) {
-      opts.wall.open()
-      buffer = []
+      opts.wall.open();
+      buffer = [];
     }
   }
 
@@ -959,45 +978,49 @@ export function createPresencePlugin(opts: PresencePluginOptions): () => void {
     open: () => opts.wall.open(),
     close: () => opts.wall.close(),
     sign: (text: string) => opts.wall.add({ text, x: 50, y: 50 }),
-  }
-  window.$presence = consoleApi
+  };
+  window.$presence = consoleApi;
 
-  window.addEventListener('keydown', onKeydown)
+  window.addEventListener("keydown", onKeydown);
 
   return () => {
-    window.removeEventListener('keydown', onKeydown)
-    delete window.$presence
-  }
+    window.removeEventListener("keydown", onKeydown);
+    delete window.$presence;
+  };
 }
 
 export default defineNuxtPlugin((nuxtApp) => {
-  const route = useRoute()
-  const wall = usePresenceWall()
-  const opts = (nuxtApp.$config.public.presence ?? {}) as { combo?: string[]; mobilePath?: string }
+  const route = useRoute();
+  const wall = usePresenceWall();
+  const opts = (nuxtApp.$config.public.presence ?? {}) as { combo?: string[]; mobilePath?: string };
 
   const teardown = createPresencePlugin({
-    combo: opts.combo ?? ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown'],
-    mobilePath: opts.mobilePath ?? '/presence',
+    combo: opts.combo ?? ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown"],
+    mobilePath: opts.mobilePath ?? "/presence",
     wall,
-  })
+  });
 
   // Auto-open on mobile hash route
-  watch(() => route.path, (path) => {
-    if (path === (opts.mobilePath ?? '/presence')) {
-      wall.open()
-    }
-  }, { immediate: true })
+  watch(
+    () => route.path,
+    (path) => {
+      if (path === (opts.mobilePath ?? "/presence")) {
+        wall.open();
+      }
+    },
+    { immediate: true },
+  );
 
-  nuxtApp.hook('app:beforeMount', () => {
-    if (route.path === (opts.mobilePath ?? '/presence')) {
-      wall.open()
+  nuxtApp.hook("app:beforeMount", () => {
+    if (route.path === (opts.mobilePath ?? "/presence")) {
+      wall.open();
     }
-  })
+  });
 
   if (import.meta.client) {
-    nuxtApp.hook('app:mounted', () => teardown)
+    nuxtApp.hook("app:mounted", () => teardown);
   }
-})
+});
 ```
 
 - [ ] **Step 4: Run test — expect PASS**
@@ -1010,13 +1033,13 @@ Expected: `3 passed`.
 Modify `packages/presence/src/module.ts`:
 
 ```ts
-import { defineNuxtModule, addPlugin } from '@nuxt/kit'
-import { resolveOptions, type ModuleOptions } from './options'
+import { defineNuxtModule, addPlugin } from "@nuxt/kit";
+import { resolveOptions, type ModuleOptions } from "./options";
 
 export default defineNuxtModule<ModuleOptions>({
   meta: {
-    name: '@vantol/presence',
-    configKey: 'presence',
+    name: "@vantol/presence",
+    configKey: "presence",
   },
   defaults: {
     enabled: true,
@@ -1025,31 +1048,31 @@ export default defineNuxtModule<ModuleOptions>({
       server: false,
       ttlSeconds: 3600,
       maxSignatures: 50,
-      combo: ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown'],
-      mobilePath: '/presence',
-      renderStyle: 'cursive',
+      combo: ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown"],
+      mobilePath: "/presence",
+      renderStyle: "cursive",
     },
     mark: {
       enabled: true,
-      handle: '',
-      keyDir: '.presence/',
+      handle: "",
+      keyDir: ".presence/",
     },
   },
   setup(options, nuxt) {
-    const resolved = resolveOptions(options)
-    if (!resolved.enabled || !resolved.wall.enabled) return
+    const resolved = resolveOptions(options);
+    if (!resolved.enabled || !resolved.wall.enabled) return;
 
     nuxt.options.runtimeConfig.public.presence = {
       combo: resolved.wall.combo,
       mobilePath: resolved.wall.mobilePath,
-    }
+    };
 
     addPlugin({
-      src: resolve('./runtime/plugins/presence.client'),
-      mode: 'client',
-    })
+      src: resolve("./runtime/plugins/presence.client"),
+      mode: "client",
+    });
   },
-})
+});
 ```
 
 Add the `resolve` import: `import { defineNuxtModule, addPlugin, createResolver } from '@nuxt/kit'` and at the top of setup: `const { resolve } = createResolver(import.meta.url)`.
@@ -1071,6 +1094,7 @@ git commit -m "feat(presence): client plugin with combo listener and console API
 ### Task 8: Verify beginner milestone — install in playground
 
 **Files:**
+
 - Modify: `packages/presence/playground/app.vue`
 
 - [ ] **Step 1: Add `<PresenceWall>` to the playground page**
@@ -1079,7 +1103,7 @@ In `packages/presence/playground/app.vue`:
 
 ```vue
 <script setup lang="ts">
-const open = ref(false)
+const open = ref(false);
 </script>
 
 <template>
@@ -1111,6 +1135,7 @@ git commit -m "feat(presence): playground demonstrates wall"
 ### Task 9: `wallStore.ts` with TTL
 
 **Files:**
+
 - Create: `packages/presence/src/server/utils/wallStore.ts`
 - Create: `packages/presence/test/wallStore.test.ts`
 
@@ -1119,48 +1144,48 @@ git commit -m "feat(presence): playground demonstrates wall"
 In `packages/presence/test/wallStore.test.ts`:
 
 ```ts
-import { describe, it, expect, beforeEach, vi, afterEach } from 'vitest'
-import { createWallStore, type StoredSignature } from '../src/server/utils/wallStore'
+import { describe, it, expect, beforeEach, vi, afterEach } from "vitest";
+import { createWallStore, type StoredSignature } from "../src/server/utils/wallStore";
 
-describe('wallStore', () => {
+describe("wallStore", () => {
   beforeEach(() => {
-    vi.useFakeTimers()
-  })
+    vi.useFakeTimers();
+  });
   afterEach(() => {
-    vi.useRealTimers()
-  })
+    vi.useRealTimers();
+  });
 
-  it('adds and retrieves signatures', () => {
-    const store = createWallStore({ ttlSeconds: 60, maxSignatures: 10 })
-    const sig: Omit<StoredSignature, 'createdAt' | 'expiresAt' | 'id'> = {
-      text: 'hello',
+  it("adds and retrieves signatures", () => {
+    const store = createWallStore({ ttlSeconds: 60, maxSignatures: 10 });
+    const sig: Omit<StoredSignature, "createdAt" | "expiresAt" | "id"> = {
+      text: "hello",
       x: 50,
       y: 50,
       rotation: 0,
-      color: '#fff',
-    }
-    store.add(sig)
-    expect(store.list()).toHaveLength(1)
-    expect(store.list()[0]!.text).toBe('hello')
-  })
+      color: "#fff",
+    };
+    store.add(sig);
+    expect(store.list()).toHaveLength(1);
+    expect(store.list()[0]!.text).toBe("hello");
+  });
 
-  it('evicts expired signatures on list', () => {
-    const store = createWallStore({ ttlSeconds: 60, maxSignatures: 10 })
-    store.add({ text: 'old', x: 0, y: 0, rotation: 0, color: '#fff' })
-    vi.advanceTimersByTime(61_000)
-    expect(store.list()).toEqual([])
-  })
+  it("evicts expired signatures on list", () => {
+    const store = createWallStore({ ttlSeconds: 60, maxSignatures: 10 });
+    store.add({ text: "old", x: 0, y: 0, rotation: 0, color: "#fff" });
+    vi.advanceTimersByTime(61_000);
+    expect(store.list()).toEqual([]);
+  });
 
-  it('caps at maxSignatures and evicts oldest', () => {
-    const store = createWallStore({ ttlSeconds: 3600, maxSignatures: 2 })
-    store.add({ text: 'a', x: 0, y: 0, rotation: 0, color: '#fff' })
-    store.add({ text: 'b', x: 0, y: 0, rotation: 0, color: '#fff' })
-    store.add({ text: 'c', x: 0, y: 0, rotation: 0, color: '#fff' })
-    const list = store.list()
-    expect(list).toHaveLength(2)
-    expect(list.map(s => s.text)).toEqual(['b', 'c'])
-  })
-})
+  it("caps at maxSignatures and evicts oldest", () => {
+    const store = createWallStore({ ttlSeconds: 3600, maxSignatures: 2 });
+    store.add({ text: "a", x: 0, y: 0, rotation: 0, color: "#fff" });
+    store.add({ text: "b", x: 0, y: 0, rotation: 0, color: "#fff" });
+    store.add({ text: "c", x: 0, y: 0, rotation: 0, color: "#fff" });
+    const list = store.list();
+    expect(list).toHaveLength(2);
+    expect(list.map((s) => s.text)).toEqual(["b", "c"]);
+  });
+});
 ```
 
 - [ ] **Step 2: Run test — expect FAIL**
@@ -1172,66 +1197,66 @@ Expected: FAIL — `createWallStore` not exported.
 
 ```ts
 export interface StoredSignature {
-  id: string
-  text: string
-  x: number
-  y: number
-  rotation: number
-  color: string
-  createdAt: number
-  expiresAt: number
+  id: string;
+  text: string;
+  x: number;
+  y: number;
+  rotation: number;
+  color: string;
+  createdAt: number;
+  expiresAt: number;
 }
 
 export interface WallStoreOptions {
-  ttlSeconds: number
-  maxSignatures: number
+  ttlSeconds: number;
+  maxSignatures: number;
 }
 
 export interface WallStore {
-  add: (input: Omit<StoredSignature, 'id' | 'createdAt' | 'expiresAt'>) => StoredSignature
-  list: () => StoredSignature[]
-  clear: () => void
+  add: (input: Omit<StoredSignature, "id" | "createdAt" | "expiresAt">) => StoredSignature;
+  list: () => StoredSignature[];
+  clear: () => void;
 }
 
 function makeId(): string {
-  return Math.random().toString(36).slice(2) + Date.now().toString(36)
+  return Math.random().toString(36).slice(2) + Date.now().toString(36);
 }
 
 export function createWallStore(opts: WallStoreOptions): WallStore {
-  const items: StoredSignature[] = []
+  const items: StoredSignature[] = [];
 
   function evictExpired() {
-    const now = Date.now()
+    const now = Date.now();
     while (items.length > 0 && items[0]!.expiresAt <= now) {
-      items.shift()
+      items.shift();
     }
   }
 
-  function add(input: Omit<StoredSignature, 'id' | 'createdAt' | 'expiresAt'>): StoredSignature {
-    const now = Date.now()
+  function add(input: Omit<StoredSignature, "id" | "createdAt" | "expiresAt">): StoredSignature {
+    const now = Date.now();
     const sig: StoredSignature = {
       ...input,
       id: makeId(),
       createdAt: now,
       expiresAt: now + opts.ttlSeconds * 1000,
-    }
-    items.push(sig)
+    };
+    items.push(sig);
     if (items.length > opts.maxSignatures) {
-      items.splice(0, items.length - opts.maxSignatures)
+      items.splice(0, items.length - opts.maxSignatures);
     }
-    return sig
+    return sig;
   }
 
   function list(): StoredSignature[] {
-    evictExpired()
-    return [...items]
+    evictExpired();
+    return [...items];
   }
 
   function clear() {
-    items.length = 0
+    items.length = 0;
   }
 
-  return { add, list, clear }
+  return { add, list, clear };
 }
 ```
 
@@ -1252,6 +1277,7 @@ git commit -m "feat(presence): wallStore with TTL eviction and capacity cap"
 ### Task 10: `wall.post.ts` route
 
 **Files:**
+
 - Create: `packages/presence/src/server/api/wall.post.ts`
 - Append tests to: `packages/presence/test/wall.test.ts`
 
@@ -1260,39 +1286,39 @@ git commit -m "feat(presence): wallStore with TTL eviction and capacity cap"
 Append to `packages/presence/test/wall.test.ts`:
 
 ```ts
-import { defineEventHandler, readBody, setResponseStatus } from 'h3'
-import { wallStore } from '../utils/wallStore'
-import { resolveRuntimeOptions } from '../utils/runtimeOptions'
+import { defineEventHandler, readBody, setResponseStatus } from "h3";
+import { wallStore } from "../utils/wallStore";
+import { resolveRuntimeOptions } from "../utils/runtimeOptions";
 
 export default defineEventHandler(async (event) => {
-  const opts = resolveRuntimeOptions()
+  const opts = resolveRuntimeOptions();
   if (!opts.wall.enabled || !opts.wall.server) {
-    setResponseStatus(event, 404)
-    return { error: 'not_found' }
+    setResponseStatus(event, 404);
+    return { error: "not_found" };
   }
 
   const body = await readBody<{
-    text?: string
-    x?: number
-    y?: number
-    rotation?: number
-    color?: string
-  }>(event)
+    text?: string;
+    x?: number;
+    y?: number;
+    rotation?: number;
+    color?: string;
+  }>(event);
 
   if (
-    typeof body?.text !== 'string' ||
-    typeof body?.x !== 'number' ||
-    typeof body?.y !== 'number' ||
+    typeof body?.text !== "string" ||
+    typeof body?.x !== "number" ||
+    typeof body?.y !== "number" ||
     body.text.length === 0 ||
     body.text.length > 200
   ) {
-    setResponseStatus(event, 400)
-    return { error: 'invalid_signature' }
+    setResponseStatus(event, 400);
+    return { error: "invalid_signature" };
   }
 
   if (wallStore.list().length >= opts.wall.maxSignatures) {
-    setResponseStatus(event, 429)
-    return { error: 'wall_full' }
+    setResponseStatus(event, 429);
+    return { error: "wall_full" };
   }
 
   const sig = wallStore.add({
@@ -1300,11 +1326,11 @@ export default defineEventHandler(async (event) => {
     x: body.x,
     y: body.y,
     rotation: body.rotation ?? 0,
-    color: body.color ?? '#f5c542',
-  })
+    color: body.color ?? "#f5c542",
+  });
 
-  return { ok: true, signature: sig }
-})
+  return { ok: true, signature: sig };
+});
 ```
 
 - [ ] **Step 2: Run test — expect FAIL**
@@ -1315,92 +1341,92 @@ Expected: FAIL — file missing.
 - [ ] **Step 3: Create `packages/presence/test/wallRoutes.test.ts`**
 
 ```ts
-import { describe, it, expect } from 'vitest'
-import { setup, $fetch } from '@nuxt/test-utils/e2e'
-import { fileURLToPath } from 'node:url'
+import { describe, it, expect } from "vitest";
+import { setup, $fetch } from "@nuxt/test-utils/e2e";
+import { fileURLToPath } from "node:url";
 
 await setup({
-  rootDir: fileURLToPath(new URL('../playground', import.meta.url)),
+  rootDir: fileURLToPath(new URL("../playground", import.meta.url)),
   server: false,
-})
+});
 
-describe('wall API', () => {
-  it('rejects malformed signatures', async () => {
-    const res = await $fetch('/api/_presence/wall', {
-      method: 'POST',
-      body: { text: '', x: 'no', y: 50 },
+describe("wall API", () => {
+  it("rejects malformed signatures", async () => {
+    const res = await $fetch("/api/_presence/wall", {
+      method: "POST",
+      body: { text: "", x: "no", y: 50 },
       ignoreResponseError: true,
-    }).catch(e => e.response?._data ?? e)
-    expect(res.error).toBe('invalid_signature')
-  })
+    }).catch((e) => e.response?._data ?? e);
+    expect(res.error).toBe("invalid_signature");
+  });
 
-  it('returns not_found when wall.server is false', async () => {
-    const res = await $fetch('/api/_presence/wall', {
-      method: 'POST',
-      body: { text: 'hi', x: 50, y: 50 },
+  it("returns not_found when wall.server is false", async () => {
+    const res = await $fetch("/api/_presence/wall", {
+      method: "POST",
+      body: { text: "hi", x: 50, y: 50 },
       ignoreResponseError: true,
-    }).catch(e => e.response?._data ?? e)
+    }).catch((e) => e.response?._data ?? e);
     // Default config has wall.server: false
-    expect(res.error).toBe('not_found')
-  })
-})
+    expect(res.error).toBe("not_found");
+  });
+});
 ```
 
 - [ ] **Step 4: Create `packages/presence/src/server/utils/runtimeOptions.ts`**
 
 ```ts
-import type { ModuleOptions } from '../../options'
-import { defaults } from '../../options'
+import type { ModuleOptions } from "../../options";
+import { defaults } from "../../options";
 
-let cache: ModuleOptions | null = null
+let cache: ModuleOptions | null = null;
 
 export function setRuntimeOptions(opts: ModuleOptions) {
-  cache = opts
+  cache = opts;
 }
 
 export function resolveRuntimeOptions(): ModuleOptions {
-  return cache ?? defaults
+  return cache ?? defaults;
 }
 ```
 
 - [ ] **Step 5: Create `packages/presence/src/server/api/wall.post.ts`**
 
 ```ts
-import { defineEventHandler, readBody, setResponseStatus } from 'h3'
-import { createWallStore } from '../utils/wallStore'
-import { resolveRuntimeOptions } from '../utils/runtimeOptions'
+import { defineEventHandler, readBody, setResponseStatus } from "h3";
+import { createWallStore } from "../utils/wallStore";
+import { resolveRuntimeOptions } from "../utils/runtimeOptions";
 
-const store = createWallStore({ ttlSeconds: 3600, maxSignatures: 50 })
+const store = createWallStore({ ttlSeconds: 3600, maxSignatures: 50 });
 
 export default defineEventHandler(async (event) => {
-  const opts = resolveRuntimeOptions()
+  const opts = resolveRuntimeOptions();
   if (!opts.wall.enabled || !opts.wall.server) {
-    setResponseStatus(event, 404)
-    return { error: 'not_found' }
+    setResponseStatus(event, 404);
+    return { error: "not_found" };
   }
 
   const body = await readBody<{
-    text?: string
-    x?: number
-    y?: number
-    rotation?: number
-    color?: string
-  }>(event)
+    text?: string;
+    x?: number;
+    y?: number;
+    rotation?: number;
+    color?: string;
+  }>(event);
 
   if (
-    typeof body?.text !== 'string' ||
-    typeof body?.x !== 'number' ||
-    typeof body?.y !== 'number' ||
+    typeof body?.text !== "string" ||
+    typeof body?.x !== "number" ||
+    typeof body?.y !== "number" ||
     body.text.length === 0 ||
     body.text.length > 200
   ) {
-    setResponseStatus(event, 400)
-    return { error: 'invalid_signature' }
+    setResponseStatus(event, 400);
+    return { error: "invalid_signature" };
   }
 
   if (store.list().length >= opts.wall.maxSignatures) {
-    setResponseStatus(event, 429)
-    return { error: 'wall_full' }
+    setResponseStatus(event, 429);
+    return { error: "wall_full" };
   }
 
   const sig = store.add({
@@ -1408,11 +1434,11 @@ export default defineEventHandler(async (event) => {
     x: body.x,
     y: body.y,
     rotation: body.rotation ?? 0,
-    color: body.color ?? '#f5c542',
-  })
+    color: body.color ?? "#f5c542",
+  });
 
-  return { ok: true, signature: sig }
-})
+  return { ok: true, signature: sig };
+});
 ```
 
 - [ ] **Step 6: Run test — expect PASS**
@@ -1432,25 +1458,26 @@ git commit -m "feat(presence): POST /api/_presence/wall route with validation"
 ### Task 11: `wall.get.ts` route
 
 **Files:**
+
 - Create: `packages/presence/src/server/api/wall.get.ts`
 
 - [ ] **Step 1: Create the route**
 
 ```ts
-import { defineEventHandler, setResponseStatus } from 'h3'
-import { createWallStore } from '../utils/wallStore'
-import { resolveRuntimeOptions } from '../utils/runtimeOptions'
+import { defineEventHandler, setResponseStatus } from "h3";
+import { createWallStore } from "../utils/wallStore";
+import { resolveRuntimeOptions } from "../utils/runtimeOptions";
 
-const store = createWallStore({ ttlSeconds: 3600, maxSignatures: 50 })
+const store = createWallStore({ ttlSeconds: 3600, maxSignatures: 50 });
 
 export default defineEventHandler((event) => {
-  const opts = resolveRuntimeOptions()
+  const opts = resolveRuntimeOptions();
   if (!opts.wall.enabled || !opts.wall.server) {
-    setResponseStatus(event, 404)
-    return { error: 'not_found' }
+    setResponseStatus(event, 404);
+    return { error: "not_found" };
   }
-  return { signatures: store.list() }
-})
+  return { signatures: store.list() };
+});
 ```
 
 - [ ] **Step 2: Add test**
@@ -1458,18 +1485,19 @@ export default defineEventHandler((event) => {
 Append to `packages/presence/test/wallRoutes.test.ts`:
 
 ```ts
-describe('wall GET', () => {
-  it('returns 404 when server mode off', async () => {
-    const res = await $fetch('/api/_presence/wall', { ignoreResponseError: true })
-      .catch(e => e.response?._data ?? e)
-    expect(res.error).toBe('not_found')
-  })
+describe("wall GET", () => {
+  it("returns 404 when server mode off", async () => {
+    const res = await $fetch("/api/_presence/wall", { ignoreResponseError: true }).catch(
+      (e) => e.response?._data ?? e,
+    );
+    expect(res.error).toBe("not_found");
+  });
 
-  it('returns signatures array when server mode on', async () => {
+  it("returns signatures array when server mode on", async () => {
     // Override via test-only module option — see Task 13 (testing the integration).
     // Skipped here; covered in integration test.
-  })
-})
+  });
+});
 ```
 
 - [ ] **Step 3: Run tests**
@@ -1489,6 +1517,7 @@ git commit -m "feat(presence): GET /api/_presence/wall route"
 ### Task 12: Wire server routes into the module
 
 **Files:**
+
 - Modify: `packages/presence/src/module.ts`
 
 - [ ] **Step 1: Add server handlers when `wall.server` is on**
@@ -1496,13 +1525,13 @@ git commit -m "feat(presence): GET /api/_presence/wall route"
 Modify `packages/presence/src/module.ts`:
 
 ```ts
-import { defineNuxtModule, addPlugin, addServerHandler, createResolver } from '@nuxt/kit'
-import { resolveOptions, type ModuleOptions } from './options'
+import { defineNuxtModule, addPlugin, addServerHandler, createResolver } from "@nuxt/kit";
+import { resolveOptions, type ModuleOptions } from "./options";
 
 export default defineNuxtModule<ModuleOptions>({
   meta: {
-    name: '@vantol/presence',
-    configKey: 'presence',
+    name: "@vantol/presence",
+    configKey: "presence",
   },
   defaults: {
     enabled: true,
@@ -1511,36 +1540,44 @@ export default defineNuxtModule<ModuleOptions>({
       server: false,
       ttlSeconds: 3600,
       maxSignatures: 50,
-      combo: ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown'],
-      mobilePath: '/presence',
-      renderStyle: 'cursive',
+      combo: ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown"],
+      mobilePath: "/presence",
+      renderStyle: "cursive",
     },
     mark: {
       enabled: true,
-      handle: '',
-      keyDir: '.presence/',
+      handle: "",
+      keyDir: ".presence/",
     },
   },
   setup(options, nuxt) {
-    const resolved = resolveOptions(options)
-    if (!resolved.enabled) return
+    const resolved = resolveOptions(options);
+    if (!resolved.enabled) return;
 
     if (resolved.wall.enabled) {
       nuxt.options.runtimeConfig.public.presence = {
         combo: resolved.wall.combo,
         mobilePath: resolved.wall.mobilePath,
-      }
+      };
 
-      const { resolve } = createResolver(import.meta.url)
-      addPlugin({ src: resolve('./runtime/plugins/presence.client'), mode: 'client' })
+      const { resolve } = createResolver(import.meta.url);
+      addPlugin({ src: resolve("./runtime/plugins/presence.client"), mode: "client" });
 
       if (resolved.wall.server) {
-        addServerHandler({ route: '/api/_presence/wall', method: 'post', handler: resolve('./server/api/wall.post') })
-        addServerHandler({ route: '/api/_presence/wall', method: 'get', handler: resolve('./server/api/wall.get') })
+        addServerHandler({
+          route: "/api/_presence/wall",
+          method: "post",
+          handler: resolve("./server/api/wall.post"),
+        });
+        addServerHandler({
+          route: "/api/_presence/wall",
+          method: "get",
+          handler: resolve("./server/api/wall.get"),
+        });
       }
     }
   },
-})
+});
 ```
 
 - [ ] **Step 2: Verify build still passes**
@@ -1560,55 +1597,56 @@ git commit -m "feat(presence): wire server routes when wall.server enabled"
 ### Task 13: Integration test for server wall flow
 
 **Files:**
+
 - Create: `packages/presence/test/wallIntegration.test.ts`
 
 - [ ] **Step 1: Write integration test**
 
 ```ts
-import { describe, it, expect } from 'vitest'
-import { setup, $fetch } from '@nuxt/test-utils/e2e'
-import { fileURLToPath } from 'node:url'
+import { describe, it, expect } from "vitest";
+import { setup, $fetch } from "@nuxt/test-utils/e2e";
+import { fileURLToPath } from "node:url";
 
 await setup({
-  rootDir: fileURLToPath(new URL('../playground', import.meta.url)),
+  rootDir: fileURLToPath(new URL("../playground", import.meta.url)),
   server: true,
   nuxtConfig: {
     presence: {
       wall: { server: true, ttlSeconds: 60, maxSignatures: 3 },
     },
   },
-})
+});
 
-describe('wall server integration', () => {
-  it('rejects invalid signatures with 400', async () => {
-    const res = await $fetch('/api/_presence/wall', {
-      method: 'POST',
-      body: { text: '', x: 50, y: 50 },
+describe("wall server integration", () => {
+  it("rejects invalid signatures with 400", async () => {
+    const res = await $fetch("/api/_presence/wall", {
+      method: "POST",
+      body: { text: "", x: 50, y: 50 },
       ignoreResponseError: true,
-    }).catch(e => e.response?._data ?? e)
-    expect(res.error).toBe('invalid_signature')
-  })
+    }).catch((e) => e.response?._data ?? e);
+    expect(res.error).toBe("invalid_signature");
+  });
 
-  it('accepts valid signatures and lists them', async () => {
-    await $fetch('/api/_presence/wall', {
-      method: 'POST',
-      body: { text: 'first', x: 30, y: 40 },
-    })
-    const list = await $fetch<{ signatures: Array<{ text: string }> }>('/api/_presence/wall')
-    expect(list.signatures.length).toBeGreaterThan(0)
-    expect(list.signatures.some(s => s.text === 'first')).toBe(true)
-  })
+  it("accepts valid signatures and lists them", async () => {
+    await $fetch("/api/_presence/wall", {
+      method: "POST",
+      body: { text: "first", x: 30, y: 40 },
+    });
+    const list = await $fetch<{ signatures: Array<{ text: string }> }>("/api/_presence/wall");
+    expect(list.signatures.length).toBeGreaterThan(0);
+    expect(list.signatures.some((s) => s.text === "first")).toBe(true);
+  });
 
-  it('caps at maxSignatures', async () => {
-    await $fetch('/api/_presence/wall', { method: 'POST', body: { text: 'a', x: 0, y: 0 } })
-    await $fetch('/api/_presence/wall', { method: 'POST', body: { text: 'b', x: 0, y: 0 } })
-    await $fetch('/api/_presence/wall', { method: 'POST', body: { text: 'c', x: 0, y: 0 } })
-    await $fetch('/api/_presence/wall', { method: 'POST', body: { text: 'd', x: 0, y: 0 } })
-    const list = await $fetch<{ signatures: Array<{ text: string }> }>('/api/_presence/wall')
-    expect(list.signatures).toHaveLength(3)
-    expect(list.signatures.map(s => s.text)).not.toContain('a')
-  })
-})
+  it("caps at maxSignatures", async () => {
+    await $fetch("/api/_presence/wall", { method: "POST", body: { text: "a", x: 0, y: 0 } });
+    await $fetch("/api/_presence/wall", { method: "POST", body: { text: "b", x: 0, y: 0 } });
+    await $fetch("/api/_presence/wall", { method: "POST", body: { text: "c", x: 0, y: 0 } });
+    await $fetch("/api/_presence/wall", { method: "POST", body: { text: "d", x: 0, y: 0 } });
+    const list = await $fetch<{ signatures: Array<{ text: string }> }>("/api/_presence/wall");
+    expect(list.signatures).toHaveLength(3);
+    expect(list.signatures.map((s) => s.text)).not.toContain("a");
+  });
+});
 ```
 
 - [ ] **Step 2: Run test — expect PASS**
@@ -1628,6 +1666,7 @@ git commit -m "test(presence): server wall integration covers happy + cap paths"
 ### Task 14: `renderStyle` option wires through
 
 **Files:**
+
 - Modify: `packages/presence/src/runtime/components/PresenceWall.vue`
 - Create: `packages/presence/test/renderStyle.test.ts`
 
@@ -1636,25 +1675,25 @@ git commit -m "test(presence): server wall integration covers happy + cap paths"
 In `packages/presence/test/renderStyle.test.ts`:
 
 ```ts
-import { describe, it, expect } from 'vitest'
-import { signatureStyle } from '../src/runtime/utils/renderStyle'
+import { describe, it, expect } from "vitest";
+import { signatureStyle } from "../src/runtime/utils/renderStyle";
 
-describe('signatureStyle', () => {
-  it('returns cursive font for cursive style', () => {
-    const s = signatureStyle({ text: 'a', x: 0, y: 0, rotation: 0, color: '#fff' }, 'cursive')
-    expect(s.fontFamily).toMatch(/cursive/i)
-  })
+describe("signatureStyle", () => {
+  it("returns cursive font for cursive style", () => {
+    const s = signatureStyle({ text: "a", x: 0, y: 0, rotation: 0, color: "#fff" }, "cursive");
+    expect(s.fontFamily).toMatch(/cursive/i);
+  });
 
-  it('returns monospace font for block style', () => {
-    const s = signatureStyle({ text: 'a', x: 0, y: 0, rotation: 0, color: '#fff' }, 'block')
-    expect(s.fontFamily).toMatch(/monospace/i)
-  })
+  it("returns monospace font for block style", () => {
+    const s = signatureStyle({ text: "a", x: 0, y: 0, rotation: 0, color: "#fff" }, "block");
+    expect(s.fontFamily).toMatch(/monospace/i);
+  });
 
-  it('returns initial-cap styled string for monogram', () => {
-    const s = signatureStyle({ text: 'hello', x: 0, y: 0, rotation: 0, color: '#fff' }, 'monogram')
-    expect(s.text).toBe('H')
-  })
-})
+  it("returns initial-cap styled string for monogram", () => {
+    const s = signatureStyle({ text: "hello", x: 0, y: 0, rotation: 0, color: "#fff" }, "monogram");
+    expect(s.text).toBe("H");
+  });
+});
 ```
 
 - [ ] **Step 2: Run test — expect FAIL**
@@ -1665,22 +1704,22 @@ Expected: FAIL.
 - [ ] **Step 3: Create `packages/presence/src/runtime/utils/renderStyle.ts`**
 
 ```ts
-import type { RenderStyle } from '../../options'
-import type { Signature } from '../composables/usePresenceWall'
+import type { RenderStyle } from "../../options";
+import type { Signature } from "../composables/usePresenceWall";
 
 export interface SignatureStyle {
-  fontFamily: string
-  text: string
+  fontFamily: string;
+  text: string;
 }
 
 export function signatureStyle(sig: Signature, style: RenderStyle): SignatureStyle {
   switch (style) {
-    case 'cursive':
-      return { fontFamily: "'Caveat', cursive", text: sig.text }
-    case 'block':
-      return { fontFamily: "'Courier New', monospace", text: sig.text.toUpperCase() }
-    case 'monogram':
-      return { fontFamily: "'Georgia', serif", text: sig.text.charAt(0).toUpperCase() }
+    case "cursive":
+      return { fontFamily: "'Caveat', cursive", text: sig.text };
+    case "block":
+      return { fontFamily: "'Courier New', monospace", text: sig.text.toUpperCase() };
+    case "monogram":
+      return { fontFamily: "'Georgia', serif", text: sig.text.charAt(0).toUpperCase() };
   }
 }
 ```
@@ -1696,26 +1735,29 @@ Modify `packages/presence/src/runtime/components/PresenceWall.vue`:
 
 ```vue
 <script setup lang="ts">
-import { computed } from 'vue'
-import { usePresenceWall } from '../composables/usePresenceWall'
-import { signatureStyle } from '../utils/renderStyle'
+import { computed } from "vue";
+import { usePresenceWall } from "../composables/usePresenceWall";
+import { signatureStyle } from "../utils/renderStyle";
 
-const props = defineProps<{ open: boolean }>()
-const emit = defineEmits<{ (e: 'update:open', value: boolean): void }>()
+const props = defineProps<{ open: boolean }>();
+const emit = defineEmits<{ (e: "update:open", value: boolean): void }>();
 
-const wall = usePresenceWall()
-wall.isOpen.value = props.open
+const wall = usePresenceWall();
+wall.isOpen.value = props.open;
 
-const config = useRuntimeConfig()
-const renderStyle = (config.public.presence?.renderStyle ?? 'cursive') as 'cursive' | 'block' | 'monogram'
+const config = useRuntimeConfig();
+const renderStyle = (config.public.presence?.renderStyle ?? "cursive") as
+  | "cursive"
+  | "block"
+  | "monogram";
 
-const isVisible = computed(() => props.open)
+const isVisible = computed(() => props.open);
 
 function close() {
-  emit('update:open', false)
+  emit("update:open", false);
 }
 
-defineExpose(wall)
+defineExpose(wall);
 </script>
 
 <template>
@@ -1799,7 +1841,7 @@ nuxt.options.runtimeConfig.public.presence = {
   combo: resolved.wall.combo,
   mobilePath: resolved.wall.mobilePath,
   renderStyle: resolved.wall.renderStyle,
-}
+};
 ```
 
 - [ ] **Step 6: Run all tests**
@@ -1819,6 +1861,7 @@ git commit -m "feat(presence): renderStyle piped through runtimeConfig into comp
 ### Task 15: All tests green — full module suite
 
 **Files:**
+
 - (no new files)
 
 - [ ] **Step 1: Run the full test suite**
@@ -1845,6 +1888,7 @@ git commit -m "chore(presence): type-check fixes" --allow-empty
 ### Task 16: `crypto.ts` sign/verify
 
 **Files:**
+
 - Create: `packages/presence/src/runtime/utils/crypto.ts`
 - Create: `packages/presence/test/crypto.test.ts`
 
@@ -1853,44 +1897,59 @@ git commit -m "chore(presence): type-check fixes" --allow-empty
 In `packages/presence/test/crypto.test.ts`:
 
 ```ts
-import { describe, it, expect } from 'vitest'
-import { generateKeypair, signPayload, verifySignature } from '../src/runtime/utils/crypto'
+import { describe, it, expect } from "vitest";
+import { generateKeypair, signPayload, verifySignature } from "../src/runtime/utils/crypto";
 
-describe('crypto', () => {
-  it('generates a keypair with PEM strings', () => {
-    const { publicKey, privateKey } = generateKeypair()
-    expect(publicKey).toMatch(/BEGIN PUBLIC KEY/)
-    expect(privateKey).toMatch(/BEGIN PRIVATE KEY/)
-  })
+describe("crypto", () => {
+  it("generates a keypair with PEM strings", () => {
+    const { publicKey, privateKey } = generateKeypair();
+    expect(publicKey).toMatch(/BEGIN PUBLIC KEY/);
+    expect(privateKey).toMatch(/BEGIN PRIVATE KEY/);
+  });
 
-  it('signs and verifies a payload roundtrip', () => {
-    const { publicKey, privateKey } = generateKeypair()
-    const payload = { handle: 'vantol', siteUrl: 'https://vantolbennett.com', buildSha: 'abc123', timestamp: 1700000000 }
-    const sig = signPayload(payload, privateKey)
-    expect(sig).toBeTruthy()
-    const result = verifySignature(payload, sig, publicKey)
-    expect(result.valid).toBe(true)
-    expect(result.payload).toEqual(payload)
-  })
+  it("signs and verifies a payload roundtrip", () => {
+    const { publicKey, privateKey } = generateKeypair();
+    const payload = {
+      handle: "vantol",
+      siteUrl: "https://vantolbennett.com",
+      buildSha: "abc123",
+      timestamp: 1700000000,
+    };
+    const sig = signPayload(payload, privateKey);
+    expect(sig).toBeTruthy();
+    const result = verifySignature(payload, sig, publicKey);
+    expect(result.valid).toBe(true);
+    expect(result.payload).toEqual(payload);
+  });
 
-  it('rejects tampered payloads', () => {
-    const { publicKey, privateKey } = generateKeypair()
-    const payload = { handle: 'vantol', siteUrl: 'https://vantolbennett.com', buildSha: 'abc123', timestamp: 1700000000 }
-    const sig = signPayload(payload, privateKey)
-    const tampered = { ...payload, handle: 'attacker' }
-    const result = verifySignature(tampered, sig, publicKey)
-    expect(result.valid).toBe(false)
-  })
+  it("rejects tampered payloads", () => {
+    const { publicKey, privateKey } = generateKeypair();
+    const payload = {
+      handle: "vantol",
+      siteUrl: "https://vantolbennett.com",
+      buildSha: "abc123",
+      timestamp: 1700000000,
+    };
+    const sig = signPayload(payload, privateKey);
+    const tampered = { ...payload, handle: "attacker" };
+    const result = verifySignature(tampered, sig, publicKey);
+    expect(result.valid).toBe(false);
+  });
 
-  it('rejects signatures from a different key', () => {
-    const kp1 = generateKeypair()
-    const kp2 = generateKeypair()
-    const payload = { handle: 'vantol', siteUrl: 'https://vantolbennett.com', buildSha: 'abc', timestamp: 1 }
-    const sig = signPayload(payload, kp1.privateKey)
-    const result = verifySignature(payload, sig, kp2.publicKey)
-    expect(result.valid).toBe(false)
-  })
-})
+  it("rejects signatures from a different key", () => {
+    const kp1 = generateKeypair();
+    const kp2 = generateKeypair();
+    const payload = {
+      handle: "vantol",
+      siteUrl: "https://vantolbennett.com",
+      buildSha: "abc",
+      timestamp: 1,
+    };
+    const sig = signPayload(payload, kp1.privateKey);
+    const result = verifySignature(payload, sig, kp2.publicKey);
+    expect(result.valid).toBe(false);
+  });
+});
 ```
 
 - [ ] **Step 2: Run test — expect FAIL**
@@ -1901,43 +1960,53 @@ Expected: FAIL.
 - [ ] **Step 3: Create `packages/presence/src/runtime/utils/crypto.ts`**
 
 ```ts
-import { generateKeyPairSync, sign as edSign, verify as edVerify, createPrivateKey, createPublicKey } from 'node:crypto'
+import {
+  generateKeyPairSync,
+  sign as edSign,
+  verify as edVerify,
+  createPrivateKey,
+  createPublicKey,
+} from "node:crypto";
 
 export interface Keypair {
-  publicKey: string
-  privateKey: string
+  publicKey: string;
+  privateKey: string;
 }
 
 export interface VerifyResult {
-  valid: boolean
-  payload?: unknown
-  reason?: string
+  valid: boolean;
+  payload?: unknown;
+  reason?: string;
 }
 
 export function generateKeypair(): Keypair {
-  const { publicKey, privateKey } = generateKeyPairSync('ed25519')
+  const { publicKey, privateKey } = generateKeyPairSync("ed25519");
   return {
-    publicKey: publicKey.export({ type: 'spki', format: 'pem' }) as string,
-    privateKey: privateKey.export({ type: 'pkcs8', format: 'pem' }) as string,
-  }
+    publicKey: publicKey.export({ type: "spki", format: "pem" }) as string,
+    privateKey: privateKey.export({ type: "pkcs8", format: "pem" }) as string,
+  };
 }
 
 export function signPayload(payload: unknown, privateKeyPem: string): string {
-  const key = createPrivateKey(privateKeyPem)
-  const data = Buffer.from(JSON.stringify(payload))
-  const sig = edSign(null, data, key)
-  return sig.toString('base64url')
+  const key = createPrivateKey(privateKeyPem);
+  const data = Buffer.from(JSON.stringify(payload));
+  const sig = edSign(null, data, key);
+  return sig.toString("base64url");
 }
 
-export function verifySignature(payload: unknown, signatureBase64Url: string, publicKeyPem: string): VerifyResult {
+export function verifySignature(
+  payload: unknown,
+  signatureBase64Url: string,
+  publicKeyPem: string,
+): VerifyResult {
   try {
-    const key = createPublicKey(publicKeyPem)
-    const data = Buffer.from(JSON.stringify(payload))
-    const sig = Buffer.from(signatureBase64Url, 'base64url')
-    const ok = edVerify(null, data, key, sig)
-    return ok ? { valid: true, payload } : { valid: false, reason: 'invalid_signature' }
+    const key = createPublicKey(publicKeyPem);
+    const data = Buffer.from(JSON.stringify(payload));
+    const sig = Buffer.from(signatureBase64Url, "base64url");
+    const ok = edVerify(null, data, key, sig);
+    return ok ? { valid: true, payload } : { valid: false, reason: "invalid_signature" };
   } catch (e: any) {
-    return { valid: false, reason: e?.message ?? 'verify_error' }
+    return { valid: false, reason: e?.message ?? "verify_error" };
   }
 }
 ```
@@ -1959,6 +2028,7 @@ git commit -m "feat(presence): ed25519 sign/verify for mark payload"
 ### Task 17: Build hook — generate keypair on first run
 
 **Files:**
+
 - Create: `packages/presence/src/hooks/keypair.ts`
 - Create: `packages/presence/test/keypair.test.ts`
 
@@ -1967,37 +2037,37 @@ git commit -m "feat(presence): ed25519 sign/verify for mark payload"
 In `packages/presence/test/keypair.test.ts`:
 
 ```ts
-import { describe, it, expect, beforeEach, afterEach } from 'vitest'
-import { mkdtempSync, readFileSync, existsSync, rmSync } from 'node:fs'
-import { tmpdir } from 'node:os'
-import { join } from 'node:path'
-import { ensureKeypair } from '../src/hooks/keypair'
+import { describe, it, expect, beforeEach, afterEach } from "vitest";
+import { mkdtempSync, readFileSync, existsSync, rmSync } from "node:fs";
+import { tmpdir } from "node:os";
+import { join } from "node:path";
+import { ensureKeypair } from "../src/hooks/keypair";
 
-describe('ensureKeypair', () => {
-  let dir: string
+describe("ensureKeypair", () => {
+  let dir: string;
 
   beforeEach(() => {
-    dir = mkdtempSync(join(tmpdir(), 'presence-test-'))
-  })
+    dir = mkdtempSync(join(tmpdir(), "presence-test-"));
+  });
   afterEach(() => {
-    rmSync(dir, { recursive: true, force: true })
-  })
+    rmSync(dir, { recursive: true, force: true });
+  });
 
-  it('generates keys when none exist', () => {
-    const kp = ensureKeypair({ keyDir: dir })
-    expect(existsSync(join(dir, 'private.pem'))).toBe(true)
-    expect(existsSync(join(dir, 'public.pem'))).toBe(true)
-    expect(kp.publicKey).toMatch(/BEGIN PUBLIC KEY/)
-    expect(kp.privateKey).toMatch(/BEGIN PRIVATE KEY/)
-  })
+  it("generates keys when none exist", () => {
+    const kp = ensureKeypair({ keyDir: dir });
+    expect(existsSync(join(dir, "private.pem"))).toBe(true);
+    expect(existsSync(join(dir, "public.pem"))).toBe(true);
+    expect(kp.publicKey).toMatch(/BEGIN PUBLIC KEY/);
+    expect(kp.privateKey).toMatch(/BEGIN PRIVATE KEY/);
+  });
 
-  it('is idempotent — reuses existing keys', () => {
-    const kp1 = ensureKeypair({ keyDir: dir })
-    const kp2 = ensureKeypair({ keyDir: dir })
-    expect(kp1.publicKey).toBe(kp2.publicKey)
-    expect(kp1.privateKey).toBe(kp2.privateKey)
-  })
-})
+  it("is idempotent — reuses existing keys", () => {
+    const kp1 = ensureKeypair({ keyDir: dir });
+    const kp2 = ensureKeypair({ keyDir: dir });
+    expect(kp1.publicKey).toBe(kp2.publicKey);
+    expect(kp1.privateKey).toBe(kp2.privateKey);
+  });
+});
 ```
 
 - [ ] **Step 2: Run test — expect FAIL**
@@ -2008,30 +2078,30 @@ Expected: FAIL.
 - [ ] **Step 3: Create `packages/presence/src/hooks/keypair.ts`**
 
 ```ts
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from 'node:fs'
-import { join } from 'node:path'
-import { generateKeypair, type Keypair } from '../runtime/utils/crypto'
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
+import { join } from "node:path";
+import { generateKeypair, type Keypair } from "../runtime/utils/crypto";
 
 export interface EnsureKeypairOptions {
-  keyDir: string
+  keyDir: string;
 }
 
 export function ensureKeypair(opts: EnsureKeypairOptions): Keypair {
-  const publicPath = join(opts.keyDir, 'public.pem')
-  const privatePath = join(opts.keyDir, 'private.pem')
+  const publicPath = join(opts.keyDir, "public.pem");
+  const privatePath = join(opts.keyDir, "private.pem");
 
   if (existsSync(publicPath) && existsSync(privatePath)) {
     return {
-      publicKey: readFileSync(publicPath, 'utf8'),
-      privateKey: readFileSync(privatePath, 'utf8'),
-    }
+      publicKey: readFileSync(publicPath, "utf8"),
+      privateKey: readFileSync(privatePath, "utf8"),
+    };
   }
 
-  const kp = generateKeypair()
-  mkdirSync(opts.keyDir, { recursive: true })
-  writeFileSync(publicPath, kp.publicKey, { mode: 0o644 })
-  writeFileSync(privatePath, kp.privateKey, { mode: 0o600 })
-  return kp
+  const kp = generateKeypair();
+  mkdirSync(opts.keyDir, { recursive: true });
+  writeFileSync(publicPath, kp.publicKey, { mode: 0o644 });
+  writeFileSync(privatePath, kp.privateKey, { mode: 0o600 });
+  return kp;
 }
 ```
 
@@ -2052,33 +2122,35 @@ git commit -m "feat(presence): idempotent keypair bootstrap"
 ### Task 18: Inject mark into HTML head (build hook)
 
 **Files:**
+
 - Modify: `packages/presence/src/module.ts`
 - Create: `packages/presence/src/hooks/mark.ts`
 
 - [ ] **Step 1: Create `packages/presence/src/hooks/mark.ts`**
 
 ```ts
-import { execSync } from 'node:child_process'
-import { ensureKeypair } from './keypair'
-import { signPayload } from '../runtime/utils/crypto'
+import { execSync } from "node:child_process";
+import { ensureKeypair } from "./keypair";
+import { signPayload } from "../runtime/utils/crypto";
 
 export interface InjectMarkOptions {
-  keyDir: string
-  handle: string
-  siteUrl: string
+  keyDir: string;
+  handle: string;
+  siteUrl: string;
 }
 
 export interface MarkInjection {
-  meta: string
-  comment: string
+  meta: string;
+  comment: string;
 }
 
 export function buildMarkInjection(opts: InjectMarkOptions): MarkInjection {
-  let buildSha = 'unknown'
+  let buildSha = "unknown";
   try {
-    buildSha = execSync('git rev-parse --short HEAD', { stdio: ['pipe', 'pipe', 'ignore'] })
-      .toString()
-      .trim() || 'unknown'
+    buildSha =
+      execSync("git rev-parse --short HEAD", { stdio: ["pipe", "pipe", "ignore"] })
+        .toString()
+        .trim() || "unknown";
   } catch {
     // not a git repo or git unavailable — keep 'unknown'
   }
@@ -2088,17 +2160,17 @@ export function buildMarkInjection(opts: InjectMarkOptions): MarkInjection {
     siteUrl: opts.siteUrl,
     buildSha,
     timestamp: Date.now(),
-  }
+  };
 
-  const kp = ensureKeypair({ keyDir: opts.keyDir })
-  const sig = signPayload(payload, kp.privateKey)
+  const kp = ensureKeypair({ keyDir: opts.keyDir });
+  const sig = signPayload(payload, kp.privateKey);
 
-  const encoded = `${Buffer.from(JSON.stringify(payload)).toString('base64url')}.${sig}`
+  const encoded = `${Buffer.from(JSON.stringify(payload)).toString("base64url")}.${sig}`;
 
   return {
     meta: `<meta name="presence-mark" content="${encoded}">`,
     comment: `<!-- presence-mark: ${encoded} -->`,
-  }
+  };
 }
 ```
 
@@ -2108,31 +2180,31 @@ Modify `packages/presence/src/module.ts` — add to `setup()` after the wall wir
 
 ```ts
 if (resolved.mark.enabled) {
-  const { resolve } = createResolver(import.meta.url)
-  const siteUrl = (nuxt.options.runtimeConfig.public.siteUrl as string | undefined) ?? ''
+  const { resolve } = createResolver(import.meta.url);
+  const siteUrl = (nuxt.options.runtimeConfig.public.siteUrl as string | undefined) ?? "";
 
-  nuxt.hook('nitro:config', async (nitroConfig) => {
+  nuxt.hook("nitro:config", async (nitroConfig) => {
     const injection = buildMarkInjection({
       keyDir: resolved.mark.keyDir,
-      handle: resolved.mark.handle || 'unknown',
+      handle: resolved.mark.handle || "unknown",
       siteUrl,
-    })
+    });
 
-    nitroConfig.hooks ??= {}
-    nitroConfig.hooks['render:html'] = nitroConfig.hooks['render:html'] ?? []
-    const hooks = nitroConfig.hooks['render:html'] as Array<(html: { head: string[] }) => void>
+    nitroConfig.hooks ??= {};
+    nitroConfig.hooks["render:html"] = nitroConfig.hooks["render:html"] ?? [];
+    const hooks = nitroConfig.hooks["render:html"] as Array<(html: { head: string[] }) => void>;
     hooks.push((html) => {
-      html.head.push(injection.meta)
-      html.head.push(injection.comment)
-    })
-  })
+      html.head.push(injection.meta);
+      html.head.push(injection.comment);
+    });
+  });
 }
 ```
 
 Add the import at top:
 
 ```ts
-import { buildMarkInjection } from './hooks/mark'
+import { buildMarkInjection } from "./hooks/mark";
 ```
 
 - [ ] **Step 3: Verify build**
@@ -2152,6 +2224,7 @@ git commit -m "feat(presence): build hook injects presence-mark meta + comment"
 ### Task 19: `verify.post.ts` server route
 
 **Files:**
+
 - Create: `packages/presence/src/server/api/verify.post.ts`
 - Create: `packages/presence/test/verify.test.ts`
 
@@ -2160,44 +2233,49 @@ git commit -m "feat(presence): build hook injects presence-mark meta + comment"
 In `packages/presence/test/verify.test.ts`:
 
 ```ts
-import { describe, it, expect } from 'vitest'
-import { setup, $fetch } from '@nuxt/test-utils/e2e'
-import { fileURLToPath } from 'node:url'
-import { generateKeypair, signPayload } from '../src/runtime/utils/crypto'
+import { describe, it, expect } from "vitest";
+import { setup, $fetch } from "@nuxt/test-utils/e2e";
+import { fileURLToPath } from "node:url";
+import { generateKeypair, signPayload } from "../src/runtime/utils/crypto";
 
 await setup({
-  rootDir: fileURLToPath(new URL('../playground', import.meta.url)),
+  rootDir: fileURLToPath(new URL("../playground", import.meta.url)),
   server: true,
   nuxtConfig: {
-    presence: { mark: { enabled: true, handle: 'vantol' } },
+    presence: { mark: { enabled: true, handle: "vantol" } },
   },
-})
+});
 
-describe('verify endpoint', () => {
-  it('accepts valid payload + signature', async () => {
-    const kp = generateKeypair()
-    const payload = { handle: 'vantol', siteUrl: 'https://vantolbennett.com', buildSha: 'abc', timestamp: 1 }
-    const sig = signPayload(payload, kp.privateKey)
-    const res = await $fetch<{ valid: boolean; payload?: any }>('/api/_presence/verify', {
-      method: 'POST',
+describe("verify endpoint", () => {
+  it("accepts valid payload + signature", async () => {
+    const kp = generateKeypair();
+    const payload = {
+      handle: "vantol",
+      siteUrl: "https://vantolbennett.com",
+      buildSha: "abc",
+      timestamp: 1,
+    };
+    const sig = signPayload(payload, kp.privateKey);
+    const res = await $fetch<{ valid: boolean; payload?: any }>("/api/_presence/verify", {
+      method: "POST",
       body: { payload, signature: sig, publicKey: kp.publicKey },
-    })
-    expect(res.valid).toBe(true)
-    expect(res.payload).toEqual(payload)
-  })
+    });
+    expect(res.valid).toBe(true);
+    expect(res.payload).toEqual(payload);
+  });
 
-  it('rejects tampered payloads', async () => {
-    const kp = generateKeypair()
-    const payload = { handle: 'vantol', siteUrl: 'x', buildSha: 'a', timestamp: 1 }
-    const sig = signPayload(payload, kp.privateKey)
-    const tampered = { ...payload, handle: 'attacker' }
-    const res = await $fetch<{ valid: boolean }>('/api/_presence/verify', {
-      method: 'POST',
+  it("rejects tampered payloads", async () => {
+    const kp = generateKeypair();
+    const payload = { handle: "vantol", siteUrl: "x", buildSha: "a", timestamp: 1 };
+    const sig = signPayload(payload, kp.privateKey);
+    const tampered = { ...payload, handle: "attacker" };
+    const res = await $fetch<{ valid: boolean }>("/api/_presence/verify", {
+      method: "POST",
       body: { payload: tampered, signature: sig, publicKey: kp.publicKey },
-    })
-    expect(res.valid).toBe(false)
-  })
-})
+    });
+    expect(res.valid).toBe(false);
+  });
+});
 ```
 
 - [ ] **Step 2: Run test — expect FAIL**
@@ -2208,16 +2286,16 @@ Expected: FAIL — endpoint missing.
 - [ ] **Step 3: Create `packages/presence/src/server/api/verify.post.ts`**
 
 ```ts
-import { defineEventHandler, readBody } from 'h3'
-import { verifySignature } from '../../runtime/utils/crypto'
+import { defineEventHandler, readBody } from "h3";
+import { verifySignature } from "../../runtime/utils/crypto";
 
 export default defineEventHandler(async (event) => {
-  const body = await readBody<{ payload?: unknown; signature?: string; publicKey?: string }>(event)
-  if (typeof body?.signature !== 'string' || typeof body?.publicKey !== 'string') {
-    return { valid: false, reason: 'missing_fields' }
+  const body = await readBody<{ payload?: unknown; signature?: string; publicKey?: string }>(event);
+  if (typeof body?.signature !== "string" || typeof body?.publicKey !== "string") {
+    return { valid: false, reason: "missing_fields" };
   }
-  return verifySignature(body.payload, body.signature, body.publicKey)
-})
+  return verifySignature(body.payload, body.signature, body.publicKey);
+});
 ```
 
 - [ ] **Step 4: Wire into module**
@@ -2225,7 +2303,11 @@ export default defineEventHandler(async (event) => {
 In `packages/presence/src/module.ts`, alongside the other `addServerHandler` calls:
 
 ```ts
-addServerHandler({ route: '/api/_presence/verify', method: 'post', handler: resolve('./server/api/verify.post') })
+addServerHandler({
+  route: "/api/_presence/verify",
+  method: "post",
+  handler: resolve("./server/api/verify.post"),
+});
 ```
 
 - [ ] **Step 5: Run test — expect PASS**
@@ -2245,6 +2327,7 @@ git commit -m "feat(presence): POST /api/_presence/verify endpoint"
 ### Task 20: Client-side verify + `$presence.verify()` console helper
 
 **Files:**
+
 - Modify: `packages/presence/src/runtime/plugins/presence.client.ts`
 - Create: `packages/presence/test/clientVerify.test.ts`
 
@@ -2253,33 +2336,33 @@ git commit -m "feat(presence): POST /api/_presence/verify endpoint"
 In `packages/presence/test/clientVerify.test.ts`:
 
 ```ts
-import { describe, it, expect } from 'vitest'
-import { decodeMark, verifyMarkLocally } from '../src/runtime/utils/verifyClient'
+import { describe, it, expect } from "vitest";
+import { decodeMark, verifyMarkLocally } from "../src/runtime/utils/verifyClient";
 
-describe('client-side verify', () => {
-  it('decodes a mark into payload + signature', () => {
-    const payload = { handle: 'a', siteUrl: 'b', buildSha: 'c', timestamp: 1 }
-    const sig = 'sig-value'
-    const encoded = `${Buffer.from(JSON.stringify(payload)).toString('base64url')}.${sig}`
-    const decoded = decodeMark(encoded)
-    expect(decoded.payload).toEqual(payload)
-    expect(decoded.signature).toBe(sig)
-  })
+describe("client-side verify", () => {
+  it("decodes a mark into payload + signature", () => {
+    const payload = { handle: "a", siteUrl: "b", buildSha: "c", timestamp: 1 };
+    const sig = "sig-value";
+    const encoded = `${Buffer.from(JSON.stringify(payload)).toString("base64url")}.${sig}`;
+    const decoded = decodeMark(encoded);
+    expect(decoded.payload).toEqual(payload);
+    expect(decoded.signature).toBe(sig);
+  });
 
-  it('returns null on malformed input', () => {
-    expect(decodeMark('not-base64-no-dot')).toBeNull()
-  })
+  it("returns null on malformed input", () => {
+    expect(decodeMark("not-base64-no-dot")).toBeNull();
+  });
 
-  it('verifies a valid mark locally with a public key', () => {
-    const kp = generateKeypair()
-    const payload = { handle: 'a', siteUrl: 'b', buildSha: 'c', timestamp: 1 }
-    const sig = signPayload(payload, kp.privateKey)
-    const encoded = `${Buffer.from(JSON.stringify(payload)).toString('base64url')}.${sig}`
-    const result = verifyMarkLocally(encoded, kp.publicKey)
-    expect(result.valid).toBe(true)
-    expect(result.payload).toEqual(payload)
-  })
-})
+  it("verifies a valid mark locally with a public key", () => {
+    const kp = generateKeypair();
+    const payload = { handle: "a", siteUrl: "b", buildSha: "c", timestamp: 1 };
+    const sig = signPayload(payload, kp.privateKey);
+    const encoded = `${Buffer.from(JSON.stringify(payload)).toString("base64url")}.${sig}`;
+    const result = verifyMarkLocally(encoded, kp.publicKey);
+    expect(result.valid).toBe(true);
+    expect(result.payload).toEqual(payload);
+  });
+});
 ```
 
 - [ ] **Step 2: Run test — expect FAIL**
@@ -2290,31 +2373,31 @@ Expected: FAIL.
 - [ ] **Step 3: Create `packages/presence/src/runtime/utils/verifyClient.ts`**
 
 ```ts
-import { verifySignature, type VerifyResult } from './crypto'
+import { verifySignature, type VerifyResult } from "./crypto";
 
 export interface DecodedMark {
-  payload: unknown
-  signature: string
+  payload: unknown;
+  signature: string;
 }
 
 export function decodeMark(encoded: string): DecodedMark | null {
-  const idx = encoded.indexOf('.')
-  if (idx < 0) return null
-  const payloadB64 = encoded.slice(0, idx)
-  const signature = encoded.slice(idx + 1)
+  const idx = encoded.indexOf(".");
+  if (idx < 0) return null;
+  const payloadB64 = encoded.slice(0, idx);
+  const signature = encoded.slice(idx + 1);
   try {
-    const json = Buffer.from(payloadB64, 'base64url').toString('utf8')
-    const payload = JSON.parse(json)
-    return { payload, signature }
+    const json = Buffer.from(payloadB64, "base64url").toString("utf8");
+    const payload = JSON.parse(json);
+    return { payload, signature };
   } catch {
-    return null
+    return null;
   }
 }
 
 export function verifyMarkLocally(encoded: string, publicKeyPem: string): VerifyResult {
-  const decoded = decodeMark(encoded)
-  if (!decoded) return { valid: false, reason: 'malformed' }
-  return verifySignature(decoded.payload, decoded.signature, publicKeyPem)
+  const decoded = decodeMark(encoded);
+  if (!decoded) return { valid: false, reason: "malformed" };
+  return verifySignature(decoded.payload, decoded.signature, publicKeyPem);
 }
 ```
 
@@ -2332,41 +2415,41 @@ Expected: `3 passed`.
 Replace the contents of `packages/presence/src/runtime/plugins/presence.client.ts`:
 
 ```ts
-import type { WallHandle } from '../composables/usePresenceWall'
-import { decodeMark, verifyMarkLocally } from '../utils/verifyClient'
+import type { WallHandle } from "../composables/usePresenceWall";
+import { decodeMark, verifyMarkLocally } from "../utils/verifyClient";
 
 export interface PresencePluginOptions {
-  combo: string[]
-  mobilePath: string
-  wall: Pick<WallHandle, 'open' | 'close' | 'add'>
+  combo: string[];
+  mobilePath: string;
+  wall: Pick<WallHandle, "open" | "close" | "add">;
 }
 
 interface PresenceConsole {
-  open: () => void
-  close: () => void
-  sign: (text: string) => void
-  verify: () => { valid: boolean; payload?: unknown; reason?: string } | null
+  open: () => void;
+  close: () => void;
+  sign: (text: string) => void;
+  verify: () => { valid: boolean; payload?: unknown; reason?: string } | null;
 }
 
 declare global {
   interface Window {
-    $presence?: PresenceConsole
+    $presence?: PresenceConsole;
   }
 }
 
 export function createPresencePlugin(opts: PresencePluginOptions): () => void {
-  let buffer: string[] = []
-  let lastTs = 0
+  let buffer: string[] = [];
+  let lastTs = 0;
 
   function onKeydown(e: KeyboardEvent) {
-    const now = Date.now()
-    if (now - lastTs > 1500) buffer = []
-    lastTs = now
-    buffer.push(e.key)
-    if (buffer.length > opts.combo.length) buffer = buffer.slice(-opts.combo.length)
+    const now = Date.now();
+    if (now - lastTs > 1500) buffer = [];
+    lastTs = now;
+    buffer.push(e.key);
+    if (buffer.length > opts.combo.length) buffer = buffer.slice(-opts.combo.length);
     if (buffer.length === opts.combo.length && buffer.every((k, i) => k === opts.combo[i])) {
-      opts.wall.open()
-      buffer = []
+      opts.wall.open();
+      buffer = [];
     }
   }
 
@@ -2375,58 +2458,63 @@ export function createPresencePlugin(opts: PresencePluginOptions): () => void {
     close: () => opts.wall.close(),
     sign: (text: string) => opts.wall.add({ text, x: 50, y: 50 }),
     verify: () => {
-      if (typeof document === 'undefined') return null
-      const meta = document.querySelector<HTMLMetaElement>('meta[name="presence-mark"]')
-      const encoded = meta?.content
-      if (!encoded) return null
-      const pk = (window as unknown as { __PRESENCE_PUBLIC_KEY__?: string }).__PRESENCE_PUBLIC_KEY__
-      if (pk) return verifyMarkLocally(encoded, pk)
-      const decoded = decodeMark(encoded)
-      return decoded ? { valid: false, reason: 'no_public_key', payload: decoded.payload } : null
+      if (typeof document === "undefined") return null;
+      const meta = document.querySelector<HTMLMetaElement>('meta[name="presence-mark"]');
+      const encoded = meta?.content;
+      if (!encoded) return null;
+      const pk = (window as unknown as { __PRESENCE_PUBLIC_KEY__?: string })
+        .__PRESENCE_PUBLIC_KEY__;
+      if (pk) return verifyMarkLocally(encoded, pk);
+      const decoded = decodeMark(encoded);
+      return decoded ? { valid: false, reason: "no_public_key", payload: decoded.payload } : null;
     },
-  }
-  window.$presence = consoleApi
+  };
+  window.$presence = consoleApi;
 
-  window.addEventListener('keydown', onKeydown)
+  window.addEventListener("keydown", onKeydown);
 
   return () => {
-    window.removeEventListener('keydown', onKeydown)
-    delete window.$presence
-  }
+    window.removeEventListener("keydown", onKeydown);
+    delete window.$presence;
+  };
 }
 
 export default defineNuxtPlugin((nuxtApp) => {
-  const route = useRoute()
-  const wall = usePresenceWall()
-  const opts = (nuxtApp.$config.public.presence ?? {}) as { combo?: string[]; mobilePath?: string }
+  const route = useRoute();
+  const wall = usePresenceWall();
+  const opts = (nuxtApp.$config.public.presence ?? {}) as { combo?: string[]; mobilePath?: string };
 
   const teardown = createPresencePlugin({
-    combo: opts.combo ?? ['ArrowUp', 'ArrowUp', 'ArrowDown', 'ArrowDown'],
-    mobilePath: opts.mobilePath ?? '/presence',
+    combo: opts.combo ?? ["ArrowUp", "ArrowUp", "ArrowDown", "ArrowDown"],
+    mobilePath: opts.mobilePath ?? "/presence",
     wall,
-  })
+  });
 
-  if (typeof window !== 'undefined') {
-    ;(window as unknown as { __PRESENCE_PUBLIC_KEY__?: string }).__PRESENCE_PUBLIC_KEY__ =
-      (nuxtApp.$config.public.presenceMarkKey as string | undefined) ?? ''
+  if (typeof window !== "undefined") {
+    (window as unknown as { __PRESENCE_PUBLIC_KEY__?: string }).__PRESENCE_PUBLIC_KEY__ =
+      (nuxtApp.$config.public.presenceMarkKey as string | undefined) ?? "";
   }
 
-  watch(() => route.path, (path) => {
-    if (path === (opts.mobilePath ?? '/presence')) {
-      wall.open()
-    }
-  }, { immediate: true })
+  watch(
+    () => route.path,
+    (path) => {
+      if (path === (opts.mobilePath ?? "/presence")) {
+        wall.open();
+      }
+    },
+    { immediate: true },
+  );
 
-  nuxtApp.hook('app:beforeMount', () => {
-    if (route.path === (opts.mobilePath ?? '/presence')) {
-      wall.open()
+  nuxtApp.hook("app:beforeMount", () => {
+    if (route.path === (opts.mobilePath ?? "/presence")) {
+      wall.open();
     }
-  })
+  });
 
   if (import.meta.client) {
-    nuxtApp.hook('app:mounted', () => teardown)
+    nuxtApp.hook("app:mounted", () => teardown);
   }
-})
+});
 ```
 
 - [ ] **Step 7: Update the plugin test for the new verify method**
@@ -2434,16 +2522,16 @@ export default defineNuxtPlugin((nuxtApp) => {
 Append to `packages/presence/test/plugin.test.ts`:
 
 ```ts
-it('exposes $presence.verify', () => {
-  const wall = { open: vi.fn(), close: vi.fn(), add: vi.fn() }
+it("exposes $presence.verify", () => {
+  const wall = { open: vi.fn(), close: vi.fn(), add: vi.fn() };
   const teardown = createPresencePlugin({
-    combo: ['KeyV'],
-    mobilePath: '/presence',
+    combo: ["KeyV"],
+    mobilePath: "/presence",
     wall,
-  })
-  expect((window as any).$presence.verify).toBeInstanceOf(Function)
-  teardown()
-})
+  });
+  expect((window as any).$presence.verify).toBeInstanceOf(Function);
+  teardown();
+});
 ```
 
 - [ ] **Step 8: Run all tests**
@@ -2463,6 +2551,7 @@ git commit -m "feat(presence): client-side verify + $presence.verify console hel
 ### Task 21: Ship public key via runtimeConfig.public
 
 **Files:**
+
 - Modify: `packages/presence/src/module.ts`
 
 - [ ] **Step 1: Add public key to runtimeConfig when mark is enabled**
@@ -2471,15 +2560,15 @@ In `setup()` of `packages/presence/src/module.ts`, when `resolved.mark.enabled`:
 
 ```ts
 if (resolved.mark.enabled) {
-  const kp = ensureKeypair({ keyDir: resolved.mark.keyDir })
-  nuxt.options.runtimeConfig.public.presenceMarkKey = kp.publicKey
+  const kp = ensureKeypair({ keyDir: resolved.mark.keyDir });
+  nuxt.options.runtimeConfig.public.presenceMarkKey = kp.publicKey;
 }
 ```
 
 Add import:
 
 ```ts
-import { ensureKeypair } from './hooks/keypair'
+import { ensureKeypair } from "./hooks/keypair";
 ```
 
 - [ ] **Step 2: Verify the public key lands in the rendered HTML**
@@ -2522,6 +2611,7 @@ git commit -m "feat(presence): ship public key via runtimeConfig.public"
 ### Task 22: Install module in `apps/web` and verify mark renders
 
 **Files:**
+
 - Modify: `apps/web/nuxt.config.ts`
 - Modify: `apps/web/.gitignore` (add `.presence/`)
 
@@ -2595,13 +2685,14 @@ Note: `.env` may be gitignored. If so, document the required env var in the comm
 ### Task 23: Verify deployment locally + document deployment
 
 **Files:**
+
 - Modify: `packages/presence/README.md`
 
 - [ ] **Step 1: Add deployment section to README**
 
 Append to `packages/presence/README.md`:
 
-```markdown
+````markdown
 ## Deployment
 
 After installing in your Nuxt app:
@@ -2609,8 +2700,14 @@ After installing in your Nuxt app:
 1. Set `NUXT_PUBLIC_SITE_URL` in your environment.
 2. Configure the mark handle in your `nuxt.config.ts`:
    ```ts
-   presence: { mark: { handle: 'your-handle' } }
+   presence: {
+     mark: {
+       handle: "your-handle";
+     }
+   }
    ```
+````
+
 3. Build your app (`nuxi build`).
 4. Inspect the rendered HTML — look for `<meta name="presence-mark" content="...">` in `<head>`.
 5. The mark payload encodes `{handle, siteUrl, buildSha, timestamp}` and is signed with an ed25519 keypair generated on first build into `.presence/`.
@@ -2620,7 +2717,7 @@ After installing in your Nuxt app:
 In devtools on the deployed site:
 
 ```js
-$presence.verify()
+$presence.verify();
 ```
 
 Returns `{ valid: boolean, payload?: {...}, reason?: string }`.
@@ -2630,7 +2727,8 @@ Returns `{ valid: boolean, payload?: {...}, reason?: string }`.
 - `.presence/private.pem` — gitignored, keep secret.
 - `.presence/public.pem` — safe to commit, used for verification.
 - Delete both to regenerate (invalidates past marks).
-```
+
+````
 
 - [ ] **Step 2: Verify local deployment end-to-end**
 
@@ -2638,9 +2736,10 @@ Run from `apps/web`:
 
 ```bash
 pnpm dev
-```
+````
 
 In browser at `http://localhost:3000`:
+
 - Open devtools.
 - Type `$presence.verify()`.
 - Expected: returns `{ valid: true, payload: { handle: 'vantolbennett', siteUrl: ..., buildSha: ..., timestamp: ... } }`.

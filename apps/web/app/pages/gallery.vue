@@ -1,22 +1,21 @@
 <script setup lang="ts">
 useHead({
-  title: 'Gallery | Vantol Bennett'
-})
+  title: "Gallery | Vantol Bennett",
+});
 
 type GalleryItem = {
-  title: string
-  type: 'Photo' | 'Screenshot' | 'Sketch'
-  year: string
-  note: string
-  img: string
-}
+  title: string;
+  type: "Photo" | "Screenshot" | "Sketch";
+  year: string;
+  note: string;
+  img: string;
+};
 
-const { data: galleryData } = await useAsyncData('gallery-data', () => {
-  return queryCollection('gallery').first()
-})
+const { data: galleryData } = await useAsyncData("gallery-data", () => {
+  return queryCollection("gallery").first();
+});
 
-const items = computed(() => galleryData.value?.items || [])
-
+const items = computed(() => galleryData.value?.items || []);
 </script>
 
 <template>
@@ -26,10 +25,12 @@ const items = computed(() => galleryData.value?.items || [])
         <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
           <div>
             <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500">Gallery</p>
-            <h1 class="mt-2 text-3xl md:text-4xl font-semibold tracking-tight">Visual Notes & Builds</h1>
+            <h1 class="mt-2 text-3xl md:text-4xl font-semibold tracking-tight">
+              Visual Notes & Builds
+            </h1>
             <p class="mt-3 text-sm text-zinc-400 max-w-2xl">
-              A lightweight space for design snapshots, build screenshots, and experiments.
-              I'll keep it curated—less feed, more archive.
+              A lightweight space for design snapshots, build screenshots, and experiments. I'll
+              keep it curated—less feed, more archive.
             </p>
           </div>
 
@@ -39,7 +40,17 @@ const items = computed(() => galleryData.value?.items || [])
               class="border border-white/10 bg-[#0a0a0a] px-4 py-2 text-xs font-bold uppercase tracking-widest hover:bg-white/5 transition-colors rounded-lg text-zinc-300"
             >
               Developer Exploration
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="inline ml-1"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              <svg
+                width="12"
+                height="12"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+                class="inline ml-1"
+              >
+                <path d="M5 12h14M12 5l7 7-7 7" />
+              </svg>
             </NuxtLink>
           </div>
         </div>
@@ -52,7 +63,9 @@ const items = computed(() => galleryData.value?.items || [])
           >
             <div class="flex items-start justify-between gap-4">
               <div>
-                <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500">{{ item.type }}</p>
+                <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500">
+                  {{ item.type }}
+                </p>
                 <h2 class="mt-2 font-semibold tracking-tight">{{ item.title }}</h2>
               </div>
               <span class="text-xs text-zinc-600">{{ item.year }}</span>
@@ -81,7 +94,8 @@ const items = computed(() => galleryData.value?.items || [])
 
         <div class="mt-8 border-t border-white/10 pt-6">
           <p class="text-xs text-zinc-600">
-            Tip: update the <code class="text-[#f5c542]">items</code> array in this page with your Cloudinary URLs.
+            Tip: update the <code class="text-[#f5c542]">items</code> array in this page with your
+            Cloudinary URLs.
           </p>
         </div>
       </section>

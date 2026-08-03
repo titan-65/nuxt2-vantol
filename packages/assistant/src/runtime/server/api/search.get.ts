@@ -14,7 +14,7 @@ export default defineEventHandler((event) => {
     (page) =>
       page.title.toLowerCase().includes(q) ||
       page.description.toLowerCase().includes(q) ||
-      page.keywords.some((k) => k.includes(q))
+      page.keywords.some((k) => k.includes(q)),
   );
 
   return { ok: true, results };

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-const route = useRoute()
+const route = useRoute();
 
-await navigateTo(`/blog/${route.params.slug}`, { replace: true })
+await navigateTo(`/blog/${route.params.slug}`, { replace: true });
 </script>
 
 <template>

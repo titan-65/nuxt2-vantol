@@ -1,60 +1,60 @@
 <script setup lang="ts">
-import { MessageSquare, Trash2, LogIn } from 'lucide-vue-next'
+import { MessageSquare, Trash2, LogIn } from "lucide-vue-next";
 
 useHead({
-  title: 'Guestbook - VantolBennett'
-})
+  title: "Guestbook - VantolBennett",
+});
 
-const { entries, loading, init, addEntry, deleteEntry, cleanup } = useGuestbook()
-const { user, loading: authLoading, isAdmin, init: authInit, signInWithGoogle } = useFirebaseAuth()
+const { entries, loading, init, addEntry, deleteEntry, cleanup } = useGuestbook();
+const { user, loading: authLoading, isAdmin, init: authInit, signInWithGoogle } = useFirebaseAuth();
 
-const newMessage = ref('')
-const submitting = ref(false)
-const error = ref('')
+const newMessage = ref("");
+const submitting = ref(false);
+const error = ref("");
 
 onMounted(async () => {
-  await authInit()
-  init()
-})
+  await authInit();
+  init();
+});
 
 onUnmounted(() => {
-  cleanup()
-})
+  cleanup();
+});
 
 const handleSubmit = async () => {
-  if (!newMessage.value.trim()) return
-  if (!user.value) return
+  if (!newMessage.value.trim()) return;
+  if (!user.value) return;
 
-  submitting.value = true
-  error.value = ''
+  submitting.value = true;
+  error.value = "";
 
   try {
-    await addEntry(newMessage.value)
-    newMessage.value = ''
+    await addEntry(newMessage.value);
+    newMessage.value = "";
   } catch (e: any) {
-    error.value = e.message || 'Failed to post message'
+    error.value = e.message || "Failed to post message";
   } finally {
-    submitting.value = false
+    submitting.value = false;
   }
-}
+};
 
 const handleDelete = async (id: string) => {
   try {
-    await deleteEntry(id)
+    await deleteEntry(id);
   } catch (e: any) {
-    error.value = e.message || 'Failed to delete entry'
+    error.value = e.message || "Failed to delete entry";
   }
-}
+};
 
 function formatDate(timestamp: number) {
-  if (!timestamp) return ''
-  return new Date(timestamp).toLocaleDateString('en-US', {
-    month: 'short',
-    day: 'numeric',
-    year: 'numeric',
-    hour: 'numeric',
-    minute: '2-digit'
-  })
+  if (!timestamp) return "";
+  return new Date(timestamp).toLocaleDateString("en-US", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+  });
 }
 </script>
 
@@ -74,7 +74,9 @@ function formatDate(timestamp: number) {
         <!-- Sign-in / Message Form -->
         <div class="bg-[#111] border border-white/10 rounded-xl p-6 mb-8">
           <div v-if="authLoading" class="flex items-center justify-center py-4">
-            <div class="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin"></div>
+            <div
+              class="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin"
+            ></div>
           </div>
 
           <div v-else-if="!user" class="text-center py-4">
@@ -114,7 +116,7 @@ function formatDate(timestamp: number) {
                   :disabled="!newMessage.trim() || submitting"
                   class="bg-[#f5c542] text-black px-5 py-2 text-xs font-bold uppercase tracking-widest hover:bg-[#e0b13a] transition-colors disabled:opacity-40 disabled:cursor-not-allowed rounded-lg"
                 >
-                  {{ submitting ? 'Posting...' : 'Post' }}
+                  {{ submitting ? "Posting..." : "Post" }}
                 </button>
               </div>
 
@@ -125,7 +127,11 @@ function formatDate(timestamp: number) {
 
         <!-- Entries -->
         <div v-if="loading" class="space-y-4">
-          <div v-for="i in 3" :key="i" class="bg-[#111] border border-white/10 rounded-xl p-6 animate-pulse">
+          <div
+            v-for="i in 3"
+            :key="i"
+            class="bg-[#111] border border-white/10 rounded-xl p-6 animate-pulse"
+          >
             <div class="flex items-center gap-3 mb-3">
               <div class="w-8 h-8 bg-zinc-800 rounded-full"></div>
               <div class="h-4 bg-zinc-800 rounded w-24"></div>
@@ -134,7 +140,10 @@ function formatDate(timestamp: number) {
           </div>
         </div>
 
-        <div v-else-if="entries.length === 0" class="bg-[#111] border border-white/10 rounded-xl p-12 text-center">
+        <div
+          v-else-if="entries.length === 0"
+          class="bg-[#111] border border-white/10 rounded-xl p-12 text-center"
+        >
           <MessageSquare class="w-12 h-12 text-zinc-700 mx-auto mb-4" />
           <p class="text-zinc-500 text-sm">No messages yet. Be the first to sign the guestbook!</p>
         </div>
@@ -161,7 +170,9 @@ function formatDate(timestamp: number) {
                 </div>
                 <div>
                   <span class="text-sm font-semibold">{{ entry.authorName }}</span>
-                  <span class="text-[10px] text-zinc-600 ml-2">{{ formatDate(entry.createdAt) }}</span>
+                  <span class="text-[10px] text-zinc-600 ml-2">{{
+                    formatDate(entry.createdAt)
+                  }}</span>
                 </div>
               </div>
 
@@ -175,13 +186,17 @@ function formatDate(timestamp: number) {
               </button>
             </div>
 
-            <p class="mt-3 text-sm text-zinc-400 leading-relaxed whitespace-pre-wrap">{{ entry.message }}</p>
+            <p class="mt-3 text-sm text-zinc-400 leading-relaxed whitespace-pre-wrap">
+              {{ entry.message }}
+            </p>
           </div>
         </div>
 
         <template #fallback>
           <div class="bg-[#111] border border-white/10 rounded-xl p-12 text-center">
-            <div class="inline-block w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin"></div>
+            <div
+              class="inline-block w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin"
+            ></div>
           </div>
         </template>
       </ClientOnly>

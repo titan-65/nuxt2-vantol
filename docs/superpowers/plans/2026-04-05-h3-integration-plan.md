@@ -13,6 +13,7 @@
 ### Task 1: Install h3 and rewrite server
 
 **Files:**
+
 - Modify: `packages/null-agent/src/server/index.ts`
 - Modify: `packages/null-agent/src/server/routes.ts`
 - Modify: `packages/null-agent/package.json`
@@ -79,11 +80,13 @@ export async function startServer(config: ServerConfig): Promise<void> {
   const app = createApp();
 
   // Global CORS
-  app.use(useCors({
-    origin: "*",
-    methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
-    allowHeaders: ["Content-Type"],
-  }));
+  app.use(
+    useCors({
+      origin: "*",
+      methods: ["GET", "POST", "PATCH", "DELETE", "OPTIONS"],
+      allowHeaders: ["Content-Type"],
+    }),
+  );
 
   // Register routes
   registerRoutes(app, { agent, memory, config: appConfig });
@@ -118,11 +121,16 @@ function getProviderFromEnv(): ProviderName {
 
 function getDefaultModel(provider: ProviderName): string {
   switch (provider) {
-    case "openai": return "gpt-4o";
-    case "anthropic": return "claude-sonnet-4-20250514";
-    case "gemini": return "gemini-2.0-flash";
-    case "openrouter": return "google/gemini-2.0-flash-001";
-    default: return "gpt-4o";
+    case "openai":
+      return "gpt-4o";
+    case "anthropic":
+      return "claude-sonnet-4-20250514";
+    case "gemini":
+      return "gemini-2.0-flash";
+    case "openrouter":
+      return "google/gemini-2.0-flash-001";
+    default:
+      return "gpt-4o";
   }
 }
 ```

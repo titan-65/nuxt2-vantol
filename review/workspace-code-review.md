@@ -8,6 +8,7 @@
 ## 1. Correctness / Security Issues
 
 ### Blocker — Activity catalog is split between two conflicting data sources
+
 - **Location:** `src/pages/ActivitiesPage.tsx` (uses `src/data/activities.ts`) vs. `src/pages/ActivityPage.tsx` / `convex/activities.ts`.
 - **Evidence:**
   - Hardcoded catalog lists 4 activities (`profile-card`, `event-page`, `kindness-tracker`, `verse-display`) and links to `/activities/${slug}`.
@@ -16,11 +17,13 @@
 - **Impact:** A marketed activity is unreachable after navigation.
 
 ### Blocker — Runtime type mismatch between Convex records and `ActivityDetail`
+
 - **Location:** `src/types.ts:15` (`overview: string`), `src/workspace/ActivityWorkspace.tsx:153` (`activity.overview`), `convex/schema.ts:58` (`description: v.string()`).
 - **Evidence:** The Convex `activities` table stores `description`, not `overview`. The workspace component renders `activity.overview`, which is `undefined` for Convex-backed activities. `src/pages/ActivityPage.tsx:10` hides this with an `as ActivityDetail & { _id: ... }` cast.
 - **Impact:** The Overview section in the workspace is blank for all DB-loaded activities. TypeScript also does not protect against future field drift.
 
 ### Blocker — Autosave can leave the database out of sync with the editor
+
 - **Location:** `src/workspace/ActivityWorkspace.tsx:42-68`.
 - **Evidence:** `autosave` skips the network call when `nextCode === (progress?.code ?? starterCode)`. `progress` is a prop that does not update during the session; it represents the code at page load, not the last saved value.
 - **Scenario:**
@@ -32,16 +35,19 @@
 - **Impact:** Data integrity bug for the primary user artifact (student code).
 
 ### High — Duplicate reflections are created on every save
+
 - **Location:** `convex/progress.ts:111-120` (`saveReflection`).
 - **Evidence:** The mutation always `ctx.db.insert("reflections", ...)` and never checks for an existing reflection. The schema has no unique index on `(profileId, activityId)` for `reflections`.
 - **Impact:** Students can accidentally (or maliciously) create unlimited reflection rows by clicking the button repeatedly.
 
 ### High — `activityProgress` uniqueness is assumed but not enforced
+
 - **Location:** `convex/schema.ts:89`, `convex/progress.ts:37-39`, `convex/progress.ts:85-87`.
 - **Evidence:** `by_profile_activity` is a regular index, not unique. Both `markActivity` and `saveCode` call `.unique()`. If duplicate rows ever exist, `.unique()` throws and the mutation fails.
 - **Impact:** Hard failure for core save/completion flows.
 
 ### Note — Sandboxed iframe is acceptable but could be hardened
+
 - **Location:** `src/workspace/PreviewFrame.tsx:9-10`.
 - **Evidence:** Uses `srcDoc={code}` with `sandbox="allow-scripts"`. The resulting document has an opaque origin, so it cannot access `parent` or same-origin storage. Scripts are still allowed to make network requests (`fetch`, `XMLHttpRequest`, `<script src>`, `<img src>`, etc.) and could render arbitrary external content or phishing UI inside the preview pane.
 - **Assessment:** This is a reasonable baseline for a live-code playground, but there is no parent CSP, no `Content-Security-Policy` on the iframe, and no origin-isolation upgrade. For a youth-facing product, consider:
@@ -50,11 +56,13 @@
   - Capturing `console` errors and network failures so students get feedback instead of a broken preview.
 
 ### Note — Monaco editor loads from a CDN with no loading or error state
+
 - **Location:** `src/workspace/CodeEditor.tsx:1`, `src/workspace/CodeEditor.tsx:11`.
 - **Evidence:** `@monaco-editor/react` defaults to loading Monaco from jsDelivr. `CodeEditor` does not pass `loading` or `onMount`/`onValidate` handlers and does not surface loader failures.
 - **Impact:** On slow, offline, or CSP-locked networks the editor area can appear blank or fail silently. Also leaks request metadata to the CDN.
 
 ### Note — No Content Security Policy or iframe sandbox documentation
+
 - **Location:** `index.html` (not inspected in detail), `src/main.tsx`.
 - **Evidence:** No `Content-Security-Policy` meta tag or headers are visible in the reviewed files. The iframe relies entirely on the `sandbox` attribute.
 
@@ -63,6 +71,7 @@
 ## 2. Schema / Data Model Issues
 
 ### Blocker — Missing unique constraints on business keys
+
 - **Location:** `convex/schema.ts`.
 - **Evidence:**
   - `workspaces.slug` has `.index("by_slug", ["slug"])` but no unique index.
@@ -73,21 +82,25 @@
 - **Impact:** Duplicate slugs can break routing; duplicate progress/reflection rows break `.unique()` lookups; duplicate Clerk IDs can create multiple profiles per user.
 
 ### High — `lessons` table is defined but unused
+
 - **Location:** `convex/schema.ts:32-43`.
 - **Evidence:** `lessons` has a schema and indexes, but no queries/mutations reference it. `activities.lessonId` is optional and also unused.
 - **Impact:** Dead schema adds maintenance burden and hints at incomplete feature work.
 
 ### High — `activityProgress.notes` is orphaned
+
 - **Location:** `convex/schema.ts:84`, `convex/progress.ts:29`, `convex/progress.ts:47`, `convex/progress.ts:61`.
 - **Evidence:** The table has a `notes` field and `markActivity` accepts it, but the UI never writes to it; reflections are stored in a separate `reflections` table.
 - **Impact:** Two places for the same concept. Decide whether reflections belong on `activityProgress` (single row per activity) or in the `reflections` table (history/append-only).
 
 ### Note — `invitations` lacks a workspace+email lookup index
+
 - **Location:** `convex/schema.ts:102-110`.
 - **Evidence:** Indexes are `by_workspace` and `by_email`, but there is no composite `(workspaceId, email)` index.
 - **Impact:** Cannot efficiently check whether an invitation already exists before inserting, which will matter once duplicate-prevention logic is added.
 
 ### Note — `onboarding.ts` does not validate slug or email shape
+
 - **Location:** `convex/onboarding.ts:14-48`.
 - **Evidence:** `args.workspace.slug` and `args.invites[]` are accepted as plain strings. There is no normalization, no empty-string guard, and no slug-format validation.
 - **Impact:** Workspaces can be created with empty or malformed slugs that later break routing or invitation lookups.
@@ -97,30 +110,36 @@
 ## 3. UI / UX Problems
 
 ### High — Core mutations have no loading or error feedback
+
 - **Location:** `src/workspace/ActivityWorkspace.tsx:74-104`.
 - **Evidence:** `handleStart`, `handleComplete`, `handleSaveReflection`, and `autosave` call Convex mutations but do not track pending/error state. Buttons remain clickable during the async call, and failures are silent.
 - **Impact:** Students may click **Mark complete** multiple times, see no confirmation, and not know if their work was saved.
 
 ### High — Reflection save button gives no success feedback
+
 - **Location:** `src/workspace/ActivityWorkspace.tsx:180-192`.
 - **Evidence:** After `saveReflection` resolves, there is no confirmation, no timestamp, and the textarea is not cleared or disabled.
 - **Impact:** Students cannot tell whether their reflection was recorded.
 
 ### Note — Preview does not capture runtime errors
+
 - **Location:** `src/workspace/PreviewFrame.tsx`, `src/workspace/ActivityWorkspace.tsx:69-71`.
 - **Evidence:** The preview is a plain iframe. JavaScript errors, missing resources, or `console.log` output are not surfaced to the student.
 - **Impact:** Beginners cannot debug why their page "doesn't work."
 
 ### Note — Editor loading state is not handled
+
 - **Location:** `src/workspace/CodeEditor.tsx:9-26`.
 - **Evidence:** No `loading` prop, no spinner, no fallback if Monaco fails to initialize.
 
 ### Note — Responsive layout trades preview visibility
+
 - **Location:** `src/workspace/workspace.css:188-230`.
 - **Evidence:** Below `1120px` the preview drops below the editor, which is good. Below `760px` the instructions, editor, and preview stack vertically. On a phone this is usable but requires a lot of vertical scrolling.
 - **Suggestion:** Consider a tabbed mobile view (Instructions | Code | Preview) so the editor and preview are not competing for limited vertical space.
 
 ### Note — "Back to activities" uses a plain `<a>` tag
+
 - **Location:** `src/workspace/ActivityWorkspace.tsx:115-118`.
 - **Evidence:** Although `App.tsx` intercepts clicks for in-app routes, relying on global click interception is fragile. A router-aware link component would be more robust.
 
@@ -129,11 +148,13 @@
 ## 4. Code Quality / Maintainability Concerns
 
 ### High — `api = anyApi` disables Convex type safety
+
 - **Location:** `src/api.ts:1-3`.
 - **Evidence:** `export const api = anyApi;` instead of the generated typed API.
 - **Impact:** No compile-time verification of argument shapes or return types for mutations/queries. This directly contributed to the `overview`/`description` mismatch going unnoticed.
 
 ### High — Frontend types do not match the database schema
+
 - **Location:** `src/types.ts:14-19`, `src/pages/ActivityPage.tsx:10`, `src/workspace/ActivityWorkspace.tsx:21-25`.
 - **Evidence:**
   - `ActivityDetail` requires `overview` and `buildGoal`.
@@ -142,20 +163,24 @@
 - **Impact:** TypeScript cannot catch data-shape bugs; runtime behavior diverges from types.
 
 ### High — No automated tests
+
 - **Location:** Entire `apps/zhyjen` workspace.
 - **Evidence:** `find **/*.test.{ts,tsx}` returned no results.
 - **Impact:** Core flows (autosave, progress mutation, reflection saving, preview rendering) are unprotected against regressions.
 
 ### Note — `ActivityWorkspace` mixes data fetching, state management, and UI
+
 - **Location:** `src/workspace/ActivityWorkspace.tsx`.
 - **Evidence:** The component is ~250 lines and owns autosave logic, progress mutations, reflection mutations, and layout. Splitting into smaller hooks/components (`useAutosave`, `ReflectionForm`, `WorkspaceToolbar`) would improve readability and testability.
 
 ### Note — `seedStarterActivities` does an upsert but mutates `createdAt`
+
 - **Location:** `convex/activities.ts:168-186`.
 - **Evidence:** On existing records, the code spreads `...activity` (which includes `createdAt: now`) and then overrides with `createdAt: existing.createdAt`. It works, but it is fragile: adding a new field to the spread could accidentally overwrite the original creation time.
 - **Suggestion:** Build the update object explicitly instead of spreading the full seed record.
 
 ### Note — Magic numbers and one-off colors in CSS
+
 - **Location:** `src/workspace/workspace.css`.
 - **Evidence:** Many hardcoded values (`#8b5cf6`, `#0f1117`, `rgba(255,255,255,0.08)`, breakpoints `1120px`/`760px`) that are not derived from the global CSS variable system.
 - **Impact:** Inconsistent theming and harder future re-skinning.

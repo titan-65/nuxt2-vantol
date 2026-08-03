@@ -16,20 +16,22 @@ rating: 9
 
 # Introduction
 
-Most backend tutorials stop at *“Hello World”*. In this **two-part series**, we’ll go further by using **Nitro** to build an **actual backend application** — a food truck / coffee shop API that could realistically power a real product.
+Most backend tutorials stop at _“Hello World”_. In this **two-part series**, we’ll go further by using **Nitro** to build an **actual backend application** — a food truck / coffee shop API that could realistically power a real product.
 
 In **Part 1**, we’ll focus on:
-- Project setup  
-- Application structure  
-- Core API routes (menu, orders, hours)  
-- Runtime configuration  
-- Local development  
+
+- Project setup
+- Application structure
+- Core API routes (menu, orders, hours)
+- Runtime configuration
+- Local development
 
 In **Part 2**, we’ll expand this into:
-- Order creation and validation  
-- Persistence (in-memory → storage)  
-- Middleware and plugins  
-- Deployment-ready architecture  
+
+- Order creation and validation
+- Persistence (in-memory → storage)
+- Middleware and plugins
+- Deployment-ready architecture
 
 This series assumes basic JavaScript/TypeScript knowledge but **no prior Nitro experience**.
 
@@ -42,14 +44,16 @@ This series assumes basic JavaScript/TypeScript knowledge but **no prior Nitro e
 Our fictional app: **BrewStop** ☕🚚 — a mobile coffee truck.
 
 ### Core Features (Backend)
-- Fetch menu items  
-- View opening hours  
-- Place orders  
-- Track order status  
+
+- Fetch menu items
+- View opening hours
+- Place orders
+- Track order status
 
 Nitro will serve as:
-- The API server  
-- The runtime abstraction layer  
+
+- The API server
+- The runtime abstraction layer
 - The deployment target (Node, serverless, edge)
 
 ---
@@ -57,10 +61,11 @@ Nitro will serve as:
 ## Why Nitro for This App?
 
 Nitro is perfect for this use case because:
-- It’s lightweight and fast  
-- It supports filesystem routing  
-- It deploys anywhere  
-- It works great with frontend frameworks later  
+
+- It’s lightweight and fast
+- It supports filesystem routing
+- It deploys anywhere
+- It works great with frontend frameworks later
 
 ::BlogAlert{type="info"}
 Nitro is the same server engine powering Nuxt — meaning anything we build here can later scale into a fullstack Nuxt app.
@@ -75,7 +80,7 @@ npx create-nitro-app brewstop-api
 cd brewstop-api
 npm install
 npm run dev
-````
+```
 
 Your project structure will look like this:
 
@@ -99,18 +104,18 @@ Create `server/data/menu.ts`:
 
 ```ts
 export interface MenuItem {
-  id: string
-  name: string
-  price: number
-  category: "coffee" | "tea" | "food"
+  id: string;
+  name: string;
+  price: number;
+  category: "coffee" | "tea" | "food";
 }
 
 export const menu: MenuItem[] = [
   { id: "latte", name: "Latte", price: 4.5, category: "coffee" },
   { id: "espresso", name: "Espresso", price: 3, category: "coffee" },
   { id: "chai", name: "Chai Tea", price: 4, category: "tea" },
-  { id: "croissant", name: "Croissant", price: 3.5, category: "food" }
-]
+  { id: "croissant", name: "Croissant", price: 3.5, category: "food" },
+];
 ```
 
 This shared file keeps our types and data clean.
@@ -122,13 +127,13 @@ This shared file keeps our types and data clean.
 Create `server/api/menu.get.ts`:
 
 ```ts
-import { menu } from "../data/menu"
+import { menu } from "../data/menu";
 
 export default defineEventHandler(() => {
   return {
-    items: menu
-  }
-})
+    items: menu,
+  };
+});
 ```
 
 Now visit:
@@ -139,7 +144,7 @@ http://localhost:3000/api/menu
 
 You’ll receive structured JSON instantly.
 
-Filesystem routing means no router config, no boilerplate — your file structure *is* your API.
+Filesystem routing means no router config, no boilerplate — your file structure _is_ your API.
 ::
 
 ---
@@ -153,9 +158,9 @@ export default defineEventHandler(() => {
   return {
     open: "08:00",
     close: "16:00",
-    days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"]
-  }
-})
+    days: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+  };
+});
 ```
 
 This allows the frontend to determine if orders are allowed.
@@ -169,24 +174,24 @@ Let’s make the truck name configurable.
 Update `nitro.config.ts`:
 
 ```ts
-import { defineNitroConfig } from "nitro/config"
+import { defineNitroConfig } from "nitro/config";
 
 export default defineNitroConfig({
   runtimeConfig: {
     public: {
-      truckName: "BrewStop Coffee"
-    }
-  }
-})
+      truckName: "BrewStop Coffee",
+    },
+  },
+});
 ```
 
 Use it in an endpoint:
 
 ```ts
 export default defineEventHandler(() => {
-  const config = useRuntimeConfig()
-  return { name: config.public.truckName }
-})
+  const config = useRuntimeConfig();
+  return { name: config.public.truckName };
+});
 ```
 
 Environment overrides can be added later without code changes.
@@ -198,21 +203,21 @@ Environment overrides can be added later without code changes.
 Create `server/api/orders.post.ts`:
 
 ```ts
-let orders: any[] = []
+let orders: any[] = [];
 
 export default defineEventHandler(async (event) => {
-  const body = await readBody(event)
+  const body = await readBody(event);
 
   const order = {
     id: crypto.randomUUID(),
     items: body.items,
     status: "pending",
-    createdAt: Date.now()
-  }
+    createdAt: Date.now(),
+  };
 
-  orders.push(order)
-  return order
-})
+  orders.push(order);
+  return order;
+});
 ```
 
 This gives us a basic order flow we’ll **refactor and harden** in Part 2.
@@ -240,17 +245,17 @@ You’ll receive a created order response immediately.
 
 By the end of Part 1, we have:
 
-* A working Nitro backend
-* Menu and hours endpoints
-* Order creation
-* Runtime config
-* Clean file structure
+- A working Nitro backend
+- Menu and hours endpoints
+- Order creation
+- Runtime config
+- Clean file structure
 
 ### Current API Endpoints
 
-* GET `/api/menu`
-* GET `/api/hours`
-* POST `/api/orders`
+- GET `/api/menu`
+- GET `/api/hours`
+- POST `/api/orders`
   ::
 
 ---
@@ -259,11 +264,11 @@ By the end of Part 1, we have:
 
 In **Part 2**, we’ll level this up:
 
-* Input validation
-* Order status updates
-* Storage using UnJS tools
-* Middleware (logging & auth)
-* Deployment-ready output
+- Input validation
+- Order status updates
+- Storage using UnJS tools
+- Middleware (logging & auth)
+- Deployment-ready output
 
 ---
 

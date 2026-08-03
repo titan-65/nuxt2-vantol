@@ -20,11 +20,11 @@ In **Part 1**, we built the foundation of **BrewStop**, a food truck / coffee sh
 
 In **Part 2**, we’ll turn that prototype into something **production-ready** by adding:
 
-- Input validation  
-- Persistent storage (using UnJS tools)  
-- Order status updates  
-- Middleware & plugins  
-- Better structure for deployment  
+- Input validation
+- Persistent storage (using UnJS tools)
+- Order status updates
+- Middleware & plugins
+- Better structure for deployment
 
 This is where Nitro really shines — small additions, big capability.
 
@@ -35,10 +35,11 @@ This is where Nitro really shines — small additions, big capability.
 ## Recap: Where We Left Off
 
 At the end of Part 1, we had:
+
 - `GET /api/menu`
 - `GET /api/hours`
 - `POST /api/orders`
-- In-memory order storage  
+- In-memory order storage
 
 The biggest limitation? **Orders disappear on restart** and inputs are not validated. Let’s fix that.
 
@@ -52,26 +53,26 @@ Nitro integrates beautifully with **Unstorage**, a key-value storage system from
 
 ```bash
 npm install unstorage
-````
+```
 
 ### Create a Storage Utility
 
 Create `server/utils/storage.ts`:
 
 ```ts
-import { createStorage } from "unstorage"
-import fsDriver from "unstorage/drivers/fs"
+import { createStorage } from "unstorage";
+import fsDriver from "unstorage/drivers/fs";
 
 export const storage = createStorage({
-  driver: fsDriver({ base: "./.data" })
-})
+  driver: fsDriver({ base: "./.data" }),
+});
 ```
 
 This gives us:
 
-* Persistent storage
-* Zero database setup
-* Easy swap to Redis, Cloudflare KV, etc.
+- Persistent storage
+- Zero database setup
+- Easy swap to Redis, Cloudflare KV, etc.
 
 You can switch storage drivers without rewriting your application logic.
 ::
@@ -83,21 +84,21 @@ You can switch storage drivers without rewriting your application logic.
 Update `server/api/orders.post.ts`:
 
 ```ts
-import { storage } from "../utils/storage"
+import { storage } from "../utils/storage";
 
 export default defineEventHandler(async (event) => {
-  const body = await readBody(event)
+  const body = await readBody(event);
 
   const order = {
     id: crypto.randomUUID(),
     items: body.items,
     status: "pending",
-    createdAt: Date.now()
-  }
+    createdAt: Date.now(),
+  };
 
-  await storage.setItem(`orders:${order.id}`, order)
-  return order
-})
+  await storage.setItem(`orders:${order.id}`, order);
+  return order;
+});
 ```
 
 Now orders persist across restarts.
@@ -115,8 +116,8 @@ export function validateOrder(body: any) {
   if (!body?.items || !Array.isArray(body.items)) {
     throw createError({
       statusCode: 400,
-      statusMessage: "Invalid order format"
-    })
+      statusMessage: "Invalid order format",
+    });
   }
 }
 ```
@@ -124,13 +125,13 @@ export function validateOrder(body: any) {
 Use it in your endpoint:
 
 ```ts
-import { validateOrder } from "../utils/validation"
+import { validateOrder } from "../utils/validation";
 
 export default defineEventHandler(async (event) => {
-  const body = await readBody(event)
-  validateOrder(body)
+  const body = await readBody(event);
+  validateOrder(body);
   // continue logic
-})
+});
 ```
 
 Validation protects your API from malformed requests and accidental misuse.
@@ -145,15 +146,13 @@ Validation protects your API from malformed requests and accidental misuse.
 Create `server/api/orders.get.ts`:
 
 ```ts
-import { storage } from "../utils/storage"
+import { storage } from "../utils/storage";
 
 export default defineEventHandler(async () => {
-  const keys = await storage.getKeys("orders:")
-  const orders = await Promise.all(
-    keys.map((key) => storage.getItem(key))
-  )
-  return orders
-})
+  const keys = await storage.getKeys("orders:");
+  const orders = await Promise.all(keys.map((key) => storage.getItem(key)));
+  return orders;
+});
 ```
 
 ### Update Order Status
@@ -161,27 +160,27 @@ export default defineEventHandler(async () => {
 Create `server/api/orders/[id].patch.ts`:
 
 ```ts
-import { storage } from "../../utils/storage"
+import { storage } from "../../utils/storage";
 
 export default defineEventHandler(async (event) => {
-  const id = event.context.params?.id
-  const body = await readBody(event)
+  const id = event.context.params?.id;
+  const body = await readBody(event);
 
-  const order = await storage.getItem(`orders:${id}`)
+  const order = await storage.getItem(`orders:${id}`);
   if (!order) {
-    throw createError({ statusCode: 404, statusMessage: "Order not found" })
+    throw createError({ statusCode: 404, statusMessage: "Order not found" });
   }
 
-  const updated = { ...order, status: body.status }
-  await storage.setItem(`orders:${id}`, updated)
+  const updated = { ...order, status: body.status };
+  await storage.setItem(`orders:${id}`, updated);
 
-  return updated
-})
+  return updated;
+});
 ```
 
 Now BrewStop supports a real workflow:
 
-* pending → preparing → ready → completed
+- pending → preparing → ready → completed
 
 ---
 
@@ -192,11 +191,9 @@ Create `server/plugins/logger.ts`:
 ```ts
 export default defineNitroPlugin((nitroApp) => {
   nitroApp.hooks.hook("request", (event) => {
-    console.log(
-      `[${new Date().toISOString()}] ${event.method} ${event.path}`
-    )
-  })
-})
+    console.log(`[${new Date().toISOString()}] ${event.method} ${event.path}`);
+  });
+});
 ```
 
 This gives you centralized request logging without cluttering endpoints.
@@ -212,9 +209,9 @@ Update `nitro.config.ts`:
 ```ts
 export default defineNitroConfig({
   runtimeConfig: {
-    apiKey: "super-secret-key"
-  }
-})
+    apiKey: "super-secret-key",
+  },
+});
 ```
 
 Create `server/plugins/auth.ts`:
@@ -223,13 +220,13 @@ Create `server/plugins/auth.ts`:
 export default defineNitroPlugin(() => {
   addEventHandler((event) => {
     if (event.path.startsWith("/api/orders") && event.method !== "GET") {
-      const key = event.headers.get("x-api-key")
+      const key = event.headers.get("x-api-key");
       if (key !== useRuntimeConfig().apiKey) {
-        throw createError({ statusCode: 401, statusMessage: "Unauthorized" })
+        throw createError({ statusCode: 401, statusMessage: "Unauthorized" });
       }
     }
-  })
-})
+  });
+});
 ```
 
 This is intentionally simple — Nitro plugins scale well to JWT, OAuth, or third-party auth later.
@@ -247,9 +244,9 @@ npm run build
 
 Nitro outputs a `.output` directory that can run on:
 
-* Node.js servers
-* Serverless platforms
-* Edge runtimes
+- Node.js servers
+- Serverless platforms
+- Edge runtimes
 
 ```bash
 node .output/server/index.mjs
@@ -263,19 +260,19 @@ No changes needed.
 
 ### BrewStop API (Final)
 
-* GET `/api/menu`
-* GET `/api/hours`
-* GET `/api/orders`
-* POST `/api/orders`
-* PATCH `/api/orders/:id`
+- GET `/api/menu`
+- GET `/api/hours`
+- GET `/api/orders`
+- POST `/api/orders`
+- PATCH `/api/orders/:id`
   ::
 
 This backend can now realistically power:
 
-* A POS system
-* A mobile app
-* A Nuxt frontend
-* An admin dashboard
+- A POS system
+- A mobile app
+- A Nuxt frontend
+- An admin dashboard
 
 ---
 
@@ -283,19 +280,19 @@ This backend can now realistically power:
 
 In just **two parts**, we’ve built a real backend using **Nitro**:
 
-* Persistent storage
-* Validation
-* Middleware
-* Secure endpoints
-* Multi-runtime deployment
+- Persistent storage
+- Validation
+- Middleware
+- Secure endpoints
+- Multi-runtime deployment
 
 Nitro proves that you don’t need heavy frameworks or complex infrastructure to build **serious applications**. With composable UnJS tools and clean architecture, you can ship fast — and scale later.
 
 Next steps?
 
-* Add a frontend (Nuxt or Vite)
-* Add payments
-* Deploy to edge
-* Replace storage with a database
+- Add a frontend (Nuxt or Vite)
+- Add payments
+- Deploy to edge
+- Replace storage with a database
 
 BrewStop is production-ready — and this is only the beginning. ☕🚀

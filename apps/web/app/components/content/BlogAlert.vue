@@ -1,7 +1,7 @@
 <script setup lang="ts">
 defineProps<{
-  type?: 'info' | 'warning' | 'success' | 'danger'
-}>()
+  type?: "info" | "warning" | "success" | "danger";
+}>();
 </script>
 
 <template>
@@ -10,7 +10,7 @@ defineProps<{
     :class="{
       'border-white/10': type === 'info' || !type || type === 'success',
       'border-yellow-500/30 bg-yellow-500/5': type === 'warning',
-      'border-red-500/30 bg-red-500/5': type === 'danger'
+      'border-red-500/30 bg-red-500/5': type === 'danger',
     }"
   >
     <div class="flex items-start gap-3">

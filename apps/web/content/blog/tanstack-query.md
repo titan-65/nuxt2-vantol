@@ -58,7 +58,7 @@ yarn add @tanstack/react-query
 First, wrap your application with the QueryClientProvider:
 
 ```tsx [App.tsx]
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 
 const queryClient = new QueryClient();
 
@@ -76,7 +76,7 @@ function App() {
 Here's a simple example of fetching user data:
 
 ```tsx [UserProfile.tsx]
-import { useQuery } from '@tanstack/react-query';
+import { useQuery } from "@tanstack/react-query";
 
 interface User {
   id: number;
@@ -86,13 +86,13 @@ interface User {
 
 async function fetchUser(userId: string): Promise<User> {
   const response = await fetch(`/api/users/${userId}`);
-  if (!response.ok) throw new Error('Failed to fetch user');
+  if (!response.ok) throw new Error("Failed to fetch user");
   return response.json();
 }
 
 function UserProfile({ userId }: { userId: string }) {
   const { data, isLoading, error } = useQuery({
-    queryKey: ['user', userId],
+    queryKey: ["user", userId],
     queryFn: () => fetchUser(userId),
   });
 
@@ -119,7 +119,7 @@ Query keys are crucial in TanStack Query. They uniquely identify your queries an
 Mutations handle data updates, creations, and deletions. Here's how to create a mutation for updating user data:
 
 ```tsx [UpdateUser.tsx]
-import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 
 interface UpdateUserData {
   name: string;
@@ -132,13 +132,13 @@ function UpdateUserForm({ userId }: { userId: string }) {
   const mutation = useMutation({
     mutationFn: (userData: UpdateUserData) =>
       fetch(`/api/users/${userId}`, {
-        method: 'PUT',
+        method: "PUT",
         body: JSON.stringify(userData),
-        headers: { 'Content-Type': 'application/json' },
+        headers: { "Content-Type": "application/json" },
       }),
     onSuccess: () => {
       // Invalidate and refetch user data
-      queryClient.invalidateQueries({ queryKey: ['user', userId] });
+      queryClient.invalidateQueries({ queryKey: ["user", userId] });
     },
   });
 
@@ -147,10 +147,12 @@ function UpdateUserForm({ userId }: { userId: string }) {
   };
 
   return (
-    <form onSubmit={(e) => {
-      e.preventDefault();
-      // Form handling logic
-    }}>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        // Form handling logic
+      }}
+    >
       {mutation.isPending && <p>Updating...</p>}
       {mutation.isError && <p>Error updating user</p>}
       {mutation.isSuccess && <p>User updated successfully!</p>}
@@ -169,30 +171,32 @@ const mutation = useMutation({
   mutationFn: updateTodo,
   onMutate: async (newTodo) => {
     // Cancel outgoing refetches
-    await queryClient.cancelQueries({ queryKey: ['todos'] });
+    await queryClient.cancelQueries({ queryKey: ["todos"] });
 
     // Snapshot the previous value
-    const previousTodos = queryClient.getQueryData(['todos']);
+    const previousTodos = queryClient.getQueryData(["todos"]);
 
     // Optimistically update
-    queryClient.setQueryData(['todos'], (old: Todo[]) => [...old, newTodo]);
+    queryClient.setQueryData(["todos"], (old: Todo[]) => [...old, newTodo]);
 
     // Return context with the snapshot
     return { previousTodos };
   },
   onError: (err, newTodo, context) => {
     // Rollback on error
-    queryClient.setQueryData(['todos'], context?.previousTodos);
+    queryClient.setQueryData(["todos"], context?.previousTodos);
   },
   onSettled: () => {
     // Refetch after error or success
-    queryClient.invalidateQueries({ queryKey: ['todos'] });
+    queryClient.invalidateQueries({ queryKey: ["todos"] });
   },
 });
 ```
 
 ::BlogCard
+
 ### Performance Benefits
+
 Optimistic updates can make your application feel up to 10x faster by eliminating the perceived latency of server responses.
 ::
 
@@ -205,24 +209,23 @@ function PaginatedPosts() {
   const [page, setPage] = useState(1);
 
   const { data, isLoading, isPlaceholderData } = useQuery({
-    queryKey: ['posts', page],
+    queryKey: ["posts", page],
     queryFn: () => fetchPosts(page),
     placeholderData: (previousData) => previousData,
   });
 
   return (
     <div>
-      {data?.posts.map(post => <PostCard key={post.id} post={post} />)}
-      
-      <button
-        onClick={() => setPage(old => Math.max(old - 1, 1))}
-        disabled={page === 1}
-      >
+      {data?.posts.map((post) => (
+        <PostCard key={post.id} post={post} />
+      ))}
+
+      <button onClick={() => setPage((old) => Math.max(old - 1, 1))} disabled={page === 1}>
         Previous
       </button>
-      
+
       <button
-        onClick={() => setPage(old => old + 1)}
+        onClick={() => setPage((old) => old + 1)}
         disabled={isPlaceholderData || !data?.hasMore}
       >
         Next
@@ -260,13 +263,13 @@ Establish a naming convention for your query keys:
 ```ts [queryKeys.ts]
 export const queryKeys = {
   users: {
-    all: ['users'] as const,
-    detail: (id: string) => ['users', id] as const,
-    posts: (id: string) => ['users', id, 'posts'] as const,
+    all: ["users"] as const,
+    detail: (id: string) => ["users", id] as const,
+    posts: (id: string) => ["users", id, "posts"] as const,
   },
   posts: {
-    all: ['posts'] as const,
-    detail: (id: string) => ['posts', id] as const,
+    all: ["posts"] as const,
+    detail: (id: string) => ["posts", id] as const,
   },
 };
 ```
@@ -276,7 +279,7 @@ export const queryKeys = {
 TanStack Query comes with excellent developer tools:
 
 ```tsx [App.tsx]
-import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 
 function App() {
   return (
@@ -301,12 +304,12 @@ Sometimes you need to fetch data based on previous query results:
 ```tsx [DependentQueries.tsx]
 function UserPosts({ userId }: { userId: string }) {
   const { data: user } = useQuery({
-    queryKey: ['user', userId],
+    queryKey: ["user", userId],
     queryFn: () => fetchUser(userId),
   });
 
   const { data: posts } = useQuery({
-    queryKey: ['posts', user?.id],
+    queryKey: ["posts", user?.id],
     queryFn: () => fetchUserPosts(user!.id),
     enabled: !!user, // Only run when user is available
   });
@@ -324,24 +327,21 @@ function PostList() {
   const queryClient = useQueryClient();
 
   const { data: posts } = useQuery({
-    queryKey: ['posts'],
+    queryKey: ["posts"],
     queryFn: fetchPosts,
   });
 
   const handleMouseEnter = (postId: string) => {
     queryClient.prefetchQuery({
-      queryKey: ['post', postId],
+      queryKey: ["post", postId],
       queryFn: () => fetchPost(postId),
     });
   };
 
   return (
     <div>
-      {posts?.map(post => (
-        <div 
-          key={post.id}
-          onMouseEnter={() => handleMouseEnter(post.id)}
-        >
+      {posts?.map((post) => (
+        <div key={post.id} onMouseEnter={() => handleMouseEnter(post.id)}>
           <Link to={`/posts/${post.id}`}>{post.title}</Link>
         </div>
       ))}

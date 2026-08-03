@@ -3,43 +3,40 @@
   "version": "0.1.0",
   "description": "An intelligent personal developer and portfolio assistant module for Nuxt applications.",
   "keywords": [
+    "ai-assistant",
+    "assistant",
+    "chat",
+    "command-palette",
     "nuxt",
     "nuxt-module",
-    "assistant",
-    "ai-assistant",
-    "portfolio",
-    "chat",
-    "command-palette"
+    "portfolio"
   ],
+  "homepage": "https://github.com/titan-65/nuxt2-vantol/tree/main/packages/assistant#readme",
+  "bugs": {
+    "url": "https://github.com/titan-65/nuxt2-vantol/issues"
+  },
   "license": "MIT",
   "author": "Vantol Bennett <vantolbennettclm@gmail.com> (https://vantolbennett.com)",
-  "homepage": "https://github.com/titan-65/nuxt2-vantol/tree/main/packages/assistant#readme",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/titan-65/nuxt2-vantol.git",
     "directory": "packages/assistant"
-  },
-  "bugs": {
-    "url": "https://github.com/titan-65/nuxt2-vantol/issues"
   },
   "files": [
     "dist"
   ],
   "type": "module",
   "sideEffects": false,
+  "main": "./dist/module.mjs",
+  "types": "./dist/types.d.mts",
   "exports": {
     ".": {
       "types": "./dist/types.d.mts",
       "import": "./dist/module.mjs"
     }
   },
-  "main": "./dist/module.mjs",
-  "types": "./dist/types.d.mts",
   "publishConfig": {
     "access": "public"
-  },
-  "engines": {
-    "node": ">=18.0.0"
   },
   "scripts": {
     "build": "nuxt-module-build build",
@@ -70,5 +67,8 @@
   },
   "peerDependencies": {
     "nuxt": "^4.0.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }

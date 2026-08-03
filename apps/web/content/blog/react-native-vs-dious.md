@@ -26,14 +26,14 @@ In this post, we’ll compare **Dioxus** and **React Native** across architectur
 
 ## High-Level Overview
 
-| Feature | Dioxus 0.7 | React Native |
-|------|-----------|--------------|
-| Language | Rust | JavaScript / TypeScript |
-| UI Model | Declarative (RSX) | Declarative (JSX) |
-| Platforms | Web, Desktop, Mobile | Mobile (iOS, Android) |
-| Rendering | Native + WASM | Native via bridge |
-| Backend Integration | Native Rust fullstack | Separate backend |
-| Performance Focus | Compile-time + memory safety | Runtime optimizations |
+| Feature             | Dioxus 0.7                   | React Native            |
+| ------------------- | ---------------------------- | ----------------------- |
+| Language            | Rust                         | JavaScript / TypeScript |
+| UI Model            | Declarative (RSX)            | Declarative (JSX)       |
+| Platforms           | Web, Desktop, Mobile         | Mobile (iOS, Android)   |
+| Rendering           | Native + WASM                | Native via bridge       |
+| Backend Integration | Native Rust fullstack        | Separate backend        |
+| Performance Focus   | Compile-time + memory safety | Runtime optimizations   |
 
 ---
 
@@ -43,10 +43,10 @@ In this post, we’ll compare **Dioxus** and **React Native** across architectur
 
 Dioxus is built entirely in **Rust**, giving developers:
 
-- Strong compile-time guarantees  
-- Memory safety without garbage collection  
-- Fearless refactoring  
-- Fewer runtime crashes  
+- Strong compile-time guarantees
+- Memory safety without garbage collection
+- Fearless refactoring
+- Fewer runtime crashes
 
 ```rust
 fn App() -> Element {
@@ -54,7 +54,7 @@ fn App() -> Element {
         div { "Hello from Rust!" }
     }
 }
-````
+```
 
 Rust errors are caught at compile time, reducing runtime failures common in large JavaScript codebases.
 ::
@@ -63,9 +63,9 @@ Rust errors are caught at compile time, reducing runtime failures common in larg
 
 React Native relies on **JavaScript or TypeScript**, which offers:
 
-* Faster onboarding
-* Massive community knowledge
-* Runtime flexibility
+- Faster onboarding
+- Massive community knowledge
+- Runtime flexibility
 
 ```tsx
 export default function App() {
@@ -87,28 +87,28 @@ Dioxus wins on safety and correctness. React Native wins on approachability and 
 
 Dioxus benefits from:
 
-* Zero-cost abstractions
-* No JS bridge
-* Direct native execution
-* WASM for the web
+- Zero-cost abstractions
+- No JS bridge
+- Direct native execution
+- WASM for the web
 
 This leads to:
 
-* Faster startup times
-* Lower memory usage
-* Predictable performance
+- Faster startup times
+- Lower memory usage
+- Predictable performance
 
 ### React Native Performance Model
 
 React Native uses:
 
-* A JS runtime
-* A native bridge (even with the new architecture)
+- A JS runtime
+- A native bridge (even with the new architecture)
 
 While performance has improved significantly, complex UIs can still suffer from:
 
-* Bridge overhead
-* Thread synchronization issues
+- Bridge overhead
+- Thread synchronization issues
 
 If your app is performance-critical (IoT dashboards, embedded systems, real-time UIs), Dioxus has a structural advantage.
 ::
@@ -132,31 +132,31 @@ rsx! {
 
 Pros:
 
-* Compile-time UI validation
-* No undefined props
-* Cleaner refactors
+- Compile-time UI validation
+- No undefined props
+- Cleaner refactors
 
 Cons:
 
-* Rust macros have a learning curve
+- Rust macros have a learning curve
 
 ### React Native (JSX)
 
 JSX is flexible and expressive:
 
 ```tsx
-<Button title="Increment" onPress={() => setCount(c => c + 1)} />
+<Button title="Increment" onPress={() => setCount((c) => c + 1)} />
 ```
 
 Pros:
 
-* Huge component ecosystem
-* Familiar React mental model
+- Huge component ecosystem
+- Familiar React mental model
 
 Cons:
 
-* Runtime UI errors
-* Props misuse is easy
+- Runtime UI errors
+- Props misuse is easy
 
 ---
 
@@ -172,21 +172,21 @@ let mut count = use_signal(|| 0);
 
 Benefits:
 
-* No stale closures
-* Predictable updates
-* Compile-time guarantees
+- No stale closures
+- Predictable updates
+- Compile-time guarantees
 
 ### React Native
 
 React Native relies on:
 
-* React hooks
-* External libraries (Redux, Zustand, Recoil)
+- React hooks
+- External libraries (Redux, Zustand, Recoil)
 
 This flexibility is powerful—but can lead to:
 
-* State sprawl
-* Hard-to-debug race conditions
+- State sprawl
+- Hard-to-debug race conditions
 
 ---
 
@@ -194,10 +194,10 @@ This flexibility is powerful—but can lead to:
 
 ### Dioxus Tooling
 
-* Built-in CLI
-* Hot reload
-* Unified build pipeline
-* Rust analyzer integration
+- Built-in CLI
+- Hot reload
+- Unified build pipeline
+- Rust analyzer integration
 
 ```bash
 dx serve
@@ -207,16 +207,16 @@ Everything—from UI to backend—lives in **one ecosystem**.
 
 ### React Native Tooling
 
-* Metro bundler
-* Native SDKs
-* Xcode & Android Studio
-* Many third-party tools
+- Metro bundler
+- Native SDKs
+- Xcode & Android Studio
+- Many third-party tools
 
 Powerful, but:
 
-* Complex setup
-* Platform-specific bugs
-* Steeper maintenance at scale
+- Complex setup
+- Platform-specific bugs
+- Steeper maintenance at scale
 
 ### Tooling Summary
 
@@ -232,10 +232,10 @@ React Native prioritizes flexibility and scale.
 
 Dioxus shines here.
 
-* Frontend and backend both in Rust
-* Shared types
-* Server functions
-* SSR support
+- Frontend and backend both in Rust
+- Shared types
+- Server functions
+- SSR support
 
 This makes it ideal for **end-to-end Rust teams**.
 
@@ -243,9 +243,9 @@ This makes it ideal for **end-to-end Rust teams**.
 
 React Native typically requires:
 
-* Separate backend stack
-* API contracts
-* Data validation duplication
+- Separate backend stack
+- API contracts
+- Data validation duplication
 
 Still powerful—but fragmented.
 
@@ -255,15 +255,15 @@ Still powerful—but fragmented.
 
 ### React Native
 
-* Massive ecosystem
-* Thousands of libraries
-* Long-term industry support
+- Massive ecosystem
+- Thousands of libraries
+- Long-term industry support
 
 ### Dioxus
 
-* Smaller but growing ecosystem
-* Strong Rust community backing
-* Rapid iteration
+- Smaller but growing ecosystem
+- Strong Rust community backing
+- Rapid iteration
 
 Dioxus is younger, but its pace of development is significantly faster than React Native’s early years.
 ::
@@ -274,19 +274,19 @@ Dioxus is younger, but its pace of development is significantly faster than Reac
 
 Choose **Dioxus** if:
 
-* You value performance and safety
-* Your team knows Rust
-* You want a unified fullstack solution
-* You target web + desktop + mobile
+- You value performance and safety
+- Your team knows Rust
+- You want a unified fullstack solution
+- You target web + desktop + mobile
 
 ## When to Choose React Native
 
 Choose **React Native** if:
 
-* You need mature mobile tooling
-* You rely on third-party native modules
-* Your team is React-centric
-* Time-to-market is critical
+- You need mature mobile tooling
+- You rely on third-party native modules
+- Your team is React-centric
+- Time-to-market is critical
 
 ---
 

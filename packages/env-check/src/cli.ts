@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
-import { readFileSync, existsSync } from 'node:fs';
-import { resolve } from 'node:path';
-import { validateEnv } from './validate';
-import type { EnvSchema } from './types';
+import { readFileSync, existsSync } from "node:fs";
+import { resolve } from "node:path";
+import { validateEnv } from "./validate";
+import type { EnvSchema } from "./types";
 
 const args = process.argv.slice(2);
 
@@ -18,15 +18,18 @@ function hasFlag(flag: string): boolean {
 }
 
 function parseEnvFile(path: string): Record<string, string> {
-  const content = readFileSync(path, 'utf-8');
+  const content = readFileSync(path, "utf-8");
   const env: Record<string, string> = {};
-  for (const line of content.split('\n')) {
+  for (const line of content.split("\n")) {
     const trimmed = line.trim();
-    if (!trimmed || trimmed.startsWith('#')) continue;
-    const eqIdx = trimmed.indexOf('=');
+    if (!trimmed || trimmed.startsWith("#")) continue;
+    const eqIdx = trimmed.indexOf("=");
     if (eqIdx === -1) continue;
     const key = trimmed.slice(0, eqIdx).trim();
-    const value = trimmed.slice(eqIdx + 1).trim().replace(/^['"]|['"]$/g, '');
+    const value = trimmed
+      .slice(eqIdx + 1)
+      .trim()
+      .replace(/^['"]|['"]$/g, "");
     env[key] = value;
   }
   return env;
@@ -54,14 +57,14 @@ Schema format (JSON):
 }
 
 function main() {
-  if (hasFlag('--help') || hasFlag('-h')) {
+  if (hasFlag("--help") || hasFlag("-h")) {
     printHelp();
     process.exit(0);
   }
 
-  const schemaPath = getArg('--schema');
+  const schemaPath = getArg("--schema");
   if (!schemaPath) {
-    console.error('env-check: --schema is required\n');
+    console.error("env-check: --schema is required\n");
     printHelp();
     process.exit(1);
   }
@@ -74,7 +77,7 @@ function main() {
 
   let schema: EnvSchema | undefined;
   try {
-    schema = JSON.parse(readFileSync(resolvedSchemaPath, 'utf-8')) as EnvSchema;
+    schema = JSON.parse(readFileSync(resolvedSchemaPath, "utf-8")) as EnvSchema;
   } catch {
     console.error(`env-check: failed to parse schema file: ${resolvedSchemaPath}`);
     process.exit(1);
@@ -85,7 +88,7 @@ function main() {
     process.exit(1);
   }
 
-  const envPath = getArg('--env');
+  const envPath = getArg("--env");
   let env: Record<string, string | undefined>;
 
   if (envPath) {
@@ -101,11 +104,14 @@ function main() {
 
   try {
     const result = validateEnv(schema, env);
-    console.log('env-check: all variables valid');
+    console.log("env-check: all variables valid");
     for (const [key, value] of Object.entries(result)) {
-      const display = key.toLowerCase().includes('secret') || key.toLowerCase().includes('key') || key.toLowerCase().includes('password')
-        ? '••••••'
-        : String(value);
+      const display =
+        key.toLowerCase().includes("secret") ||
+        key.toLowerCase().includes("key") ||
+        key.toLowerCase().includes("password")
+          ? "••••••"
+          : String(value);
       console.log(`  ✓ ${key}=${display}`);
     }
   } catch (err) {

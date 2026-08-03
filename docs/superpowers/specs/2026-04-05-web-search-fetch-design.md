@@ -14,10 +14,12 @@ Add two new tools to null-agent that give the agent web access: searching the in
 Searches the web using the Tavily Search API and returns extracted, readable content snippets (not just links).
 
 **Parameters:**
+
 - `query` (required, string) — The search query
 - `maxResults` (optional, number) — Number of results to return. Default: 5. Max: 10.
 
 **Response format:**
+
 ```
 ## [Result Title](url)
 Extracted content snippet...
@@ -27,6 +29,7 @@ Extracted content snippet...
 ```
 
 **Error handling:**
+
 - Missing API key: "Error: TAVILY_API_KEY not configured. Set the environment variable or run `null-agent auth tavily`."
 - API error: "Search failed: <API error message>"
 - Empty results: "No results found for '<query>'."
@@ -38,15 +41,18 @@ Extracted content snippet...
 Fetches a URL and converts its content to readable text.
 
 **Parameters:**
+
 - `url` (required, string) — The URL to fetch
 
 **Response format:**
+
 - HTML pages: stripped to readable text, formatted as markdown
 - Non-HTML responses: returned as-is with content-type header noted
 - Max response: 1MB (truncated with notice)
 - Timeout: 30s
 
 **Error handling:**
+
 - Invalid URL: "Error: Invalid URL '<url>'."
 - Network error: "Error: Failed to fetch '<url>': <error message>"
 - Non-200 status: "Error: HTTP <status> for '<url>'."
@@ -61,6 +67,7 @@ Fetches a URL and converts its content to readable text.
 Single file containing both tools. Uses Node.js built-in `fetch()` for web_fetch (no new dependencies). Tavily API called via `fetch()` as well.
 
 **API key resolution:**
+
 1. `TAVILY_API_KEY` environment variable
 2. `~/.null-agent/credentials.json` under `tavily` key
 
@@ -74,12 +81,14 @@ Single file containing both tools. Uses Node.js built-in `fetch()` for web_fetch
 ### Auth
 
 Add `tavily` as a configurable provider in `src/auth/`:
+
 - `null-agent auth tavily` — interactive setup
 - `null-agent auth status` — shows Tavily key status alongside existing providers
 
 ### Documentation
 
 Update README.md:
+
 - Add Tavily to the providers table (or a new "Web Tools" section)
 - Document `TAVILY_API_KEY` environment variable
 - Add web tools to the tools table

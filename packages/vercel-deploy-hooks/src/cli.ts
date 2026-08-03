@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 
-import { readFileSync, existsSync } from 'node:fs';
-import { resolve } from 'node:path';
-import { triggerDeploy } from './deploy';
-import type { DeployConfig } from './types';
+import { readFileSync, existsSync } from "node:fs";
+import { resolve } from "node:path";
+import { triggerDeploy } from "./deploy";
+import type { DeployConfig } from "./types";
 
 const args = process.argv.slice(2);
 
@@ -40,14 +40,14 @@ Examples:
 }
 
 async function main() {
-  if (hasFlag('--help') || hasFlag('-h')) {
+  if (hasFlag("--help") || hasFlag("-h")) {
     printHelp();
     process.exit(0);
   }
 
   let config: DeployConfig | undefined;
 
-  const configPath = getArg('--config');
+  const configPath = getArg("--config");
   if (configPath) {
     const resolved = resolve(configPath);
     if (!existsSync(resolved)) {
@@ -55,34 +55,34 @@ async function main() {
       process.exit(1);
     }
     try {
-      config = JSON.parse(readFileSync(resolved, 'utf-8')) as DeployConfig;
+      config = JSON.parse(readFileSync(resolved, "utf-8")) as DeployConfig;
     } catch {
       console.error(`vercel-deploy-hooks: failed to parse config file: ${resolved}`);
       process.exit(1);
     }
   } else {
-    const hookUrl = getArg('--url') || process.env.VERCEL_DEPLOY_HOOK_URL;
+    const hookUrl = getArg("--url") || process.env.VERCEL_DEPLOY_HOOK_URL;
     if (!hookUrl) {
-      console.error('vercel-deploy-hooks: --url or VERCEL_DEPLOY_HOOK_URL is required\n');
+      console.error("vercel-deploy-hooks: --url or VERCEL_DEPLOY_HOOK_URL is required\n");
       printHelp();
       process.exit(1);
     }
     config = {
       hookUrl,
-      noBuildCache: hasFlag('--no-build-cache'),
+      noBuildCache: hasFlag("--no-build-cache"),
     };
   }
 
   if (!config) {
-    console.error('vercel-deploy-hooks: failed to load config');
+    console.error("vercel-deploy-hooks: failed to load config");
     process.exit(1);
   }
 
   // Validate URL
   try {
     const url = new URL(config.hookUrl);
-    if (!url.hostname.includes('vercel.com')) {
-      throw new Error('URL does not appear to be a Vercel deploy hook');
+    if (!url.hostname.includes("vercel.com")) {
+      throw new Error("URL does not appear to be a Vercel deploy hook");
     }
   } catch (err) {
     console.error(`vercel-deploy-hooks: invalid URL — ${err instanceof Error ? err.message : err}`);
@@ -90,18 +90,18 @@ async function main() {
   }
 
   // Dry run
-  if (hasFlag('--dry-run')) {
-    console.log('vercel-deploy-hooks: dry run (no deploy triggered)');
+  if (hasFlag("--dry-run")) {
+    console.log("vercel-deploy-hooks: dry run (no deploy triggered)");
     console.log(`  URL:    ${config.hookUrl.slice(0, 60)}...`);
-    console.log(`  Cache:  ${config.noBuildCache ? 'disabled' : 'enabled'}`);
-    console.log('  Valid:  yes');
+    console.log(`  Cache:  ${config.noBuildCache ? "disabled" : "enabled"}`);
+    console.log("  Valid:  yes");
     process.exit(0);
   }
 
   try {
-    console.log('vercel-deploy-hooks: triggering deploy...');
+    console.log("vercel-deploy-hooks: triggering deploy...");
     const result = await triggerDeploy(config);
-    console.log('vercel-deploy-hooks: deployed successfully');
+    console.log("vercel-deploy-hooks: deployed successfully");
     console.log(`  Job ID:  ${result.jobId}`);
     console.log(`  State:   ${result.state}`);
     console.log(`  Created: ${result.createdAt}`);

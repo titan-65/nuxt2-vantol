@@ -204,7 +204,7 @@ android {
         versionCode 1
         versionName "1.0.0"
     }
-    
+
     signingConfigs {
         release {
             if (project.hasProperty('MYAPP_RELEASE_STORE_FILE')) {
@@ -219,7 +219,7 @@ android {
             }
         }
     }
-    
+
     buildTypes {
         release {
             signingConfig release.signingConfigs.debug
@@ -437,4 +437,4 @@ Good luck with your Play Store deployment!
 
 ---
 
-*This guide covers the deployment process for both React Native (bare workflow) and Expo (managed workflow). For specific issues with your particular setup, consult the official documentation for your framework.*
+_This guide covers the deployment process for both React Native (bare workflow) and Expo (managed workflow). For specific issues with your particular setup, consult the official documentation for your framework._

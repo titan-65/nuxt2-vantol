@@ -1,136 +1,155 @@
 <script setup lang="ts">
-import { ref, onMounted, nextTick } from 'vue'
-import { Send, Bot, User, Sparkles, Terminal, Code2, Cpu, FileText, CheckCircle2, ChevronDown, ChevronRight, Loader2 } from 'lucide-vue-next'
+import { ref, onMounted, nextTick } from "vue";
+import {
+  Send,
+  Bot,
+  User,
+  Sparkles,
+  Terminal,
+  Code2,
+  Cpu,
+  FileText,
+  CheckCircle2,
+  ChevronDown,
+  ChevronRight,
+  Loader2,
+} from "lucide-vue-next";
 
 interface ToolCall {
-  tool: string
-  args: any
-  result: any
+  tool: string;
+  args: any;
+  result: any;
 }
 
 interface Message {
-  id: string
-  role: 'user' | 'assistant'
-  content: string
+  id: string;
+  role: "user" | "assistant";
+  content: string;
   metadata?: {
-    framework?: string
-    model?: string
-    activeSkill?: string | null
-    toolCalls?: ToolCall[]
-    subagentLogs?: string[]
-    timestamp?: string
-  }
+    framework?: string;
+    model?: string;
+    activeSkill?: string | null;
+    toolCalls?: ToolCall[];
+    subagentLogs?: string[];
+    timestamp?: string;
+  };
 }
 
 const props = defineProps<{
-  initialPrompt?: string
-}>()
+  initialPrompt?: string;
+}>();
 
 const messages = ref<Message[]>([
   {
-    id: '1',
-    role: 'assistant',
+    id: "1",
+    role: "assistant",
     content: `Hello! I am the **Eve AI Agent** powering [vantolbennett.com](/learn). 
 
 I run on Vercel's **Eve Framework** — a filesystem-first architecture for durable AI agents.
 
 How can I help you today? Ask me about Eve architecture, tutorial series, or search the site!`,
     metadata: {
-      framework: 'Vercel Eve',
-      model: 'openai/gpt-5.4-mini',
-      timestamp: new Date().toISOString()
-    }
-  }
-])
+      framework: "Vercel Eve",
+      model: "openai/gpt-5.4-mini",
+      timestamp: new Date().toISOString(),
+    },
+  },
+]);
 
-const input = ref('')
-const isLoading = ref(false)
-const chatContainer = ref<HTMLElement | null>(null)
-const expandedTools = ref<Record<string, boolean>>({})
+const input = ref("");
+const isLoading = ref(false);
+const chatContainer = ref<HTMLElement | null>(null);
+const expandedTools = ref<Record<string, boolean>>({});
 
 const quickPrompts = [
-  'What is the Eve framework?',
-  'Show me step 1 of the Eve Core tutorial',
-  'Search for Null Agent blog posts',
-  'Run agent.ts code in the Sandbox'
-]
+  "What is the Eve framework?",
+  "Show me step 1 of the Eve Core tutorial",
+  "Search for Null Agent blog posts",
+  "Run agent.ts code in the Sandbox",
+];
 
 function toggleTool(id: string) {
-  expandedTools.value[id] = !expandedTools.value[id]
+  expandedTools.value[id] = !expandedTools.value[id];
 }
 
 function scrollToBottom() {
   nextTick(() => {
     if (chatContainer.value) {
-      chatContainer.value.scrollTop = chatContainer.value.scrollHeight
+      chatContainer.value.scrollTop = chatContainer.value.scrollHeight;
     }
-  })
+  });
 }
 
 async function sendMessage(textToSend?: string) {
-  const text = textToSend || input.value.trim()
-  if (!text || isLoading.value) return
+  const text = textToSend || input.value.trim();
+  if (!text || isLoading.value) return;
 
   const userMsg: Message = {
     id: Date.now().toString(),
-    role: 'user',
-    content: text
-  }
+    role: "user",
+    content: text,
+  };
 
-  messages.value.push(userMsg)
-  if (!textToSend) input.value = ''
-  isLoading.value = true
-  scrollToBottom()
+  messages.value.push(userMsg);
+  if (!textToSend) input.value = "";
+  isLoading.value = true;
+  scrollToBottom();
 
   try {
     const res = await $fetch<{
-      role: 'assistant'
-      content: string
-      metadata: any
-    }>('/api/eve/chat', {
-      method: 'POST',
+      role: "assistant";
+      content: string;
+      metadata: any;
+    }>("/api/eve/chat", {
+      method: "POST",
       body: {
-        messages: messages.value.map(m => ({ role: m.role, content: m.content }))
-      }
-    })
+        messages: messages.value.map((m) => ({ role: m.role, content: m.content })),
+      },
+    });
 
     messages.value.push({
       id: (Date.now() + 1).toString(),
-      role: 'assistant',
+      role: "assistant",
       content: res.content,
-      metadata: res.metadata
-    })
+      metadata: res.metadata,
+    });
   } catch (err: any) {
     messages.value.push({
       id: (Date.now() + 1).toString(),
-      role: 'assistant',
-      content: 'Sorry, an error occurred while communicating with the Eve Agent. Please try again.'
-    })
+      role: "assistant",
+      content: "Sorry, an error occurred while communicating with the Eve Agent. Please try again.",
+    });
   } finally {
-    isLoading.value = false
-    scrollToBottom()
+    isLoading.value = false;
+    scrollToBottom();
   }
 }
 
 onMounted(() => {
   if (props.initialPrompt) {
-    sendMessage(props.initialPrompt)
+    sendMessage(props.initialPrompt);
   }
-})
+});
 </script>
 
 <template>
-  <div class="flex flex-col h-full bg-[#0a0a0a] border border-white/10 rounded-2xl overflow-hidden shadow-2xl">
+  <div
+    class="flex flex-col h-full bg-[#0a0a0a] border border-white/10 rounded-2xl overflow-hidden shadow-2xl"
+  >
     <!-- Chat Header -->
     <div class="px-5 py-4 bg-[#111] border-b border-white/10 flex items-center justify-between">
       <div class="flex items-center gap-3">
-        <div class="w-8 h-8 rounded-lg bg-[#f5c542]/10 border border-[#f5c542]/30 flex items-center justify-center text-[#f5c542]">
+        <div
+          class="w-8 h-8 rounded-lg bg-[#f5c542]/10 border border-[#f5c542]/30 flex items-center justify-center text-[#f5c542]"
+        >
           <Bot class="w-4 h-4" />
         </div>
         <div>
           <div class="flex items-center gap-2">
             <h3 class="text-sm font-semibold text-white">Eve AI Agent</h3>
-            <span class="px-2 py-0.5 text-[10px] font-mono bg-[#f5c542]/10 text-[#f5c542] border border-[#f5c542]/30 rounded-full font-semibold">
+            <span
+              class="px-2 py-0.5 text-[10px] font-mono bg-[#f5c542]/10 text-[#f5c542] border border-[#f5c542]/30 rounded-full font-semibold"
+            >
               FILESYSTEM FIRST
             </span>
           </div>
@@ -149,31 +168,47 @@ onMounted(() => {
       <div v-for="msg in messages" :key="msg.id" class="flex flex-col gap-2">
         <!-- User Message -->
         <div v-if="msg.role === 'user'" class="flex justify-end">
-          <div class="max-w-[85%] bg-white/10 text-white rounded-2xl px-4 py-3 text-sm leading-relaxed border border-white/10">
+          <div
+            class="max-w-[85%] bg-white/10 text-white rounded-2xl px-4 py-3 text-sm leading-relaxed border border-white/10"
+          >
             {{ msg.content }}
           </div>
         </div>
 
         <!-- Assistant Message -->
         <div v-else class="flex gap-3 max-w-[92%]">
-          <div class="w-7 h-7 rounded-lg bg-[#f5c542] text-black font-bold flex items-center justify-center shrink-0 mt-1 shadow-lg shadow-[#f5c542]/20">
+          <div
+            class="w-7 h-7 rounded-lg bg-[#f5c542] text-black font-bold flex items-center justify-center shrink-0 mt-1 shadow-lg shadow-[#f5c542]/20"
+          >
             <Sparkles class="w-3.5 h-3.5" />
           </div>
 
           <div class="flex-1 space-y-3">
             <!-- Active Skill Badge -->
-            <div v-if="msg.metadata?.activeSkill" class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-amber-500/10 border border-amber-500/30 text-amber-400 rounded-md text-xs font-mono">
+            <div
+              v-if="msg.metadata?.activeSkill"
+              class="inline-flex items-center gap-1.5 px-2.5 py-1 bg-amber-500/10 border border-amber-500/30 text-amber-400 rounded-md text-xs font-mono"
+            >
               <FileText class="w-3.5 h-3.5" />
-              <span>Skill Loaded: <strong>{{ msg.metadata.activeSkill }}</strong></span>
+              <span
+                >Skill Loaded: <strong>{{ msg.metadata.activeSkill }}</strong></span
+              >
             </div>
 
             <!-- Subagent Execution Logs -->
-            <div v-if="msg.metadata?.subagentLogs?.length" class="bg-purple-950/20 border border-purple-500/30 rounded-lg p-3 font-mono text-xs text-purple-300 space-y-1">
+            <div
+              v-if="msg.metadata?.subagentLogs?.length"
+              class="bg-purple-950/20 border border-purple-500/30 rounded-lg p-3 font-mono text-xs text-purple-300 space-y-1"
+            >
               <div class="flex items-center gap-1.5 text-purple-400 font-bold mb-1">
                 <Cpu class="w-3.5 h-3.5" />
                 <span>Subagent Delegation ('researcher')</span>
               </div>
-              <p v-for="(log, idx) in msg.metadata.subagentLogs" :key="idx" class="text-[11px] opacity-85">
+              <p
+                v-for="(log, idx) in msg.metadata.subagentLogs"
+                :key="idx"
+                class="text-[11px] opacity-85"
+              >
                 {{ log }}
               </p>
             </div>
@@ -192,26 +227,41 @@ onMounted(() => {
                 >
                   <div class="flex items-center gap-2">
                     <Terminal class="w-3.5 h-3.5 text-[#f5c542]" />
-                    <span>Tool Called: <strong class="text-white">{{ tc.tool }}</strong></span>
+                    <span
+                      >Tool Called: <strong class="text-white">{{ tc.tool }}</strong></span
+                    >
                   </div>
-                  <component :is="expandedTools[msg.id + '-' + idx] ? ChevronDown : ChevronRight" class="w-3.5 h-3.5 text-zinc-500" />
+                  <component
+                    :is="expandedTools[msg.id + '-' + idx] ? ChevronDown : ChevronRight"
+                    class="w-3.5 h-3.5 text-zinc-500"
+                  />
                 </button>
 
-                <div v-if="expandedTools[msg.id + '-' + idx]" class="p-3 bg-black/60 border-t border-white/10 font-mono space-y-2 text-[11px]">
+                <div
+                  v-if="expandedTools[msg.id + '-' + idx]"
+                  class="p-3 bg-black/60 border-t border-white/10 font-mono space-y-2 text-[11px]"
+                >
                   <div>
                     <span class="text-zinc-500">Inputs:</span>
-                    <pre class="text-amber-300 overflow-x-auto p-1.5 bg-zinc-950 rounded mt-0.5">{{ JSON.stringify(tc.args, null, 2) }}</pre>
+                    <pre class="text-amber-300 overflow-x-auto p-1.5 bg-zinc-950 rounded mt-0.5">{{
+                      JSON.stringify(tc.args, null, 2)
+                    }}</pre>
                   </div>
                   <div>
                     <span class="text-zinc-500">Output:</span>
-                    <pre class="text-emerald-400 overflow-x-auto p-1.5 bg-zinc-950 rounded mt-0.5">{{ JSON.stringify(tc.result, null, 2) }}</pre>
+                    <pre
+                      class="text-emerald-400 overflow-x-auto p-1.5 bg-zinc-950 rounded mt-0.5"
+                      >{{ JSON.stringify(tc.result, null, 2) }}</pre
+                    >
                   </div>
                 </div>
               </div>
             </div>
 
             <!-- Content text -->
-            <div class="bg-[#111] border border-white/10 rounded-2xl p-4 text-sm text-zinc-200 leading-relaxed whitespace-pre-wrap font-sans prose prose-invert max-w-none prose-a:text-[#f5c542]">
+            <div
+              class="bg-[#111] border border-white/10 rounded-2xl p-4 text-sm text-zinc-200 leading-relaxed whitespace-pre-wrap font-sans prose prose-invert max-w-none prose-a:text-[#f5c542]"
+            >
               {{ msg.content }}
             </div>
           </div>
@@ -219,8 +269,13 @@ onMounted(() => {
       </div>
 
       <!-- Loading state -->
-      <div v-if="isLoading" class="flex gap-3 max-w-[80%] items-center text-xs text-zinc-400 font-mono">
-        <div class="w-7 h-7 rounded-lg bg-[#f5c542]/20 border border-[#f5c542]/30 flex items-center justify-center text-[#f5c542]">
+      <div
+        v-if="isLoading"
+        class="flex gap-3 max-w-[80%] items-center text-xs text-zinc-400 font-mono"
+      >
+        <div
+          class="w-7 h-7 rounded-lg bg-[#f5c542]/20 border border-[#f5c542]/30 flex items-center justify-center text-[#f5c542]"
+        >
           <Loader2 class="w-4 h-4 animate-spin" />
         </div>
         <span>Eve Agent is executing filesystem tools & synthesizing answer...</span>
@@ -241,7 +296,10 @@ onMounted(() => {
     </div>
 
     <!-- Input Form -->
-    <form @submit.prevent="sendMessage()" class="p-4 bg-[#111] border-t border-white/10 flex items-center gap-3">
+    <form
+      @submit.prevent="sendMessage()"
+      class="p-4 bg-[#111] border-t border-white/10 flex items-center gap-3"
+    >
       <input
         v-model="input"
         type="text"
