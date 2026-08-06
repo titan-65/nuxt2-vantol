@@ -1,10 +1,13 @@
 # Handoff Report: Zero Language Lesson Proposals
 
 ## 1. Observation
+
 I directly observed the structure of the existing database lessons and the Zero language reference documentation.
 
 ### Database Format & Schema
+
 In `apps/zhyjen/convex/lessons.ts` (lines 32–237), the database lessons follow this structure:
+
 - `title` (string): Human-readable name.
 - `slug` (string): URL-friendly identifier.
 - `description` (string): Short overview.
@@ -18,6 +21,7 @@ In `apps/zhyjen/convex/lessons.ts` (lines 32–237), the database lessons follow
   - `codeExample` (string): Code snippet, CLI command, or configuration block.
 
 Six lessons currently exist in the database with orders 1 through 6:
+
 1. "HTML Foundations" (Beginner, order: 1, prerequisites: `[]`)
 2. "CSS Layout Basics" (Beginner, order: 2, prerequisites: `["html-foundations"]`)
 3. "JavaScript Interactions" (Beginner, order: 3, prerequisites: `["html-foundations"]`)
@@ -26,7 +30,9 @@ Six lessons currently exist in the database with orders 1 through 6:
 6. "Web Accessibility" (Beginner, order: 6, prerequisites: `["html-foundations"]`)
 
 ### ZeroLang Reference Details
+
 In `/Users/vantolbennett/.gemini/antigravity/brain/d66d2c6f-9796-408b-b651-6ad82b08c193/zerolang_reference.md`, the key specifications are:
+
 - **Philosophy**: Graph-first programming where the graph is the program database. Text is a projection, not the source of truth.
 - **The Daily Loop**: `zero query` -> `zero patch` -> `zero check` -> `zero test` -> `zero run`.
 - **Projections**: `zero export` (and `zero verify-projection` in CI/drift detection) for exporting text to review; `zero import` -> `zero check` for manual changes back into the graph.
@@ -37,6 +43,7 @@ In `/Users/vantolbennett/.gemini/antigravity/brain/d66d2c6f-9796-408b-b651-6ad82
 ---
 
 ## 2. Logic Chain
+
 1. Based on the `lessons.ts` order sequence (1–6), the new ZeroLang lessons must start at order `7` to avoid overlap.
 2. The prerequisites must refer to previous lesson slugs (e.g., the second lesson requires the first lesson, intermediate lessons require basic ones, etc.).
 3. The content must map directly to the technical details found in the `zerolang_reference.md` file (CLI syntax, concepts, target triple arguments).
@@ -53,12 +60,14 @@ In `/Users/vantolbennett/.gemini/antigravity/brain/d66d2c6f-9796-408b-b651-6ad82
 ---
 
 ## 3. Caveats
+
 - The ZeroLang environment and runtime are not live/executable locally, so the code snippets represent documentation-level CLI examples and hypothetical projections rather than runtime-validated syntax.
 - The proposal assumes the database schema expects lessons to be seeded in a single unified list in order, appending ZeroLang lessons to the web development ones.
 
 ---
 
 ## 4. Conclusion
+
 Below is the complete set of 8 ZeroLang lessons formatted as a JSON array matching the database schema.
 
 ```json
@@ -277,7 +286,9 @@ Below is the complete set of 8 ZeroLang lessons formatted as a JSON array matchi
 ---
 
 ## 5. Verification Method
+
 To verify that this proposal is correct and matches the structure of the database:
+
 1. Compare the key fields of each object in the proposed JSON array above with the schema types and existing objects in `apps/zhyjen/convex/lessons.ts`.
 2. Inspect `handoff.md` to ensure all fields are present for every single proposed lesson.
 3. Validate that the JSON structure is parseable.

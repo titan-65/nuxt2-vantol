@@ -15,8 +15,14 @@ export default defineTool({
     let logs: string[] = [];
 
     if (isTs) {
-      if (!input.code.includes("defineAgent") && !input.code.includes("defineTool") && !input.code.includes("defineMcpClientConnection") && !input.code.includes("defineSchedule")) {
-        validationResult = "Warning: TypeScript file does not use standard Eve helper functions (defineAgent, defineTool, defineMcpClientConnection, defineSchedule).";
+      if (
+        !input.code.includes("defineAgent") &&
+        !input.code.includes("defineTool") &&
+        !input.code.includes("defineMcpClientConnection") &&
+        !input.code.includes("defineSchedule")
+      ) {
+        validationResult =
+          "Warning: TypeScript file does not use standard Eve helper functions (defineAgent, defineTool, defineMcpClientConnection, defineSchedule).";
       } else {
         logs.push(`[Eve Compiler] Loaded TS module: ${input.filename}`);
         logs.push(`[Eve Sandbox] Evaluated input schemas and export defaults.`);

@@ -1,9 +1,11 @@
 # BRIEFING — 2026-06-15T23:32:27-05:00
 
 ## Mission
+
 Verify the correctness, completeness, and layout of AST Visualizer and Zero activities in apps/zhyjen.
 
 ## 🔒 My Identity
+
 - Archetype: reviewer-critic
 - Roles: reviewer, critic
 - Working directory: /Users/vantolbennett/Developer/2025/vantolbennett-blog/.agents/reviewer_milestone2_2
@@ -12,15 +14,18 @@ Verify the correctness, completeness, and layout of AST Visualizer and Zero acti
 - Instance: 1 of 1
 
 ## 🔒 Key Constraints
+
 - Review-only — do NOT modify implementation code
 - Run `vp check` and `vp test` to verify.
 - Network Restrictions: CODE_ONLY network mode.
 
 ## Current Parent
+
 - Conversation ID: 93d13174-090b-4693-bb8c-736290f0baff
 - Updated: 2026-06-15T23:32:27-05:00
 
 ## Review Scope
+
 - **Files to review**:
   - `apps/zhyjen/src/forge/ForgeWorkspace.tsx`
   - `apps/zhyjen/src/forge/AstVisualizer.tsx`
@@ -30,12 +35,15 @@ Verify the correctness, completeness, and layout of AST Visualizer and Zero acti
 - **Review criteria**: Correctness, completeness, styling/layout regressions, typescript compiler check, tests passing.
 
 ## Key Decisions Made
+
 - Initiated code investigation.
 
 ## Artifact Index
+
 - `/Users/vantolbennett/Developer/2025/vantolbennett-blog/.agents/reviewer_milestone2_2/handoff.md` — Handoff report containing quality review and adversarial challenge results.
 
 ## Review Checklist
+
 - **Items reviewed**:
   - None yet
 - **Verdict**: pending
@@ -44,6 +52,7 @@ Verify the correctness, completeness, and layout of AST Visualizer and Zero acti
   - Zero activities are synchronized correctly.
 
 ## Attack Surface
+
 - **Hypotheses tested**:
   - None yet
 - **Vulnerabilities found**:

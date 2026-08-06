@@ -1,4 +1,5 @@
 ## 2026-06-16T03:44:52Z
+
 You are the teamwork_preview_worker.
 Your working directory is `/Users/vantolbennett/Developer/2025/vantolbennett-blog/.agents/worker_lessons_1`.
 

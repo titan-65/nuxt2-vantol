@@ -10,6 +10,7 @@
   - `apps/zhyjen/src/lessons.verify.test.ts` (verified exactly 8 Zero activities seed and integrate AST Visualizer)
 - **Commands Executed**:
   - `vp test`:
+
     ```
     RUN  /Users/vantolbennett/Developer/2025/vantolbennett-blog/apps/zhyjen
 
@@ -22,8 +23,10 @@
     Test Files  5 passed (5)
     Tests  31 passed (31)
     ```
+
   - `vp check`: Completed successfully with `0 errors` and `21 warnings` after formatting fixes were applied automatically with `vp check --fix`.
   - `vp build`: Built the client app successfully in `1.61s` (`dist/assets/index-CADyvATm.js` size `3,541.26 kB`).
+
 - **Parser Regex Limitation**:
   `AstVisualizer.tsx` uses regular expressions to extract functions and variables:
   ```typescript
@@ -59,6 +62,7 @@ The AST Graph Visualizer is correct, robust, and performs well for normal educat
 ## 5. Verification Method
 
 To verify the test suite and checks:
+
 1. Navigate to `/Users/vantolbennett/Developer/2025/vantolbennett-blog/apps/zhyjen`
 2. Run `vp check` to check for formatting and lint issues.
 3. Run `vp test` to execute all 31 tests.

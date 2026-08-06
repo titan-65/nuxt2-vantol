@@ -1,15 +1,18 @@
 ## 2026-06-15T23:28:32Z
+
 You are a Worker agent.
 Your Working Directory: /Users/vantolbennett/Developer/2025/vantolbennett-blog/.agents/worker_milestone2_1
 
 Your task is to implement the AST Graph Visualizer features in the Forge editor and sync the Zero language activities in `activities.ts`.
 
 Inputs:
+
 - Explorer Design Reports:
   - `/Users/vantolbennett/Developer/2025/vantolbennett-blog/.agents/explorer_milestone1_3/handoff.md` (detailed layout logic, resizer math, AstVisualizer component blueprint, and activities updates)
   - `/Users/vantolbennett/Developer/2025/vantolbennett-blog/.agents/explorer_milestone1_1/handoff.md` (additional layout and UI design details)
 
 Implementation Tasks:
+
 1. Update `apps/zhyjen/src/forge/ForgeWorkspace.tsx`:
    - Add state for toggling visualizer visibility and state/handlers for resizable visualizer pane width (using pointer capture, co-existing with outer sidebars).
    - Render a toggle button inside the toolbar actions block (`.forge-editor-toolbar-actions`) using the `Network` icon from `lucide-react`. Make sure to import `Network` from `lucide-react` at the top of the file.

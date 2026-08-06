@@ -27,12 +27,12 @@ pnpm dev            # Start portfolio dev server
 
 ## Commands
 
-| Command | Description |
-|---|---|
-| `pnpm dev` | Start the Nuxt dev server |
-| `pnpm build` | Build portfolio for production |
-| `pnpm generate` | Static site generation |
-| `pnpm test` | Run tests across all packages |
+| Command         | Description                    |
+| --------------- | ------------------------------ |
+| `pnpm dev`      | Start the Nuxt dev server      |
+| `pnpm build`    | Build portfolio for production |
+| `pnpm generate` | Static site generation         |
+| `pnpm test`     | Run tests across all packages  |
 
 ## Packages
 
@@ -45,14 +45,14 @@ npm install @vvantol2000/teacher-toolkit
 ```
 
 ```ts
-import { toLetterGrade, weightedAverage, classStats } from '@vvantol2000/teacher-toolkit';
+import { toLetterGrade, weightedAverage, classStats } from "@vvantol2000/teacher-toolkit";
 
-toLetterGrade(87);                    // => "B"
+toLetterGrade(87); // => "B"
 weightedAverage([
-  { name: 'Quiz', score: 92, weight: 0.2 },
-  { name: 'Final', score: 85, weight: 0.8 },
-]);                                   // => 86.4
-classStats([90, 82, 75, 68, 55]);     // => { mean: 74, median: 75, ... }
+  { name: "Quiz", score: 92, weight: 0.2 },
+  { name: "Final", score: 85, weight: 0.8 },
+]); // => 86.4
+classStats([90, 82, 75, 68, 55]); // => { mean: 74, median: 75, ... }
 ```
 
 See [packages/teacher-toolkit/README.md](packages/teacher-toolkit/README.md) for full API.

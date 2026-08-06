@@ -1,4 +1,5 @@
 ## 2026-06-15T22:47:59Z
+
 Your working directory is `/Users/vantolbennett/Developer/2025/vantolbennett-blog/.agents/teamwork_preview_auditor_lessons_1`.
 Perform an integrity check on the implementation. Integrity mode: demo.
 Verify that the implementation in `apps/zhyjen/convex/lessons.ts` is authentic and conforms to instructions. Check that no fake or mocked outputs are used, no test values are hardcoded, and the seeding output is valid.

@@ -92,6 +92,7 @@ The database seeding mutation executes successfully, seeding all 14 lessons. The
 ## 5. Verification Method
 
 To independently execute and verify the checks:
+
 1. Run the seeding mutation:
    ```bash
    vp exec convex run lessons:seedStarterLessons

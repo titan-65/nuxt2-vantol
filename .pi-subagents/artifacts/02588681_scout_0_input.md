@@ -3,16 +3,19 @@
 Read-only trace in /Users/vantolbennett/Developer/2025/vantolbennett-blog/apps/web: determine why /presence-demo could 404 under Nuxt 4, how routes/pages are structured, and where main blog login/header authentication currently lives. Return exact files and minimal integration points. Do not edit.
 
 ---
+
 **Output:**
 Write your findings to exactly this path: /Users/vantolbennett/orca/workspaces/vantolbennett-blog/fixes-presence/.pi-subagents/artifacts/outputs/02588681/route-login.md
 This path is authoritative for this run.
 Ignore any other output filename or output path mentioned elsewhere, including output destinations in the base agent prompt, system prompt, or task instructions.
 
 ## Acceptance Contract
+
 Acceptance level: checked
 Completion is not accepted from prose alone. End with a structured acceptance report.
 
 Criteria:
+
 - criterion-1: Return concrete findings with file paths and severity when applicable
 
 Required evidence: changed-files, tests-added, commands-run, residual-risks, no-staged-files
@@ -22,6 +25,7 @@ Use empty arrays when no items apply; array fields contain strings unless object
 `criteriaSatisfied[].status` must be exactly one of: satisfied, not-satisfied, not-applicable.
 `commandsRun[].result` must be exactly one of: passed, failed, not-run.
 `manualNotes` and `notes` are optional strings; an empty string means no note and does not satisfy `manual-notes` evidence.
+
 ```acceptance-report
 {
   "criteriaSatisfied": [

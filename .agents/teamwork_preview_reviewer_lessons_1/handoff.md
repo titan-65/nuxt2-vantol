@@ -28,7 +28,7 @@ This report documents the review, verification, quality assessment, and adversar
     prerequisites: v.optional(v.array(v.string())),
     createdAt: v.number(),
     updatedAt: v.number(),
-  })
+  });
   ```
 - **Observation 2 (Lessons Content)**: We inspected `apps/zhyjen/convex/lessons.ts` (lines 237-474) and verified the 8 Zero language lessons are defined sequentially from order 7 to 14:
   - **Lesson 7**: `zero-intro-and-graph` (order: 7, skillLevel: "Beginner", area: "Learn", prerequisites: [])
@@ -85,20 +85,24 @@ The 8 Zero language lessons in `apps/zhyjen/convex/lessons.ts` are fully correct
 ### Findings
 
 #### [Minor] Finding 1: Type Definition Formatting Drift
+
 - **What**: Formatting issues detected in generated files.
 - **Where**: `apps/zhyjen/convex/_generated/api.d.ts` and `apps/zhyjen/convex/_generated/dataModel.d.ts`.
 - **Why**: Causes `vp check` tool to exit with code 1.
 - **Suggestion**: Run `vp check --fix` in `apps/zhyjen` to format these generated files.
 
 ### Verified Claims
+
 - **Convex Schema Compatibility** &rarr; verified via visual verification of the seed data structure against `schema.ts` &rarr; PASS
 - **ZeroLang Command Conformity** &rarr; verified via comparing command strings with `zerolang_reference.md` &rarr; PASS
 - **TypeScript Type Safety** &rarr; verified via running `vp lint` and checking compilation &rarr; PASS
 
 ### Coverage Gaps
+
 - None.
 
 ### Unverified Items
+
 - None.
 
 ---
@@ -110,22 +114,26 @@ The 8 Zero language lessons in `apps/zhyjen/convex/lessons.ts` are fully correct
 ### Challenges
 
 #### [Low] Challenge 1: Prerequisite Resolution Checks
+
 - **Assumption challenged**: Prerequisite references are sound and exist in the seeded data.
 - **Attack scenario**: A lesson references an invalid prerequisite, leading to broken client navigation.
 - **Blast radius**: User interface navigation errors.
 - **Mitigation**: We traced all prerequisite slugs in `lessons.ts` and verified they all reference valid slugs within the same seeded dataset.
 
 #### [Low] Challenge 2: Module Array Format Match
+
 - **Assumption challenged**: The seeded object module format matches the union type defined in `schema.ts`.
 - **Attack scenario**: The DB client crashes trying to write or read a structure mismatch.
 - **Blast radius**: Seeding mutation failure.
 - **Mitigation**: We verified the schema allows `v.object` with `title`, `body`, and `codeExample` (as a union with `v.string()`), which is exactly what is seeded.
 
 ### Stress Test Results
+
 - **Prerequisite DAG verification** &rarr; checked that all prerequisites trace back to lesson 7 &rarr; PASS
 - **Idempotency test** &rarr; verified that `seedStarterLessons` uses `db.replace` on duplicate slugs &rarr; PASS
 
 ### Unchallenged Areas
+
 - None.
 
 ---
@@ -133,6 +141,7 @@ The 8 Zero language lessons in `apps/zhyjen/convex/lessons.ts` are fully correct
 ## 7. Verification Method
 
 To verify these results independently:
+
 1. Run `vp lint` inside `apps/zhyjen` to confirm zero lint errors.
 2. Run `vp test` inside `apps/zhyjen` to ensure all tests pass.
 3. Open `apps/zhyjen/convex/lessons.ts` and verify the content of lessons with slugs starting with `zero-`.

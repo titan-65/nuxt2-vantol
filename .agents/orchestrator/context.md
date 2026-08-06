@@ -1,6 +1,7 @@
 # Zero Language Lessons - Curriculum Design
 
 ## Synthesized Lessons
+
 The following 8 lessons cover the complete spectrum of Zero programming language concepts (basics, graph editing, the daily loop, diagnostics, compilation, standard libraries, CI/CD, and collaboration workflows).
 
 ```typescript
