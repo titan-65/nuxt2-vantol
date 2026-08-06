@@ -3,16 +3,19 @@
 Read-only trace in /Users/vantolbennett/Developer/2025/vantolbennett-blog/packages/presence and apps/web: trace Easter egg trigger from keypress to wall open/sign request to server identity resolution. Identify why an already Better Auth GitHub logged-in blog user would or would not be recognized. Return exact files and minimal fixes. Do not edit.
 
 ---
+
 **Output:**
 Write your findings to exactly this path: /Users/vantolbennett/orca/workspaces/vantolbennett-blog/fixes-presence/.pi-subagents/artifacts/outputs/02588681/presence-flow.md
 This path is authoritative for this run.
 Ignore any other output filename or output path mentioned elsewhere, including output destinations in the base agent prompt, system prompt, or task instructions.
 
 ## Acceptance Contract
+
 Acceptance level: checked
 Completion is not accepted from prose alone. End with a structured acceptance report.
 
 Criteria:
+
 - criterion-1: Return concrete findings with file paths and severity when applicable
 
 Required evidence: changed-files, tests-added, commands-run, residual-risks, no-staged-files
@@ -22,6 +25,7 @@ Use empty arrays when no items apply; array fields contain strings unless object
 `criteriaSatisfied[].status` must be exactly one of: satisfied, not-satisfied, not-applicable.
 `commandsRun[].result` must be exactly one of: passed, failed, not-run.
 `manualNotes` and `notes` are optional strings; an empty string means no note and does not satisfy `manual-notes` evidence.
+
 ```acceptance-report
 {
   "criteriaSatisfied": [

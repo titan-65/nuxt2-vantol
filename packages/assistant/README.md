@@ -16,18 +16,18 @@ Add `nuxt-assistant` to `nuxt.config.ts`:
 
 ```ts
 export default defineNuxtConfig({
-  modules: ['nuxt-assistant'],
+  modules: ["nuxt-assistant"],
   assistant: {
     enabled: true,
     autoMount: true,
-    shortcut: ['Cmd+K', 'Ctrl+K'],
-    position: 'bottom-right',
+    shortcut: ["Cmd+K", "Ctrl+K"],
+    position: "bottom-right",
     persona: {
-      name: 'Nox',
-      avatar: '/eve.png',
-      title: 'Personal Assistant',
-      greeting: 'Hi! Ask me anything about projects, articles, or site navigation!'
-    }
-  }
-})
+      name: "Nox",
+      avatar: "/eve.png",
+      title: "Personal Assistant",
+      greeting: "Hi! Ask me anything about projects, articles, or site navigation!",
+    },
+  },
+});
 ```

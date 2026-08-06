@@ -29,6 +29,7 @@ src/tools/
 ### Task 1: Trash Management Module
 
 **Files:**
+
 - Create: `src/tools/trash.ts`
 - Test: `tests/tools/trash.test.ts`
 
@@ -42,7 +43,7 @@ import { tmpdir } from "node:os";
 
 describe("TrashManager", () => {
   const testDir = join(tmpdir(), "null-agent-trash-test");
-  
+
   beforeEach(async () => {
     // Clean up test directory
   });
@@ -120,25 +121,22 @@ async function writeUndoLog(entries: TrashEntry[]): Promise<void> {
   await writeFile(UNDO_FILE, JSON.stringify(entries, null, 2), "utf-8");
 }
 
-export async function moveToTrash(
-  filePath: string,
-  rootBoundary: string
-): Promise<TrashEntry> {
+export async function moveToTrash(filePath: string, rootBoundary: string): Promise<TrashEntry> {
   // Validate path is within root boundary
-  const resolvedPath = await import("node:path").then(p => p.resolve(filePath));
-  const resolvedBoundary = await import("node:path").then(p => p.resolve(rootBoundary));
-  
+  const resolvedPath = await import("node:path").then((p) => p.resolve(filePath));
+  const resolvedBoundary = await import("node:path").then((p) => p.resolve(rootBoundary));
+
   if (!resolvedPath.startsWith(resolvedBoundary)) {
     throw new Error(`Path ${filePath} is outside root boundary ${rootBoundary}`);
   }
 
   const trashDir = await ensureTrashDir();
   const id = generateId();
-  const fileName = await import("node:path").then(p => p.basename(filePath));
+  const fileName = await import("node:path").then((p) => p.basename(filePath));
   const trashPath = join(trashDir, `${id}_${fileName}`);
-  
+
   await rename(filePath, trashPath);
-  
+
   const entry: TrashEntry = {
     id,
     originalPath: filePath,
@@ -146,11 +144,11 @@ export async function moveToTrash(
     timestamp: Date.now(),
     operation: "delete",
   };
-  
+
   const entries = await readUndoLog();
   entries.push(entry);
   await writeUndoLog(entries);
-  
+
   return entry;
 }
 
@@ -160,19 +158,19 @@ export async function getTrashEntries(): Promise<TrashEntry[]> {
 
 export async function restore(trashPath: string): Promise<string> {
   const entries = await readUndoLog();
-  const entry = entries.find(e => e.trashPath === trashPath);
-  
+  const entry = entries.find((e) => e.trashPath === trashPath);
+
   if (!entry) {
     throw new Error(`Trash entry not found: ${trashPath}`);
   }
-  
+
   await mkdir(dirname(entry.originalPath), { recursive: true });
   await rename(trashPath, entry.originalPath);
-  
+
   // Remove from undo log
-  const updatedEntries = entries.filter(e => e.id !== entry.id);
+  const updatedEntries = entries.filter((e) => e.id !== entry.id);
   await writeUndoLog(updatedEntries);
-  
+
   return entry.originalPath;
 }
 ```
@@ -194,6 +192,7 @@ git commit -m "feat: add trash management module for undo/restore"
 ### Task 2: file_move Tool
 
 **Files:**
+
 - Create: `src/tools/file-move.ts`
 - Test: `tests/tools/file-move.test.ts`
 
@@ -212,17 +211,17 @@ describe("file_move tool", () => {
     const { fileMoveTool } = await import("../../src/tools/file-move.ts");
     const source = join(testDir, "source.txt");
     const dest = join(testDir, "dest.txt");
-    
+
     await writeFile(source, "test content");
     const result = await fileMoveTool.execute({ source, destination: dest });
-    
+
     expect(result.isError).toBe(false);
     expect(result.content).toContain("Moved");
-    
+
     // Verify file exists at dest
     const content = await readFile(dest, "utf-8");
     expect(content).toBe("test content");
-    
+
     // Verify source no longer exists
     await expect(readFile(source, "utf-8")).rejects.toThrow();
   });
@@ -234,7 +233,7 @@ describe("file_move tool", () => {
       destination: "/tmp/malicious",
       rootBoundary: testDir,
     });
-    
+
     expect(result.isError).toBe(true);
     expect(result.content).toContain("outside root boundary");
   });
@@ -287,20 +286,25 @@ export const fileMoveTool: ToolDefinition = {
 
     try {
       const resolvedSource = isAbsolute(source) ? source : resolve(rootBoundary, source);
-      const resolvedDest = isAbsolute(destination) ? destination : resolve(rootBoundary, destination);
+      const resolvedDest = isAbsolute(destination)
+        ? destination
+        : resolve(rootBoundary, destination);
       const resolvedBoundary = resolve(rootBoundary);
 
       // Security check
-      if (!resolvedSource.startsWith(resolvedBoundary) || !resolvedDest.startsWith(resolvedBoundary)) {
+      if (
+        !resolvedSource.startsWith(resolvedBoundary) ||
+        !resolvedDest.startsWith(resolvedBoundary)
+      ) {
         return { content: `Error: Path is outside root boundary ${rootBoundary}`, isError: true };
       }
 
       // Create destination directory if needed
       await mkdir(dirname(resolvedDest), { recursive: true });
-      
+
       // Move the file
       await rename(resolvedSource, resolvedDest);
-      
+
       // Record undo info (move can be undone by moving back)
       const undoEntry = {
         operation: "move",
@@ -311,7 +315,7 @@ export const fileMoveTool: ToolDefinition = {
       const undoFile = resolve(rootBoundary, ".null-agent-undo.json");
       try {
         const { readFile, writeFile: write } = await import("node:fs/promises");
-        let undoData: typeof undoEntry[] = [];
+        let undoData: (typeof undoEntry)[] = [];
         try {
           const content = await readFile(undoFile, "utf-8");
           undoData = JSON.parse(content);
@@ -322,7 +326,10 @@ export const fileMoveTool: ToolDefinition = {
 
       return { content: `Moved ${source} to ${destination}` };
     } catch (error) {
-      return { content: `Error moving file: ${error instanceof Error ? error.message : String(error)}`, isError: true };
+      return {
+        content: `Error moving file: ${error instanceof Error ? error.message : String(error)}`,
+        isError: true,
+      };
     }
   },
 };
@@ -345,6 +352,7 @@ git commit -m "feat: add file_move tool"
 ### Task 3: file_copy Tool
 
 **Files:**
+
 - Create: `src/tools/file-copy.ts`
 - Test: `tests/tools/file-copy.test.ts`
 
@@ -363,12 +371,12 @@ describe("file_copy tool", () => {
     const { fileCopyTool } = await import("../../src/tools/file-copy.ts");
     const source = join(testDir, "source.txt");
     const dest = join(testDir, "dest.txt");
-    
+
     await writeFile(source, "test content");
     const result = await fileCopyTool.execute({ source, destination: dest });
-    
+
     expect(result.isError).toBe(false);
-    
+
     // Both files should exist
     const sourceContent = await readFile(source, "utf-8");
     const destContent = await readFile(dest, "utf-8");
@@ -379,10 +387,10 @@ describe("file_copy tool", () => {
     const { fileCopyTool } = await import("../../src/tools/file-copy.ts");
     const source = join(testDir, "source.txt");
     const dest = join(testDir, "nested/deep/dest.txt");
-    
+
     await writeFile(source, "test content");
     const result = await fileCopyTool.execute({ source, destination: dest });
-    
+
     expect(result.isError).toBe(false);
     const content = await readFile(dest, "utf-8");
     expect(content).toBe("test content");
@@ -435,10 +443,15 @@ export const fileCopyTool: ToolDefinition = {
 
     try {
       const resolvedSource = isAbsolute(source) ? source : resolve(rootBoundary, source);
-      const resolvedDest = isAbsolute(destination) ? destination : resolve(rootBoundary, destination);
+      const resolvedDest = isAbsolute(destination)
+        ? destination
+        : resolve(rootBoundary, destination);
       const resolvedBoundary = resolve(rootBoundary);
 
-      if (!resolvedSource.startsWith(resolvedBoundary) || !resolvedDest.startsWith(resolvedBoundary)) {
+      if (
+        !resolvedSource.startsWith(resolvedBoundary) ||
+        !resolvedDest.startsWith(resolvedBoundary)
+      ) {
         return { content: `Error: Path is outside root boundary ${rootBoundary}`, isError: true };
       }
 
@@ -447,7 +460,10 @@ export const fileCopyTool: ToolDefinition = {
 
       return { content: `Copied ${source} to ${destination}` };
     } catch (error) {
-      return { content: `Error copying file: ${error instanceof Error ? error.message : String(error)}`, isError: true };
+      return {
+        content: `Error copying file: ${error instanceof Error ? error.message : String(error)}`,
+        isError: true,
+      };
     }
   },
 };
@@ -470,6 +486,7 @@ git commit -m "feat: add file_copy tool"
 ### Task 4: file_delete Tool
 
 **Files:**
+
 - Create: `src/tools/file-delete.ts`
 - Test: `tests/tools/file-delete.test.ts`
 
@@ -488,17 +505,17 @@ describe("file_delete tool", () => {
     const { fileDeleteTool } = await import("../../src/tools/file-delete.ts");
     const { getTrashEntries } = await import("../../src/tools/trash.ts");
     const filePath = join(testDir, "to-delete.txt");
-    
+
     await writeFile(filePath, "test content");
     const result = await fileDeleteTool.execute({ path: filePath, rootBoundary: testDir });
-    
+
     expect(result.isError).toBe(false);
     expect(result.content).toContain("trash");
-    
+
     // Verify trash entry was created
     const entries = await getTrashEntries();
-    expect(entries.some(e => e.originalPath === filePath)).toBe(true);
-    
+    expect(entries.some((e) => e.originalPath === filePath)).toBe(true);
+
     // Verify original file no longer exists
     await expect(readFile(filePath, "utf-8")).rejects.toThrow();
   });
@@ -549,7 +566,10 @@ export const fileDeleteTool: ToolDefinition = {
       const entry = await moveToTrash(path, rootBoundary);
       return { content: `Deleted ${path}. Moved to trash. Use file_restore to undo.` };
     } catch (error) {
-      return { content: `Error deleting file: ${error instanceof Error ? error.message : String(error)}`, isError: true };
+      return {
+        content: `Error deleting file: ${error instanceof Error ? error.message : String(error)}`,
+        isError: true,
+      };
     }
   },
 };
@@ -572,6 +592,7 @@ git commit -m "feat: add file_delete tool with trash support"
 ### Task 5: file_glob Tool
 
 **Files:**
+
 - Create: `src/tools/file-glob.ts`
 - Test: `tests/tools/file-glob.test.ts`
 
@@ -588,18 +609,18 @@ describe("file_glob tool", () => {
 
   it("should find files matching pattern", async () => {
     const { fileGlobTool } = await import("../../src/tools/file-glob.ts");
-    
+
     // Create test files
     await mkdir(join(testDir, "src"), { recursive: true });
     await writeFile(join(testDir, "src", "a.ts"), "");
     await writeFile(join(testDir, "src", "b.ts"), "");
     await writeFile(join(testDir, "src", "c.js"), "");
-    
-    const result = await fileGlobTool.execute({ 
-      pattern: "**/*.ts", 
-      rootBoundary: testDir 
+
+    const result = await fileGlobTool.execute({
+      pattern: "**/*.ts",
+      rootBoundary: testDir,
     });
-    
+
     expect(result.isError).toBe(false);
     const files = JSON.parse(result.content);
     expect(files).toHaveLength(2);
@@ -608,17 +629,17 @@ describe("file_glob tool", () => {
 
   it("should respect ignore patterns", async () => {
     const { fileGlobTool } = await import("../../src/tools/file-glob.ts");
-    
+
     await mkdir(join(testDir, "node_modules", "pkg"), { recursive: true });
     await writeFile(join(testDir, "node_modules", "pkg", "index.js"), "");
     await writeFile(join(testDir, "src", "index.js"), "");
-    
-    const result = await fileGlobTool.execute({ 
-      pattern: "**/*.js", 
+
+    const result = await fileGlobTool.execute({
+      pattern: "**/*.js",
       rootBoundary: testDir,
-      options: { ignore: ["node_modules/**"] }
+      options: { ignore: ["node_modules/**"] },
     });
-    
+
     expect(result.isError).toBe(false);
     const files = JSON.parse(result.content);
     expect(files.every((f: string) => !f.includes("node_modules"))).toBe(true);
@@ -664,10 +685,15 @@ export const fileGlobTool: ToolDefinition = {
     {
       pattern: String({ description: "Glob pattern (e.g., **/*.ts)" }),
       rootBoundary: Optional(String({ description: "Root boundary for path validation" })),
-      options: Optional(Object({
-        ignore: Array(String()),
-        limit: Number(),
-      }, ["ignore", "limit"])),
+      options: Optional(
+        Object(
+          {
+            ignore: Array(String()),
+            limit: Number(),
+          },
+          ["ignore", "limit"],
+        ),
+      ),
     },
     ["pattern"],
   ),
@@ -683,7 +709,7 @@ export const fileGlobTool: ToolDefinition = {
     try {
       const resolvedBoundary = resolve(rootBoundary);
       const ignorePatterns = [...DEFAULT_IGNORE, ...(options.ignore || [])];
-      
+
       const files = await glob(pattern, {
         cwd: resolvedBoundary,
         ignore: ignorePatterns,
@@ -692,13 +718,14 @@ export const fileGlobTool: ToolDefinition = {
       });
 
       // Filter to ensure all results are within boundary
-      const filtered = files
-        .filter(f => f.startsWith(resolvedBoundary))
-        .slice(0, options.limit);
+      const filtered = files.filter((f) => f.startsWith(resolvedBoundary)).slice(0, options.limit);
 
       return { content: JSON.stringify(filtered) };
     } catch (error) {
-      return { content: `Error globbing: ${error instanceof Error ? error.message : String(error)}`, isError: true };
+      return {
+        content: `Error globbing: ${error instanceof Error ? error.message : String(error)}`,
+        isError: true,
+      };
     }
   },
 };
@@ -725,6 +752,7 @@ git commit -m "feat: add file_glob tool with tinyglobby"
 ### Task 6: file_restore Tool
 
 **Files:**
+
 - Create: `src/tools/file-restore.ts`
 - Test: `tests/tools/file-restore.test.ts`
 
@@ -742,16 +770,16 @@ describe("file_restore tool", () => {
   it("should list all trash entries", async () => {
     const { fileRestoreTool } = await import("../../src/tools/file-restore.ts");
     const { fileDeleteTool } = await import("../../src/tools/file-delete.ts");
-    
+
     // Delete some files
     const file1 = join(testDir, "file1.txt");
     const file2 = join(testDir, "file2.txt");
     await writeFile(file1, "content1");
     await writeFile(file2, "content2");
-    
+
     await fileDeleteTool.execute({ path: file1, rootBoundary: testDir });
     await fileDeleteTool.execute({ path: file2, rootBoundary: testDir });
-    
+
     const result = await fileRestoreTool.execute({ list: true });
     expect(result.isError).toBe(false);
     const entries = JSON.parse(result.content);
@@ -762,20 +790,20 @@ describe("file_restore tool", () => {
     const { fileRestoreTool } = await import("../../src/tools/file-restore.ts");
     const { fileDeleteTool } = await import("../../src/tools/file-delete.ts");
     const { readFile } = await import("node:fs/promises");
-    
+
     const filePath = join(testDir, "to-restore.txt");
     await writeFile(filePath, "original content");
-    
+
     await fileDeleteTool.execute({ path: filePath, rootBoundary: testDir });
-    
+
     // Get trash entries to find the trash path
     const listResult = await fileRestoreTool.execute({ list: true });
     const entries = JSON.parse(listResult.content);
     const entry = entries.find((e: any) => e.originalPath === filePath);
-    
+
     const restoreResult = await fileRestoreTool.execute({ trashPath: entry.trashPath });
     expect(restoreResult.isError).toBe(false);
-    
+
     // Verify file is restored
     const content = await readFile(filePath, "utf-8");
     expect(content).toBe("original content");
@@ -831,7 +859,10 @@ export const fileRestoreTool: ToolDefinition = {
       const originalPath = await restoreFromTrash(trashPath);
       return { content: `Restored ${originalPath}` };
     } catch (error) {
-      return { content: `Error restoring: ${error instanceof Error ? error.message : String(error)}`, isError: true };
+      return {
+        content: `Error restoring: ${error instanceof Error ? error.message : String(error)}`,
+        isError: true,
+      };
     }
   },
 };
@@ -854,6 +885,7 @@ git commit -m "feat: add file_restore tool"
 ### Task 7: file_bulk Tool
 
 **Files:**
+
 - Create: `src/tools/file-bulk.ts`
 - Test: `tests/tools/file-bulk.test.ts`
 
@@ -870,19 +902,19 @@ describe("file_bulk tool", () => {
 
   it("should execute multiple operations", async () => {
     const { fileBulkTool } = await import("../../src/tools/file-bulk.ts");
-    
+
     // Create test files
     await writeFile(join(testDir, "a.txt"), "a");
     await writeFile(join(testDir, "b.txt"), "b");
-    
+
     const operations = [
       { type: "copy", source: join(testDir, "a.txt"), destination: join(testDir, "a-copy.txt") },
       { type: "move", source: join(testDir, "b.txt"), destination: join(testDir, "b-moved.txt") },
     ];
-    
+
     const result = await fileBulkTool.execute({ operations, rootBoundary: testDir });
     expect(result.isError).toBe(false);
-    
+
     const results = JSON.parse(result.content);
     expect(results).toHaveLength(2);
     expect(results.every((r: any) => !r.error)).toBe(true);
@@ -890,16 +922,24 @@ describe("file_bulk tool", () => {
 
   it("should report partial failures", async () => {
     const { fileBulkTool } = await import("../../src/tools/file-bulk.ts");
-    
+
     const operations = [
-      { type: "copy", source: join(testDir, "nonexistent.txt"), destination: join(testDir, "dest.txt") },
-      { type: "copy", source: join(testDir, "existing.txt"), destination: join(testDir, "dest2.txt") },
+      {
+        type: "copy",
+        source: join(testDir, "nonexistent.txt"),
+        destination: join(testDir, "dest.txt"),
+      },
+      {
+        type: "copy",
+        source: join(testDir, "existing.txt"),
+        destination: join(testDir, "dest2.txt"),
+      },
     ];
     await writeFile(join(testDir, "existing.txt"), "content");
-    
+
     const result = await fileBulkTool.execute({ operations, rootBoundary: testDir });
     const results = JSON.parse(result.content);
-    
+
     expect(results[0].error).toBeTruthy();
     expect(results[1].error).toBeFalsy();
   });
@@ -921,7 +961,7 @@ import { fileCopyTool } from "./file-copy.ts";
 import { fileMoveTool } from "./file-move.ts";
 import { fileDeleteTool } from "./file-delete.ts";
 
-type Operation = 
+type Operation =
   | { type: "move"; source: string; destination: string }
   | { type: "copy"; source: string; destination: string }
   | { type: "delete"; path: string };
@@ -968,19 +1008,27 @@ export const fileBulkTool: ToolDefinition = {
       try {
         const opParams = { ...op, rootBoundary };
         let result;
-        
+
         switch (op.type) {
           case "move":
-            result = await fileMoveTool.execute({ source: op.source, destination: op.destination, rootBoundary });
+            result = await fileMoveTool.execute({
+              source: op.source,
+              destination: op.destination,
+              rootBoundary,
+            });
             break;
           case "copy":
-            result = await fileCopyTool.execute({ source: op.source, destination: op.destination, rootBoundary });
+            result = await fileCopyTool.execute({
+              source: op.source,
+              destination: op.destination,
+              rootBoundary,
+            });
             break;
           case "delete":
             result = await fileDeleteTool.execute({ path: op.path, rootBoundary });
             break;
         }
-        
+
         results.push({
           operation: op.type,
           success: !result.isError,
@@ -1017,11 +1065,13 @@ git commit -m "feat: add file_bulk tool for batch operations"
 ### Task 8: Update index.ts Exports
 
 **Files:**
+
 - Modify: `src/tools/index.ts`
 
 - [ ] **Step 1: Add exports for new tools**
 
 Modify `src/tools/index.ts` to add:
+
 ```typescript
 export { fileMoveTool } from "./file-move.ts";
 export { fileCopyTool } from "./file-copy.ts";
@@ -1033,8 +1083,16 @@ export type { TrashEntry } from "./trash.ts";
 ```
 
 Add to `builtinTools` array:
+
 ```typescript
-import { fileMoveTool, fileCopyTool, fileDeleteTool, fileGlobTool, fileRestoreTool, fileBulkTool } from "./index.ts";
+import {
+  fileMoveTool,
+  fileCopyTool,
+  fileDeleteTool,
+  fileGlobTool,
+  fileRestoreTool,
+  fileBulkTool,
+} from "./index.ts";
 
 export const builtinTools: ToolDefinition[] = [
   fileReadTool,

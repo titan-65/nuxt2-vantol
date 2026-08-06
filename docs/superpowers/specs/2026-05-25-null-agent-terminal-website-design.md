@@ -29,6 +29,7 @@ Single-page Vite app. No framework. xterm.js fills the viewport.
 Full-viewport terminal window. No browser chrome, nav, or scrollable page — just the terminal.
 
 Startup banner:
+
 ```
 null-agent v0.5.1 · web terminal
 Connected to http://localhost:3737
@@ -46,13 +47,13 @@ Type /help for commands
 
 ## Commands (typed at prompt)
 
-| Command | Action |
-|---------|--------|
+| Command          | Action                        |
+| ---------------- | ----------------------------- |
 | `/connect <url>` | Connect to a different server |
-| `/clear` | Clear terminal |
-| `/health` | Show server health |
-| `/history` | Show conversation history |
-| `/help` | List commands |
+| `/clear`         | Clear terminal                |
+| `/health`        | Show server health            |
+| `/history`       | Show conversation history     |
+| `/help`          | List commands                 |
 
 ## Tech Stack
 

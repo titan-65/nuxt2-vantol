@@ -1,2 +1,2 @@
-export { triggerDeploy } from './deploy';
-export type { DeployConfig, DeployResult, DeployError } from './types';
+export { triggerDeploy } from "./deploy";
+export type { DeployConfig, DeployResult, DeployError } from "./types";

@@ -1,6 +1,7 @@
 # Handoff Report: Zero AST Visualizer & Activities Sync Forensic Audit
 
 ## 1. Observation
+
 - **Component File**: `apps/zhyjen/src/forge/AstVisualizer.tsx`
   - Parser logic parses functions, variables, parameters, built-in imports, unbound functions, and dangling variables using explicit matching logic (lines 176–384).
   - Handles coordinate layouts and spacing dynamically (lines 387–425).
@@ -34,22 +35,27 @@
   - Running `vp check` in `/Users/vantolbennett/Developer/2025/vantolbennett-blog` completed with formatting-only warnings on unstaged files but zero compiler errors or TypeScript type-check violations.
 
 ## 2. Logic Chain
+
 1. **Dynamic Parser Logic**: We inspected `AstVisualizer.tsx` and observed that it parses code strings dynamically using regular expressions (`fnRegex`, `varMatch`, `callMatch`) rather than returning fixed mock graphs or constants for zero-lang files.
 2. **Dynamic DB Testing**: We observed that the `lessons.verify.test.ts` test queries the live local Convex DB via `vp exec convex run activities:list` and asserts database counts and content shapes, rather than asserting hardcoded mocked outputs.
 3. **No Facades or Mocks**: All AST Visualizer tests (`astVisualizer.test.tsx` and `astVisualizer.stress.test.ts`) assert output strings based on actual JSX render results (`renderToString`) under varied code inputs, confirming that the implementation matches the specifications dynamically.
 4. **Conclusion**: Since the visualizer, database seed mutations, and test suites are all dynamically implemented and behave correctly without hardcoding expected test outputs, the implementation does not cheat.
 
 ## 3. Caveats
+
 - The regular expression parser inside the AST Visualizer is a lightweight, line-by-line regex parser designed for educational visualization and playground use. It is not a fully compliant parser for Zero Lang's complete syntax spec and will not support nesting of braces inside functions.
 - The 5 tests in `packages/null-agent/tests/git.test.ts` fail due to local git/sandbox environment limits (independent of the AST Visualizer and synced activities).
 
 ## 4. Conclusion
+
 **Verdict**: CLEAN
 
 The Zero AST Visualizer and Synced Activities implementation is authentic, robust, and correctly verified by the test suite. No cheats, hardcoded test values, or dummy facade patterns are present.
 
 ## 5. Verification Method
+
 To verify the findings independently, run the following commands:
+
 1. Run AST Visualizer Tests:
    `vp test --run apps/zhyjen/src/astVisualizer.test.tsx`
 2. Run AST Parser Stress Tests:

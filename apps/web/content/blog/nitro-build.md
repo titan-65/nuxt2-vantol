@@ -28,10 +28,10 @@ In this post, we’ll explore how to **use Nitro**, walk through practical examp
 
 At its core, **Nitro** is a server engine and framework designed to make backend development simple, portable, and efficient. It gives you:
 
-- **Out-of-the-box server routing** with filesystem-based handlers  
-- **Multi-runtime support** — Node, Bun, Deno, and more  
-- **Zero-config deployment** for many platforms  
-- Hot reloading and developer experience conveniences  
+- **Out-of-the-box server routing** with filesystem-based handlers
+- **Multi-runtime support** — Node, Bun, Deno, and more
+- **Zero-config deployment** for many platforms
+- Hot reloading and developer experience conveniences
 - Minimal overhead — compiled output is very small :contentReference[oaicite:1]{index=1}
 
 Instead of wrestling with server setups or environment differences, Nitro lets you focus on your **handlers and business logic** while it handles the rest.
@@ -52,7 +52,7 @@ Nitro provides a starter template to help you bootstrap quickly (and you can eve
 npx create-nitro-app nitro-app
 cd nitro-app
 npm install
-````
+```
 
 Once installed, you’ll have a Nitro project with a directory structure like:
 
@@ -88,8 +88,8 @@ Create a file named `server/api/hello.ts`:
 
 ```ts
 export default defineEventHandler(() => {
-  return { message: "Hello from Nitro!" }
-})
+  return { message: "Hello from Nitro!" };
+});
 ```
 
 Visit `http://localhost:3000/api/hello` in the browser to see the JSON response. Nitro does the routing for you based on file paths. ([Nitro][1])
@@ -107,9 +107,9 @@ Nitro auto-imports useful utilities that help you build more expressive handlers
 
 ```ts
 export default defineEventHandler((event) => {
-  const { name } = getQuery(event)
-  return { greeting: `Hello ${name ?? "World"}` }
-})
+  const { name } = getQuery(event);
+  return { greeting: `Hello ${name ?? "World"}` };
+});
 ```
 
 Visit `/api/hello?name=Vantol` and Nitro will handle parsing automatically.
@@ -127,8 +127,8 @@ import { defineNitroConfig } from "nitro/config";
 
 export default defineNitroConfig({
   runtimeConfig: {
-    apiToken: "dev_token"
-  }
+    apiToken: "dev_token",
+  },
 });
 ```
 
@@ -164,9 +164,9 @@ Nitro outputs a production-ready server in the `.output` directory that can run 
 
 You can deploy to:
 
-* **Node.js servers** — run `.output/server/index.mjs`
-* **Edge platforms** — Cloudflare Workers, Deno Deploy with presets
-* **Serverless providers** — AWS Lambda, Vercel, Netlify, etc. ([Nitro][5])
+- **Node.js servers** — run `.output/server/index.mjs`
+- **Edge platforms** — Cloudflare Workers, Deno Deploy with presets
+- **Serverless providers** — AWS Lambda, Vercel, Netlify, etc. ([Nitro][5])
 
 Nitro often autodetects the hosting provider and configures itself accordingly — meaning fewer environment-specific tweaks. ([Nitro][5])
 
@@ -186,9 +186,9 @@ You can integrate Nitro with frontend frameworks like Vite to create **full-stac
 
 This setup enables:
 
-* Server APIs without CORS complexity
-* Sharing code between backend and frontend
-* Fast development workflows with hot reload
+- Server APIs without CORS complexity
+- Sharing code between backend and frontend
+- Fast development workflows with hot reload
 
 ---
 
@@ -196,14 +196,13 @@ This setup enables:
 
 **Nitro** is an incredibly flexible and powerful tool for modern backend development. Whether you’re building APIs, hybrid apps, or full-stack projects, Nitro offers:
 
-* **Filesystem routing and simple handlers**
-* **Configurable runtime environments**
-* **Cross-runtime deployment**
-* **Out-of-the-box utility functions and developer experience**
-* **Easy integration with frontend frameworks** ([Nitro][7])
+- **Filesystem routing and simple handlers**
+- **Configurable runtime environments**
+- **Cross-runtime deployment**
+- **Out-of-the-box utility functions and developer experience**
+- **Easy integration with frontend frameworks** ([Nitro][7])
 
 With these capabilities, Nitro enables developers to build fast, scalable, and portable server apps without sacrificing simplicity — making it a strong choice for teams building modern web applications. 🚀
-
 
 [1]: https://nitro.build/guide?utm_source=chatgpt.com "Docs - Nitro"
 [2]: https://nuxt.com/docs/3.x/guide/concepts/server-engine?utm_source=chatgpt.com "Server Engine · Nuxt Concepts v3"

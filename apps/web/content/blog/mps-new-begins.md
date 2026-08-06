@@ -35,22 +35,25 @@ Mashed Potato Studios works with startups, growing businesses, and established b
 Our services are designed to meet clients where they are, whether they’re starting from scratch or refining an existing product.
 
 ::BlogCard
+
 ### Core Focus Areas
-- Website design & development  
-- Web applications & SaaS platforms  
-- Branding & digital identity  
+
+- Website design & development
+- Web applications & SaaS platforms
+- Branding & digital identity
 - Performance, scalability, and user experience  
-::
+  ::
 
 We combine clean design with modern development practices to ensure every project is fast, accessible, and future-ready.
 
 ## Why the Website Matters
 
 Your website is often the **first impression** of your brand. At Mashed Potato Studios, we design websites that:
-- Communicate value clearly  
-- Load fast and work across all devices  
-- Convert visitors into customers  
-- Grow with your business  
+
+- Communicate value clearly
+- Load fast and work across all devices
+- Convert visitors into customers
+- Grow with your business
 
 ::BlogAlert{type="warning"}
 A slow, cluttered, or outdated website can cost you credibility—and customers.
@@ -68,3 +71,4 @@ const studioPhilosophy = {
 };
 
 console.log(studioPhilosophy);
+```

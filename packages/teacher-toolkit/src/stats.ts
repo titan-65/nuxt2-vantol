@@ -1,4 +1,4 @@
-import type { ClassStats } from './types';
+import type { ClassStats } from "./types";
 
 export function classStats(scores: number[]): ClassStats {
   if (scores.length === 0) {
@@ -11,13 +11,9 @@ export function classStats(scores: number[]): ClassStats {
   const mean = sum / count;
 
   const mid = Math.floor(count / 2);
-  const median =
-    count % 2 === 0
-      ? (sorted[mid - 1] + sorted[mid]) / 2
-      : sorted[mid];
+  const median = count % 2 === 0 ? (sorted[mid - 1] + sorted[mid]) / 2 : sorted[mid];
 
-  const variance =
-    sorted.reduce((acc, s) => acc + (s - mean) ** 2, 0) / count;
+  const variance = sorted.reduce((acc, s) => acc + (s - mean) ** 2, 0) / count;
   const stdDev = Math.round(Math.sqrt(variance) * 100) / 100;
 
   return {

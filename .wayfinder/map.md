@@ -9,15 +9,15 @@ A **feasibility verdict + recommended architecture** (no build in this effort) f
 automated system that, when a blog post or tutorial is **deployed** to this repo, has AI
 **draft a Blue Sky promo post** from the post's content and **commit the draft back to the
 repo** for human review/publish. This effort ends with a go/no-go decision and a design the
-user can green-light later — it does *not* ship code.
+user can green-light later — it does _not_ ship code.
 
 ## Settled design (from grilling — the thing being assessed)
 
-These are locked; tickets below assess *how* to build it, not whether we want it:
+These are locked; tickets below assess _how_ to build it, not whether we want it:
 
 - **Trigger:** repo deploy (Vercel deploy success), not a manual command.
 - **Input:** the post's **source content at deploy time** (markdown + frontmatter in
-  `apps/web/content/blog`), *not* a scrape of the rendered URL. The URL is the trigger handle
+  `apps/web/content/blog`), _not_ a scrape of the rendered URL. The URL is the trigger handle
   and becomes the link in the post.
 - **Output:** a Blue Sky promo draft (post text + the post URL) written to
   `social/drafts/<slug>.md`, committed to the repo.
@@ -35,7 +35,7 @@ These are locked; tickets below assess *how* to build it, not whether we want it
 - Tracker: local-markdown (`.wayfinder/`) — delete the folder to discard the whole map.
 - Skills to consult while resolving tickets: `/research` (API facts), `/prototype`
   (local-model quality), `/grilling` + `/domain-modeling` (worker design decisions).
-- Biggest feasibility risks, in order: (1) local-model *quality* for punchy social copy,
+- Biggest feasibility risks, in order: (1) local-model _quality_ for punchy social copy,
   (2) Vercel deploy webhook → which slug changed, (3) Blue Sky API specifics.
 
 ## Decisions so far

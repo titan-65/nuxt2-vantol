@@ -13,6 +13,7 @@
 ### Task 1: Create `webSearchTool` and `webFetchTool`
 
 **Files:**
+
 - Create: `packages/null-agent/src/tools/web.ts`
 - Test: `packages/null-agent/tests/web.test.ts`
 
@@ -288,6 +289,7 @@ git commit -m "feat: add web_search and web_fetch tools"
 ### Task 2: Register tools and export
 
 **Files:**
+
 - Modify: `packages/null-agent/src/tools/index.ts`
 - Modify: `packages/null-agent/src/index.ts`
 
@@ -362,6 +364,7 @@ git commit -m "feat: export web tools in tool registry and main entry"
 ### Task 3: Add Tavily to auth system
 
 **Files:**
+
 - Modify: `packages/null-agent/src/auth/index.ts`
 
 - [ ] **Step 1: Add Tavily to `AUTH_PROMPTS`**
@@ -398,6 +401,7 @@ git commit -m "feat: add Tavily API key to auth system"
 ### Task 4: Update README documentation
 
 **Files:**
+
 - Modify: `packages/null-agent/README.md`
 
 - [ ] **Step 1: Add Tavily to the providers table**
@@ -405,13 +409,13 @@ git commit -m "feat: add Tavily API key to auth system"
 Find the providers table (around line 95) and add Tavily row:
 
 ```markdown
-| Provider     | Env Variable         | Default Model              | Free Models                      |
-| ------------ | -------------------- | -------------------------- | -------------------------------- |
-| OpenAI       | `OPENAI_API_KEY`     | `gpt-4o`                   | —                                |
-| Anthropic    | `ANTHROPIC_API_KEY`  | `claude-sonnet-4-20250514` | —                                |
-| Google Gemini| `GEMINI_API_KEY`     | `gemini-2.0-flash`         | `gemini-2.0-flash` (free tier)   |
-| OpenRouter   | `OPENROUTER_API_KEY` | `google/gemini-2.0-flash`  | `gemini-2.0-flash`, `llama-3.1`  |
-| Tavily       | `TAVILY_API_KEY`     | —                          | 1000 searches/month (free tier)  |
+| Provider      | Env Variable         | Default Model              | Free Models                     |
+| ------------- | -------------------- | -------------------------- | ------------------------------- |
+| OpenAI        | `OPENAI_API_KEY`     | `gpt-4o`                   | —                               |
+| Anthropic     | `ANTHROPIC_API_KEY`  | `claude-sonnet-4-20250514` | —                               |
+| Google Gemini | `GEMINI_API_KEY`     | `gemini-2.0-flash`         | `gemini-2.0-flash` (free tier)  |
+| OpenRouter    | `OPENROUTER_API_KEY` | `google/gemini-2.0-flash`  | `gemini-2.0-flash`, `llama-3.1` |
+| Tavily        | `TAVILY_API_KEY`     | —                          | 1000 searches/month (free tier) |
 ```
 
 - [ ] **Step 2: Add web tools to the tools section**
@@ -421,10 +425,10 @@ After the Testing Tools table, add a new section:
 ```markdown
 ### Web Tools
 
-| Tool            | Name         | Description                                  |
-| --------------- | ------------ | -------------------------------------------- |
-| `webSearchTool` | `web_search` | Search the web via Tavily API                |
-| `webFetchTool`  | `web_fetch`  | Fetch URL content as readable text           |
+| Tool            | Name         | Description                        |
+| --------------- | ------------ | ---------------------------------- |
+| `webSearchTool` | `web_search` | Search the web via Tavily API      |
+| `webFetchTool`  | `web_fetch`  | Fetch URL content as readable text |
 
 Get a free Tavily API key: https://tavily.com/
 ```
@@ -448,7 +452,7 @@ export TAVILY_API_KEY='tvly-...'
 And update the auth command examples to mention tavily:
 
 ```markdown
-null-agent auth tavily       # Configure Tavily API key
+null-agent auth tavily # Configure Tavily API key
 ```
 
 - [ ] **Step 5: Commit**
@@ -463,6 +467,7 @@ git commit -m "docs: add web tools and Tavily to README"
 ### Task 5: Add tests for Tavily API key resolution
 
 **Files:**
+
 - Modify: `packages/null-agent/tests/web.test.ts`
 
 - [ ] **Step 1: Add credential resolution tests**

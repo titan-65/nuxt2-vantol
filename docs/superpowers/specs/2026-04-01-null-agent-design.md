@@ -17,6 +17,7 @@ Interface (CLI/API) → Agent (reasoning loop) → Tools (executors) → Provide
 Abstraction over LLM APIs with a common streaming interface.
 
 **Files:**
+
 - `src/providers/types.ts` — Message, ToolCall, StreamChunk types
 - `src/providers/base.ts` — BaseProvider abstract class
 - `src/providers/openai.ts` — OpenAI provider
@@ -24,10 +25,11 @@ Abstraction over LLM APIs with a common streaming interface.
 - `src/providers/index.ts` — createProvider() factory
 
 **Core interface:**
+
 ```ts
 interface Provider {
-  chat(messages: Message[], options?: ChatOptions): AsyncIterable<StreamChunk>
-  chatComplete(messages: Message[], options?: ChatOptions): Promise<string>
+  chat(messages: Message[], options?: ChatOptions): AsyncIterable<StreamChunk>;
+  chatComplete(messages: Message[], options?: ChatOptions): Promise<string>;
 }
 ```
 
@@ -38,6 +40,7 @@ Streams by default, with a convenience `chatComplete` wrapper. Factory reads API
 Functions the agent can call. Each tool has a name, description, JSON schema for input, and an execute function.
 
 **Files:**
+
 - `src/tools/types.ts` — ToolDefinition interface
 - `src/tools/registry.ts` — ToolRegistry (register, list, execute)
 - `src/tools/file-read.ts` — Read file contents
@@ -46,12 +49,13 @@ Functions the agent can call. Each tool has a name, description, JSON schema for
 - `src/tools/index.ts` — Built-in tools export
 
 **Core interface:**
+
 ```ts
 interface ToolDefinition {
-  name: string
-  description: string
-  parameters: JSONSchema
-  execute: (params: Record<string, unknown>) => Promise<ToolResult>
+  name: string;
+  description: string;
+  parameters: JSONSchema;
+  execute: (params: Record<string, unknown>) => Promise<ToolResult>;
 }
 ```
 
@@ -60,12 +64,14 @@ interface ToolDefinition {
 The reasoning loop: receive input → send to LLM with tools → execute tool calls → loop until done.
 
 **Files:**
+
 - `src/agent/types.ts` — AgentConfig, AgentState
 - `src/agent/loop.ts` — runAgent() core loop
 - `src/agent/context.ts` — System prompt, project context
 - `src/agent/index.ts` — Agent class
 
 **The loop:**
+
 1. User sends a message
 2. Agent builds context (system prompt + history + available tools)
 3. Sends to LLM provider
@@ -78,20 +84,23 @@ The reasoning loop: receive input → send to LLM with tools → execute tool ca
 CLI REPL + programmatic API exports.
 
 **Files:**
+
 - `src/cli/index.ts` — Entry point, arg parsing
 - `src/cli/repl.ts` — Interactive REPL loop
 - `src/cli/output.ts` — Formatted terminal output
 - `src/index.ts` — Public API exports
 
 **CLI usage:**
+
 - `null-agent` — starts REPL
 - `null-agent "explain this file"` — one-shot mode
 
 **Programmatic usage:**
+
 ```ts
-import { Agent, createProvider } from 'null-agent'
-const agent = new Agent({ provider: createProvider('anthropic') })
-const response = await agent.chat('Review this code for bugs')
+import { Agent, createProvider } from "null-agent";
+const agent = new Agent({ provider: createProvider("anthropic") });
+const response = await agent.chat("Review this code for bugs");
 ```
 
 ## Dependencies

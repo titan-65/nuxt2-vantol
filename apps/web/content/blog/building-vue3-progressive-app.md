@@ -7,11 +7,11 @@ tag: Coffee App
 rating: 0
 date: 2022-01-20
 readTime: 25
-img: 'https://res.cloudinary.com/ddszyeplg/image/upload/v1642478176/vantol/Screenshot_2021-07-29_at_11.07.21_PM_mepvjg.png'
+img: "https://res.cloudinary.com/ddszyeplg/image/upload/v1642478176/vantol/Screenshot_2021-07-29_at_11.07.21_PM_mepvjg.png"
 author:
   name: Vantol Bennett
   website: www.teammps.com
-  img: 'https://res.cloudinary.com/ddszyeplg/image/upload/v1636919468/DSC_0988_zsfhgy.jpg'
+  img: "https://res.cloudinary.com/ddszyeplg/image/upload/v1636919468/DSC_0988_zsfhgy.jpg"
 ---
 
 # What are We Making?
@@ -22,8 +22,7 @@ In this post, we will look at building a coffee web application with progressive
 
 <!--more-->
 
-Examining the workings of Vue3, creating components, using directives and use props to pass data to components.  We can also try and utilize mixins to reduce reptition of code by abstracting out similar features in these components. 
-
+Examining the workings of Vue3, creating components, using directives and use props to pass data to components. We can also try and utilize mixins to reduce reptition of code by abstracting out similar features in these components.
 
 ## Teacher Mode: What is a PWA?
 
@@ -39,15 +38,13 @@ Always test your PWA in an Incognito window or after clearing site data to ensur
 
 ## Lets Code!
 
-
-We will be using Vite for quick prototyping our app. 
-
+We will be using Vite for quick prototyping our app.
 
 ```
 npm init vite@latest
 ```
 
-Follow the prompt name your app whatever you like but we will call this vue3-koffee-lovers 
+Follow the prompt name your app whatever you like but we will call this vue3-koffee-lovers
 
 ```
 npm run dev
@@ -55,11 +52,11 @@ npm run dev
 
 Your development server should be running on http://localhost:3000
 
-## Layout 
+## Layout
 
-Generally its important to get the layout of your web application up and running by creating all the folders necessary for you web application to work smoothly. One such folder is your Components Folder. Vue.js is a progressive framework for building user interfaces, through the use of components. 
+Generally its important to get the layout of your web application up and running by creating all the folders necessary for you web application to work smoothly. One such folder is your Components Folder. Vue.js is a progressive framework for building user interfaces, through the use of components.
 
-## Setting up PWA 
+## Setting up PWA
 
 ```
 npm install vite-plugin-pwa workbox-precaching -D
@@ -67,8 +64,7 @@ npm install vite-plugin-pwa workbox-precaching -D
 
 ## Config
 
-
-Configuration can be done in vite.config.js file. Installation of the plugin would look something this: 
+Configuration can be done in vite.config.js file. Installation of the plugin would look something this:
 
 ```
 import { defineConfig } from "vite"
@@ -80,7 +76,8 @@ export default defineConfig({
 })
 
 ```
-This basically enables the plugin however there are additional setup required in order to get PWA to work correctly on devices. Look at the following code: 
+
+This basically enables the plugin however there are additional setup required in order to get PWA to work correctly on devices. Look at the following code:
 
 ```// https://vitejs.dev/config/
 export default defineConfig({
@@ -124,6 +121,7 @@ export default defineConfig({
 })
 
 ```
+
 Every PWA must have a manifest. A Manifest is a file that defines (in JSON format) the name of the application, the background color that it will have on the device once installed, the location, formats of the icons used and the root url for PWA (web application can have different url for web and PWA). That is, the minimum requirements necessary for PWA.
 
 Next is to config the Service Worker (this allows code to run in the background and secondary actions being able to work). Service Worker is located in src/swt.(js or ts)
@@ -138,7 +136,7 @@ self.addEventListener('message', (event) => {
 precacheAndRoute(self.__WB_MANIFEST)
 ```
 
-Finally! its just to register the PWA using a component. 
+Finally! its just to register the PWA using a component.
 
 ```
 <script lang="ts">

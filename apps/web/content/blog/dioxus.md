@@ -32,7 +32,7 @@ At its core, **Dioxus** is a developer-focused UI framework designed to simplify
 Dioxus lets you build UI with familiar **HTML and CSS** semantics using Rust, and compile to web (WASM), desktop, and mobile targets from a single codebase. :contentReference[oaicite:2]{index=2}
 ::
 
-The framework’s syntax is inspired by modern declarative UI paradigms, meaning you describe *what your UI should look like* instead of how to construct elements imperatively.
+The framework’s syntax is inspired by modern declarative UI paradigms, meaning you describe _what your UI should look like_ instead of how to construct elements imperatively.
 
 ---
 
@@ -40,10 +40,10 @@ The framework’s syntax is inspired by modern declarative UI paradigms, meaning
 
 Developers gravitate toward Dioxus because it offers:
 
-- **Cross-platform support** (web, desktop, mobile)  
-- **Rust’s performance and safety guarantees**  
-- **RSX**, a macro-based declarative UI syntax  
-- **Hot-reloading** for faster developer feedback  
+- **Cross-platform support** (web, desktop, mobile)
+- **Rust’s performance and safety guarantees**
+- **RSX**, a macro-based declarative UI syntax
+- **Hot-reloading** for faster developer feedback
 - Integrated tools for building, bundling, and deploying apps :contentReference[oaicite:3]{index=3}
 
 ::BlogAlert{type="warning"}
@@ -64,7 +64,7 @@ fn App() -> Element {
         div { "Hello, world!" }
     }
 }
-````
+```
 
 RSX syntax feels familiar to developers experienced with JSX or other declarative UI languages, but with the robustness of Rust’s compiler and type system powering it. ([Dioxus Labs][1])
 ::
@@ -91,13 +91,13 @@ To help developers get started, Dioxus provides a comprehensive tutorial where y
 
 ### What You’ll Learn
 
-* Tooling setup
-* Creating your first app project
-* Working with components
-* Adding state and interactivity
-* Fetching remote data
-* Routing and multi-page UI
-* Bundling and deployment ([Dioxus Labs][3])
+- Tooling setup
+- Creating your first app project
+- Working with components
+- Adding state and interactivity
+- Fetching remote data
+- Routing and multi-page UI
+- Bundling and deployment ([Dioxus Labs][3])
 
 This guided experience walks you from zero to a full app that runs across platforms, showing how Dioxus handles fullstack needs efficiently.
 
@@ -156,9 +156,9 @@ Dioxus doesn’t just handle the frontend—**it also integrates backend logic d
 
 ### Fullstack Features
 
-* Server functions callable from the UI
-* Integration with backend frameworks
-* Static and dynamic content rendering
+- Server functions callable from the UI
+- Integration with backend frameworks
+- Static and dynamic content rendering
   ::
 
 This makes Dioxus ideal for **end-to-end Rust applications** where both client and server share a language and ecosystem.

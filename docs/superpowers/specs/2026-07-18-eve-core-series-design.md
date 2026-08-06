@@ -33,9 +33,11 @@ Lessons extend the same project so the final state is one coherent, runnable age
 ## Lesson plan
 
 ### `index.md`
+
 Series landing: what Eve is ("Next.js for agents"), how the series works, difficulty/estimate, the doc-source note, and "start with step one."
 
 ### `01-instructions.md` — Meet your agent's brain
+
 - `instructions.md`: identity, behavior, guardrails in Markdown.
 - Run `npx eve@latest init my-agent` and talk to it.
 - Before: a blank project. After: a talking agent from one file.
@@ -43,30 +45,35 @@ Series landing: what Eve is ("Next.js for agents"), how the series works, diffic
 - Gotchas: instructions are the always-on system prompt; keep them specific.
 
 ### `02-agent-config.md` — Pick a model
+
 - `agent.ts` via `defineAgent`, choosing `model` (e.g. `openai/gpt-5.4-mini`), runtime options via AI Gateway.
 - Before: default model you didn't choose. After: explicit model + config.
 - DIY: add `agent.ts`, set a model, confirm it's used.
 - Gotchas: `eve` default model exists; `agent.ts` only needed to override.
 
 ### `03-tools.md` — Give it hands
+
 - `tools/get_weather.ts` with `defineTool` + Zod `inputSchema`; filename → tool name; no registry.
 - Before: agent that can only talk. After: agent calls a typed function.
 - DIY: create the weather tool, call it from chat, confirm typed input.
 - Gotchas: `inputSchema` with Zod; return shape is what the model sees.
 
 ### `04-skills.md` — Reusable playbooks
+
 - `skills/deep_research.md`: Markdown procedures loaded only when relevant (with frontmatter `description`).
 - Before: long procedure crammed into instructions. After: skill loaded on demand.
 - DIY: add a research skill, trigger it via a relevant prompt.
 - Gotchas: skills are discovered by `description`; they're not always in context.
 
 ### `05-channels.md` — Let people talk to it
+
 - Channel setup so the same agent serves CLI + web chat (per docs `channels/overview`).
 - Before: only local `eve` run. After: reachable from web/CLI from one codebase.
 - DIY: enable a web/chat channel, send a message, get a response.
 - Gotchas: one agent codebase, many surfaces; channel config is its own file under `channels/`.
 
 ### `06-run-and-recap.md` — Run it & go further
+
 - Durable sessions in action (state persists across turns, parks/resumes).
 - Full recap of the building blocks.
 - Pointers to advanced docs: `connections/`, `sandbox/`, `subagents/`, `schedules/`, hooks, evaluations, deploy to Vercel.

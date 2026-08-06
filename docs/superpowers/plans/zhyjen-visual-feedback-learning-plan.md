@@ -25,12 +25,12 @@ Why this works for beginners:
 
 ## Why visual feedback first
 
-| Approach | Risk for beginners | Visual feedback approach |
-|---|---|---|
-| Console-first coding | Output is text-only and abstract | Immediate visual change on the page |
-| Heavy setup | Installation, terminals, build tools | Browser-only editor + preview |
-| Theory-first lessons | Feels disconnected from real work | Learn by editing a real project |
-| Complex frameworks | Too many concepts at once | Plain HTML, CSS, then JavaScript |
+| Approach             | Risk for beginners                   | Visual feedback approach            |
+| -------------------- | ------------------------------------ | ----------------------------------- |
+| Console-first coding | Output is text-only and abstract     | Immediate visual change on the page |
+| Heavy setup          | Installation, terminals, build tools | Browser-only editor + preview       |
+| Theory-first lessons | Feels disconnected from real work    | Learn by editing a real project     |
+| Complex frameworks   | Too many concepts at once            | Plain HTML, CSS, then JavaScript    |
 
 ZhyJen should feel like a warm, guided sandbox — not a professional IDE.
 
@@ -130,23 +130,23 @@ ZhyJen should feel like a warm, guided sandbox — not a professional IDE.
 
 Every activity in the database should include:
 
-| Field | Purpose |
-|---|---|
-| `title` | Friendly, beginner-oriented name |
-| `slug` | URL-friendly identifier |
-| `description` | One-sentence summary |
-| `area` | Learn / Build / Reflect / Share |
-| `skillLevel` | Beginner / Intermediate / Advanced |
-| `timeNeeded` | Estimated time |
-| `order` | Sequence in the learning path |
-| `tools` | What the student needs |
-| `outcomes` | What they will learn |
-| `steps` | Step-by-step instructions |
-| `challenges` | Optional stretch tasks |
-| `reflectionQuestions` | Prompts for reflection |
-| `sharePrompt` | How to share the work |
-| `starterCode` | Working starter HTML/CSS/JS |
-| `solutionCode` | Reference solution for hints |
+| Field                 | Purpose                            |
+| --------------------- | ---------------------------------- |
+| `title`               | Friendly, beginner-oriented name   |
+| `slug`                | URL-friendly identifier            |
+| `description`         | One-sentence summary               |
+| `area`                | Learn / Build / Reflect / Share    |
+| `skillLevel`          | Beginner / Intermediate / Advanced |
+| `timeNeeded`          | Estimated time                     |
+| `order`               | Sequence in the learning path      |
+| `tools`               | What the student needs             |
+| `outcomes`            | What they will learn               |
+| `steps`               | Step-by-step instructions          |
+| `challenges`          | Optional stretch tasks             |
+| `reflectionQuestions` | Prompts for reflection             |
+| `sharePrompt`         | How to share the work              |
+| `starterCode`         | Working starter HTML/CSS/JS        |
+| `solutionCode`        | Reference solution for hints       |
 
 ## Workspace UX principles
 
@@ -196,13 +196,13 @@ Every activity in the database should include:
 
 The feedback loop itself can reflect Christian values without preaching:
 
-| Coding moment | Value connection |
-|---|---|
-| Seeing a small change help someone | Service |
-| Revising code patiently | Perseverance |
-| Writing clear, clean code | Excellence |
-| Sharing work with a mentor | Humility and community |
-| Building something that encourages others | Encouragement |
+| Coding moment                             | Value connection       |
+| ----------------------------------------- | ---------------------- |
+| Seeing a small change help someone        | Service                |
+| Revising code patiently                   | Perseverance           |
+| Writing clear, clean code                 | Excellence             |
+| Sharing work with a mentor                | Humility and community |
+| Building something that encourages others | Encouragement          |
 
 Reflection prompts should occasionally invite students to consider how their project could help or encourage someone else.
 

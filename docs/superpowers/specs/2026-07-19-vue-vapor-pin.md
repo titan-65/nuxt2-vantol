@@ -63,12 +63,12 @@ Only template-only SFCs and `<script setup>` SFCs are supported. The Options API
 ### 2. `vite.config.ts` (unchanged — standard plugin)
 
 ```ts
-import { defineConfig } from 'vite'
-import vue from '@vitejs/plugin-vue'
+import { defineConfig } from "vite";
+import vue from "@vitejs/plugin-vue";
 
 export default defineConfig({
   plugins: [vue()],
-})
+});
 ```
 
 ### 3. App entry — choose ONE
@@ -77,20 +77,20 @@ export default defineConfig({
 
 ```ts
 // src/main.ts
-import { createVaporApp } from 'vue'
-import App from './App.vue'
+import { createVaporApp } from "vue";
+import App from "./App.vue";
 
-createVaporApp(App).mount('#app')
+createVaporApp(App).mount("#app");
 ```
 
 **VDOM app that also hosts Vapor components** (interop):
 
 ```ts
 // src/main.ts
-import { createApp, vaporInteropPlugin } from 'vue'
-import App from './App.vue'
+import { createApp, vaporInteropPlugin } from "vue";
+import App from "./App.vue";
 
-createApp(App).use(vaporInteropPlugin).mount('#app')
+createApp(App).use(vaporInteropPlugin).mount("#app");
 ```
 
 Recommendation from the core team: keep distinct regions using one rendering mode; avoid deep mixed nesting.
@@ -103,8 +103,8 @@ Add a temporary check to the Vapor SFC:
 
 ```vue
 <script setup vapor>
-import { getCurrentInstance } from 'vue'
-console.log('vapor?', getCurrentInstance() === null)
+import { getCurrentInstance } from "vue";
+console.log("vapor?", getCurrentInstance() === null);
 </script>
 ```
 
@@ -138,25 +138,25 @@ Expected: `0` for a pure-Vapor app.
 
 ## Support matrix (vue@3.6.0-rc.1)
 
-| Area | Status |
-| --- | --- |
-| `<script setup vapor>` / `<template vapor>` | ✅ Supported (opt-in per SFC) |
-| Options API | ❌ Not supported |
-| `v-if` / `v-for` / `v-show` | ✅ Supported |
-| Dynamic components `<component :is>` | ✅ Supported (dynamic-component hydration fixes landed in rc.1) |
-| Slots / scoped slots | ✅ Supported — but `slots.default()` is NOT a side-effect-free dry run; let the template render slots |
-| SSR / hydration | ✅ Supported; feature-complete in rc.1 (active hydration bug-fixing during RC) |
-| Custom directives | ⚠️ Different `VaporDirective` interface (reactive getter `value`, returns cleanup fn) |
-| Event handling | ⚠️ Events delegated to `document`; ancestor `stopPropagation()` breaks delegated handlers. Use `@[event]`, `v-bind="{ onClick }"`, or `v-on="{}"` to attach directly |
-| Template refs on components | ⚠️ Do not expose `$el`, `$props`, `$attrs`, `$slots`, `$refs` |
-| `getCurrentInstance()` | ❌ Returns `null` in Vapor components (by design) |
-| `app.config.globalProperties` | ❌ Not available |
-| `@vue:xxx` per-element lifecycle events | ❌ Not supported |
-| `v-memo` | ❌ Not supported |
-| VDOM ⇄ Vapor interop | ⚠️ Via `vaporInteropPlugin`; props/events/slots covered, edge cases remain |
-| Third-party (VDOM) component libraries | ⚠️ Work only through interop; "rough edges" expected in Vapor Mode |
-| Devtools maturity | ⚠️ Immature — Vapor is RC; devtools support for Vapor internals still stabilizing |
-| Performance | ✅ On par with Solid / Svelte 5 in js-framework-benchmark |
+| Area                                        | Status                                                                                                                                                               |
+| ------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `<script setup vapor>` / `<template vapor>` | ✅ Supported (opt-in per SFC)                                                                                                                                        |
+| Options API                                 | ❌ Not supported                                                                                                                                                     |
+| `v-if` / `v-for` / `v-show`                 | ✅ Supported                                                                                                                                                         |
+| Dynamic components `<component :is>`        | ✅ Supported (dynamic-component hydration fixes landed in rc.1)                                                                                                      |
+| Slots / scoped slots                        | ✅ Supported — but `slots.default()` is NOT a side-effect-free dry run; let the template render slots                                                                |
+| SSR / hydration                             | ✅ Supported; feature-complete in rc.1 (active hydration bug-fixing during RC)                                                                                       |
+| Custom directives                           | ⚠️ Different `VaporDirective` interface (reactive getter `value`, returns cleanup fn)                                                                                |
+| Event handling                              | ⚠️ Events delegated to `document`; ancestor `stopPropagation()` breaks delegated handlers. Use `@[event]`, `v-bind="{ onClick }"`, or `v-on="{}"` to attach directly |
+| Template refs on components                 | ⚠️ Do not expose `$el`, `$props`, `$attrs`, `$slots`, `$refs`                                                                                                        |
+| `getCurrentInstance()`                      | ❌ Returns `null` in Vapor components (by design)                                                                                                                    |
+| `app.config.globalProperties`               | ❌ Not available                                                                                                                                                     |
+| `@vue:xxx` per-element lifecycle events     | ❌ Not supported                                                                                                                                                     |
+| `v-memo`                                    | ❌ Not supported                                                                                                                                                     |
+| VDOM ⇄ Vapor interop                        | ⚠️ Via `vaporInteropPlugin`; props/events/slots covered, edge cases remain                                                                                           |
+| Third-party (VDOM) component libraries      | ⚠️ Work only through interop; "rough edges" expected in Vapor Mode                                                                                                   |
+| Devtools maturity                           | ⚠️ Immature — Vapor is RC; devtools support for Vapor internals still stabilizing                                                                                    |
+| Performance                                 | ✅ On par with Solid / Svelte 5 in js-framework-benchmark                                                                                                            |
 
 ## Source URLs
 
@@ -172,4 +172,4 @@ Expected: `0` for a pure-Vapor app.
 - **Pre-release, not stable.** `3.6.0-rc.1` is an RC; APIs are feature-complete but bugs (esp. hydration/slots) are still being fixed. A later `3.6.0-rc.N` or `3.6.0` final may change minor behavior — re-verify before publishing lessons if a newer 3.6 tag ships.
 - **No dedicated Vapor page in stable vuejs.org docs yet.** Enablement details here come from the authoritative RC release notes, not the stable docs site. Watch for a `vuejs.org` Vapor guide + a Vue 3.6 blog post at https://blog.vuejs.org for canonical wording.
 - **Devtools + third-party libs are the weakest links.** Expect breakage when using VDOM component libraries inside Vapor regions; keep tutorial examples first-party.
-- **`getCurrentInstance() === null` verify** is documented behavior but is a runtime (not build-time) check; the `dist` grep for `createElementVNode` only proves Vapor for a *pure* `createVaporApp` build, not for interop builds.
+- **`getCurrentInstance() === null` verify** is documented behavior but is a runtime (not build-time) check; the `dist` grep for `createElementVNode` only proves Vapor for a _pure_ `createVaporApp` build, not for interop builds.

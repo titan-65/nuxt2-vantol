@@ -96,31 +96,25 @@ export interface ClassStats {
 ## Letter Grade Conversion
 
 ```ts [src/grades.ts]
-import type { GradeScale } from './types';
+import type { GradeScale } from "./types";
 
 const DEFAULT_SCALE: GradeScale[] = [
-  { letter: 'A', min: 90, max: 100, gpa: 4.0 },
-  { letter: 'B', min: 80, max: 89, gpa: 3.0 },
-  { letter: 'C', min: 70, max: 79, gpa: 2.0 },
-  { letter: 'D', min: 60, max: 69, gpa: 1.0 },
-  { letter: 'F', min: 0, max: 59, gpa: 0.0 },
+  { letter: "A", min: 90, max: 100, gpa: 4.0 },
+  { letter: "B", min: 80, max: 89, gpa: 3.0 },
+  { letter: "C", min: 70, max: 79, gpa: 2.0 },
+  { letter: "D", min: 60, max: 69, gpa: 1.0 },
+  { letter: "F", min: 0, max: 59, gpa: 0.0 },
 ];
 
-export function toLetterGrade(
-  percentage: number,
-  scale: GradeScale[] = DEFAULT_SCALE
-): string {
+export function toLetterGrade(percentage: number, scale: GradeScale[] = DEFAULT_SCALE): string {
   const clamped = Math.max(0, Math.min(100, percentage));
-  const match = scale.find(s => clamped >= s.min && clamped <= s.max);
-  return match?.letter ?? 'F';
+  const match = scale.find((s) => clamped >= s.min && clamped <= s.max);
+  return match?.letter ?? "F";
 }
 
-export function toGPA(
-  percentage: number,
-  scale: GradeScale[] = DEFAULT_SCALE
-): number {
+export function toGPA(percentage: number, scale: GradeScale[] = DEFAULT_SCALE): number {
   const letter = toLetterGrade(percentage, scale);
-  const match = scale.find(s => s.letter === letter);
+  const match = scale.find((s) => s.letter === letter);
   return match?.gpa ?? 0;
 }
 ```
@@ -128,7 +122,7 @@ export function toGPA(
 ## Weighted Grade Calculation
 
 ```ts [src/weights.ts]
-import type { WeightedComponent } from './types';
+import type { WeightedComponent } from "./types";
 
 export function weightedAverage(components: WeightedComponent[]): number {
   if (components.length === 0) return 0;
@@ -136,10 +130,7 @@ export function weightedAverage(components: WeightedComponent[]): number {
   const totalWeight = components.reduce((sum, c) => sum + c.weight, 0);
   if (totalWeight === 0) return 0;
 
-  const weighted = components.reduce(
-    (sum, c) => sum + c.score * c.weight,
-    0
-  );
+  const weighted = components.reduce((sum, c) => sum + c.score * c.weight, 0);
 
   return Math.round((weighted / totalWeight) * 100) / 100;
 }
@@ -149,9 +140,9 @@ A teacher can use this like:
 
 ```ts
 const finalGrade = weightedAverage([
-  { name: 'Homework', score: 88, weight: 0.3 },
-  { name: 'Midterm', score: 76, weight: 0.3 },
-  { name: 'Final Exam', score: 82, weight: 0.4 },
+  { name: "Homework", score: 88, weight: 0.3 },
+  { name: "Midterm", score: 76, weight: 0.3 },
+  { name: "Final Exam", score: 82, weight: 0.4 },
 ]);
 // => 81.8
 ```
@@ -159,31 +150,25 @@ const finalGrade = weightedAverage([
 ## Score Curving
 
 ```ts [src/curve.ts]
-export function curveByHighest(
-  scores: number[],
-  targetHigh: number = 100
-): number[] {
+export function curveByHighest(scores: number[], targetHigh: number = 100): number[] {
   const highest = Math.max(...scores);
   if (highest >= targetHigh) return scores;
 
   const boost = targetHigh - highest;
-  return scores.map(s => Math.min(100, s + boost));
+  return scores.map((s) => Math.min(100, s + boost));
 }
 
-export function curveByMean(
-  scores: number[],
-  targetMean: number = 75
-): number[] {
+export function curveByMean(scores: number[], targetMean: number = 75): number[] {
   const mean = scores.reduce((a, b) => a + b, 0) / scores.length;
   const shift = targetMean - mean;
-  return scores.map(s => Math.max(0, Math.min(100, s + shift)));
+  return scores.map((s) => Math.max(0, Math.min(100, s + shift)));
 }
 ```
 
 ## Class Statistics
 
 ```ts [src/stats.ts"]
-import type { ClassStats } from './types';
+import type { ClassStats } from "./types";
 
 export function classStats(scores: number[]): ClassStats {
   if (scores.length === 0) {
@@ -196,9 +181,7 @@ export function classStats(scores: number[]): ClassStats {
   const mean = sum / count;
 
   const mid = Math.floor(count / 2);
-  const median = count % 2 === 0
-    ? (sorted[mid - 1] + sorted[mid]) / 2
-    : sorted[mid];
+  const median = count % 2 === 0 ? (sorted[mid - 1] + sorted[mid]) / 2 : sorted[mid];
 
   const variance = sorted.reduce((acc, s) => acc + (s - mean) ** 2, 0) / count;
   const stdDev = Math.round(Math.sqrt(variance) * 100) / 100;
@@ -217,11 +200,11 @@ export function classStats(scores: number[]): ClassStats {
 # Step 4: Wire Up the Entry Point
 
 ```ts [src/index.ts]
-export { toLetterGrade, toGPA } from './grades';
-export { weightedAverage } from './weights';
-export { curveByHighest, curveByMean } from './curve';
-export { classStats } from './stats';
-export type { GradeScale, WeightedComponent, ClassStats } from './types';
+export { toLetterGrade, toGPA } from "./grades";
+export { weightedAverage } from "./weights";
+export { curveByHighest, curveByMean } from "./curve";
+export { classStats } from "./stats";
+export type { GradeScale, WeightedComponent, ClassStats } from "./types";
 ```
 
 # Step 5: Write Tests
@@ -229,63 +212,63 @@ export type { GradeScale, WeightedComponent, ClassStats } from './types';
 Create `src/grades.test.ts`:
 
 ```ts [src/grades.test.ts]
-import { describe, it, expect } from 'vitest';
-import { toLetterGrade, toGPA } from './grades';
-import { weightedAverage } from './weights';
-import { curveByHighest, curveByMean } from './curve';
-import { classStats } from './stats';
+import { describe, it, expect } from "vitest";
+import { toLetterGrade, toGPA } from "./grades";
+import { weightedAverage } from "./weights";
+import { curveByHighest, curveByMean } from "./curve";
+import { classStats } from "./stats";
 
-describe('toLetterGrade', () => {
-  it('converts percentages to letter grades', () => {
-    expect(toLetterGrade(95)).toBe('A');
-    expect(toLetterGrade(83)).toBe('B');
-    expect(toLetterGrade(72)).toBe('C');
-    expect(toLetterGrade(65)).toBe('D');
-    expect(toLetterGrade(40)).toBe('F');
+describe("toLetterGrade", () => {
+  it("converts percentages to letter grades", () => {
+    expect(toLetterGrade(95)).toBe("A");
+    expect(toLetterGrade(83)).toBe("B");
+    expect(toLetterGrade(72)).toBe("C");
+    expect(toLetterGrade(65)).toBe("D");
+    expect(toLetterGrade(40)).toBe("F");
   });
 
-  it('clamps out-of-range values', () => {
-    expect(toLetterGrade(110)).toBe('A');
-    expect(toLetterGrade(-5)).toBe('F');
+  it("clamps out-of-range values", () => {
+    expect(toLetterGrade(110)).toBe("A");
+    expect(toLetterGrade(-5)).toBe("F");
   });
 });
 
-describe('toGPA', () => {
-  it('converts to 4.0 scale', () => {
+describe("toGPA", () => {
+  it("converts to 4.0 scale", () => {
     expect(toGPA(92)).toBe(4.0);
     expect(toGPA(85)).toBe(3.0);
     expect(toGPA(55)).toBe(0.0);
   });
 });
 
-describe('weightedAverage', () => {
-  it('calculates weighted grade', () => {
+describe("weightedAverage", () => {
+  it("calculates weighted grade", () => {
     const result = weightedAverage([
-      { name: 'Homework', score: 90, weight: 0.4 },
-      { name: 'Exam', score: 80, weight: 0.6 },
+      { name: "Homework", score: 90, weight: 0.4 },
+      { name: "Exam", score: 80, weight: 0.6 },
     ]);
     expect(result).toBe(84);
   });
 
-  it('returns 0 for empty input', () => {
+  it("returns 0 for empty input", () => {
     expect(weightedAverage([])).toBe(0);
   });
 });
 
-describe('curveByHighest', () => {
-  it('curves scores up to target', () => {
+describe("curveByHighest", () => {
+  it("curves scores up to target", () => {
     const curved = curveByHighest([70, 80, 90], 100);
     expect(curved).toEqual([80, 90, 100]);
   });
 
-  it('does not curve if highest already meets target', () => {
+  it("does not curve if highest already meets target", () => {
     const scores = [70, 80, 95];
     expect(curveByHighest(scores, 100)).toEqual(scores);
   });
 });
 
-describe('classStats', () => {
-  it('calculates stats correctly', () => {
+describe("classStats", () => {
+  it("calculates stats correctly", () => {
     const stats = classStats([90, 80, 70, 60, 50]);
     expect(stats.mean).toBe(70);
     expect(stats.median).toBe(70);
@@ -311,19 +294,20 @@ No extra install or config. `vp test` picks up `.test.ts` files automatically us
 Update `vite.config.ts`:
 
 ```ts [vite.config.ts]
-import { defineConfig } from 'vite-plus';
+import { defineConfig } from "vite-plus";
 
 export default defineConfig({
   pack: {
-    entry: ['src/index.ts'],
+    entry: ["src/index.ts"],
     dts: true,
-    format: ['esm', 'cjs'],
+    format: ["esm", "cjs"],
     sourcemap: true,
   },
 });
 ```
 
 This tells Vite+ to:
+
 - Generate TypeScript declaration files (`.d.ts`)
 - Output both ESM and CJS formats
 - Include source maps for debugging
@@ -388,20 +372,20 @@ npm install teacher-toolkit
 ```
 
 ```ts
-import { toLetterGrade, weightedAverage, curveByHighest, classStats } from 'teacher-toolkit';
+import { toLetterGrade, weightedAverage, curveByHighest, classStats } from "teacher-toolkit";
 
 // Convert a score
-toLetterGrade(87);              // => "B"
+toLetterGrade(87); // => "B"
 
 // Calculate a final grade
 const final = weightedAverage([
-  { name: 'Quiz', score: 92, weight: 0.2 },
-  { name: 'Project', score: 78, weight: 0.3 },
-  { name: 'Final', score: 85, weight: 0.5 },
-]);                             // => 84.2
+  { name: "Quiz", score: 92, weight: 0.2 },
+  { name: "Project", score: 78, weight: 0.3 },
+  { name: "Final", score: 85, weight: 0.5 },
+]); // => 84.2
 
 // Curve a set of exam scores
-const curved = curveByHighest([62, 74, 81, 90]);  // => [72, 84, 91, 100]
+const curved = curveByHighest([62, 74, 81, 90]); // => [72, 84, 91, 100]
 
 // Get class overview
 classStats([90, 82, 75, 68, 55]);
@@ -422,7 +406,9 @@ npm publish                                  # Ship it
 Six commands. Zero config files beyond `vite.config.ts`.
 
 ::BlogCard
+
 ### Why Vite+ for Libraries?
+
 With `vp pack`, you get DTS generation, dual ESM/CJS output, and source maps without touching Rollup, tsup, or unbuild configs. The Vitest and Oxc integrations mean testing and linting are already part of the workflow.
 ::
 

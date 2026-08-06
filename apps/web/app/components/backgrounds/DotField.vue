@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue';
+import { nextTick, onBeforeUnmount, onMounted, ref, watch } from "vue";
 
 const TWO_PI = Math.PI * 2;
 
@@ -40,11 +40,11 @@ const props = withDefaults(
     glowRadius: 160,
     sparkle: false,
     waveAmplitude: 0,
-    gradientFrom: 'rgba(124, 255, 103, 0.35)',
-    gradientTo: 'rgba(160, 255, 188, 0.25)',
-    glowColor: '#14110E',
-    className: ''
-  }
+    gradientFrom: "rgba(124, 255, 103, 0.35)",
+    gradientTo: "rgba(160, 255, 188, 0.25)",
+    glowColor: "#14110E",
+    className: "",
+  },
 );
 
 const root = ref<HTMLDivElement | null>(null);
@@ -60,14 +60,14 @@ const mouse = {
   y: -9999,
   prevX: -9999,
   prevY: -9999,
-  speed: 0
+  speed: 0,
 };
 
 let size = {
   w: 0,
   h: 0,
   offsetX: 0,
-  offsetY: 0
+  offsetY: 0,
 };
 
 let glowOpacity = 0;
@@ -104,7 +104,7 @@ function buildDots(w: number, h: number) {
         vx: 0,
         vy: 0,
         x: ax,
-        y: ay
+        y: ay,
       };
     }
   }
@@ -131,8 +131,8 @@ function updateMouseSpeed() {
 function setupCanvas() {
   if (!root.value || !canvas.value) return;
 
-  const ctx = canvas.value.getContext('2d', {
-    alpha: true
+  const ctx = canvas.value.getContext("2d", {
+    alpha: true,
   });
 
   if (!ctx) return;
@@ -159,7 +159,7 @@ function setupCanvas() {
       w,
       h,
       offsetX: rect.left + window.scrollX,
-      offsetY: rect.top + window.scrollY
+      offsetY: rect.top + window.scrollY,
     };
 
     buildDots(w, h);
@@ -196,8 +196,8 @@ function setupCanvas() {
     glowOpacity += (engagement - glowOpacity) * 0.08;
 
     if (glowEl.value) {
-      glowEl.value.setAttribute('cx', String(mouse.x));
-      glowEl.value.setAttribute('cy', String(mouse.y));
+      glowEl.value.setAttribute("cx", String(mouse.x));
+      glowEl.value.setAttribute("cy", String(mouse.y));
       glowEl.value.style.opacity = String(glowOpacity);
     }
 
@@ -292,10 +292,10 @@ function setupCanvas() {
 
   doResize();
 
-  window.addEventListener('resize', resize);
+  window.addEventListener("resize", resize);
 
-  window.addEventListener('mousemove', onMouseMove, {
-    passive: true
+  window.addEventListener("mousemove", onMouseMove, {
+    passive: true,
   });
 
   speedInterval = setInterval(updateMouseSpeed, 20);
@@ -310,9 +310,9 @@ function cleanup() {
 
   clearTimeout(resizeTimer);
 
-  window.removeEventListener('resize', () => {});
+  window.removeEventListener("resize", () => {});
 
-  window.removeEventListener('mousemove', () => {});
+  window.removeEventListener("mousemove", () => {});
 }
 
 watch(
@@ -323,7 +323,7 @@ watch(
     if (size.w > 0 && size.h > 0) {
       buildDots(size.w, size.h);
     }
-  }
+  },
 );
 
 onMounted(() => {

@@ -5,6 +5,7 @@
 Direct observations made on the `zhyjen` editor codebase in `/Users/vantolbennett/Developer/2025/vantolbennett-blog/apps/zhyjen`:
 
 ### A. Workspace Layout & Editor Rendering (`apps/zhyjen/src/forge/ForgeWorkspace.tsx`)
+
 - **Grid Layout**: The workspace uses a three-column grid layout where the middle column (the editor) takes the remaining space:
   ```typescript
   // Line 685:
@@ -34,14 +35,18 @@ Direct observations made on the `zhyjen` editor codebase in `/Users/vantolbennet
       setResizing(which);
       try {
         e.currentTarget.setPointerCapture(e.pointerId);
-      } catch { /* ... */ }
+      } catch {
+        /* ... */
+      }
     },
     [],
   );
   ```
 
 ### B. 8 Zero Language Activities (`apps/zhyjen/convex/activities.ts`)
+
 Eight activities exist in `starterActivities` with a slug prefixed with `zero-` and focusing on compiler graph concepts:
+
 1. **Graph Query Explorer** (slug: `"zero-graph-query"`, lines 406-447)
    - Current Tools: `tools: ["Terminal", "Zero CLI"]`
 2. **The Daily Loop Practice** (slug: `"zero-daily-loop-practice"`, lines 449-489)
@@ -91,6 +96,7 @@ The step-by-step reasoning from observations to the proposed designs:
 ### Design Blueprint 1: ForgeWorkspace.tsx Split Layout Integration
 
 #### A. State & Pointer Handlers additions:
+
 ```typescript
 // Add state
 const [showVisualizer, setShowVisualizer] = useState(false);
@@ -112,12 +118,14 @@ const handleResizePointerMove = useCallback(
       setVisualizerWidth(Math.max(200, Math.min(600, newWidth)));
     }
   },
-  [resizing, contentWidth]
+  [resizing, contentWidth],
 );
 ```
 
 #### B. Toolbar Toggle Button Markup:
+
 Add to `.forge-editor-toolbar-actions` (adjacent to Editor settings):
+
 ```typescript
 import { Network } from "lucide-react"; // Import new icon
 
@@ -143,13 +151,15 @@ import { Network } from "lucide-react"; // Import new icon
 ```
 
 #### C. Grid Split in Editor Body:
+
 Modify `.forge-editor-body` rendering inside `ForgeWorkspace.tsx`:
+
 ```typescript
 <div className="forge-editor-body" style={{ display: "flex", width: "100%", height: "100%", overflow: "hidden" }}>
   <div style={{ flex: 1, height: "100%", position: "relative", minWidth: "150px" }}>
     {editorPane}
   </div>
-  
+
   {showVisualizer && (
     <>
       <div
@@ -169,11 +179,11 @@ Modify `.forge-editor-body` rendering inside `ForgeWorkspace.tsx`:
           zIndex: 10,
         }}
       />
-      <div 
-        style={{ 
-          width: `${visualizerWidth}px`, 
-          height: "100%", 
-          background: "var(--bg)", 
+      <div
+        style={{
+          width: `${visualizerWidth}px`,
+          height: "100%",
+          background: "var(--bg)",
           borderLeft: "1px solid var(--border)",
           minWidth: "200px",
           display: "flex",
@@ -296,7 +306,7 @@ export function AstVisualizer({
           hash: `decl:${fnName}_${index}`,
         });
         edges.push({ source: rootId, target: id });
-        
+
         // Setup inner block node
         const blockId = `#block_${fnName}`;
         nodes.push({
@@ -398,7 +408,7 @@ export function AstVisualizer({
       Reference: [],
       Literal: [],
     };
-    
+
     graph.nodes.forEach((node) => {
       if (node.id === "#module_root") return;
       if (columns[node.type]) {
@@ -410,7 +420,7 @@ export function AstVisualizer({
 
     const orderedTypes = ["Import", "Declaration", "Block", "Reference", "Call", "Literal"];
     const layout: Record<string, { x: number; y: number }> = {};
-    
+
     // Root position
     layout["#module_root"] = { x: 50, y: 150 };
 
@@ -418,11 +428,11 @@ export function AstVisualizer({
     orderedTypes.forEach((type) => {
       const list = columns[type];
       if (list.length === 0) return;
-      
+
       const x = 50 + colIndex * 140;
       const height = 300;
       const step = height / (list.length + 1);
-      
+
       list.forEach((node, index) => {
         layout[node.id] = {
           x,
@@ -792,8 +802,14 @@ We propose updating the `starterActivities` list inside `convex/activities.ts` t
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(4px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 ```
 
@@ -805,9 +821,11 @@ To verify the proposed designs:
 
 1. **Syntactic & Structural Liveness**:
    Run the project check command from the app root:
+
    ```bash
    vp check
    ```
+
    This ensures no syntax errors or TypeScript definition drift is introduced when importing new types like `Network` or configuring pointer event handlers.
 
 2. **Manual UX Testing Matrix**:

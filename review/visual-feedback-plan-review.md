@@ -1,6 +1,7 @@
 # Review: ZhyJen Visual Feedback Learning Plan
 
 **Reviewed files**
+
 - `docs/superpowers/plans/zhyjen-revival-plan.md`
 - `docs/superpowers/plans/zhyjen-visual-feedback-learning-plan.md`
 - `apps/zhyjen/src/workspace/ActivityWorkspace.tsx`
@@ -21,6 +22,7 @@
 ## 1. Alignment with the revival mission and target audience
 
 ### Correct
+
 - The learning plan mirrors the revival mission almost exactly. The mission statement, core message, and target audience (10–18 year olds, church youth groups, Christian school students, homeschool groups, mentors) are copied faithfully into the plan’s purpose and phase definitions.
 - The four platform areas from the revival plan — **Learn / Build / Reflect / Share** — are used as the activity `area` taxonomy and as the backbone of the learning loop.
 - The faith-informed framing is well-calibrated: values are connected to coding moments rather than turned into devotional content, matching the revival plan’s instruction to avoid being “overly preachy.”
@@ -28,6 +30,7 @@
 - The example activities (profile card, Bible verse display, kindness tracker, gratitude journal) match the revival plan’s sample project list and the “warm, guided sandbox” positioning.
 
 ### Note
+
 - The revival plan says ZhyJen should be “smaller, warmer, more guided, and more purpose-driven” than large platforms. The visual-feedback plan captures this in prose, but the current **DashboardPage.tsx** UI undercuts it by borrowing the cold, project-management language of a professional issue tracker (see Section 2).
 
 ---
@@ -35,6 +38,7 @@
 ## 2. Terminology conflicts
 
 ### Blocker / should fix now
+
 - **“Issues” vs. “Activities.”** The entire dashboard is built around issue-tracking vocabulary that is alien to a youth learning platform:
   - `DashboardPage.tsx:25` — `type Tab = "all" | "active" | "backlog";`
   - `DashboardPage.tsx:26` — `type IssueStatus = "todo" | "in-progress" | "done";`
@@ -61,6 +65,7 @@
 - **Professional workspace actions.** The dashboard sidebar includes `"Invite people"`, `"Connect GitHub"`, and a team/Projects/Views hierarchy that matches a Linear-style PM tool. These are not reflected in the visual feedback plan or revival plan for a first release, and they create a false expectation of team collaboration features that do not exist.
 
 ### Note
+
 - The activity schema defines `area` as `"Learn" | "Build" | "Reflect" | "Share"`, but the seeded activities are all `area: "Build"`. The plan describes four phases, but the current content does not yet expose Learn/Reflect/Share as distinct areas.
 
 ---
@@ -68,10 +73,12 @@
 ## 3. Unrealistic sequencing or scope
 
 ### Correct
+
 - The four phases are sequenced sensibly: HTML/CSS visual changes → JavaScript reactivity → multi-skill projects → publishing/reflection. This matches how most beginner web curricula are ordered.
 - The “Must-have / Should-have / Nice-to-have” prioritization in the feedback mechanisms section is realistic and correctly scopes live preview, multi-file support, and responsive toggles as later work.
 
 ### Note / risk
+
 - **GitHub Pages challenge in Phase 1.** The seeded `profile-card` activity lists `"Publish the page with GitHub Pages"` as a challenge. For a first-time coder in the HTML/CSS phase, this is unrealistic without significant scaffolding (creating a GitHub account, understanding repositories, pushing files, enabling Pages). The visual feedback plan places GitHub Pages guidance in Phase 3; the Phase 1 seed should not assume it.
 - **JavaScript localStorage in Phase 2.** The `kindness-tracker` activity lists `"Save progress in localStorage"` as a challenge. By Phase 2, students have only just encountered variables, events, and DOM updates. `localStorage` introduces serialization, the same-origin policy, and debugging invisible state. It should be a Phase 3 stretch or removed from the Phase 2 seed.
 - **Monaco editor for absolute beginners.** The plan proposes Monaco via `@monaco-editor/react`. Monaco is a professional code editor. While it is technically appropriate, its feature surface (IntelliSense, error squiggles, minimap, command palette) can intimidate young beginners. The current config disables the minimap, which is good, but the rest of the chrome is still present. This is a manageable risk if paired with strong error overlays and guided instructions.
@@ -90,6 +97,7 @@ Read instructions → Edit code → Run → See result → Reflect → Share
 The current workspace implements most of this structurally, but several feedback layers are missing.
 
 ### Blocker / critical gaps
+
 - **No error feedback when code breaks.** `PreviewFrame.tsx:6-12` renders the student code in a sandboxed iframe with `sandbox="allow-scripts"`. If the HTML/JS is malformed or throws, the iframe fails silently. The student sees a blank preview and has no diagnostic information. The plan correctly flags an error overlay as a “should-have,” but for beginners it is effectively a must-have; without it, the loop breaks at “See result.”
 - **No evidence that “Run” happened before completion.** `ActivityWorkspace.tsx:55-58` lets the user click **Mark complete** at any time, regardless of whether they ran the code or edited it. This weakens the learning loop because completion is decoupled from feedback.
 - **No step-by-step checklist.** The plan lists a checklist as a “should-have.” Currently the workspace renders steps as a numbered list (`ActivityWorkspace.tsx:102-113`) but provides no way for a student to check items off, persist that state, or get guidance on the next step. Progress tracking is only at the activity level.
@@ -97,12 +105,14 @@ The current workspace implements most of this structurally, but several feedback
 - **Share is a dead end.** The plan’s loop ends with **Share**, and the workspace renders a `sharePrompt` string (`ActivityWorkspace.tsx:145-150`), but there is no share button, copy-link action, screenshot helper, or GitHub Pages flow. The student reads the prompt and then has to leave the app to act on it.
 
 ### Significant gaps
+
 - **Reflection is optional and detached.** The reflection textarea exists, but `handleSaveReflection` writes to a separate `reflections` table and does not update `activityProgress.notes`. The workspace displays progress status as `completed` regardless of whether a reflection was saved. If reflection is “part of the work,” the UI should either require it before completion or surface saved reflections alongside progress.
 - **No completion celebration.** The plan lists a celebration animation as a “should-have.” The current completion state only changes a status badge from “In progress” to a green “Completed” label. For young beginners, a small celebration is an important motivational close to the loop.
 - **No per-step progress persistence.** `progress.ts` only stores `status`, `code`, and `notes`. There is no schema field for which steps were checked, which hints were used, or how many runs occurred. This limits future mentor analytics.
 - **No gating between phases.** A student can open the Phase 2/3 JavaScript activity (`kindness-tracker`) before completing Phase 1 HTML/CSS activities. The plan’s success metric says “Students complete at least one Build activity before moving to JavaScript,” but the workspace does not enforce or recommend this.
 
 ### Minor gaps
+
 - **Editor language is hardcoded to HTML.** `CodeEditor.tsx:11` sets `defaultLanguage="html"`. For the `kindness-tracker` activity, which contains inline JavaScript, syntax highlighting is still HTML. A multi-language learner path will need the language to follow the activity.
 - **No “Compare with starter” action.** The plan lists this as a “should-have.” It is not implemented.
 
@@ -111,18 +121,21 @@ The current workspace implements most of this structurally, but several feedback
 ## 5. Risks for young beginners
 
 ### High risk
+
 - **Silent failures in the preview.** As noted above, a syntax error or broken tag produces a blank or half-rendered iframe with no explanation. Beginners often assume they broke the entire app, not just their code.
 - **Reset button destroys work without confirmation.** `ActivityWorkspace.tsx:46-49` resets `code` and `previewCode` to the starter with a single click. There is no undo and no confirmation dialog. A misclick after 30 minutes of work is a real failure mode for children.
 - **Autosave can overwrite intentional starter experiments.** `ActivityWorkspace.tsx:38-43` autosaves 1.5 seconds after the last keystroke. If a student types experimental broken code, it is persisted immediately. Combined with the single-click Reset, the undo model is fragile.
 - **Mark complete is one click and irreversible.** `handleComplete` in `ActivityWorkspace.tsx:55-58` flips status to `completed` with no summary, no checklist validation, and no way for the student to reopen the activity as “in progress” from the UI. Children may click it accidentally or for rewards without doing the work.
 
 ### Medium risk
+
 - **Monaco editor is not beginner-friendly on small screens.** The responsive CSS stacks the workspace into a single column below `760px` and shrinks the editor, but Monaco remains difficult to use on touch devices. Many young learners in the target demographic rely on tablets or Chromebooks.
 - **Dark-only theme and small text.** The workspace uses a dark theme with `--muted` and `--muted-strong` grays. The instruction text is `0.86rem`–`0.88rem` (`workspace.css`), and the editor font is `14px`. For younger users and users with low vision, this is harder to read than the plan’s “warm, guided sandbox” language implies.
 - **“Start activity” button is confusingly placed.** The workspace already shows the editor and instructions before the student clicks **Start activity**. The button does not load the starter code (it is already loaded); it only changes status to `in_progress`. Beginners may think they cannot edit until they press it, or they may ignore it and never trigger progress tracking.
 - **No offline resilience.** The app depends on Convex and Clerk. If a student loses connection, autosave and reflection save will fail silently from the user’s perspective.
 
 ### Compliance / trust risk
+
 - **Child authentication and data.** The platform targets ages 10–18. Clerk is used for authentication, but the plan and code do not address COPPA/GDPR considerations, parental consent, or data minimization for users under 13. Reflection answers are personally identifiable content and are stored without any visible privacy guardrails.
 
 ---

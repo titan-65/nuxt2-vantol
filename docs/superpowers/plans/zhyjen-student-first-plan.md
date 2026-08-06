@@ -14,12 +14,12 @@ A brand-new student signs up, answers **one** question about their coding experi
 
 ## 1. Decisions resolved in `CONTEXT.md`
 
-| Question | Decision |
-|---|---|
-| What is a "Track"? | Frontend label for the existing `phase` field. **No new table.** Four Tracks: **Web Foundations → Make It Interactive → Real Projects → Share Your Work**. |
-| How does a student get into a workspace? | **Two paths**, both first-class: (a) mentor creates a workspace and invites students by email; (b) self-learner signs up cold and creates their own workspace. |
-| What does a brand-new student see? | A **Start here** view: their current Track's first three Activities in `order`, with a pinned "Start" CTA. No tabs. After they open the first Activity, the regular dashboard takes over. |
-| Placement question | A single radio: "Have you written any code before?" → `none` / `a_little` / `comfortable` → starting Track. |
+| Question                                 | Decision                                                                                                                                                                                  |
+| ---------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| What is a "Track"?                       | Frontend label for the existing `phase` field. **No new table.** Four Tracks: **Web Foundations → Make It Interactive → Real Projects → Share Your Work**.                                |
+| How does a student get into a workspace? | **Two paths**, both first-class: (a) mentor creates a workspace and invites students by email; (b) self-learner signs up cold and creates their own workspace.                            |
+| What does a brand-new student see?       | A **Start here** view: their current Track's first three Activities in `order`, with a pinned "Start" CTA. No tabs. After they open the first Activity, the regular dashboard takes over. |
+| Placement question                       | A single radio: "Have you written any code before?" → `none` / `a_little` / `comfortable` → starting Track.                                                                               |
 
 ---
 
@@ -50,15 +50,27 @@ Everything else stays.
 
 ## 4. The plan — tracer-bullet MVP first, then layers
 
-### Slice 0 — Names + shared language *(½ day)*
+### Slice 0 — Names + shared language _(½ day)_
 
 - `src/tracks.ts` — single source of truth:
   ```ts
   export const TRACKS = [
-    { phase: "html-css",    name: "Web Foundations",     tagline: "Build your first pages with HTML and CSS." },
-    { phase: "javascript",  name: "Make It Interactive", tagline: "Add behavior, events, and state." },
-    { phase: "multi-skill", name: "Real Projects",       tagline: "Combine skills into finished projects." },
-    { phase: "publish",     name: "Share Your Work",     tagline: "Publish, present, and reflect." },
+    {
+      phase: "html-css",
+      name: "Web Foundations",
+      tagline: "Build your first pages with HTML and CSS.",
+    },
+    {
+      phase: "javascript",
+      name: "Make It Interactive",
+      tagline: "Add behavior, events, and state.",
+    },
+    {
+      phase: "multi-skill",
+      name: "Real Projects",
+      tagline: "Combine skills into finished projects.",
+    },
+    { phase: "publish", name: "Share Your Work", tagline: "Publish, present, and reflect." },
   ] as const;
   ```
 - `trackNameForPhase(phase)`, `trackForExperience(experience)`, `currentTrackForProfile(profile, progress)` — all pure, all unit-testable, the **only** functions that decide "what Track is this student on?"
@@ -66,7 +78,7 @@ Everything else stays.
 
 **Done when:** the existing dashboard reads "Web Foundations" and "Make It Interactive" instead of `html-css` / `javascript`. No behavior change.
 
-### Slice 1 — Store the experience answer *(½ day)*
+### Slice 1 — Store the experience answer _(½ day)_
 
 - Add `experience` to `profiles` in `convex/schema.ts`.
 - Add `convex/profiles.ts#setExperience` mutation (requires Clerk auth via `getCurrentProfile`).
@@ -75,17 +87,17 @@ Everything else stays.
 
 **Done when:** `setExperience` is callable and the unit test passes.
 
-### Slice 2 — Self-learner placement step *(1 day, tracer-bullet MVP)*
+### Slice 2 — Self-learner placement step _(1 day, tracer-bullet MVP)_
 
 - Add a 4th step to `OnboardingPage.tsx`: single radio "Have you written any code before?" with the three options. Skip defaults to `none`.
-- On submit, call `api.profiles.setExperience` *before* `api.onboarding.completeOnboarding` (the profile must exist first).
+- On submit, call `api.profiles.setExperience` _before_ `api.onboarding.completeOnboarding` (the profile must exist first).
 - Extend the `localStorage` `zhyjen-onboarding` state with `experience`.
 - Update the stepper to show 4 dots (Workspace / Profile / Invite / Start) or fold the question into the existing Invite step.
 - After the step, route to `/dashboard` (existing destination).
 
 **Done when:** a self-learner signs up at `/signup` → onboarding → dashboard, with their experience persisted on the profile.
 
-### Slice 3 — Start-here dashboard view *(1 day, core deliverable)*
+### Slice 3 — Start-here dashboard view _(1 day, core deliverable)_
 
 - In `DashboardPage.tsx`, branch on the student's state:
   - `profile.experience` set **and** `progress.length === 0` → render the **Start here** view.
@@ -95,14 +107,14 @@ Everything else stays.
 
 **Done when:** a brand-new self-learner lands on Start here, sees three activities, clicks Start on the first, opens the activity workspace, and on return the regular dashboard renders.
 
-### Slice 4 — Track-filtered activities list *(½ day)*
+### Slice 4 — Track-filtered activities list _(½ day)_
 
 - `src/pages/ActivitiesPage.tsx` (already exists) gets a Track segmented control. Default: the student's current Track. Locked Tracks show greyed, read-only.
 - Reuse `TRACKS` and the phase-gate from `api.progress.hasCompletedPhase`.
 
 **Done when:** a Web-Foundations student sees Web Foundations by default; other Tracks are visible but locked; completing one activity unlocks the next.
 
-### Slice 5 — Invitation acceptance *(1 day)*
+### Slice 5 — Invitation acceptance _(1 day)_
 
 - New route `/invitations/:token`. `parseRoute` in `src/router.ts` learns the new branch.
 - `convex/invitations.ts#accept` mutation: looks up by `token`, creates a `workspaceMember` with the role from the invitation, marks the invitation `accepted`, returns the `workspaceId`.
@@ -112,7 +124,7 @@ Everything else stays.
 
 **Done when:** a mentor sends an invite; a student clicks the link, signs up, answers the experience question, and lands inside the mentor's workspace.
 
-### Slice 6 — Mentor sees students' progress *(1 day, high-value)*
+### Slice 6 — Mentor sees students' progress _(1 day, high-value)_
 
 - `src/pages/MentorPage.tsx` (already exists) gets a query: every `workspaceMember` with `role: "student"` in the current workspace, joined with their latest `activityProgress` per Activity.
 - Render a simple table: student name, current Track, last Activity, status, last updated.
@@ -120,7 +132,7 @@ Everything else stays.
 
 **Done when:** a mentor opening `/mentor` sees a list of their students and a status per student.
 
-### Slice 7 — Progress strip + advance toast *(½ day)*
+### Slice 7 — Progress strip + advance toast _(½ day)_
 
 - Regular dashboard gets a slim "You're on **Web Foundations** — 2 of 6 activities completed" progress strip at the top while the student is in their first Track.
 - When a new Track unlocks, a one-time toast: "Nice — **Make It Interactive** is now unlocked."

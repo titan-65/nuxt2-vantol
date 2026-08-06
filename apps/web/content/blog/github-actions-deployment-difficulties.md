@@ -9,7 +9,17 @@ author:
   img: "https://res.cloudinary.com/ddszyeplg/image/upload/v1767533048/PXL_20251010_202726442_2_hhudfr.jpg"
   website: "https://vantolbennett.com"
 readTime: 12
-keywords: [github actions, ci/cd, continuous deployment, devops, yaml, automation, deployment pipeline, github secrets]
+keywords:
+  [
+    github actions,
+    ci/cd,
+    continuous deployment,
+    devops,
+    yaml,
+    automation,
+    deployment pipeline,
+    github secrets,
+  ]
 language: "YAML"
 rating: 5
 ---
@@ -32,7 +42,7 @@ If you are new to CI/CD, do not let this discourage you. Let it prepare you. The
 
 # The Illusion of Simplicity
 
-GitHub Actions sells you a dream: *"Automate your workflow from idea to production."* The marketplace is full of reusable actions. The syntax looks declarative and friendly. You copy a starter workflow, tweak a few values, and it works — once.
+GitHub Actions sells you a dream: _"Automate your workflow from idea to production."_ The marketplace is full of reusable actions. The syntax looks declarative and friendly. You copy a starter workflow, tweak a few values, and it works — once.
 
 Then reality sets in.
 
@@ -101,13 +111,13 @@ Flaky tests are the silent killer of CI/CD confidence. A test that passes 90% of
 
 ## Sources of Flakiness
 
-| Source | Why It Happens |
-|--------|----------------|
-| Timing issues | Network requests, animations, database migrations finish in different orders |
-| Shared state | Tests leak data into databases, filesystems, or caches |
-| External services | Third-party APIs rate-limit or return different responses |
-| Runner variance | GitHub's `ubuntu-latest` today is not `ubuntu-latest` six months ago |
-| Caching bugs | `actions/cache` restores corrupted or stale dependencies |
+| Source            | Why It Happens                                                               |
+| ----------------- | ---------------------------------------------------------------------------- |
+| Timing issues     | Network requests, animations, database migrations finish in different orders |
+| Shared state      | Tests leak data into databases, filesystems, or caches                       |
+| External services | Third-party APIs rate-limit or return different responses                    |
+| Runner variance   | GitHub's `ubuntu-latest` today is not `ubuntu-latest` six months ago         |
+| Caching bugs      | `actions/cache` restores corrupted or stale dependencies                     |
 
 ## The Retry Trap
 
@@ -218,8 +228,8 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version-file: '.nvmrc'
-          cache: 'npm'
+          node-version-file: ".nvmrc"
+          cache: "npm"
       - run: npm ci
       - run: npm run test:ci
       - run: npm run lint

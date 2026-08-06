@@ -1,18 +1,22 @@
 <script setup lang="ts">
-const count = ref(0)
+const count = ref(0);
 
 const increment = () => {
-  count.value++
-}
+  count.value++;
+};
 
 const decrement = () => {
-  count.value--
-}
+  count.value--;
+};
 </script>
 
 <template>
-  <div class="my-8 border border-white/10 p-6 bg-[#111] rounded-xl flex flex-col items-center gap-4">
-    <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500">Interactive Component</p>
+  <div
+    class="my-8 border border-white/10 p-6 bg-[#111] rounded-xl flex flex-col items-center gap-4"
+  >
+    <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500">
+      Interactive Component
+    </p>
     <div class="flex items-center gap-8">
       <button
         @click="decrement"
@@ -30,8 +34,6 @@ const decrement = () => {
         +
       </button>
     </div>
-    <p class="text-xs font-mono text-zinc-600 italic">
-      Counter: {{ count }}
-    </p>
+    <p class="text-xs font-mono text-zinc-600 italic">Counter: {{ count }}</p>
   </div>
 </template>

@@ -1,15 +1,16 @@
 <script setup lang="ts">
 useSeoMeta({
-  title: 'About - VantolBennett',
-  description: 'Learn more about Vantol R. Bennett, Jamaican Educator & Developer, Founder of Zhyjenae.',
-})
+  title: "About - VantolBennett",
+  description:
+    "Learn more about Vantol R. Bennett, Jamaican Educator & Developer, Founder of Zhyjenae.",
+});
 
-const { data: aboutData } = await useAsyncData('about-data', () => {
-  return queryCollection('about').first()
-})
+const { data: aboutData } = await useAsyncData("about-data", () => {
+  return queryCollection("about").first();
+});
 
-const skills = computed(() => aboutData.value?.skills || [])
-const experience = computed(() => aboutData.value?.experience || [])
+const skills = computed(() => aboutData.value?.skills || []);
+const experience = computed(() => aboutData.value?.experience || []);
 </script>
 
 <template>
@@ -27,14 +28,15 @@ const experience = computed(() => aboutData.value?.experience || [])
 
             <div class="border-l-2 border-white/10 pl-6 py-2">
               <p class="text-xl text-zinc-400 font-light leading-relaxed mb-4">
-                Jamaican Educator & Developer passionate about creating innovative solutions that bridge technology and education.
+                Jamaican Educator & Developer passionate about creating innovative solutions that
+                bridge technology and education.
               </p>
-              <p class="text-zinc-500 text-sm uppercase tracking-wide">
-                Founder of Zhyjenae
-              </p>
+              <p class="text-zinc-500 text-sm uppercase tracking-wide">Founder of Zhyjenae</p>
             </div>
 
-            <p class="text-lg font-light leading-relaxed border border-white/10 bg-[#111] p-6 rounded-xl italic text-zinc-400">
+            <p
+              class="text-lg font-light leading-relaxed border border-white/10 bg-[#111] p-6 rounded-xl italic text-zinc-400"
+            >
               "The best way to write code all day is by doing it! Evolve with innovation."
             </p>
           </div>
@@ -70,7 +72,9 @@ const experience = computed(() => aboutData.value?.experience || [])
             :key="skill.category"
             class="bg-[#111] border border-white/10 rounded-xl p-6 hover:border-white/20 transition-colors"
           >
-            <h3 class="text-[11px] font-bold uppercase tracking-widest mb-6 text-zinc-500 pb-2 border-b border-white/10">
+            <h3
+              class="text-[11px] font-bold uppercase tracking-widest mb-6 text-zinc-500 pb-2 border-b border-white/10"
+            >
               {{ skill.category }}
             </h3>
             <div class="flex flex-wrap gap-2">
@@ -91,7 +95,9 @@ const experience = computed(() => aboutData.value?.experience || [])
     <section class="py-20">
       <div class="max-w-[1088px] mx-auto px-6">
         <div class="mb-12">
-          <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-3">Experience</p>
+          <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-3">
+            Experience
+          </p>
           <h2 class="text-3xl font-semibold mb-4">Experience</h2>
           <p class="text-zinc-500 font-light max-w-2xl">
             My professional journey and contributions.
@@ -105,7 +111,9 @@ const experience = computed(() => aboutData.value?.experience || [])
             class="group bg-[#111] border border-white/10 rounded-xl p-6 md:p-8 hover:border-white/20 transition-colors flex flex-col md:flex-row gap-6 md:gap-12"
           >
             <div class="md:w-1/4">
-              <span class="inline-block px-2.5 py-1 text-[10px] font-bold bg-[#f5c542] text-black rounded-md mb-2 uppercase tracking-wider">
+              <span
+                class="inline-block px-2.5 py-1 text-[10px] font-bold bg-[#f5c542] text-black rounded-md mb-2 uppercase tracking-wider"
+              >
                 {{ exp.period }}
               </span>
               <p class="text-sm font-semibold text-zinc-400">

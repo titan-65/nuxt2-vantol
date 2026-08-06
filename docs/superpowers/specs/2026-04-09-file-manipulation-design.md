@@ -30,11 +30,13 @@ Add file manipulation capabilities to null-agent: move, copy, delete, glob, rest
 ### `file_move`
 
 **Parameters:**
+
 - `source`: string (required) - source file path
 - `destination`: string (required) - destination file path
 - `rootBoundary?: string` - override default root
 
 **Behavior:**
+
 1. Validate paths against root boundary
 2. Record undo info to `undo.json`
 3. Create parent directories if needed
@@ -44,6 +46,7 @@ Add file manipulation capabilities to null-agent: move, copy, delete, glob, rest
 ### `file_copy`
 
 **Parameters:**
+
 - `source`: string (required)
 - `destination`: string (required)
 - `rootBoundary?: string`
@@ -53,10 +56,12 @@ Add file manipulation capabilities to null-agent: move, copy, delete, glob, rest
 ### `file_delete`
 
 **Parameters:**
+
 - `path`: string (required)
 - `rootBoundary?: string`
 
 **Behavior:**
+
 1. Validate path against root boundary
 2. Move file to trash instead of deleting
 3. Record undo info to `undo.json`
@@ -65,11 +70,13 @@ Add file manipulation capabilities to null-agent: move, copy, delete, glob, rest
 ### `file_glob`
 
 **Parameters:**
+
 - `pattern`: string (required) - glob pattern (e.g., `**/*.ts`)
 - `rootBoundary?: string`
 - `options?: { ignore?: string[], limit?: number }`
 
 **Behavior:**
+
 1. Use `tinyglobby` for glob matching
 2. Filter matches against root boundary
 3. Respect `ignore` patterns (default: `['node_modules/**', '.git/**']`)
@@ -78,10 +85,12 @@ Add file manipulation capabilities to null-agent: move, copy, delete, glob, rest
 ### `file_restore`
 
 **Parameters:**
+
 - `trashPath?: string` - specific trash entry to restore
 - `list?: boolean` - list all trash entries instead
 
 **Behavior:**
+
 - If `list: true`, return all trash entries with metadata
 - If `trashPath` provided, restore that specific file to original location
 - Remove from trash after restore
@@ -90,10 +99,12 @@ Add file manipulation capabilities to null-agent: move, copy, delete, glob, rest
 ### `file_bulk`
 
 **Parameters:**
+
 - `operations`: Array of operation objects
 - `rootBoundary?: string`
 
 **Operation object:**
+
 ```ts
 {
   type: 'move' | 'copy' | 'delete',
@@ -104,6 +115,7 @@ Add file manipulation capabilities to null-agent: move, copy, delete, glob, rest
 ```
 
 **Behavior:**
+
 1. Validate all operations against root boundary
 2. Execute all operations
 3. Record undo info for reversible operations

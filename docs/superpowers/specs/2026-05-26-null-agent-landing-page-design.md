@@ -8,16 +8,16 @@ Transform the null-agent web terminal from a full-viewport xterm.js raw terminal
 
 Matches blog design tokens exactly:
 
-| Token | Value | Usage |
-|-------|-------|-------|
-| Page background | `#0a0a0a` | `bg-[#0a0a0a]` |
-| Card surface | `#111111` | `bg-[#111]` |
-| Accent | `#f5c542` | Gold — CTAs, hover states |
-| Text primary | `#fafafa` | Headings, body |
-| Text muted | `#a1a1aa` | Descriptions |
-| Borders | `rgba(255,255,255,0.1)` | Card borders, dividers |
-| Font | Inter, system-ui, sans-serif | Body text |
-| Mono font | JetBrains Mono, Menlo, monospace | Terminal, code |
+| Token           | Value                            | Usage                     |
+| --------------- | -------------------------------- | ------------------------- |
+| Page background | `#0a0a0a`                        | `bg-[#0a0a0a]`            |
+| Card surface    | `#111111`                        | `bg-[#111]`               |
+| Accent          | `#f5c542`                        | Gold — CTAs, hover states |
+| Text primary    | `#fafafa`                        | Headings, body            |
+| Text muted      | `#a1a1aa`                        | Descriptions              |
+| Borders         | `rgba(255,255,255,0.1)`          | Card borders, dividers    |
+| Font            | Inter, system-ui, sans-serif     | Body text                 |
+| Mono font       | JetBrains Mono, Menlo, monospace | Terminal, code            |
 
 ## Architecture
 
@@ -138,3 +138,4 @@ Questions:
 - Scroll behavior: page scrolls normally, terminal scrolls independently within its container
 - Responsive: stacks to single column on mobile
 - No routing — single page, no framework
+```

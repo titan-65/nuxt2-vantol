@@ -348,4 +348,4 @@ Good luck with your App Store deployment!
 
 ---
 
-*This guide covers the deployment process for both React Native (bare workflow) and Expo (managed workflow). For specific issues with your particular setup, consult the official documentation for your framework.*
+_This guide covers the deployment process for both React Native (bare workflow) and Expo (managed workflow). For specific issues with your particular setup, consult the official documentation for your framework._

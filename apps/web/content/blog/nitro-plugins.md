@@ -19,9 +19,10 @@ rating: 5
 Nitro is a lightweight, runtime-agnostic server framework that lets you build fast APIs and backends deployable anywhere. But what happens when you need more than basic routes? That’s where **Nitro plugins** come in — a powerful way to hook into Nitro’s runtime and extend its behavior.:contentReference[oaicite:1]{index=1}
 
 In this post we’ll cover:
-- What Nitro plugins are  
-- How to create one  
-- Useful plugin ideas you can build for real applications  
+
+- What Nitro plugins are
+- How to create one
+- Useful plugin ideas you can build for real applications
 
 <!--more-->
 
@@ -40,9 +41,9 @@ For example, a simple plugin that logs when the server starts could look like:
 ```ts
 // server/plugins/logger.ts
 export default defineNitroPlugin((nitroApp) => {
-  console.log("Nitro server initialized!")
-})
-````
+  console.log("Nitro server initialized!");
+});
+```
 
 Nitro runs your plugin as part of server initialization. You can even register plugins from custom directories by adding them to `nitro.config.ts`.([nitro.build][2])
 
@@ -56,9 +57,9 @@ Here’s a plugin that logs every request URL:
 // server/plugins/request-logger.ts
 export default defineNitroPlugin((nitroApp) => {
   nitroApp.hooks.hook("request", (event) => {
-    console.log(`[Request] ${event.method} ${event.path}`)
-  })
-})
+    console.log(`[Request] ${event.method} ${event.path}`);
+  });
+});
 ```
 
 And you can also hook into errors to capture and log them:
@@ -67,9 +68,9 @@ And you can also hook into errors to capture and log them:
 // server/plugins/error-catcher.ts
 export default defineNitroPlugin((nitroApp) => {
   nitroApp.hooks.hook("error", (error, { event }) => {
-    console.error(`Error at ${event.path}:`, error)
-  })
-})
+    console.error(`Error at ${event.path}:`, error);
+  });
+});
 ```
 
 ## Plugin Ideas You Can Build Today
@@ -80,9 +81,9 @@ Here are a handful of practical Nitro plugin ideas you could build into your app
 
 Track performance of your endpoints in real time.
 
-* Count hits per route
-* Record timing and latency
-* Write structured logs or push to analytics back end
+- Count hits per route
+- Record timing and latency
+- Write structured logs or push to analytics back end
 
 Example benefit: track how many orders per hour your API gets and surface performance bottlenecks.
 
@@ -96,12 +97,12 @@ Centralize API key checks before your route handlers run.
 // server/plugins/api-auth.ts
 export default defineNitroPlugin((nitroApp) => {
   nitroApp.hooks.hook("request", (event) => {
-    const key = event.headers.get("x-api-key")
+    const key = event.headers.get("x-api-key");
     if (!isValidKey(key)) {
-      throw createError({ statusCode: 401, statusMessage: "Unauthorized" })
+      throw createError({ statusCode: 401, statusMessage: "Unauthorized" });
     }
-  })
-})
+  });
+});
 ```
 
 This saves you from adding auth logic inside each route and ensures consistent security.
@@ -116,9 +117,9 @@ Useful for endpoints like menus or business hours that don’t change often.
 
 Example concept:
 
-* Check cache on request
-* Bypass expensive data work if present
-* Store responses with TTL
+- Check cache on request
+- Bypass expensive data work if present
+- Store responses with TTL
 
 ---
 
@@ -130,8 +131,8 @@ This helps enforce stricter API contracts and cleaner data at the router level.
 
 ```ts
 nitroApp.hooks.hook("request", (event) => {
-  sanitize(event.body)
-})
+  sanitize(event.body);
+});
 ```
 
 ---
@@ -157,4 +158,3 @@ Nitro’s plugin system gives you the flexibility to extend your server logic be
 If you’re building an API that needs observability, security, or business logic centralized in one place, plugins make Nitro even more powerful without complicating your routes.🚀
 
 Let me know if you want **tutorial examples for those plugin ideas**!
-

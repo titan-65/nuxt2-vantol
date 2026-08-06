@@ -1,25 +1,25 @@
 <script setup lang="ts">
-const isVisible = ref(false)
+const isVisible = ref(false);
 
 const checkScroll = () => {
-  isVisible.value = window.scrollY > 400
-}
+  isVisible.value = window.scrollY > 400;
+};
 
 const scrollToTop = () => {
   window.scrollTo({
     top: 0,
-    behavior: 'smooth'
-  })
-}
+    behavior: "smooth",
+  });
+};
 
 onMounted(() => {
-  window.addEventListener('scroll', checkScroll, { passive: true })
-  checkScroll()
-})
+  window.addEventListener("scroll", checkScroll, { passive: true });
+  checkScroll();
+});
 
 onUnmounted(() => {
-  window.removeEventListener('scroll', checkScroll)
-})
+  window.removeEventListener("scroll", checkScroll);
+});
 </script>
 
 <template>
@@ -38,7 +38,12 @@ onUnmounted(() => {
       aria-label="Back to top"
     >
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18"/>
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M5 10l7-7m0 0l7 7m-7-7v18"
+        />
       </svg>
     </button>
   </Transition>

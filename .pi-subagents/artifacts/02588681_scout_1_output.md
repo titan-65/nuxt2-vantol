@@ -1,6 +1,7 @@
 # Code Context
 
 ## Files Retrieved
+
 1. `packages/presence/src/runtime/plugins/presence.client.ts` (lines 75-108, 154-176) - buffers the configured key combo, opens the shared wall, mounts it, and configures transport/polling.
 2. `packages/presence/src/runtime/components/PresenceWall.vue` (lines 43-61, 204-220) - form submission calls `wall.add`.
 3. `packages/presence/src/runtime/composables/usePresenceWall.ts` (lines 47-83) - shared client wall delegates `add` to the configured transport.
@@ -21,8 +22,10 @@
 // packages/presence/src/runtime/plugins/presence.client.ts:83-95
 buffer.push({ key: e.key, code: e.code });
 if (buffer.length > opts.combo.length) buffer = buffer.slice(-opts.combo.length);
-if (buffer.length === opts.combo.length &&
-    buffer.every((k, i) => k.key === opts.combo[i] || k.code === opts.combo[i])) {
+if (
+  buffer.length === opts.combo.length &&
+  buffer.every((k, i) => k.key === opts.combo[i] || k.code === opts.combo[i])
+) {
   opts.wall.open();
   buffer = [];
 }

@@ -2,11 +2,11 @@
 title: env-check
 preview: Validate environment variables against a typed schema at startup with clear, actionable error messages.
 active: true
-url: 'https://www.npmjs.com/package/env-check'
+url: "https://www.npmjs.com/package/env-check"
 tag: TypeScript, CLI, Library
-image: 'https://picsum.photos/seed/env-check/800/450'
+image: "https://picsum.photos/seed/env-check/800/450"
 git: https://github.com/titan-65/nuxt2-vantol/tree/main/packages/env-check
-stack: 
+stack:
   language: TypeScript
   Backend: N/A
   Frontend: N/A
@@ -26,7 +26,7 @@ Validates environment variables against a typed schema at startup with clear, ac
 - **Zero Dependencies** — Lightweight with no external runtime dependencies
 
 ::Flex{gap="4"}
-  ::StatBox{label="Runtime" value="Node.js"}
-  ::StatBox{label="Type Safety" value="100%"}
-  ::StatBox{label="Dependencies" value="0"}
+::StatBox{label="Runtime" value="Node.js"}
+::StatBox{label="Type Safety" value="100%"}
+::StatBox{label="Dependencies" value="0"}
 ::

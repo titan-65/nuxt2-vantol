@@ -18,7 +18,8 @@ export function processQuery(rawQuery: string): AssistantResponse {
 
   if (!query) {
     return {
-      answer: "How can I help you today? Ask me about Vantol's projects, tutorials, or site navigation!",
+      answer:
+        "How can I help you today? Ask me about Vantol's projects, tutorials, or site navigation!",
       suggestions: [
         "Who is Vantol Bennett?",
         "What projects are featured?",
@@ -30,7 +31,12 @@ export function processQuery(rawQuery: string): AssistantResponse {
   }
 
   // Intent 1: Tech Skills / Stack (check before bio so "skills of Vantol" maps to stack)
-  if (query.includes("skill") || query.includes("stack") || query.includes("technology") || query.includes("languages")) {
+  if (
+    query.includes("skill") ||
+    query.includes("stack") ||
+    query.includes("technology") ||
+    query.includes("languages")
+  ) {
     const frontend = PORTFOLIO_KNOWLEDGE.skills.frontend.join(", ");
     const backend = PORTFOLIO_KNOWLEDGE.skills.backend.join(", ");
     const tools = PORTFOLIO_KNOWLEDGE.skills.tools.join(", ");
@@ -52,7 +58,13 @@ export function processQuery(rawQuery: string): AssistantResponse {
   }
 
   // Intent 2: Learn / Tutorials / Series / Modules
-  if (query.includes("tutorial") || query.includes("learn") || query.includes("course") || query.includes("series") || query.includes("module")) {
+  if (
+    query.includes("tutorial") ||
+    query.includes("learn") ||
+    query.includes("course") ||
+    query.includes("series") ||
+    query.includes("module")
+  ) {
     const seriesList = PORTFOLIO_KNOWLEDGE.tutorialSeries
       .map((s) => `• **[${s.title}](${s.path})**: ${s.description}`)
       .join("\n");
@@ -74,7 +86,13 @@ export function processQuery(rawQuery: string): AssistantResponse {
   }
 
   // Intent 3: Projects / Work / Packages
-  if (query.includes("project") || query.includes("package") || query.includes("null-agent") || query.includes("presence") || query.includes("work showcase")) {
+  if (
+    query.includes("project") ||
+    query.includes("package") ||
+    query.includes("null-agent") ||
+    query.includes("presence") ||
+    query.includes("work showcase")
+  ) {
     const projectList = PORTFOLIO_KNOWLEDGE.projects
       .map((p) => `• **[${p.name}](${p.path})** (${p.tag}): ${p.description}`)
       .join("\n");
@@ -96,25 +114,33 @@ export function processQuery(rawQuery: string): AssistantResponse {
   }
 
   // Intent 4: Guestbook / Wall / Signatures
-  if (query.includes("guestbook") || query.includes("sign") || query.includes("wall") || query.includes("leave message")) {
+  if (
+    query.includes("guestbook") ||
+    query.includes("sign") ||
+    query.includes("wall") ||
+    query.includes("leave message")
+  ) {
     return {
-      answer: "You can leave your mark or sign the visitor wall on the **Guestbook** page! It persists real-time signatures and messages.",
+      answer:
+        "You can leave your mark or sign the visitor wall on the **Guestbook** page! It persists real-time signatures and messages.",
       action: {
         type: "navigate",
         target: "/guestbook",
         label: "Open Guestbook",
       },
-      suggestions: [
-        "What is nuxt-presence?",
-        "Who is Vantol Bennett?",
-        "Show blog stats",
-      ],
+      suggestions: ["What is nuxt-presence?", "Who is Vantol Bennett?", "Show blog stats"],
       matchedPages: SITE_PAGES.filter((p) => p.path === "/guestbook"),
     };
   }
 
   // Intent 5: Who is Vantol / Bio / Background
-  if (query.includes("who is") || query.includes("about") || query.includes("bio") || query.includes("vantol") || query.includes("background")) {
+  if (
+    query.includes("who is") ||
+    query.includes("about") ||
+    query.includes("bio") ||
+    query.includes("vantol") ||
+    query.includes("background")
+  ) {
     const expSummary = PORTFOLIO_KNOWLEDGE.experience
       .map((e) => `• **${e.role}** at ${e.company} (${e.period})`)
       .join("\n");
@@ -136,28 +162,31 @@ export function processQuery(rawQuery: string): AssistantResponse {
   }
 
   // Intent 6: Blog / Articles
-  if (query.includes("blog") || query.includes("article") || query.includes("post") || query.includes("write")) {
+  if (
+    query.includes("blog") ||
+    query.includes("article") ||
+    query.includes("post") ||
+    query.includes("write")
+  ) {
     return {
-      answer: "The blog features 30+ deep technical articles covering Nuxt 4, Vue 3, Nitro, Drizzle, Vite+, and React Native performance optimizations.",
+      answer:
+        "The blog features 30+ deep technical articles covering Nuxt 4, Vue 3, Nitro, Drizzle, Vite+, and React Native performance optimizations.",
       action: {
         type: "navigate",
         target: "/blog",
         label: "Read Blog Articles",
       },
-      suggestions: [
-        "Show Nuxt tutorial series",
-        "View blog statistics",
-        "Search projects",
-      ],
+      suggestions: ["Show Nuxt tutorial series", "View blog statistics", "Search projects"],
       matchedPages: SITE_PAGES.filter((p) => p.path === "/blog"),
     };
   }
 
   // Intent 7: General sitemap keyword search fallback
-  const matchedPages = SITE_PAGES.filter((page) =>
-    page.title.toLowerCase().includes(query) ||
-    page.description.toLowerCase().includes(query) ||
-    page.keywords.some((k) => query.includes(k))
+  const matchedPages = SITE_PAGES.filter(
+    (page) =>
+      page.title.toLowerCase().includes(query) ||
+      page.description.toLowerCase().includes(query) ||
+      page.keywords.some((k) => query.includes(k)),
   );
 
   if (matchedPages.length > 0) {
@@ -173,11 +202,7 @@ export function processQuery(rawQuery: string): AssistantResponse {
         target: firstMatch.path,
         label: `Go to ${firstMatch.title}`,
       },
-      suggestions: [
-        "Who is Vantol Bennett?",
-        "View projects showcase",
-        "Read Nuxt tutorials",
-      ],
+      suggestions: ["Who is Vantol Bennett?", "View projects showcase", "Read Nuxt tutorials"],
       matchedPages,
     };
   }

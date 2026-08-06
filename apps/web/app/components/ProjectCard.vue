@@ -1,24 +1,26 @@
 <script setup lang="ts">
 defineProps<{
   item: {
-    title: string
-    preview: string
-    tag: string
-    image: string
-    url: string
-    git: string
+    title: string;
+    preview: string;
+    tag: string;
+    image: string;
+    url: string;
+    git: string;
     stack: {
-      Backend?: string
-      Frontend?: string
-      css?: string
-    }
-    path: string
-  }
-}>()
+      Backend?: string;
+      Frontend?: string;
+      css?: string;
+    };
+    path: string;
+  };
+}>();
 </script>
 
 <template>
-  <div class="group flex flex-col bg-[#111] border border-white/10 rounded-xl overflow-hidden hover:border-white/20 transition-all duration-300">
+  <div
+    class="group flex flex-col bg-[#111] border border-white/10 rounded-xl overflow-hidden hover:border-white/20 transition-all duration-300"
+  >
     <!-- Image -->
     <div class="relative h-48 overflow-hidden">
       <img
@@ -30,7 +32,9 @@ defineProps<{
       />
       <div class="absolute inset-0 bg-gradient-to-t from-[#111] to-transparent opacity-40" />
       <div class="absolute bottom-3 left-3">
-        <span class="inline-block bg-black/60 backdrop-blur-sm border border-white/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-md text-zinc-300">
+        <span
+          class="inline-block bg-black/60 backdrop-blur-sm border border-white/10 px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider rounded-md text-zinc-300"
+        >
           {{ item.tag }}
         </span>
       </div>

@@ -66,7 +66,8 @@ export const SITE_PAGES: SitePage[] = [
   {
     path: "/about",
     title: "About Vantol",
-    description: "Background, work experience (MPS CEO, Zhyjenae Founder, Educator), and tech skills.",
+    description:
+      "Background, work experience (MPS CEO, Zhyjenae Founder, Educator), and tech skills.",
     keywords: ["about", "bio", "experience", "resume", "skills", "background"],
     category: "main",
   },
@@ -126,7 +127,8 @@ export const PORTFOLIO_KNOWLEDGE: PortfolioKnowledge = {
       role: "Computer Science Educator",
       company: "Eltham High School",
       period: "2010 - 2022",
-      description: "Educated over 1,000 students in software development and Computer Science fundamentals.",
+      description:
+        "Educated over 1,000 students in software development and Computer Science fundamentals.",
     },
   ],
   projects: [
@@ -140,7 +142,8 @@ export const PORTFOLIO_KNOWLEDGE: PortfolioKnowledge = {
       name: "nuxt-presence",
       path: "/projects",
       tag: "Nuxt Module",
-      description: "Visitor signature wall & cryptographic build mark token generator for Nuxt apps.",
+      description:
+        "Visitor signature wall & cryptographic build mark token generator for Nuxt apps.",
     },
     {
       name: "teacher-toolkit",
@@ -159,7 +162,8 @@ export const PORTFOLIO_KNOWLEDGE: PortfolioKnowledge = {
     {
       title: "Nuxt Modules Tutorial Series",
       path: "/learn/nuxt-modules-core",
-      description: "Mastering module anatomy, server handlers, client plugins, options, and signed build marks.",
+      description:
+        "Mastering module anatomy, server handlers, client plugins, options, and signed build marks.",
     },
     {
       title: "Vue Vapor Deep Dive",

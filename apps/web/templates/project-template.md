@@ -30,7 +30,9 @@ Provide a detailed overview of what this project is about, the problem it solves
 Explain how you built it, the challenges you faced, and the solutions you implemented. You can use MDC components here as well.
 
 ::BlogCard
+
 ### Architecture Insight
+
 Detailed explanation of the project architecture or a specific technical decision.
 ::
 

@@ -1,10 +1,10 @@
-import { defineConfig } from 'vite-plus';
+import { defineConfig } from "vite-plus";
 
 export default defineConfig({
   run: {
     tasks: {
       build: {
-        command: 'vp run -r build',
+        command: "vp run -r build",
         cache: true,
       },
     },

@@ -2,21 +2,21 @@
 defineProps({
   src: {
     type: String,
-    default: ''
+    default: "",
   },
   alt: {
     type: String,
-    default: ''
+    default: "",
   },
   width: {
     type: [String, Number],
-    default: undefined
+    default: undefined,
   },
   height: {
     type: [String, Number],
-    default: undefined
-  }
-})
+    default: undefined,
+  },
+});
 </script>
 
 <template>

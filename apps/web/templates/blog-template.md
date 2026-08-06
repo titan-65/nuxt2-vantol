@@ -42,7 +42,9 @@ console.log(greeting);
 ## Using a Card
 
 ::BlogCard
+
 ### Important Note
+
 You can even use Markdown inside this card!
 ::
 

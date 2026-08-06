@@ -2,11 +2,11 @@
 title: null-agent
 preview: Interactive coding assistant with 5 LLM providers, 49 built-in tools, terminal UI, proactive automation, and developer accountability tracking.
 active: true
-url: 'https://nuxt2-vantol-null-agent.vercel.app/'
+url: "https://nuxt2-vantol-null-agent.vercel.app/"
 tag: LLM, CLI, Library
-image: 'https://res.cloudinary.com/ddszyeplg/image/upload/v1780482190/null-agent___AI_coding_assistant_e8k8cu.jpg'
+image: "https://res.cloudinary.com/ddszyeplg/image/upload/v1780482190/null-agent___AI_coding_assistant_e8k8cu.jpg"
 git: https://github.com/vantolbennett/vantolbennett-blog/tree/main/packages/null-agent
-stack: 
+stack:
   language: TypeScript
   Backend: N/A
   Frontend: N/A
@@ -31,8 +31,8 @@ Interactive coding assistant library with multi-provider LLM support, 49 built-i
 - **Four Interfaces** — Terminal UI, REPL, HTTP server, or one-shot CLI
 
 :::Flex{gap="4"}
-  ::StatBox{label="Providers" value="5"}
-  ::StatBox{label="Built-in Tools" value="49"}
-  ::StatBox{label="Interfaces" value="4"}
-  ::StatBox{label="Test Files" value="52"}
+::StatBox{label="Providers" value="5"}
+::StatBox{label="Built-in Tools" value="49"}
+::StatBox{label="Interfaces" value="4"}
+::StatBox{label="Test Files" value="52"}
 :::

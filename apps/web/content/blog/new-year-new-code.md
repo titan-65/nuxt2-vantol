@@ -47,12 +47,13 @@ Why it’s exciting:
 - Freedom from heavy abstractions
 
 ::blog-card
+
 ### What TanStack Start Encourages
 
 - Thinking in data, not just pages
 - Clear separation of concerns
 - Performance by default
-::
+  ::
 
 It’s less about fighting the framework and more about building with confidence.
 

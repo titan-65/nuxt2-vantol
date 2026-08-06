@@ -1,80 +1,90 @@
 <script setup lang="ts">
 const props = defineProps<{
-  isOpen: boolean
-}>()
+  isOpen: boolean;
+}>();
 
 const emit = defineEmits<{
-  close: []
-}>()
+  close: [];
+}>();
 
-const searchQuery = ref('')
-const searchResults = ref<any[]>([])
-const isSearching = ref(false)
+const searchQuery = ref("");
+const searchResults = ref<any[]>([]);
+const isSearching = ref(false);
 
-const { data: allPosts } = await useAsyncData('all-posts-search', () => {
-  return queryCollection('blog').all() as Promise<any[]>
-})
+const { data: allPosts } = await useAsyncData("all-posts-search", () => {
+  return queryCollection("blog").all() as Promise<any[]>;
+});
 
 const performSearch = () => {
   if (!searchQuery.value.trim()) {
-    searchResults.value = []
-    return
+    searchResults.value = [];
+    return;
   }
 
-  isSearching.value = true
-  const query = searchQuery.value.toLowerCase()
+  isSearching.value = true;
+  const query = searchQuery.value.toLowerCase();
 
-  searchResults.value = (allPosts.value || []).filter(post => {
-    const titleMatch = post.title?.toLowerCase().includes(query)
-    const descMatch = post.description?.toLowerCase().includes(query)
-    const tagMatch = post.tag?.toLowerCase().includes(query)
-    const keywordsMatch = post.keywords?.some((k: string) => k.toLowerCase().includes(query))
-    return titleMatch || descMatch || tagMatch || keywordsMatch
-  }).slice(0, 5)
+  searchResults.value = (allPosts.value || [])
+    .filter((post) => {
+      const titleMatch = post.title?.toLowerCase().includes(query);
+      const descMatch = post.description?.toLowerCase().includes(query);
+      const tagMatch = post.tag?.toLowerCase().includes(query);
+      const keywordsMatch = post.keywords?.some((k: string) => k.toLowerCase().includes(query));
+      return titleMatch || descMatch || tagMatch || keywordsMatch;
+    })
+    .slice(0, 5);
 
-  isSearching.value = false
-}
+  isSearching.value = false;
+};
 
-watch(searchQuery, performSearch)
+watch(searchQuery, performSearch);
 
 const handleClose = () => {
-  searchQuery.value = ''
-  searchResults.value = []
-  emit('close')
-}
+  searchQuery.value = "";
+  searchResults.value = [];
+  emit("close");
+};
 
 const navigateToPost = (post: any) => {
-  handleClose()
-  navigateTo(`/blog/${post.path?.split('/').pop()}`)
-}
+  handleClose();
+  navigateTo(`/blog/${post.path?.split("/").pop()}`);
+};
 
 onMounted(() => {
   const handleEscape = (e: KeyboardEvent) => {
-    if (e.key === 'Escape' && props.isOpen) {
-      handleClose()
+    if (e.key === "Escape" && props.isOpen) {
+      handleClose();
     }
-  }
-  document.addEventListener('keydown', handleEscape)
+  };
+  document.addEventListener("keydown", handleEscape);
   onUnmounted(() => {
-    document.removeEventListener('keydown', handleEscape)
-  })
-})
+    document.removeEventListener("keydown", handleEscape);
+  });
+});
 </script>
 
 <template>
   <Teleport to="body">
-    <div
-      v-if="isOpen"
-      class="fixed inset-0 z-50 overflow-y-auto"
-      @click.self="handleClose"
-    >
+    <div v-if="isOpen" class="fixed inset-0 z-50 overflow-y-auto" @click.self="handleClose">
       <div class="fixed inset-0 bg-black/70 backdrop-blur-sm" @click="handleClose" />
       <div class="relative min-h-screen flex items-start justify-center pt-20 px-4">
-        <div class="relative w-full max-w-xl bg-[#111] border border-white/10 rounded-xl shadow-2xl overflow-hidden">
+        <div
+          class="relative w-full max-w-xl bg-[#111] border border-white/10 rounded-xl shadow-2xl overflow-hidden"
+        >
           <div class="p-4">
             <div class="flex items-center border-b border-white/10 pb-4">
-              <svg class="w-5 h-5 text-zinc-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+              <svg
+                class="w-5 h-5 text-zinc-500"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+                />
               </svg>
               <input
                 v-model="searchQuery"
@@ -83,17 +93,22 @@ onMounted(() => {
                 class="w-full ml-3 bg-transparent outline-none text-white placeholder-zinc-600"
                 autofocus
               />
-              <button
-                @click="handleClose"
-                class="p-1 hover:bg-white/5 rounded text-zinc-500"
-              >
+              <button @click="handleClose" class="p-1 hover:bg-white/5 rounded text-zinc-500">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M6 18L18 6M6 6l12 12"
+                  />
                 </svg>
               </button>
             </div>
             <div class="py-4 max-h-96 overflow-y-auto">
-              <div v-if="searchQuery && searchResults.length === 0 && !isSearching" class="text-center text-zinc-500 py-8">
+              <div
+                v-if="searchQuery && searchResults.length === 0 && !isSearching"
+                class="text-center text-zinc-500 py-8"
+              >
                 No posts found for "{{ searchQuery }}"
               </div>
               <div v-else-if="!searchQuery" class="text-center text-zinc-600 py-8">
@@ -108,14 +123,19 @@ onMounted(() => {
                 >
                   <h3 class="font-medium text-white">{{ post.title }}</h3>
                   <p class="text-sm text-zinc-500 line-clamp-1">{{ post.description }}</p>
-                  <span v-if="post.tag" class="inline-block mt-1 px-2 py-0.5 text-xs bg-[#f5c542]/10 text-[#f5c542] rounded">
+                  <span
+                    v-if="post.tag"
+                    class="inline-block mt-1 px-2 py-0.5 text-xs bg-[#f5c542]/10 text-[#f5c542] rounded"
+                  >
                     {{ post.tag }}
                   </span>
                 </button>
               </div>
             </div>
           </div>
-          <div class="border-t border-white/10 px-4 py-3 text-xs text-zinc-600 flex items-center justify-between">
+          <div
+            class="border-t border-white/10 px-4 py-3 text-xs text-zinc-600 flex items-center justify-between"
+          >
             <span>Press ESC to close</span>
             <span>{{ searchResults.length }} result(s)</span>
           </div>

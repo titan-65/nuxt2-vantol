@@ -8,12 +8,12 @@ ticket: t1-blue-sky-api
 
 **Verdict: FEASIBLE, and free.** Posting to Blue Sky from a self-hosted worker is the
 easy part of this whole effort. Official TypeScript SDK, app-password auth, generous limits,
-no API paywall. The only real design work is *threading* promos longer than 300 graphemes.
+no API paywall. The only real design work is _threading_ promos longer than 300 graphemes.
 
 ## Auth model
 
 - **App password** (recommended for a single-account personal automation): create one at
-  `bsky.app/settings/app-passwords` — it is *not* your main account password and can be
+  `bsky.app/settings/app-passwords` — it is _not_ your main account password and can be
   revoked anytime. Held as an env var (`BLUESKY_HANDLE`, `BLUESKY_APP_PASSWORD`).
 - Session: `com.atproto.server.createSession` with `{ identifier, password }` → returns
   `accessJwt` (short-lived, minutes) + `refreshJwt` (longer). SDK manages refresh automatically.
@@ -55,7 +55,7 @@ contrast with X, whose write API requires a paid Basic tier.)
 
 ## What the "draft staged in repo" model changes
 
-Nothing about feasibility — it *simplifies* it. The deploy-time worker needs **zero** Blue
+Nothing about feasibility — it _simplifies_ it. The deploy-time worker needs **zero** Blue
 Sky access: it only writes `social/drafts/<slug>.md`. Only the later **publish adapter**
 (run by the human) needs the app password + `@atproto/api`. So the credential surface is
 small and human-gated.
@@ -63,21 +63,27 @@ small and human-gated.
 ## Minimal publish snippet (for the t6 adapter)
 
 ```ts
-import { BskyAgent } from '@atproto/api'
+import { BskyAgent } from "@atproto/api";
 
-const agent = new BskyAgent({ service: 'https://bsky.social' })
-await agent.login({ identifier: process.env.BLUESKY_HANDLE!, password: process.env.BLUESKY_APP_PASSWORD! })
+const agent = new BskyAgent({ service: "https://bsky.social" });
+await agent.login({
+  identifier: process.env.BLUESKY_HANDLE!,
+  password: process.env.BLUESKY_APP_PASSWORD!,
+});
 
 // single post
-await agent.post({ text: 'New post: <title> <url>', createdAt: new Date().toISOString() })
+await agent.post({ text: "New post: <title> <url>", createdAt: new Date().toISOString() });
 
 // threaded promo: post segments[0], then reply with each subsequent segment
-let root, parent
+let root, parent;
 for (const seg of segments) {
-  const res = await agent.post({ text: seg, createdAt: new Date().toISOString(),
-    ...(parent ? { reply: { root, parent } } : {}) })
-  if (!root) root = { uri: res.uri, cid: res.cid }
-  parent = { uri: res.uri, cid: res.cid }
+  const res = await agent.post({
+    text: seg,
+    createdAt: new Date().toISOString(),
+    ...(parent ? { reply: { root, parent } } : {}),
+  });
+  if (!root) root = { uri: res.uri, cid: res.cid };
+  parent = { uri: res.uri, cid: res.cid };
 }
 ```
 

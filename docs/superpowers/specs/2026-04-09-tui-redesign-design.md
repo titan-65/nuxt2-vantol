@@ -55,12 +55,14 @@ Comprehensive redesign of the null-agent TUI to create a "Terminal IDE" experien
 ### 1. StatusBar
 
 **Left side:**
+
 - `null-agent` (bold, accent color)
 - Project name (truncated with `…` if > 20 chars)
 - Git branch (yellow, if in git repo)
 - Dirty indicator (`●` red if uncommitted, green if clean)
 
 **Right side:**
+
 - Provider/model (gray, truncated)
 - Tool count
 - Status with color coding
@@ -72,16 +74,19 @@ Comprehensive redesign of the null-agent TUI to create a "Terminal IDE" experien
 **Sections:**
 
 **File Tree (top)**
+
 - Shows project root
 - Expands 2 levels deep
 - Files colored by type (`.ts` cyan, `.json` yellow, `.md` green)
 - `node_modules/` and `.git/` collapsed by default
 
 **Recent Files (middle)**
+
 - Last 5 edited files
 - Timestamps relative ("2m ago")
 
 **Git Status (bottom)**
+
 - Modified files count
 - Staged/unstaged indicators
 - Current branch
@@ -91,22 +96,26 @@ Comprehensive redesign of the null-agent TUI to create a "Terminal IDE" experien
 ### 3. ChatPanel
 
 **Message rendering:**
+
 - Role prefix with color (`▸ you`, `▸ assistant`)
 - Streaming indicator (⠋ spinner) for in-progress
 - Timestamps on hover (relative)
 
 **Code blocks:**
+
 - Language label top-right
 - Syntax highlighting (TS, JS, Bash, JSON, MD)
 - Copy button hint (`Ctrl+C to copy`)
 - Line numbers optional (toggle)
 
 **Tool calls:**
+
 - Collapsible (expanded by default, `v` to collapse)
 - Shows tool name + summary result
 - Status indicator (executing/success/error)
 
 **Scrolling:**
+
 - `Page Up/Down` or `Shift+↑/↓` to scroll
 - `gg` to jump to top, `G` to jump to bottom
 - Visual scroll indicator on right edge
@@ -125,33 +134,36 @@ Comprehensive redesign of the null-agent TUI to create a "Terminal IDE" experien
 
 **Moods & Expressions:**
 
-| Mood | Eyes | Mouth | Color | Animation |
-|------|------|-------|-------|-----------|
-| idle | `◠◠` | `◡` | blue | slow blink |
-| thinking | `◠?` | `~` | yellow | occasional tilt |
-| executing | `◠◠` | `⟳` | magenta | spin |
-| happy | `◡◡` | `♥` | green | bounce |
-| waiting | `◠◠` | `…` | gray | pulse |
-| sleeping | `-.-` | `z` | gray | Zzz float |
-| excited | `★★` | `✧` | cyan | sparkle |
-| confused | `◠?` | `/` | yellow | tilt |
-| error | `◠◠` | `×` | red | shake |
-| success | `◡◡` | `✓` | green | pop |
-| loading | `◠◠` | `…` | blue | dots wave |
+| Mood      | Eyes  | Mouth | Color   | Animation       |
+| --------- | ----- | ----- | ------- | --------------- |
+| idle      | `◠◠`  | `◡`   | blue    | slow blink      |
+| thinking  | `◠?`  | `~`   | yellow  | occasional tilt |
+| executing | `◠◠`  | `⟳`   | magenta | spin            |
+| happy     | `◡◡`  | `♥`   | green   | bounce          |
+| waiting   | `◠◠`  | `…`   | gray    | pulse           |
+| sleeping  | `-.-` | `z`   | gray    | Zzz float       |
+| excited   | `★★`  | `✧`   | cyan    | sparkle         |
+| confused  | `◠?`  | `/`   | yellow  | tilt            |
+| error     | `◠◠`  | `×`   | red     | shake           |
+| success   | `◡◡`  | `✓`   | green   | pop             |
+| loading   | `◠◠`  | `…`   | blue    | dots wave       |
 
 **Animation:**
+
 - Eyes blink every 3-5 seconds (random)
 - Mouth expressions cycle every 500ms (8 frames)
 - Mood transitions have 200ms fade
 - Special reactions: shake on error, bounce on success
 
 **Positioning:**
+
 - Left side of AgentBar
 - Mood color matches status color
 
 ### 5. InputBar
 
 **Features:**
+
 - Single line by default
 - `Shift+Enter` for multi-line
 - `↑/↓` for command history (persisted)
@@ -161,11 +173,13 @@ Comprehensive redesign of the null-agent TUI to create a "Terminal IDE" experien
 - `Ctrl+C` cancel current input
 
 **Visual states:**
+
 - Idle: green border, blinking cursor
 - Busy: yellow border, no cursor
 - Error: red border, shake animation
 
 **Hints (right side):**
+
 - `[↑ history]` when empty
 - `[tab complete]` when partial
 - `[shift+enter for multi-line]`
@@ -173,12 +187,14 @@ Comprehensive redesign of the null-agent TUI to create a "Terminal IDE" experien
 ### 6. Notifications
 
 **Behavior:**
+
 - Stack up to 3 visible
 - Click to dismiss
 - `d` key to dismiss oldest
 - History viewable with `Ctrl+H`
 
 **Types with icons:**
+
 - `git:` git events (yellow)
 - `file:` file events (green/red based on action)
 - `error:` errors (red, persistent until dismissed)
@@ -196,12 +212,12 @@ Comprehensive redesign of the null-agent TUI to create a "Terminal IDE" experien
 const darkTheme = {
   background: "#1a1a2e",
   foreground: "#eaeaea",
-  accent: "#6c5ce7",      // purple for branding
-  success: "#00b894",     // green
-  warning: "#fdcb6e",     // yellow
-  error: "#ff7675",       // red
-  info: "#74b9ff",        // blue
-  muted: "#636e72",       // gray
+  accent: "#6c5ce7", // purple for branding
+  success: "#00b894", // green
+  warning: "#fdcb6e", // yellow
+  error: "#ff7675", // red
+  info: "#74b9ff", // blue
+  muted: "#636e72", // gray
   border: "#2d2d44",
 };
 ```
@@ -231,18 +247,18 @@ const lightTheme = {
 
 ## Keyboard Shortcuts
 
-| Shortcut | Action |
-|----------|--------|
-| `Ctrl+B` | Toggle context panel |
-| `Ctrl+H` | Notification history |
-| `Ctrl+T` | Toggle theme |
-| `↑/↓` | Command history |
-| `Tab` | Autocomplete |
-| `Shift+Enter` | Multi-line input |
-| `Ctrl+K` | Clear line |
-| `Ctrl+C` | Cancel input |
-| `Ctrl+L` | Clear screen |
-| `Esc` | Cancel current action |
+| Shortcut      | Action                |
+| ------------- | --------------------- |
+| `Ctrl+B`      | Toggle context panel  |
+| `Ctrl+H`      | Notification history  |
+| `Ctrl+T`      | Toggle theme          |
+| `↑/↓`         | Command history       |
+| `Tab`         | Autocomplete          |
+| `Shift+Enter` | Multi-line input      |
+| `Ctrl+K`      | Clear line            |
+| `Ctrl+C`      | Cancel input          |
+| `Ctrl+L`      | Clear screen          |
+| `Esc`         | Cancel current action |
 
 ---
 

@@ -13,6 +13,7 @@
 ### Task 1: Clean up template boilerplate
 
 **Files:**
+
 - Modify: `apps/null-agent/index.html`
 - Delete: `apps/null-agent/src/counter.ts`
 - Delete: `apps/null-agent/src/assets/hero.png`
@@ -53,6 +54,7 @@ git commit -m "feat: clean up template boilerplate for terminal website"
 ### Task 2: Add xterm.js dependencies
 
 **Files:**
+
 - Modify: `apps/null-agent/package.json`
 
 - [ ] **Step 1: Install xterm packages**
@@ -73,12 +75,14 @@ git commit -m "feat: add xterm.js dependencies"
 ### Task 3: Write CSS — full-viewport terminal theme
 
 **Files:**
+
 - Modify: `apps/null-agent/src/style.css`
 
 - [ ] **Step 1: Write the CSS**
 
 ```css
-html, body {
+html,
+body {
   margin: 0;
   padding: 0;
   width: 100%;
@@ -110,6 +114,7 @@ git commit -m "feat: add full-viewport terminal CSS"
 ### Task 4: Write main.ts — terminal app with SSE streaming
 
 **Files:**
+
 - Create: `apps/null-agent/src/main.ts`
 
 This is the core file. All logic in one place since the app is small.
@@ -323,7 +328,8 @@ async function handleCommand(input: string) {
               writeln("No messages in history.");
             } else {
               for (const msg of messages) {
-                const role = msg.role === "user" ? "\x1b[32muser\x1b[0m" : "\x1b[36massistant\x1b[0m";
+                const role =
+                  msg.role === "user" ? "\x1b[32muser\x1b[0m" : "\x1b[36massistant\x1b[0m";
                 const preview = msg.content.slice(0, 120).replace(/\n/g, " ");
                 writeln(`  ${role}: ${preview}`);
               }

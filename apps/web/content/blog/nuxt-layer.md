@@ -22,9 +22,9 @@ Nuxt 3 introduced many powerful features, but **Nuxt Layers** stand out as one o
 
 If you’ve ever wanted to:
 
-- Reuse layouts, components, and pages across projects  
-- Build a scalable SaaS architecture  
-- Maintain a shared design system or feature set  
+- Reuse layouts, components, and pages across projects
+- Build a scalable SaaS architecture
+- Maintain a shared design system or feature set
 
 Then Nuxt Layers are exactly what you’re looking for.
 
@@ -40,19 +40,19 @@ A **Nuxt Layer** is a Nuxt application that is designed to be **extended**, not 
 
 In simple terms:
 
-- A layer looks like a normal Nuxt app  
-- Another Nuxt app can extend it  
-- Nuxt merges everything together at runtime  
+- A layer looks like a normal Nuxt app
+- Another Nuxt app can extend it
+- Nuxt merges everything together at runtime
 
 Layers can contain:
 
-- Pages  
-- Components  
-- Layouts  
-- Composables  
-- Assets  
-- Configuration  
-- Dependencies  
+- Pages
+- Components
+- Layouts
+- Composables
+- Assets
+- Configuration
+- Dependencies
 
 > Think of layers as inheritance for Nuxt applications.
 
@@ -64,11 +64,11 @@ Before layers, reuse often meant duplication. Layers introduce a **first-class a
 
 ### Benefits of Using Layers
 
-- Reusable features across multiple apps  
-- Cleaner separation of concerns  
-- Faster project setup  
-- Easier long-term maintenance  
-- Ideal for SaaS platforms and white-label apps  
+- Reusable features across multiple apps
+- Cleaner separation of concerns
+- Faster project setup
+- Easier long-term maintenance
+- Ideal for SaaS platforms and white-label apps
 
 Layers help teams move faster **without sacrificing structure**.
 
@@ -78,9 +78,9 @@ Layers help teams move faster **without sacrificing structure**.
 
 Nuxt merges layers **from bottom to top**:
 
-1. Base layers (design system, shared config)  
-2. Feature layers (auth, billing, dashboards)  
-3. Final application (branding, custom logic)  
+1. Base layers (design system, shared config)
+2. Feature layers (auth, billing, dashboards)
+3. Final application (branding, custom logic)
 
 If multiple layers define the same file, **the closest one wins**.
 
@@ -94,7 +94,7 @@ If multiple layers define the same file, **the closest one wins**.
 npx nuxi init layers/base-ui
 cd layers/base-ui
 npm install
-````
+```
 
 This creates a standard Nuxt project structure:
 
@@ -117,8 +117,8 @@ You will not run this project directly—it exists to be extended.
 // layers/base-ui/nuxt.config.ts
 export default defineNuxtConfig({
   components: true,
-  css: ['~/assets/main.css']
-})
+  css: ["~/assets/main.css"],
+});
 ```
 
 Add a shared component:
@@ -158,17 +158,15 @@ Extend the layer:
 ```ts
 // apps/web/nuxt.config.ts
 export default defineNuxtConfig({
-  extends: ['../layers/base-ui']
-})
+  extends: ["../layers/base-ui"],
+});
 ```
 
 Now you can use the shared component without importing it:
 
 ```vue
 <template>
-  <BaseButton>
-    Click Me
-  </BaseButton>
+  <BaseButton> Click Me </BaseButton>
 </template>
 ```
 
@@ -180,12 +178,8 @@ You can extend **multiple layers** in a single app.
 
 ```ts
 export default defineNuxtConfig({
-  extends: [
-    '../layers/base-ui',
-    '../layers/auth',
-    '../layers/dashboard'
-  ]
-})
+  extends: ["../layers/base-ui", "../layers/auth", "../layers/dashboard"],
+});
 ```
 
 Later layers override earlier ones.
@@ -237,14 +231,14 @@ Layers are perfect for shared logic.
 ```ts
 // layers/auth/composables/useAuth.ts
 export const useAuth = () => {
-  const user = useState('user', () => null)
+  const user = useState("user", () => null);
 
   const login = async () => {
-    user.value = { name: 'Vantol' }
-  }
+    user.value = { name: "Vantol" };
+  };
 
-  return { user, login }
-}
+  return { user, login };
+};
 ```
 
 This composable is globally available.
@@ -259,10 +253,10 @@ Layers can define runtime configuration:
 export default defineNuxtConfig({
   runtimeConfig: {
     public: {
-      appName: 'Base App'
-    }
-  }
-})
+      appName: "Base App",
+    },
+  },
+});
 ```
 
 Apps can override these values safely.
@@ -306,10 +300,10 @@ This structure works well with pnpm workspaces, Turborepo, or Nx.
 
 A common production setup:
 
-* `base-ui` – Design system
-* `auth` – Authentication and guards
-* `billing` – Stripe and subscriptions
-* `dashboard` – Core product UI
+- `base-ui` – Design system
+- `auth` – Authentication and guards
+- `billing` – Stripe and subscriptions
+- `dashboard` – Core product UI
 
 ```ts
 extends: [
@@ -328,10 +322,10 @@ New apps can be launched in days instead of weeks.
 
 You can override:
 
-* Components
-* Pages
-* Layouts
-* Composables
+- Components
+- Pages
+- Layouts
+- Composables
 
 Nuxt resolves conflicts using **closest-first resolution**.
 
@@ -339,10 +333,10 @@ Nuxt resolves conflicts using **closest-first resolution**.
 
 ## Common Pitfalls
 
-* Putting app-specific logic in base layers
-* Creating tight coupling between layers
-* Ignoring layer order
-* Treating layers like plugins
+- Putting app-specific logic in base layers
+- Creating tight coupling between layers
+- Ignoring layer order
+- Treating layers like plugins
 
 Design layers as **products**, not shortcuts.
 
@@ -365,14 +359,14 @@ They solve different problems and often work best together.
 
 **Use layers when:**
 
-* You manage multiple Nuxt apps
-* You want shared features or UI
-* You’re building a SaaS platform
+- You manage multiple Nuxt apps
+- You want shared features or UI
+- You’re building a SaaS platform
 
 **Avoid layers when:**
 
-* You have a single small app
-* There is little to no shared logic
+- You have a single small app
+- There is little to no shared logic
 
 ---
 

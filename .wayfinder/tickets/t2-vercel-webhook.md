@@ -23,7 +23,7 @@ How does a self-hosted worker learn "a blog post just deployed," and which one? 
   or polling the Vercel API for latest deploy + git sha.
 
 Deliver a markdown summary: the exact trigger path recommended, payload fields, and how the
-worker resolves *which slug(s)* to draft for. Feeds the worker architecture (t5).
+worker resolves _which slug(s)_ to draft for. Feeds the worker architecture (t5).
 
 ## Resolution
 

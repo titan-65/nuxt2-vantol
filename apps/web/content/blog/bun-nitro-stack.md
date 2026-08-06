@@ -21,6 +21,7 @@ The JavaScript ecosystem is evolving fast, and **Bun** is leading the charge. Si
 When paired with **Nitro**, you get a server stack that's both incredibly fast and deployment-agnostic.
 
 In this post, we'll explore:
+
 - Why Bun matters in 2026
 - Setting up Bun with Nitro
 - Performance benefits and benchmarks
@@ -53,12 +54,12 @@ Bun's startup time is 4-6x faster than Node.js, and it can handle significantly 
 
 Let's look at real-world performance comparisons:
 
-| Metric | Node.js | Bun | Improvement |
-|--------|---------|-----|-------------|
-| Startup time | 45ms | 8ms | **5.6x faster** |
-| HTTP requests/sec | 12,400 | 48,200 | **3.9x faster** |
-| TypeScript execution | 180ms | 12ms | **15x faster** |
-| Memory usage | 120MB | 85MB | **29% less** |
+| Metric               | Node.js | Bun    | Improvement     |
+| -------------------- | ------- | ------ | --------------- |
+| Startup time         | 45ms    | 8ms    | **5.6x faster** |
+| HTTP requests/sec    | 12,400  | 48,200 | **3.9x faster** |
+| TypeScript execution | 180ms   | 12ms   | **15x faster**  |
+| Memory usage         | 120MB   | 85MB   | **29% less**    |
 
 These aren't synthetic benchmarks—they're representative of real API workloads.
 
@@ -139,7 +140,7 @@ export default defineNuxtConfig({
   nitro: {
     preset: "bun",
   },
-  
+
   devtools: {
     enabled: true,
   },
@@ -193,27 +194,27 @@ interface OrderItem {
 const orders: any[] = [];
 
 export default defineEventHandler(async (event) => {
-  const body = await readBody(event) as OrderItem[];
-  
+  const body = (await readBody(event)) as OrderItem[];
+
   if (!body || body.length === 0) {
     throw createError({
       statusCode: 400,
       statusMessage: "Order must contain at least one item",
     });
   }
-  
+
   // Simulate database delay
   await new Promise((resolve) => setTimeout(resolve, 100));
-  
+
   const order = {
     id: crypto.randomUUID(),
     items: body,
     status: "pending",
     createdAt: new Date().toISOString(),
   };
-  
+
   orders.push(order);
-  
+
   return order;
 });
 ```
@@ -257,12 +258,12 @@ const CONCURRENCY = 100;
 
 async function benchmark() {
   console.log(`Running benchmark: ${REQUESTS} requests with ${CONCURRENCY} concurrency\n`);
-  
+
   const start = Date.now();
   let completed = 0;
-  
+
   const promises = [];
-  
+
   for (let i = 0; i < CONCURRENCY; i++) {
     promises.push(
       new Promise((resolve) => {
@@ -271,11 +272,11 @@ async function benchmark() {
             resolve(true);
             return;
           }
-          
+
           try {
             await fetch(`http://${HOST}:${PORT}/api/products`);
             completed++;
-            
+
             if (completed < REQUESTS) {
               makeRequest();
             } else {
@@ -285,17 +286,17 @@ async function benchmark() {
             resolve(true);
           }
         };
-        
+
         makeRequest();
-      })
+      }),
     );
   }
-  
+
   await Promise.all(promises);
-  
+
   const duration = Date.now() - start;
   const rps = Math.round(REQUESTS / (duration / 1000));
-  
+
   console.log(`Results:`);
   console.log(`  Total time: ${duration}ms`);
   console.log(`  Requests/sec: ${rps}`);
@@ -353,7 +354,7 @@ Bun has built-in support for file operations:
 export default defineEventHandler(async (event) => {
   const file = Bun.file("./server/data/products.json");
   const contents = await file.json();
-  
+
   return contents;
 });
 ```
@@ -369,12 +370,10 @@ export default defineEventHandler(async () => {
     "https://api.github.com/users/facebook",
     "https://api.github.com/users/nuxt",
   ];
-  
+
   // Fetch all URLs in parallel - Bun optimizes this natively
-  const responses = await Promise.all(
-    urls.map((url) => fetch(url).then((r) => r.json()))
-  );
-  
+  const responses = await Promise.all(urls.map((url) => fetch(url).then((r) => r.json())));
+
   return {
     users: responses.map((r) => r.login),
     fetchedAt: new Date().toISOString(),
@@ -389,12 +388,15 @@ export default defineEventHandler(async () => {
 ### From Node.js to Bun
 
 1. **Test your dependencies**
+
    ```bash
    bun pm trust
    ```
+
    This ensures all packages work with Bun's module resolution.
 
 2. **Update scripts**
+
    ```json
    {
      "scripts": {
@@ -414,6 +416,7 @@ export default defineEventHandler(async () => {
 ### Known Compatibility Issues
 
 ::BlogAlert{type="warning"}
+
 - Some native modules may require rebuilding: `bun pm rebuild`
 - Very old packages with C++ addons might not work
 - Edge cases in crypto API differ slightly
@@ -490,13 +493,13 @@ By the end of this guide, you have:
 
 ### API Endpoints Summary
 
-| Endpoint | Description |
-|----------|-------------|
-| GET `/api/ping` | Health check with Bun info |
-| GET `/api/products` | Product list |
-| GET `/api/bun-features` | Bun-specific features demo |
-| GET `/api/external` | Parallel external API calls |
-| POST `/api/orders` | Order creation |
+| Endpoint                | Description                 |
+| ----------------------- | --------------------------- |
+| GET `/api/ping`         | Health check with Bun info  |
+| GET `/api/products`     | Product list                |
+| GET `/api/bun-features` | Bun-specific features demo  |
+| GET `/api/external`     | Parallel external API calls |
+| POST `/api/orders`      | Order creation              |
 
 ---
 

@@ -10,27 +10,23 @@
       aria-label="Open Nox Assistant"
     >
       <span class="launcher-avatar-wrap">
-        <img
-          :src="avatarUrl"
-          alt="Nox"
-          class="launcher-avatar"
-          @error="handleAvatarError"
-        />
+        <img :src="avatarUrl" alt="Nox" class="launcher-avatar" @error="handleAvatarError" />
         <span class="online-dot"></span>
       </span>
       <span class="launcher-label font-medium text-sm text-zinc-100 hidden sm:inline">Nox AI</span>
-      <span class="shortcut-pill text-xs font-mono px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-400 border border-zinc-700">⌘K</span>
+      <span
+        class="shortcut-pill text-xs font-mono px-1.5 py-0.5 rounded bg-zinc-800 text-zinc-400 border border-zinc-700"
+        >⌘K</span
+      >
     </button>
 
     <!-- Modal Drawer Overlay -->
-    <div
-      v-if="isOpen"
-      class="nuxt-assistant-overlay"
-      @click.self="closeAssistant"
-    >
+    <div v-if="isOpen" class="nuxt-assistant-overlay" @click.self="closeAssistant">
       <div class="nuxt-assistant-modal" :class="positionClass">
         <!-- Header -->
-        <div class="assistant-header border-b border-zinc-800/80 px-4 py-3 flex items-center justify-between bg-zinc-950/80">
+        <div
+          class="assistant-header border-b border-zinc-800/80 px-4 py-3 flex items-center justify-between bg-zinc-950/80"
+        >
           <div class="flex items-center space-x-3">
             <div class="relative">
               <img
@@ -39,12 +35,17 @@
                 class="w-8 h-8 rounded-full border border-emerald-500/50 object-cover"
                 @error="handleAvatarError"
               />
-              <span class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 rounded-full ring-2 ring-zinc-950"></span>
+              <span
+                class="absolute bottom-0 right-0 w-2.5 h-2.5 bg-emerald-500 rounded-full ring-2 ring-zinc-950"
+              ></span>
             </div>
             <div>
               <div class="flex items-center space-x-2">
                 <h3 class="text-sm font-semibold text-zinc-100 tracking-wide">Nox Assistant</h3>
-                <span class="text-[10px] uppercase font-mono px-1.5 py-0.2 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Nuxt 4</span>
+                <span
+                  class="text-[10px] uppercase font-mono px-1.5 py-0.2 rounded bg-emerald-500/10 text-emerald-400 border border-emerald-500/20"
+                  >Nuxt 4</span
+                >
               </div>
               <p class="text-xs text-zinc-400">Portfolio & Technical Guide</p>
             </div>
@@ -57,7 +58,14 @@
               title="Clear History"
               @click="clearHistory"
             >
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" /></svg>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
+                />
+              </svg>
             </button>
             <button
               type="button"
@@ -65,7 +73,14 @@
               title="Close Assistant (Esc)"
               @click="closeAssistant"
             >
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M6 18L18 6M6 6l12 12"
+                />
+              </svg>
             </button>
           </div>
         </div>
@@ -107,12 +122,22 @@
                   @click="handleAction(msg.action)"
                 >
                   <span>{{ msg.action.label }}</span>
-                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
+                  <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      stroke-width="2"
+                      d="M14 5l7 7m0 0l-7 7m7-7H3"
+                    />
+                  </svg>
                 </button>
               </div>
 
               <!-- Suggestion Chips -->
-              <div v-if="msg.suggestions && msg.suggestions.length > 0" class="mt-2.5 flex flex-wrap gap-1.5">
+              <div
+                v-if="msg.suggestions && msg.suggestions.length > 0"
+                class="mt-2.5 flex flex-wrap gap-1.5"
+              >
                 <button
                   v-for="(sug, sIdx) in msg.suggestions"
                   :key="sIdx"
@@ -150,10 +175,19 @@
               :disabled="!inputQuery.trim() || isThinking"
               aria-label="Send query"
             >
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 12h14M12 5l7 7-7 7" /></svg>
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M5 12h14M12 5l7 7-7 7"
+                />
+              </svg>
             </button>
           </form>
-          <div class="mt-2 flex items-center justify-between text-[10px] text-zinc-500 font-mono px-1">
+          <div
+            class="mt-2 flex items-center justify-between text-[10px] text-zinc-500 font-mono px-1"
+          >
             <span>Press Enter to send</span>
             <span>⌘K to toggle | Esc to close</span>
           </div>
@@ -168,16 +202,15 @@ import { ref, watch, nextTick, onMounted } from "vue";
 import { useNuxtAssistant } from "../composables/useNuxtAssistant";
 import type { AssistantAction } from "../utils/engine";
 
-const { isOpen, isThinking, messages, openAssistant, closeAssistant, sendMessage, clearHistory } = useNuxtAssistant();
+const { isOpen, isThinking, messages, openAssistant, closeAssistant, sendMessage, clearHistory } =
+  useNuxtAssistant();
 
 const inputQuery = ref("");
 const inputRef = ref<HTMLInputElement | null>(null);
 const chatContainer = ref<HTMLElement | null>(null);
 const avatarUrl = ref("/eve.png");
 const runtimeConfig = useRuntimeConfig();
-const positionClass = ref(
-  (runtimeConfig.public.assistant?.position as string) || "bottom-right",
-);
+const positionClass = ref((runtimeConfig.public.assistant?.position as string) || "bottom-right");
 
 function handleAvatarError() {
   avatarUrl.value = "https://ui-avatars.com/api/?name=Nox+AI&background=059669&color=fff";
@@ -187,7 +220,10 @@ function formatMessage(text: string): string {
   // Safe simple markdown link & bold converter
   return text
     .replace(/\*\*(.*?)\*\*/g, "<strong>$1</strong>")
-    .replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2" class="underline text-emerald-400 hover:text-emerald-300" target="_self">$1</a>');
+    .replace(
+      /\[(.*?)\]\((.*?)\)/g,
+      '<a href="$2" class="underline text-emerald-400 hover:text-emerald-300" target="_self">$1</a>',
+    );
 }
 
 function scrollToBottom() {
@@ -198,9 +234,13 @@ function scrollToBottom() {
   });
 }
 
-watch(messages, () => {
-  scrollToBottom();
-}, { deep: true });
+watch(
+  messages,
+  () => {
+    scrollToBottom();
+  },
+  { deep: true },
+);
 
 watch(isOpen, (val) => {
   if (val) {
@@ -255,7 +295,9 @@ onMounted(() => {
   border: 1px solid rgba(63, 63, 70, 0.7);
   backdrop-filter: blur(12px);
   border-radius: 9999px;
-  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5), 0 0 15px rgba(16, 185, 129, 0.2);
+  box-shadow:
+    0 10px 25px -5px rgba(0, 0, 0, 0.5),
+    0 0 15px rgba(16, 185, 129, 0.2);
   cursor: pointer;
   transition: all 0.2s ease;
 }
@@ -263,7 +305,9 @@ onMounted(() => {
 .nuxt-assistant-launcher:hover {
   transform: translateY(-2px);
   border-color: rgba(16, 185, 129, 0.5);
-  box-shadow: 0 12px 30px -5px rgba(0, 0, 0, 0.6), 0 0 20px rgba(16, 185, 129, 0.35);
+  box-shadow:
+    0 12px 30px -5px rgba(0, 0, 0, 0.6),
+    0 0 20px rgba(16, 185, 129, 0.35);
 }
 
 .launcher-avatar-wrap {

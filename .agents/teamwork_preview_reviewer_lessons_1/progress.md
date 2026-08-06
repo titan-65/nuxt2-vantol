@@ -4,6 +4,7 @@
 - Status: Completed
 
 ## Steps
+
 - [x] Read and analyze `apps/zhyjen/convex/lessons.ts` <!-- id: 0 -->
 - [x] Read and analyze `apps/zhyjen/convex/schema.ts` <!-- id: 1 -->
 - [x] Read and analyze the reference documentation at `/Users/vantolbennett/.gemini/antigravity/brain/d66d2c6f-9796-408b-b651-6ad82b08c193/zerolang_reference.md` <!-- id: 2 -->

@@ -10,6 +10,7 @@
   - `apps/zhyjen/src/lessons.verify.test.ts` (Convex seeded activities query validation)
 - **Tests Execution & Output**:
   - Running `vp test` in `apps/zhyjen`:
+
     ```
     RUN  /Users/vantolbennett/Developer/2025/vantolbennett-blog/apps/zhyjen
 
@@ -22,6 +23,7 @@
     Test Files  5 passed (5)
     Tests  30 passed (30)
     ```
+
 - **Linter & Formatting Execution**:
   - Running `vp check` initially yielded formatting failures in `src/astVisualizer.stress.test.ts` and `src/astVisualizer.test.tsx`.
   - Running `vp check --fix` successfully auto-formatted the files, resulting in `0 errors and 21 warnings in 100 files`.
@@ -71,6 +73,7 @@ The AST Graph Visualizer is correctly built, robust against malformed or empty i
 ## 5. Verification Method
 
 To independently verify:
+
 1. Navigate to the zhyjen application root:
    ```bash
    cd apps/zhyjen
@@ -93,12 +96,14 @@ To independently verify:
 ### Challenges
 
 #### [Low] Challenge 1: Regex Parser Nesting Limitation
+
 - **Assumption challenged**: The parser can represent the structure of complex programs.
 - **Attack scenario**: Code with nested blocks (such as helper functions inside functions or complex conditionals) confuses the lazy matching regex `/\{([\s\S]*?)\}/`.
 - **Blast radius**: The generated visualizer tree layout will be distorted (e.g., nesting is flattened, inner variables are attributed to parent/outer scope). No crash occurs.
 - **Mitigation**: A recursive grammar parser (such as pegjs or a state-machine parser) instead of simple regular expressions. Since this is an educational playground, the regex parser is acceptable.
 
 #### [Low] Challenge 2: Escaped Quotes in Literal Strings
+
 - **Assumption challenged**: Literal string contents are entirely ignored by reference analysis.
 - **Attack scenario**: Strings containing escaped quotes (e.g., `let x = "string \" unbound_symbol";`) are parsed incorrectly because of the simplistic regex `/"[^"]*"/g`.
 - **Blast radius**: `unbound_symbol` is falsely extracted as a dangling reference, highlighting it in red on the visualizer graph.

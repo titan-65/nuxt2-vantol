@@ -7,11 +7,11 @@ tag: Me
 rating: 0
 date: 2021-11-14
 readTime: 5
-img: 'https://res.cloudinary.com/ddszyeplg/image/upload/v1636919448/DSC_0991_snlozn.jpg'
+img: "https://res.cloudinary.com/ddszyeplg/image/upload/v1636919448/DSC_0991_snlozn.jpg"
 author:
   name: Vantol Bennett
   website: www.teammps.com
-  img: 'https://res.cloudinary.com/ddszyeplg/image/upload/v1636919468/DSC_0988_zsfhgy.jpg'
+  img: "https://res.cloudinary.com/ddszyeplg/image/upload/v1636919468/DSC_0988_zsfhgy.jpg"
 ---
 
 # Just Starting
@@ -20,7 +20,7 @@ Hey, I am Vantol, I am a Jamaican - FullStack Developer - and Educator in the Ja
 
 <!--more-->
 
-I have been coding for about 10 years, and I have experimented with most programming languages but I have come to love Javascript - Node.js, Vue.js, Nuxt.js, React, MongoDB/Postgres in my stack. I have been playing with Django Rest Framework of recently and might make something with one day. 
+I have been coding for about 10 years, and I have experimented with most programming languages but I have come to love Javascript - Node.js, Vue.js, Nuxt.js, React, MongoDB/Postgres in my stack. I have been playing with Django Rest Framework of recently and might make something with one day.
 
 In 2021, my focused shifted to making me a concept of grow along with skills and ideas that can change the world.
 

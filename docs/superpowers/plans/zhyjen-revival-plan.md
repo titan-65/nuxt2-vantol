@@ -203,16 +203,16 @@ The goal is to connect coding with positive Christian values such as:
 
 Teach real coding skills first, then connect the activity to a value or reflection.
 
-| Coding Skill | Value Connection |
-|---|---|
-| Debugging | Patience and perseverance |
-| Clean code | Excellence and stewardship |
-| Building websites | Communication and service |
-| Forms | Listening to people’s needs |
-| Team projects | Unity and humility |
-| Version control | Growth over time |
-| Accessibility | Caring for others |
-| Documentation | Helping the next person |
+| Coding Skill      | Value Connection            |
+| ----------------- | --------------------------- |
+| Debugging         | Patience and perseverance   |
+| Clean code        | Excellence and stewardship  |
+| Building websites | Communication and service   |
+| Forms             | Listening to people’s needs |
+| Team projects     | Unity and humility          |
+| Version control   | Growth over time            |
+| Accessibility     | Caring for others           |
+| Documentation     | Helping the next person     |
 
 ## What to Avoid
 

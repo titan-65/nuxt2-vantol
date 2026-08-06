@@ -1,6 +1,7 @@
 # Code Context
 
 ## Files Retrieved
+
 1. `apps/web/package.json` (lines 1-36) - confirms Nuxt `^4.5.0`; Nuxt 4 uses `app/` as the application source directory.
 2. `apps/web/nuxt.config.ts` (lines 9-28, 75-88, 106-126) - no `srcDir`, `pages`, or router override; enables `nuxt-presence`; Nitro only explicitly prerenders `/` and crawls links.
 3. `apps/web/app/pages/presence-demo.vue` (lines 1-29, 31-127) - the concrete file-based `/presence-demo` page and its Better Auth/GitHub UI.
