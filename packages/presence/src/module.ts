@@ -4,6 +4,7 @@ import {
   addServerHandler,
   createResolver,
   defineNuxtModule,
+  type NuxtModule,
 } from "@nuxt/kit";
 import { resolve as resolvePath } from "node:path";
 import { defaults, resolveOptions, type ModuleOptions } from "./options";
@@ -11,7 +12,7 @@ import { ensureKeypair } from "./hooks/keypair";
 import { buildMarkToken, MARK_META_NAME } from "./hooks/mark";
 import { isAdminEnvSet } from "./runtime/server/admin";
 
-export default defineNuxtModule<ModuleOptions>({
+const presenceModule: NuxtModule<ModuleOptions> = defineNuxtModule<ModuleOptions>({
   meta: {
     name: "nuxt-presence",
     configKey: "presence",
@@ -122,3 +123,5 @@ export default defineNuxtModule<ModuleOptions>({
     nuxt.options.app.head.meta.push({ name: MARK_META_NAME, content: token });
   },
 });
+
+export default presenceModule;

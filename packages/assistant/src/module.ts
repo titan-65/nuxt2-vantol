@@ -5,12 +5,13 @@ import {
   addServerHandler,
   createResolver,
   defineNuxtModule,
+  type NuxtModule,
 } from "@nuxt/kit";
 import { defaults, resolveOptions, type ModuleOptions } from "./options";
 
 export type { ModuleOptions };
 
-export default defineNuxtModule<ModuleOptions>({
+const assistantModule: NuxtModule<ModuleOptions> = defineNuxtModule<ModuleOptions>({
   meta: {
     name: "nuxt-assistant",
     configKey: "assistant",
@@ -78,3 +79,5 @@ export default defineNuxtModule<ModuleOptions>({
     }
   },
 });
+
+export default assistantModule;

@@ -4,6 +4,7 @@ import {
   addImports,
   addComponent,
   addServerHandler,
+  type NuxtModule,
 } from "@nuxt/kit";
 
 export interface ModuleOptions {
@@ -31,7 +32,7 @@ export interface ModuleOptions {
   };
 }
 
-export default defineNuxtModule<ModuleOptions>({
+const eveModule: NuxtModule<ModuleOptions> = defineNuxtModule<ModuleOptions>({
   meta: {
     name: "@vvantol2000/nuxt-eve",
     configKey: "eve",
@@ -92,3 +93,5 @@ export default defineNuxtModule<ModuleOptions>({
     });
   },
 });
+
+export default eveModule;
