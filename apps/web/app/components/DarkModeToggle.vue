@@ -1,42 +1,57 @@
 <script setup lang="ts">
-const colorMode = useState("colorMode", () => "light");
+const colorMode = useState("colorMode", () => "dark");
 
 const toggleDarkMode = () => {
   colorMode.value = colorMode.value === "dark" ? "light" : "dark";
   if (typeof document !== "undefined") {
     document.documentElement.classList.toggle("dark", colorMode.value === "dark");
+    document.documentElement.style.colorScheme = colorMode.value;
     localStorage.setItem("colorMode", colorMode.value);
   }
 };
 
 onMounted(() => {
   const saved = localStorage.getItem("colorMode");
-  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
-  colorMode.value = saved || (prefersDark ? "dark" : "light");
+  colorMode.value = saved || "dark";
   document.documentElement.classList.toggle("dark", colorMode.value === "dark");
+  document.documentElement.style.colorScheme = colorMode.value;
 });
 </script>
 
 <template>
   <button
+    type="button"
+    class="grid h-9 w-9 place-items-center border border-transparent text-muted-foreground transition-colors hover:border-border hover:text-foreground"
+    aria-label="Toggle color theme"
     @click="toggleDarkMode"
-    class="p-2 rounded-lg text-zinc-500 hover:bg-black/5 hover:text-[#171717] transition-colors dark:text-zinc-400 dark:hover:bg-white/5 dark:hover:text-white"
-    :aria-label="colorMode === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'"
   >
     <svg
-      v-if="colorMode === 'dark'"
-      class="w-5 h-5 text-[#f5c542]"
-      fill="currentColor"
-      viewBox="0 0 20 20"
+      class="hidden h-4 w-4 dark:block"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.5"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
     >
+      <circle cx="12" cy="12" r="4" />
       <path
-        fill-rule="evenodd"
-        d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
-        clip-rule="evenodd"
+        stroke-linecap="round"
+        d="M12 2v2m0 16v2M4.93 4.93l1.41 1.41m11.32 11.32l1.41 1.41M2 12h2m16 0h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"
       />
     </svg>
-    <svg v-else class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-      <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+    <svg
+      class="block h-4 w-4 dark:hidden"
+      fill="none"
+      stroke="currentColor"
+      stroke-width="1.5"
+      viewBox="0 0 24 24"
+      aria-hidden="true"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79Z"
+      />
     </svg>
   </button>
 </template>

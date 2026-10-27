@@ -27,113 +27,101 @@ function formatDate(date: string | undefined) {
 </script>
 
 <template>
-  <div class="min-h-screen bg-[#0a0a0a] text-white font-sans">
+  <div class="reading-page min-h-screen bg-background text-foreground">
     <LearnHeaderNav />
-    <div class="max-w-[1088px] mx-auto px-6 py-12">
-      <!-- Header -->
-      <div class="mb-10 border-b border-white/10 pb-8">
-        <p class="text-[10px] font-bold uppercase tracking-widest text-[#f5c542] mb-2">
-          Learn & Build
-        </p>
-        <h1 class="text-4xl font-semibold tracking-tight">Learning, one release at a time</h1>
-        <p class="text-sm text-zinc-400 mt-3 max-w-2xl leading-relaxed">
+
+    <div class="container-page py-12 md:py-20">
+      <header class="border-b border-border pb-10 md:pb-12">
+        <h1 class="display max-w-[18ch] text-[clamp(2.8rem,5vw,4rem)]">
+          Learning, one release at a time
+        </h1>
+        <p class="mt-5 max-w-2xl text-[17px] leading-relaxed text-muted-foreground">
           I build with these tools every day — hands-on tutorials where we learn new framework
           features step by step, straight from the source.
         </p>
 
-        <!-- Eve Agent Feature Card -->
-        <div
-          class="mt-6 p-6 rounded-2xl bg-gradient-to-r from-zinc-900 via-[#111] to-black border border-[#f5c542]/30 flex flex-col md:flex-row items-start md:items-center justify-between gap-6 shadow-xl"
-        >
+        <div class="card mt-8 flex flex-col justify-between gap-6 p-6 md:flex-row md:items-center md:p-8">
           <div>
-            <div class="flex items-center gap-2 mb-2">
+            <div class="flex flex-wrap items-center gap-2">
               <span
-                class="px-2 py-0.5 bg-[#f5c542] text-black font-bold text-[10px] uppercase tracking-widest rounded-md"
-                >LIVE AGENT</span
+                class="rounded border border-blue/30 bg-blue/10 px-2 py-0.5 font-mono text-[9px] uppercase tracking-[0.1em] text-blue"
               >
-              <span class="text-xs text-zinc-400 font-mono">Vercel Eve Framework</span>
+                Live agent
+              </span>
+              <span class="font-mono text-[11px] text-muted-foreground">
+                Vercel Eve framework
+              </span>
             </div>
-            <h3 class="text-xl font-bold text-white">Eve AI Agent Studio</h3>
-            <p class="text-xs text-zinc-400 mt-1 max-w-xl">
+            <h2 class="mt-3 text-[22px] font-medium tracking-[-0.03em]">Eve AI Agent Studio</h2>
+            <p class="mt-2 max-w-xl text-[14px] leading-relaxed text-muted-foreground">
               Interact with the live EVE Agent built for this site. Chat with the agent or inspect
               its underlying instructions, tools, skills, subagents, and schedules.
             </p>
           </div>
 
-          <NuxtLink
-            to="/eve"
-            class="px-5 py-2.5 bg-[#f5c542] hover:bg-[#e0b13a] text-black font-bold text-xs rounded-xl shadow-lg shadow-[#f5c542]/20 transition-all shrink-0 flex items-center gap-2"
-          >
+          <NuxtLink to="/eve" class="btn btn-primary shrink-0">
             Launch Eve Agent Studio
-            <svg
-              width="14"
-              height="14"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2.5"
-            >
-              <path d="M5 12h14M12 5l7 7-7 7" />
-            </svg>
+            <span aria-hidden="true">→</span>
           </NuxtLink>
         </div>
+      </header>
+
+      <div v-if="!series?.length" class="border-b border-border py-16 text-center">
+        <p class="text-[15px] text-muted-foreground">No tutorials yet — check back soon.</p>
       </div>
 
-      <div
-        v-if="!series?.length"
-        class="text-center py-20 border border-dashed border-white/10 bg-[#111] rounded-xl"
-      >
-        <p class="text-zinc-500 text-sm">No tutorials yet — check back soon.</p>
-      </div>
-
-      <div class="grid gap-6 md:grid-cols-2">
+      <div v-else class="mt-10 grid gap-5 md:grid-cols-2">
         <NuxtLink
           v-for="s in series"
           :key="s.seriesSlug"
           :to="s.path"
-          class="group flex flex-col bg-[#111] border border-white/10 rounded-xl overflow-hidden hover:border-white/20 transition-all"
+          class="card group flex flex-col"
         >
-          <div v-if="s.img" class="aspect-[16/9] overflow-hidden bg-zinc-900">
-            <NuxtImg :src="s.img" :alt="s.title" class="w-full h-full object-cover" sizes="600px" />
+          <div v-if="s.img" class="aspect-[16/9] overflow-hidden border-b border-border bg-surface-2">
+            <NuxtImg
+              :src="s.img"
+              :alt="s.title"
+              width="600"
+              height="338"
+              class="h-full w-full object-cover opacity-90 transition-all duration-500 group-hover:scale-[1.02] group-hover:opacity-100"
+            />
           </div>
-          <div class="p-6 flex flex-col flex-1">
-            <div class="flex items-center gap-3 mb-3 flex-wrap">
+
+          <div class="flex flex-1 flex-col p-6">
+            <div class="flex flex-wrap items-center gap-3">
               <span
                 v-if="s.nuxtVersion"
-                class="px-2.5 py-1 bg-[#f5c542] text-black text-[10px] font-bold uppercase tracking-widest rounded-md"
+                class="rounded border border-blue/30 bg-blue/10 px-2 py-0.5 font-mono text-[9px] font-medium uppercase tracking-[0.08em] text-blue"
               >
                 v{{ s.nuxtVersion }}
               </span>
               <span
                 v-if="s.difficulty"
-                class="text-[11px] uppercase tracking-wider text-zinc-500"
-                >{{ s.difficulty }}</span
+                class="font-mono text-[10px] uppercase tracking-[0.08em] text-muted-foreground"
               >
-              <span v-if="s.releaseDate" class="text-[11px] text-zinc-600">{{
-                formatDate(s.releaseDate)
-              }}</span>
+                {{ s.difficulty }}
+              </span>
+              <span v-if="s.releaseDate" class="font-mono text-[10px] text-faint-ink">
+                {{ formatDate(s.releaseDate) }}
+              </span>
             </div>
+
             <h2
-              class="text-xl font-semibold text-white mb-2 group-hover:text-[#f5c542] transition-colors"
+              class="mt-3 text-[18px] font-medium leading-snug tracking-[-0.02em] transition-colors group-hover:text-blue"
             >
               {{ s.title }}
             </h2>
-            <p class="text-zinc-500 text-sm leading-relaxed line-clamp-2">{{ s.description }}</p>
-            <span
-              class="mt-4 inline-flex items-center gap-2 text-sm font-medium text-zinc-300 group-hover:text-[#f5c542] transition-colors"
-            >
+            <p class="mt-2 text-[14px] leading-relaxed text-muted-foreground line-clamp-2">
+              {{ s.description }}
+            </p>
+
+            <span class="mt-5 inline-flex items-center gap-1.5 text-[13px] text-blue">
               Start learning
-              <svg
-                width="14"
-                height="14"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                stroke-width="2"
-                class="group-hover:translate-x-0.5 transition-transform"
+              <span
+                aria-hidden="true"
+                class="transition-transform duration-200 group-hover:translate-x-0.5"
+                >→</span
               >
-                <path d="M5 12h14M12 5l7 7-7 7" />
-              </svg>
             </span>
           </div>
         </NuxtLink>

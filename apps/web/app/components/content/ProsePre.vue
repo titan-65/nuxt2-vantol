@@ -42,71 +42,59 @@ const copy = async () => {
 </script>
 
 <template>
-  <div class="relative group my-6 overflow-hidden border border-white/10 rounded-xl">
-    <!-- Header/Filename -->
+  <div class="group relative my-8 max-w-full overflow-hidden rounded-lg border border-border bg-code">
     <div
       v-if="filename || language"
-      class="flex items-center justify-between px-4 py-2 border-b border-white/10 bg-zinc-900"
+      class="flex items-center justify-between border-b border-border px-4 py-2"
     >
-      <span class="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">
+      <span class="font-mono text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
         {{ filename || language }}
       </span>
       <button
+        type="button"
+        class="flex items-center gap-1.5 font-mono text-[10px] uppercase tracking-[0.1em] text-muted-foreground transition-colors hover:text-foreground"
         @click="copy"
-        class="flex items-center gap-1.5 text-[10px] font-mono uppercase tracking-wider text-zinc-500 hover:text-white transition-colors"
       >
-        <span v-if="copied" class="text-green-400">Copied!</span>
+        <span v-if="copied" class="text-success">Copied</span>
         <template v-else>
           Copy
-          <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path
-              stroke-linecap="round"
-              stroke-linejoin="round"
-              stroke-width="2"
-              d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"
-            />
+          <svg
+            class="h-3 w-3"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1.5"
+            viewBox="0 0 24 24"
+            aria-hidden="true"
+          >
+            <rect x="9" y="9" width="11" height="11" />
+            <path d="M5 15V5h10" />
           </svg>
         </template>
       </button>
     </div>
 
-    <!-- Copy button for blocks without filename -->
     <button
       v-else
-      @click="copy"
-      class="absolute top-3 right-3 z-10 p-2 rounded bg-white/5 hover:bg-white/10 text-zinc-500 hover:text-white opacity-0 group-hover:opacity-100 transition-all duration-200"
+      type="button"
+      class="absolute right-3 top-3 z-10 border border-border bg-code px-2 py-1.5 font-mono text-[10px] uppercase tracking-[0.1em] text-muted-foreground opacity-0 transition-all duration-200 hover:text-foreground group-hover:opacity-100 focus:opacity-100"
       title="Copy code"
+      @click="copy"
     >
-      <svg v-if="!copied" class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          stroke-width="2"
-          d="M8 5H6a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2v-1M8 5a2 2 0 002 2h2a2 2 0 002-2M8 5a2 2 0 012-2h2a2 2 0 012 2m0 0h2a2 2 0 012 2v3m2 4H10m0 0l3-3m-3 3l3 3"
-        />
-      </svg>
-      <svg
-        v-else
-        class="w-4 h-4 text-green-400"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-      </svg>
+      <span v-if="copied" class="text-success">Copied</span>
+      <span v-else>Copy</span>
     </button>
 
     <pre
       :class="props.class"
-      class="p-4 overflow-x-auto font-mono text-sm leading-relaxed bg-zinc-900"
+      class="overflow-x-auto bg-code p-4 font-mono text-[0.84em] leading-[1.7] text-code-foreground"
     ><slot /></pre>
   </div>
 </template>
 
 <style scoped>
-/* Shiki highlighting adjustments */
 pre code {
   background-color: transparent !important;
   padding: 0 !important;
+  border: 0 !important;
 }
 </style>

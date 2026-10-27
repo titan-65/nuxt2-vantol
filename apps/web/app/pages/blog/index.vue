@@ -17,24 +17,28 @@ const uniqueAuthors = computed(() => {
   return Array.from(authors.values());
 });
 
+const normalizeTag = (tag: string | undefined) =>
+  (tag || "").replace(/^["'“”\s]+|["'“”\s]+$/g, "").trim();
+
 const allTags = computed(() => {
-  const tags = new Set<string>();
+  const tags = new Map<string, string>();
   posts.value?.forEach((post: any) => {
-    if (post.tag) tags.add(post.tag);
+    const tag = normalizeTag(post.tag);
+    if (tag && !tags.has(tag.toLowerCase())) tags.set(tag.toLowerCase(), tag);
   });
-  return Array.from(tags).sort((a, b) => a.localeCompare(b));
+  return Array.from(tags.values()).sort((a, b) => a.localeCompare(b));
 });
 
 const selectedTag = ref<string | null>(null);
 const sortOrder = ref<"latest" | "oldest">("latest");
 const searchQuery = ref("");
 const currentPage = ref(1);
-const postsPerPage = 6;
+const postsPerPage = 8;
 
 watch(
   () => route.query.tag,
   (tag) => {
-    selectedTag.value = typeof tag === "string" && tag.length ? tag : null;
+    selectedTag.value = typeof tag === "string" && tag.length ? normalizeTag(tag) : null;
     currentPage.value = 1;
   },
   { immediate: true },
@@ -54,7 +58,7 @@ const filteredPosts = computed(() => {
   let result = posts.value || [];
 
   if (selectedTag.value) {
-    result = result.filter((post: any) => post.tag === selectedTag.value);
+    result = result.filter((post: any) => normalizeTag(post.tag) === selectedTag.value);
   }
 
   if (query) {
@@ -95,188 +99,264 @@ const goToPage = (page: number) => {
   const nextPage = Math.min(Math.max(1, page), totalPages.value);
   currentPage.value = nextPage;
 };
+
+function formatDate(date: string | Date | undefined) {
+  if (!date) return "";
+  return new Date(date).toLocaleDateString("en", {
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
+  });
+}
+
+function isoDate(date: string | Date | undefined) {
+  if (!date) return "";
+  return new Date(date).toISOString().slice(0, 10);
+}
+
+function readingTime(post: any) {
+  if (post?.readTime) return post.readTime;
+  if (post?.body) {
+    const text = JSON.stringify(post.body);
+    const words = text.match(/\w+/g)?.length || 0;
+    return Math.max(1, Math.ceil(words / 200));
+  }
+  return 1;
+}
 </script>
 
 <template>
-  <div class="min-h-screen bg-[#0a0a0a] text-white font-sans">
-    <div class="max-w-[1088px] mx-auto px-6 py-12">
-      <div class="flex flex-col lg:flex-row gap-12">
-        <!-- Main Content -->
-        <div class="w-full lg:w-8/12">
-          <!-- Header -->
-          <div
-            class="mb-10 border-b border-white/10 pb-6 flex flex-col md:flex-row justify-between items-start md:items-end gap-4"
-          >
-            <div>
-              <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-2">Blog</p>
-              <h1 class="text-4xl font-semibold tracking-tight">Writing</h1>
+  <div class="reading-page container-page pt-16 md:pt-24">
+    <header class="grid gap-8 lg:grid-cols-12 lg:gap-12">
+      <div class="lg:col-span-8">
+        <h1 class="display text-[clamp(3rem,5.4vw,4rem)]">
+          Writing
+        </h1>
+        <p
+          class="mt-5 max-w-2xl text-[clamp(1.05rem,1.5vw,1.25rem)] leading-[1.65] text-muted-foreground"
+        >
+          Essays and field notes on Nuxt, Vue, TypeScript, Nitro, and the work of building software
+          that survives contact with production.
+        </p>
+      </div>
+      <div class="lg:col-span-4 lg:pl-10">
+        <p class="ledger-meta">
+          {{ filteredPosts.length }} {{ filteredPosts.length === 1 ? "essay" : "essays" }}
+          <span v-if="selectedTag"> in {{ selectedTag }}</span>
+          <span v-if="searchQuery"> matching “{{ searchQuery }}”</span>
+        </p>
+        <p class="mt-4 max-w-xs text-[15px] leading-relaxed text-muted-foreground">
+          Long-form notes, not hot takes. Every piece starts from something that was actually
+          shipped.
+        </p>
+        <a href="/rss.xml" class="link mt-4 inline-flex text-[12px] font-medium">
+          Subscribe via RSS →
+        </a>
+      </div>
+    </header>
 
-              <p v-if="selectedTag" class="text-sm text-zinc-500 mt-2">
-                Filter: <span class="text-white font-semibold">{{ selectedTag }}</span>
-                <button @click="clearFilter" class="text-red-400 hover:underline ml-2 text-xs">
-                  [Clear]
-                </button>
-              </p>
-              <p class="text-xs text-zinc-600 mt-2">
-                Showing {{ filteredPosts.length }} post{{ filteredPosts.length === 1 ? "" : "s" }}
-                <span v-if="searchQuery"> for "{{ searchQuery }}"</span>
-              </p>
-            </div>
-
-            <div class="flex flex-col sm:flex-row items-start sm:items-center gap-3">
-              <div
-                class="flex items-center border border-white/10 bg-[#111] rounded-lg overflow-hidden focus-within:border-white/30 transition-colors"
-              >
-                <svg
-                  class="w-4 h-4 text-zinc-600 ml-3"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    stroke-width="2"
-                    d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                  />
-                </svg>
-                <input
-                  v-model="searchQuery"
-                  type="text"
-                  placeholder="Search posts"
-                  class="px-3 py-2 bg-transparent text-xs text-white placeholder:text-zinc-600 focus:outline-none w-40 sm:w-52"
-                />
-              </div>
-              <div
-                class="flex items-center border border-white/10 bg-[#111] rounded-lg overflow-hidden"
-              >
-                <select
-                  v-model="sortOrder"
-                  class="px-4 py-2 bg-transparent text-xs font-semibold text-zinc-400 focus:outline-none cursor-pointer"
-                >
-                  <option value="latest">Latest First</option>
-                  <option value="oldest">Oldest First</option>
-                </select>
-              </div>
-            </div>
+    <div class="mt-10 border-y border-border py-4">
+      <div class="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+        <div class="flex flex-1 flex-col gap-3 sm:flex-row sm:items-center">
+          <div class="relative w-full max-w-xs">
+            <label for="writing-search" class="sr-only">Search writing</label>
+            <svg
+              class="pointer-events-none absolute left-3 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-faint-ink"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="1.5"
+              viewBox="0 0 24 24"
+              aria-hidden="true"
+            >
+              <circle cx="11" cy="11" r="7" />
+              <path d="m20 20-3.5-3.5" />
+            </svg>
+            <input
+              id="writing-search"
+              v-model="searchQuery"
+              type="search"
+              placeholder="Search the archive"
+              class="field pl-9"
+            />
           </div>
 
-          <div
-            v-if="filteredPosts.length === 0"
-            class="text-center py-20 border border-dashed border-white/10 bg-[#111] rounded-xl"
-          >
-            <p class="text-zinc-500 text-sm">No posts found</p>
+          <div class="flex items-center gap-2">
+            <label for="sort-order" class="label whitespace-nowrap">Sort</label>
+            <select id="sort-order" v-model="sortOrder" class="field max-w-[9rem] py-2 text-[12px]">
+              <option value="latest">Newest first</option>
+              <option value="oldest">Oldest first</option>
+            </select>
           </div>
+        </div>
 
-          <div class="space-y-0">
-            <CardLong v-for="post in paginatedPosts" :key="post.slug" :item="post" />
-          </div>
+        <button
+          v-if="selectedTag"
+          type="button"
+          class="link self-start text-left text-[12px] text-muted-foreground lg:self-auto"
+          @click="clearFilter"
+        >
+          Clear tag: {{ selectedTag }} ×
+        </button>
+      </div>
 
-          <div
-            v-if="filteredPosts.length > postsPerPage"
-            class="mt-10 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-white/10 pt-6"
+      <div class="mt-4 flex flex-wrap items-center gap-x-4 gap-y-2">
+        <span class="label">Tags</span>
+        <button
+          v-for="tag in allTags"
+          :key="tag"
+          type="button"
+          class="text-[12px] transition-colors"
+          :class="selectedTag === tag ? 'font-semibold text-blue' : 'text-muted-foreground hover:text-foreground'"
+          :aria-pressed="selectedTag === tag"
+          @click="selectedTag = selectedTag === tag ? null : tag"
+        >
+          {{ tag }}
+        </button>
+      </div>
+    </div>
+
+    <div class="mt-12 grid gap-12 lg:grid-cols-12 lg:gap-16">
+      <div class="lg:col-span-8">
+        <div v-if="filteredPosts.length === 0" class="border-t border-border py-16">
+          <p class="text-lg text-muted-foreground">No essays match that search.</p>
+          <button
+            type="button"
+            class="link mt-3 text-[13px] font-medium"
+            @click="
+              searchQuery = '';
+              selectedTag = null;
+            "
           >
-            <div class="text-xs text-zinc-600">Page {{ currentPage }} of {{ totalPages }}</div>
-            <div class="flex items-center gap-2">
-              <button
-                type="button"
-                @click="goToPage(currentPage - 1)"
-                :disabled="currentPage === 1"
-                class="px-3 py-2 text-xs font-semibold border border-white/10 rounded-lg disabled:opacity-40 disabled:cursor-not-allowed hover:border-white/30 text-zinc-400 hover:text-white transition-colors"
+            Clear filters
+          </button>
+        </div>
+
+        <div v-else>
+          <NuxtLink
+            v-for="post in paginatedPosts"
+            :key="post.slug"
+            :to="`/blog/${post.slug}`"
+            class="ledger-row"
+          >
+            <time class="ledger-date ledger-meta" :datetime="isoDate(post.date)">
+              {{ formatDate(post.date) }}
+            </time>
+            <span class="min-w-0">
+              <span class="ledger-title block">{{ post.title }}</span>
+              <span
+                class="mt-1 hidden max-w-2xl text-[14px] leading-relaxed text-muted-foreground sm:line-clamp-2 sm:block"
               >
-                Prev
-              </button>
+                {{ post.description }}
+              </span>
+            </span>
+            <span
+              class="ledger-tag font-mono text-[10px] uppercase tracking-[0.1em] text-muted-foreground"
+            >
+              {{ normalizeTag(post.tag) }}
+            </span>
+            <span class="ledger-time ledger-meta text-right">{{ readingTime(post) }} min</span>
+          </NuxtLink>
+          <div class="border-t border-border" />
+        </div>
+
+        <div
+          v-if="filteredPosts.length > postsPerPage"
+          class="mt-8 flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"
+        >
+          <p class="ledger-meta">Page {{ currentPage }} of {{ totalPages }}</p>
+          <div class="flex items-center gap-4">
+            <button
+              type="button"
+              class="link text-[12px] font-medium disabled:pointer-events-none disabled:opacity-40"
+              :disabled="currentPage === 1"
+              @click="goToPage(currentPage - 1)"
+            >
+              ← Previous
+            </button>
+            <div class="flex items-center gap-3">
               <button
                 v-for="page in totalPages"
                 :key="page"
                 type="button"
-                @click="goToPage(page)"
-                :class="[
-                  'px-3 py-2 text-xs font-semibold border rounded-lg transition-colors',
+                class="grid h-8 min-w-8 place-items-center rounded-md border px-2 font-mono text-[11px] transition-colors"
+                :class="
                   page === currentPage
-                    ? 'bg-[#f5c542] text-black border-[#f5c542]'
-                    : 'border-white/10 text-zinc-400 hover:border-white/30 hover:text-white',
-                ]"
+                    ? 'border-foreground bg-foreground text-background'
+                    : 'border-border text-muted-foreground hover:border-border-strong hover:text-foreground'
+                "
+                :aria-current="page === currentPage ? 'page' : undefined"
+                @click="goToPage(page)"
               >
                 {{ page }}
               </button>
-              <button
-                type="button"
-                @click="goToPage(currentPage + 1)"
-                :disabled="currentPage === totalPages"
-                class="px-3 py-2 text-xs font-semibold border border-white/10 rounded-lg disabled:opacity-40 disabled:cursor-not-allowed hover:border-white/30 text-zinc-400 hover:text-white transition-colors"
-              >
-                Next
-              </button>
             </div>
-          </div>
-
-          <div class="mt-16">
-            <Newsletter />
+            <button
+              type="button"
+              class="link text-[12px] font-medium disabled:pointer-events-none disabled:opacity-40"
+              :disabled="currentPage === totalPages"
+              @click="goToPage(currentPage + 1)"
+            >
+              Next →
+            </button>
           </div>
         </div>
 
-        <!-- Sidebar -->
-        <div class="w-full lg:w-4/12 space-y-6">
-          <!-- Authors Widget -->
-          <div class="bg-[#111] border border-white/10 rounded-xl p-6">
-            <h2
-              class="text-[11px] font-bold uppercase tracking-widest text-zinc-500 mb-4 pb-2 border-b border-white/10"
-            >
-              Authors
-            </h2>
-            <ul class="space-y-4">
-              <PAuthor v-for="author in uniqueAuthors" :key="author.name" :author="author" />
-            </ul>
-          </div>
-
-          <!-- Tags Widget -->
-          <div class="bg-[#111] border border-white/10 rounded-xl p-6">
-            <h2
-              class="text-[11px] font-bold uppercase tracking-widest text-zinc-500 mb-4 pb-2 border-b border-white/10"
-            >
-              Tags
-            </h2>
-            <div class="flex flex-wrap gap-2">
-              <button
-                v-for="tag in allTags"
-                :key="tag"
-                @click="selectedTag = selectedTag === tag ? null : tag"
-                :class="[
-                  'px-3 py-1.5 text-[11px] font-medium rounded-lg border transition-colors',
-                  selectedTag === tag
-                    ? 'bg-[#f5c542] text-black border-[#f5c542]'
-                    : 'bg-transparent text-zinc-500 border-white/10 hover:border-white/30 hover:text-white',
-                ]"
-              >
-                {{ tag }}
-              </button>
-            </div>
-          </div>
-
-          <!-- RSS Widget -->
-          <div class="bg-[#111] border border-white/10 rounded-xl p-6">
-            <h2
-              class="text-[11px] font-bold uppercase tracking-widest text-zinc-500 mb-4 pb-2 border-b border-white/10"
-            >
-              Subscribe
-            </h2>
-            <p class="text-zinc-500 text-sm mb-4">Subscribe to the RSS feed to get updates.</p>
-            <a
-              href="/rss.xml"
-              target="_blank"
-              class="inline-flex items-center justify-center gap-2 px-4 py-2 bg-[#f5c542] text-black text-xs font-bold rounded-lg hover:bg-[#e0b13a] transition-colors"
-            >
-              <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                <path
-                  d="M6.18 15.64a2.18 2.18 0 0 1 2.18 2.18C8.36 19 7.38 20 6.18 20C5 20 4 19 4 17.82a2.18 2.18 0 0 1 2.18-2.18M4 4.44A15.56 15.56 0 0 1 19.56 20h-2.83A12.73 12.73 0 0 0 4 7.27V4.44m0 5.66a9.9 9.9 0 0 1 9.9 9.9h-2.83A7.07 7.07 0 0 0 4 12.93V10.1z"
-                />
-              </svg>
-              RSS Feed
-            </a>
-          </div>
-        </div>
       </div>
+
+      <aside class="lg:col-span-4">
+        <div class="border-t border-border pt-4">
+          <h2 class="label">About the author</h2>
+          <div v-for="author in uniqueAuthors" :key="author.name" class="mt-4 flex items-start gap-3">
+            <NuxtImg
+              :src="author.img"
+              :alt="author.name"
+              width="44"
+              height="44"
+              class="h-11 w-11 border border-border object-cover grayscale"
+            />
+            <div>
+              <p class="text-[13px] font-semibold">{{ author.name }}</p>
+              <p class="mt-1 text-[13px] leading-relaxed text-muted-foreground">
+                Educator and full-stack developer in Jamaica. Writes about the work, not the hype.
+              </p>
+            </div>
+          </div>
+          <NuxtLink to="/about" class="link mt-4 inline-flex text-[12px] font-medium"
+            >More about Vantol →</NuxtLink
+          >
+        </div>
+
+        <div class="mt-10 border-t border-border pt-4">
+          <h2 class="label">Elsewhere</h2>
+          <ul class="mt-4 space-y-2.5 text-[13px]">
+            <li>
+              <NuxtLink to="/learn" class="link text-muted-foreground hover:text-foreground"
+                >Tutorial series</NuxtLink
+              >
+            </li>
+            <li>
+              <NuxtLink to="/projects" class="link text-muted-foreground hover:text-foreground"
+                >Projects</NuxtLink
+              >
+            </li>
+            <li>
+              <NuxtLink to="/publications" class="link text-muted-foreground hover:text-foreground"
+                >Publications</NuxtLink
+              >
+            </li>
+            <li>
+              <a href="/rss.xml" class="link text-muted-foreground hover:text-foreground"
+                >RSS feed</a
+              >
+            </li>
+          </ul>
+        </div>
+
+      </aside>
+    </div>
+
+    <div class="mt-20">
+      <Newsletter />
     </div>
   </div>
 </template>

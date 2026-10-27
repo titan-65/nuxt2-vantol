@@ -34,7 +34,7 @@ onUnmounted(() => {
     <button
       v-show="isVisible"
       @click="scrollToTop"
-      class="fixed bottom-6 right-6 z-40 p-3 bg-indigo-600 hover:bg-indigo-700 text-white rounded-full shadow-lg transition-colors"
+      class="fixed bottom-6 right-6 z-40 grid h-11 w-11 place-items-center border border-border bg-background text-muted-foreground transition-colors hover:border-blue hover:text-blue"
       aria-label="Back to top"
     >
       <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">

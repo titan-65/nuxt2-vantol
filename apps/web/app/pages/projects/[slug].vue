@@ -6,14 +6,17 @@ const { data: project } = await useAsyncData("project-" + route.path, () => {
 
 const runtimeConfig = useRuntimeConfig();
 const requestOrigin = computed(() => {
+  const configured = String(runtimeConfig.public.siteUrl || "").replace(/\/$/, "");
+  if (configured) return configured;
+
   if (import.meta.server) {
     try {
       return useRequestURL().origin;
     } catch {
-      return runtimeConfig.public.siteUrl || "";
+      return "";
     }
   }
-  return runtimeConfig.public.siteUrl || "";
+  return "";
 });
 const canonicalUrl = computed(() => `${requestOrigin.value}${route.path}`);
 const ogImage = computed(() => project.value?.image || "");
@@ -50,19 +53,19 @@ useHead(() => {
 
   return {
     link: [{ rel: "canonical", href: canonicalUrl.value }],
-    script: jsonLd ? [{ type: "application/ld+json", children: JSON.stringify(jsonLd) }] : [],
+    script: jsonLd ? [{ type: "application/ld+json", innerHTML: JSON.stringify(jsonLd) }] : [],
   };
 });
 </script>
 
 <template>
-  <div class="min-h-screen bg-[#0a0a0a] text-white font-sans">
+  <div class="min-h-screen bg-background text-foreground font-sans">
     <div class="max-w-[1088px] mx-auto px-6 py-12">
       <div v-if="project" class="max-w-4xl mx-auto">
         <div class="mb-8">
           <NuxtLink
             to="/projects"
-            class="text-xs font-bold uppercase tracking-widest hover:text-[#f5c542] transition-colors flex items-center gap-2 mb-6 text-zinc-400"
+            class="text-xs font-bold uppercase tracking-widest hover:text-blue transition-colors flex items-center gap-2 mb-6 text-muted-foreground"
           >
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path
@@ -75,24 +78,24 @@ useHead(() => {
             Back to Projects
           </NuxtLink>
 
-          <div class="bg-[#111] border border-white/10 rounded-xl p-8 md:p-12">
+          <div class="bg-card border border-border rounded-xl p-8 md:p-12">
             <h1 class="text-3xl md:text-5xl font-semibold tracking-tight mb-6">
               {{ project.title }}
             </h1>
 
-            <div class="flex flex-wrap gap-4 mb-8 text-xs text-zinc-500 uppercase">
+            <div class="flex flex-wrap gap-4 mb-8 text-xs text-muted-foreground uppercase">
               <div v-if="project.stack?.Frontend">
-                <span class="font-bold text-zinc-300">Frontend:</span> {{ project.stack.Frontend }}
+                <span class="font-bold text-foreground">Frontend:</span> {{ project.stack.Frontend }}
               </div>
               <div v-if="project.stack?.Backend">
-                <span class="font-bold text-zinc-300">Backend:</span> {{ project.stack.Backend }}
+                <span class="font-bold text-foreground">Backend:</span> {{ project.stack.Backend }}
               </div>
               <div v-if="project.tag">
-                <span class="font-bold text-zinc-300">Tag:</span> {{ project.tag }}
+                <span class="font-bold text-foreground">Tag:</span> {{ project.tag }}
               </div>
             </div>
 
-            <div class="mb-8 rounded-xl overflow-hidden bg-zinc-900">
+            <div class="mb-8 rounded-xl overflow-hidden bg-muted">
               <img
                 :src="project.image"
                 :alt="project.title"
@@ -103,17 +106,17 @@ useHead(() => {
             </div>
 
             <div
-              class="prose prose-invert max-w-none font-light prose-headings:font-semibold prose-headings:tracking-tight prose-a:text-[#f5c542] prose-strong:text-white prose-code:text-[#f5c542] prose-pre:bg-zinc-900 prose-pre:border prose-pre:border-white/10"
+              class="prose  max-w-none font-light prose-headings:font-semibold prose-headings:tracking-tight prose-a:text-blue prose-strong:text-foreground prose-code:text-blue prose-pre:bg-muted prose-pre:border prose-pre:border-border"
             >
               <ContentRenderer :value="project" />
             </div>
 
-            <div class="mt-12 pt-8 border-t border-white/10 flex gap-4">
+            <div class="mt-12 pt-8 border-t border-border flex gap-4">
               <a
                 v-if="project.url"
                 :href="project.url"
                 target="_blank"
-                class="px-6 py-3 bg-[#f5c542] text-black text-xs font-bold uppercase tracking-widest hover:bg-[#e0b13a] transition-colors rounded-lg"
+                class="px-6 py-3 bg-brand text-brand-foreground text-xs font-bold uppercase tracking-widest hover:bg-brand-hover transition-colors rounded-lg"
               >
                 View Live Site
               </a>
@@ -121,7 +124,7 @@ useHead(() => {
                 v-if="project.git"
                 :href="project.git"
                 target="_blank"
-                class="px-6 py-3 border border-white/10 text-zinc-300 text-xs font-bold uppercase tracking-widest hover:bg-white/5 hover:border-white/20 transition-colors rounded-lg"
+                class="px-6 py-3 border border-border text-foreground text-xs font-bold uppercase tracking-widest hover:bg-accent hover:border-border-strong transition-colors rounded-lg"
               >
                 View Source
               </a>

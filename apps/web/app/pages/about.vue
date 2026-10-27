@@ -14,35 +14,35 @@ const experience = computed(() => aboutData.value?.experience || []);
 </script>
 
 <template>
-  <div class="min-h-screen bg-[#0a0a0a] text-white font-sans">
+  <div class="min-h-screen bg-background text-foreground font-sans">
     <!-- Hero Section -->
-    <section class="py-20 border-b border-white/10">
+    <section class="py-20 border-b border-border">
       <div class="max-w-[1088px] mx-auto px-6">
         <div class="grid gap-12 lg:grid-cols-2 items-center">
           <div class="space-y-6">
-            <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-500">About Me</p>
+            <p class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground">About Me</p>
 
             <h1 class="text-5xl md:text-7xl font-semibold tracking-tight leading-[1.05]">
               Vantol R. Bennett
             </h1>
 
-            <div class="border-l-2 border-white/10 pl-6 py-2">
-              <p class="text-xl text-zinc-400 font-light leading-relaxed mb-4">
+            <div class="border-l-2 border-border pl-6 py-2">
+              <p class="text-xl text-muted-foreground font-light leading-relaxed mb-4">
                 Jamaican Educator & Developer passionate about creating innovative solutions that
                 bridge technology and education.
               </p>
-              <p class="text-zinc-500 text-sm uppercase tracking-wide">Founder of Zhyjenae</p>
+              <p class="text-muted-foreground text-sm uppercase tracking-wide">Founder of Zhyjenae</p>
             </div>
 
             <p
-              class="text-lg font-light leading-relaxed border border-white/10 bg-[#111] p-6 rounded-xl italic text-zinc-400"
+              class="text-lg font-light leading-relaxed border border-border bg-card p-6 rounded-xl italic text-muted-foreground"
             >
               "The best way to write code all day is by doing it! Evolve with innovation."
             </p>
           </div>
 
           <div class="relative">
-            <div class="rounded-2xl overflow-hidden bg-zinc-900">
+            <div class="rounded-2xl overflow-hidden bg-muted">
               <NuxtImg
                 src="https://res.cloudinary.com/ddszyeplg/image/upload/v1656478354/IMG_1412_orxemy.jpg"
                 alt="Vantol Bennett"
@@ -56,12 +56,12 @@ const experience = computed(() => aboutData.value?.experience || []);
     </section>
 
     <!-- Skills Section -->
-    <section class="py-20 border-b border-white/10">
+    <section class="py-20 border-b border-border">
       <div class="max-w-[1088px] mx-auto px-6">
         <div class="mb-12">
-          <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-3">Skills</p>
+          <p class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-3">Skills</p>
           <h2 class="text-3xl font-semibold mb-4">Skills & Technologies</h2>
-          <p class="text-zinc-500 font-light max-w-2xl">
+          <p class="text-muted-foreground font-light max-w-2xl">
             Tools and technologies I work with regularly to build digital products.
           </p>
         </div>
@@ -70,10 +70,10 @@ const experience = computed(() => aboutData.value?.experience || []);
           <div
             v-for="skill in skills"
             :key="skill.category"
-            class="bg-[#111] border border-white/10 rounded-xl p-6 hover:border-white/20 transition-colors"
+            class="bg-card border border-border rounded-xl p-6 hover:border-border-strong transition-colors"
           >
             <h3
-              class="text-[11px] font-bold uppercase tracking-widest mb-6 text-zinc-500 pb-2 border-b border-white/10"
+              class="text-[11px] font-bold uppercase tracking-widest mb-6 text-muted-foreground pb-2 border-b border-border"
             >
               {{ skill.category }}
             </h3>
@@ -81,7 +81,7 @@ const experience = computed(() => aboutData.value?.experience || []);
               <span
                 v-for="item in skill.items"
                 :key="item"
-                class="px-2.5 py-1 text-[11px] font-mono border border-white/10 text-zinc-400 rounded-md hover:bg-white/5 hover:text-white transition-colors cursor-default"
+                class="px-2.5 py-1 text-[11px] font-mono border border-border text-muted-foreground rounded-md hover:bg-accent hover:text-foreground transition-colors cursor-default"
               >
                 {{ item }}
               </span>
@@ -95,11 +95,11 @@ const experience = computed(() => aboutData.value?.experience || []);
     <section class="py-20">
       <div class="max-w-[1088px] mx-auto px-6">
         <div class="mb-12">
-          <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-3">
+          <p class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-3">
             Experience
           </p>
           <h2 class="text-3xl font-semibold mb-4">Experience</h2>
-          <p class="text-zinc-500 font-light max-w-2xl">
+          <p class="text-muted-foreground font-light max-w-2xl">
             My professional journey and contributions.
           </p>
         </div>
@@ -108,24 +108,24 @@ const experience = computed(() => aboutData.value?.experience || []);
           <div
             v-for="exp in experience"
             :key="exp.title"
-            class="group bg-[#111] border border-white/10 rounded-xl p-6 md:p-8 hover:border-white/20 transition-colors flex flex-col md:flex-row gap-6 md:gap-12"
+            class="group bg-card border border-border rounded-xl p-6 md:p-8 hover:border-border-strong transition-colors flex flex-col md:flex-row gap-6 md:gap-12"
           >
             <div class="md:w-1/4">
               <span
-                class="inline-block px-2.5 py-1 text-[10px] font-bold bg-[#f5c542] text-black rounded-md mb-2 uppercase tracking-wider"
+                class="inline-block px-2.5 py-1 text-[10px] font-bold bg-brand text-brand-foreground rounded-md mb-2 uppercase tracking-wider"
               >
                 {{ exp.period }}
               </span>
-              <p class="text-sm font-semibold text-zinc-400">
+              <p class="text-sm font-semibold text-muted-foreground">
                 {{ exp.company }}
               </p>
             </div>
 
             <div class="md:w-3/4">
-              <h3 class="text-xl font-semibold mb-2 group-hover:text-[#f5c542] transition-colors">
+              <h3 class="text-xl font-semibold mb-2 group-hover:text-blue transition-colors">
                 {{ exp.title }}
               </h3>
-              <p class="text-zinc-500 font-light leading-relaxed">
+              <p class="text-muted-foreground font-light leading-relaxed">
                 {{ exp.description }}
               </p>
             </div>

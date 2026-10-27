@@ -18,10 +18,7 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div class="fixed top-0 left-0 right-0 z-50 h-1 bg-zinc-900">
-    <div
-      class="h-full bg-[#f5c542] transition-all duration-150"
-      :style="{ width: `${progress}%` }"
-    />
+  <div class="fixed inset-x-0 top-0 z-[60] h-0.5 bg-transparent" aria-hidden="true">
+    <div class="h-full bg-blue" :style="{ width: `${progress}%` }" />
   </div>
 </template>

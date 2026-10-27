@@ -31,13 +31,13 @@ const maxViews = computed(() => {
 </script>
 
 <template>
-  <div class="min-h-screen bg-[#0a0a0a] text-white font-sans">
+  <div class="min-h-screen bg-background text-foreground font-sans">
     <div class="max-w-4xl mx-auto px-6 py-20">
       <!-- Header -->
       <div class="mb-12">
-        <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-4">Analytics</p>
+        <p class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-4">Analytics</p>
         <h1 class="text-4xl md:text-5xl font-semibold tracking-tight mb-4">Blog Stats</h1>
-        <p class="text-lg text-zinc-400 font-light">
+        <p class="text-lg text-muted-foreground font-light">
           Real-time statistics from across the blog, powered by Firebase.
         </p>
       </div>
@@ -49,10 +49,10 @@ const maxViews = computed(() => {
             <div
               v-for="i in 3"
               :key="i"
-              class="bg-[#111] border border-white/10 rounded-xl p-6 animate-pulse"
+              class="bg-card border border-border rounded-xl p-6 animate-pulse"
             >
-              <div class="h-4 bg-zinc-800 rounded w-20 mb-4"></div>
-              <div class="h-8 bg-zinc-800 rounded w-16"></div>
+              <div class="h-4 bg-muted rounded w-20 mb-4"></div>
+              <div class="h-8 bg-muted rounded w-16"></div>
             </div>
           </div>
         </div>
@@ -62,11 +62,11 @@ const maxViews = computed(() => {
           <!-- Summary Cards -->
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div
-              class="bg-[#111] border border-white/10 rounded-xl p-6 hover:border-white/20 transition-colors group"
+              class="bg-card border border-border rounded-xl p-6 hover:border-border-strong transition-colors group"
             >
               <div class="flex items-center gap-2 mb-3">
-                <Eye class="w-4 h-4 text-zinc-500 group-hover:text-[#f5c542] transition-colors" />
-                <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500"
+                <Eye class="w-4 h-4 text-muted-foreground group-hover:text-blue transition-colors" />
+                <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground"
                   >Total Views</span
                 >
               </div>
@@ -74,11 +74,11 @@ const maxViews = computed(() => {
             </div>
 
             <div
-              class="bg-[#111] border border-white/10 rounded-xl p-6 hover:border-white/20 transition-colors group"
+              class="bg-card border border-border rounded-xl p-6 hover:border-border-strong transition-colors group"
             >
               <div class="flex items-center gap-2 mb-3">
-                <Heart class="w-4 h-4 text-zinc-500 group-hover:text-red-400 transition-colors" />
-                <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500"
+                <Heart class="w-4 h-4 text-muted-foreground group-hover:text-danger transition-colors" />
+                <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground"
                   >Total Likes</span
                 >
               </div>
@@ -86,13 +86,13 @@ const maxViews = computed(() => {
             </div>
 
             <div
-              class="bg-[#111] border border-white/10 rounded-xl p-6 hover:border-white/20 transition-colors group"
+              class="bg-card border border-border rounded-xl p-6 hover:border-border-strong transition-colors group"
             >
               <div class="flex items-center gap-2 mb-3">
                 <MessageCircle
-                  class="w-4 h-4 text-zinc-500 group-hover:text-blue-400 transition-colors"
+                  class="w-4 h-4 text-muted-foreground group-hover:text-blue-400 transition-colors"
                 />
-                <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500"
+                <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground"
                   >Total Comments</span
                 >
               </div>
@@ -101,32 +101,32 @@ const maxViews = computed(() => {
           </div>
 
           <!-- Quick Stats -->
-          <div class="bg-[#111] border border-white/10 rounded-xl p-6">
+          <div class="bg-card border border-border rounded-xl p-6">
             <div class="flex items-center gap-2 mb-1">
-              <BarChart3 class="w-4 h-4 text-zinc-500" />
-              <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500"
+              <BarChart3 class="w-4 h-4 text-muted-foreground" />
+              <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground"
                 >Quick Stats</span
               >
             </div>
             <div class="grid grid-cols-2 sm:grid-cols-4 gap-6 mt-4">
               <div>
-                <p class="text-xs text-zinc-500">Posts</p>
+                <p class="text-xs text-muted-foreground">Posts</p>
                 <p class="text-xl font-bold">{{ stats.length }}</p>
               </div>
               <div>
-                <p class="text-xs text-zinc-500">Avg Views</p>
+                <p class="text-xs text-muted-foreground">Avg Views</p>
                 <p class="text-xl font-bold">
                   {{ stats.length ? Math.round(totalViews / stats.length).toLocaleString() : 0 }}
                 </p>
               </div>
               <div>
-                <p class="text-xs text-zinc-500">Avg Likes</p>
+                <p class="text-xs text-muted-foreground">Avg Likes</p>
                 <p class="text-xl font-bold">
                   {{ stats.length ? Math.round(totalLikes / stats.length).toLocaleString() : 0 }}
                 </p>
               </div>
               <div>
-                <p class="text-xs text-zinc-500">Most Viewed</p>
+                <p class="text-xs text-muted-foreground">Most Viewed</p>
                 <p class="text-xl font-bold truncate" :title="topPosts[0]?.title">
                   {{ topPosts[0]?.views.toLocaleString() || 0 }}
                 </p>
@@ -135,10 +135,10 @@ const maxViews = computed(() => {
           </div>
 
           <!-- Top Posts -->
-          <div class="bg-[#111] border border-white/10 rounded-xl p-6">
+          <div class="bg-card border border-border rounded-xl p-6">
             <div class="flex items-center gap-2 mb-6">
-              <Award class="w-4 h-4 text-zinc-500" />
-              <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500"
+              <Award class="w-4 h-4 text-muted-foreground" />
+              <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground"
                 >Top Posts</span
               >
             </div>
@@ -151,19 +151,19 @@ const maxViews = computed(() => {
                 class="block group"
               >
                 <div class="flex items-center gap-4">
-                  <span class="text-xs text-zinc-600 w-6 text-right">#{{ index + 1 }}</span>
+                  <span class="text-xs text-muted-foreground w-6 text-right">#{{ index + 1 }}</span>
                   <div class="flex-1 min-w-0">
-                    <p class="font-medium truncate group-hover:text-[#f5c542] transition-colors">
+                    <p class="font-medium truncate group-hover:text-blue transition-colors">
                       {{ post.title }}
                     </p>
                     <div class="flex items-center gap-4 mt-1">
-                      <span class="text-xs text-zinc-500 flex items-center gap-1">
+                      <span class="text-xs text-muted-foreground flex items-center gap-1">
                         <Eye class="w-3 h-3" /> {{ post.views.toLocaleString() }}
                       </span>
-                      <span class="text-xs text-zinc-500 flex items-center gap-1">
+                      <span class="text-xs text-muted-foreground flex items-center gap-1">
                         <Heart class="w-3 h-3" /> {{ post.likes }}
                       </span>
-                      <span class="text-xs text-zinc-500 flex items-center gap-1">
+                      <span class="text-xs text-muted-foreground flex items-center gap-1">
                         <MessageCircle class="w-3 h-3" /> {{ post.commentCount }}
                       </span>
                     </div>
@@ -171,9 +171,9 @@ const maxViews = computed(() => {
                 </div>
                 <!-- Bar chart -->
                 <div class="ml-10 mt-2">
-                  <div class="h-1.5 bg-zinc-800 rounded-full overflow-hidden">
+                  <div class="h-1.5 bg-muted rounded-full overflow-hidden">
                     <div
-                      class="h-full bg-[#f5c542] rounded-full transition-all duration-500"
+                      class="h-full bg-brand rounded-full transition-all duration-500"
                       :style="{ width: `${(post.views / maxViews) * 100}%` }"
                     ></div>
                   </div>
@@ -183,10 +183,10 @@ const maxViews = computed(() => {
           </div>
 
           <!-- All Posts Table -->
-          <div class="bg-[#111] border border-white/10 rounded-xl p-6">
+          <div class="bg-card border border-border rounded-xl p-6">
             <div class="flex items-center gap-2 mb-6">
-              <TrendingUp class="w-4 h-4 text-zinc-500" />
-              <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500"
+              <TrendingUp class="w-4 h-4 text-muted-foreground" />
+              <span class="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground"
                 >All Posts</span
               >
             </div>
@@ -194,24 +194,24 @@ const maxViews = computed(() => {
             <div class="overflow-x-auto">
               <table class="w-full text-sm">
                 <thead>
-                  <tr class="border-b border-white/10">
+                  <tr class="border-b border-border">
                     <th
-                      class="text-left py-3 text-xs font-bold uppercase tracking-widest text-zinc-500"
+                      class="text-left py-3 text-xs font-bold uppercase tracking-widest text-muted-foreground"
                     >
                       Post
                     </th>
                     <th
-                      class="text-right py-3 text-xs font-bold uppercase tracking-widest text-zinc-500 w-20"
+                      class="text-right py-3 text-xs font-bold uppercase tracking-widest text-muted-foreground w-20"
                     >
                       Views
                     </th>
                     <th
-                      class="text-right py-3 text-xs font-bold uppercase tracking-widest text-zinc-500 w-20"
+                      class="text-right py-3 text-xs font-bold uppercase tracking-widest text-muted-foreground w-20"
                     >
                       Likes
                     </th>
                     <th
-                      class="text-right py-3 text-xs font-bold uppercase tracking-widest text-zinc-500 w-24"
+                      class="text-right py-3 text-xs font-bold uppercase tracking-widest text-muted-foreground w-24"
                     >
                       Comments
                     </th>
@@ -221,19 +221,19 @@ const maxViews = computed(() => {
                   <tr
                     v-for="post in stats"
                     :key="post.slug"
-                    class="border-b border-white/5 hover:bg-white/[0.02] transition-colors"
+                    class="border-b border-border hover:bg-background/[0.02] transition-colors"
                   >
                     <td class="py-3 pr-4">
                       <NuxtLink
                         :to="`/blog/${post.slug}`"
-                        class="font-medium hover:text-[#f5c542] transition-colors truncate block max-w-xs"
+                        class="font-medium hover:text-blue transition-colors truncate block max-w-xs"
                       >
                         {{ post.title }}
                       </NuxtLink>
                     </td>
-                    <td class="py-3 text-right text-zinc-500">{{ post.views.toLocaleString() }}</td>
-                    <td class="py-3 text-right text-zinc-500">{{ post.likes }}</td>
-                    <td class="py-3 text-right text-zinc-500">{{ post.commentCount }}</td>
+                    <td class="py-3 text-right text-muted-foreground">{{ post.views.toLocaleString() }}</td>
+                    <td class="py-3 text-right text-muted-foreground">{{ post.likes }}</td>
+                    <td class="py-3 text-right text-muted-foreground">{{ post.commentCount }}</td>
                   </tr>
                 </tbody>
               </table>
@@ -242,9 +242,9 @@ const maxViews = computed(() => {
         </div>
 
         <template #fallback>
-          <div class="bg-[#111] border border-white/10 rounded-xl p-12 text-center">
+          <div class="bg-card border border-border rounded-xl p-12 text-center">
             <div
-              class="inline-block w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin"
+              class="inline-block w-5 h-5 border-2 border-border-strong border-t-white rounded-full animate-spin"
             ></div>
           </div>
         </template>

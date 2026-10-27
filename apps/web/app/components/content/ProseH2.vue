@@ -3,11 +3,15 @@ defineProps<{ id: string }>();
 </script>
 
 <template>
-  <h2 :id="id" class="text-2xl font-bold mt-12 mb-4 tracking-tight group flex items-center gap-2">
+  <h2
+    :id="id"
+    class="group flex scroll-mt-28 items-baseline gap-3 text-balance text-[clamp(1.5rem,2.4vw,1.9rem)] font-medium leading-[1.15] tracking-[-0.025em]"
+  >
     <slot />
     <a
       :href="`#${id}`"
-      class="opacity-0 group-hover:opacity-100 transition-opacity text-gray-400 text-sm font-mono"
+      class="font-mono text-[11px] font-normal text-faint-ink opacity-0 transition-opacity group-hover:opacity-100 focus:opacity-100"
+      aria-label="Link to this section"
       >#</a
     >
   </h2>

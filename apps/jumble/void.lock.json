@@ -1,0 +1,36 @@
+{
+  "version": 1,
+  "source": {
+    "workers_dev": true,
+    "preview_urls": true,
+    "routes": []
+  },
+  "resolved": {
+    "account_id": "af85d6e85cca5e513c3ebe7200801946",
+    "d1_databases": [
+      {
+        "binding": "DB",
+        "database_name": "jumble-db",
+        "database_id": "8a47172e-4285-4492-aef1-a8b309048abf",
+        "migrations_dir": "./db/migrations"
+      }
+    ],
+    "name": "jumble",
+    "kv_namespaces": [
+      {
+        "binding": "KV",
+        "id": "0ed5140ba7c940b7b6ffd12e275adcc3"
+      }
+    ],
+    "r2_buckets": [
+      {
+        "binding": "STORAGE",
+        "bucket_name": "jumble-storage"
+      }
+    ],
+    "workers_dev": true,
+    "preview_urls": true,
+    "routes": []
+  },
+  "text": "{\n  \"account_id\": \"af85d6e85cca5e513c3ebe7200801946\",\n  \"d1_databases\": [\n    {\n      \"binding\": \"DB\",\n      \"database_name\": \"jumble-db\",\n      \"database_id\": \"8a47172e-4285-4492-aef1-a8b309048abf\",\n      \"migrations_dir\": \"./db/migrations\"\n    }\n  ],\n  \"name\": \"jumble\",\n  \"kv_namespaces\": [\n    {\n      \"binding\": \"KV\",\n      \"id\": \"0ed5140ba7c940b7b6ffd12e275adcc3\"\n    }\n  ],\n  \"r2_buckets\": [\n    {\n      \"binding\": \"STORAGE\",\n      \"bucket_name\": \"jumble-storage\"\n    }\n  ],\n  \"workers_dev\": true,\n  \"preview_urls\": true,\n  \"routes\": []\n}\n"
+}

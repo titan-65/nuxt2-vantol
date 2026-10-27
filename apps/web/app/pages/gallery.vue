@@ -19,16 +19,16 @@ const items = computed(() => galleryData.value?.items || []);
 </script>
 
 <template>
-  <main class="min-h-screen bg-[#0a0a0a] text-white font-sans">
+  <main class="min-h-screen bg-background text-foreground font-sans">
     <div class="max-w-[1088px] mx-auto px-6 py-10">
-      <section class="border border-white/10 bg-[#111] rounded-xl p-6 md:p-10">
+      <section class="border border-border bg-card rounded-xl p-6 md:p-10">
         <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
           <div>
-            <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500">Gallery</p>
+            <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">Gallery</p>
             <h1 class="mt-2 text-3xl md:text-4xl font-semibold tracking-tight">
               Visual Notes & Builds
             </h1>
-            <p class="mt-3 text-sm text-zinc-400 max-w-2xl">
+            <p class="mt-3 text-sm text-muted-foreground max-w-2xl">
               A lightweight space for design snapshots, build screenshots, and experiments. I'll
               keep it curated—less feed, more archive.
             </p>
@@ -37,7 +37,7 @@ const items = computed(() => galleryData.value?.items || []);
           <div class="flex items-center gap-2">
             <NuxtLink
               to="/explore"
-              class="border border-white/10 bg-[#0a0a0a] px-4 py-2 text-xs font-bold uppercase tracking-widest hover:bg-white/5 transition-colors rounded-lg text-zinc-300"
+              class="border border-border bg-background px-4 py-2 text-xs font-bold uppercase tracking-widest hover:bg-accent transition-colors rounded-lg text-foreground"
             >
               Developer Exploration
               <svg
@@ -59,20 +59,20 @@ const items = computed(() => galleryData.value?.items || []);
           <article
             v-for="(item, idx) in items"
             :key="idx"
-            class="border border-white/10 bg-[#0a0a0a] rounded-xl p-5 hover:border-white/20 transition-colors"
+            class="border border-border bg-background rounded-xl p-5 hover:border-border-strong transition-colors"
           >
             <div class="flex items-start justify-between gap-4">
               <div>
-                <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500">
+                <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">
                   {{ item.type }}
                 </p>
                 <h2 class="mt-2 font-semibold tracking-tight">{{ item.title }}</h2>
               </div>
-              <span class="text-xs text-zinc-600">{{ item.year }}</span>
+              <span class="text-xs text-muted-foreground">{{ item.year }}</span>
             </div>
 
             <a
-              class="mt-4 block rounded-lg overflow-hidden bg-zinc-900"
+              class="mt-4 block rounded-lg overflow-hidden bg-muted"
               :href="item.img"
               target="_blank"
               rel="noopener noreferrer"
@@ -86,15 +86,15 @@ const items = computed(() => galleryData.value?.items || []);
               />
             </a>
 
-            <p class="mt-4 text-xs text-zinc-500">
+            <p class="mt-4 text-xs text-muted-foreground">
               {{ item.note }}
             </p>
           </article>
         </div>
 
-        <div class="mt-8 border-t border-white/10 pt-6">
-          <p class="text-xs text-zinc-600">
-            Tip: update the <code class="text-[#f5c542]">items</code> array in this page with your
+        <div class="mt-8 border-t border-border pt-6">
+          <p class="text-xs text-muted-foreground">
+            Tip: update the <code class="text-blue">items</code> array in this page with your
             Cloudinary URLs.
           </p>
         </div>

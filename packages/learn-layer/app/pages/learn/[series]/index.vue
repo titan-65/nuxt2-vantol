@@ -24,14 +24,17 @@ const percent = computed(() => seriesProgress(steps.value?.length || 0).value);
 
 const runtimeConfig = useRuntimeConfig();
 const requestOrigin = computed(() => {
+  const configured = String(runtimeConfig.public.siteUrl || "").replace(/\/$/, "");
+  if (configured) return configured;
+
   if (import.meta.server) {
     try {
       return useRequestURL().origin;
     } catch {
-      return runtimeConfig.public.siteUrl || "";
+      return "";
     }
   }
-  return runtimeConfig.public.siteUrl || "";
+  return "";
 });
 const canonicalUrl = computed(() => `${requestOrigin.value}${route.path}`);
 
@@ -56,14 +59,15 @@ function formatDate(date: string | undefined) {
 </script>
 
 <template>
-  <div v-if="landing" class="min-h-screen bg-[#0a0a0a] text-white font-sans">
+  <div v-if="landing" class="reading-page min-h-screen bg-background text-foreground">
     <LearnHeaderNav />
-    <div class="max-w-[880px] mx-auto px-6 py-12">
+
+    <div class="mx-auto max-w-[880px] px-6 py-12 md:py-16">
       <NuxtLink
         to="/learn"
-        class="inline-flex items-center gap-1.5 text-xs text-zinc-500 hover:text-white transition-colors mb-8"
+        class="inline-flex items-center gap-1.5 text-[12px] text-muted-foreground transition-colors hover:text-foreground"
       >
-        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
           <path
             stroke-linecap="round"
             stroke-linejoin="round"
@@ -74,28 +78,29 @@ function formatDate(date: string | undefined) {
         All tutorials
       </NuxtLink>
 
-      <!-- Header -->
-      <header class="mb-10 border-b border-white/10 pb-8">
-        <div class="flex items-center gap-3 mb-5 flex-wrap">
+      <header class="mt-8 border-b border-border pb-8">
+        <div class="flex flex-wrap items-center gap-3">
           <span
             v-if="landing.nuxtVersion"
-            class="px-2.5 py-1 bg-[#f5c542] text-black text-[10px] font-bold uppercase tracking-widest rounded-md"
+            class="rounded border border-blue/30 bg-blue/10 px-2 py-0.5 font-mono text-[9px] font-medium uppercase tracking-[0.08em] text-blue"
           >
             Nuxt v{{ landing.nuxtVersion }}
           </span>
           <span
             v-if="landing.difficulty"
-            class="text-[11px] uppercase tracking-wider text-zinc-500"
-            >{{ landing.difficulty }}</span
+            class="font-mono text-[10px] uppercase tracking-[0.08em] text-muted-foreground"
           >
-          <span v-if="landing.releaseDate" class="text-[11px] text-zinc-600"
-            >Released {{ formatDate(landing.releaseDate) }}</span
-          >
-          <span v-if="landing.estMinutes" class="text-[11px] text-zinc-600"
-            >• ~{{ landing.estMinutes }} min</span
-          >
+            {{ landing.difficulty }}
+          </span>
+          <span v-if="landing.releaseDate" class="font-mono text-[10px] text-faint-ink">
+            Released {{ formatDate(landing.releaseDate) }}
+          </span>
+          <span v-if="landing.estMinutes" class="font-mono text-[10px] text-faint-ink">
+            · ~{{ landing.estMinutes }} min
+          </span>
         </div>
-        <h1 class="text-3xl md:text-5xl font-semibold tracking-tight mb-6 leading-tight">
+
+        <h1 class="display mt-4 max-w-[20ch] text-[clamp(2.2rem,4vw,3.2rem)]">
           {{ landing.title }}
         </h1>
 
@@ -104,9 +109,9 @@ function formatDate(date: string | undefined) {
           :href="landing.sourceUrl"
           target="_blank"
           rel="noopener noreferrer"
-          class="inline-flex items-center gap-2 text-xs text-zinc-400 hover:text-[#f5c542] transition-colors border border-white/10 rounded-lg px-3 py-2"
+          class="btn btn-secondary mt-6"
         >
-          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path
               stroke-linecap="round"
               stroke-linejoin="round"
@@ -118,54 +123,46 @@ function formatDate(date: string | undefined) {
         </a>
       </header>
 
-      <!-- Intro body -->
-      <div
-        class="prose prose-invert max-w-none font-light prose-headings:font-semibold prose-headings:tracking-tight prose-a:text-[#f5c542] prose-a:no-underline hover:prose-a:underline prose-code:text-[#f5c542] prose-pre:bg-zinc-900 prose-pre:border prose-pre:border-white/10 mb-12"
-      >
+      <div class="article-prose mt-10 mb-12">
         <ContentRenderer :value="landing" />
       </div>
 
-      <!-- Progress + step list -->
-      <div class="border border-white/10 bg-[#111] rounded-xl p-6">
-        <div class="flex items-center justify-between mb-4">
-          <h2 class="text-[11px] font-bold uppercase tracking-widest text-zinc-500">Steps</h2>
+      <div class="card p-6">
+        <div class="flex items-center justify-between gap-4">
+          <h2 class="label">Steps</h2>
           <ClientOnly>
-            <span class="text-[11px] text-zinc-500"
-              >{{ completed.length }} / {{ steps?.length || 0 }} done</span
-            >
+            <span class="meta">{{ completed.length }} / {{ steps?.length || 0 }} done</span>
           </ClientOnly>
         </div>
 
         <ClientOnly>
-          <div
-            v-if="steps?.length"
-            class="h-1.5 w-full bg-white/10 rounded-full overflow-hidden mb-6"
-          >
-            <div class="h-full bg-[#f5c542] transition-all" :style="{ width: percent + '%' }" />
+          <div v-if="steps?.length" class="mt-4 h-1.5 w-full overflow-hidden rounded-full bg-surface-2">
+            <div class="h-full bg-blue transition-all" :style="{ width: percent + '%' }" />
           </div>
         </ClientOnly>
 
-        <ol class="space-y-2">
+        <ol class="mt-6 space-y-1">
           <li v-for="(step, i) in steps" :key="step.path">
             <NuxtLink
               :to="step.path"
-              class="group flex items-center gap-4 p-3 rounded-lg border border-white/5 hover:border-white/20 hover:bg-white/5 transition-all"
+              class="group flex items-center gap-4 rounded-md border border-transparent px-3 py-2.5 transition-all hover:border-border hover:bg-surface-2"
             >
               <ClientOnly>
                 <span
-                  class="shrink-0 w-6 h-6 rounded-full border flex items-center justify-center text-[11px] font-bold"
+                  class="grid h-6 w-6 shrink-0 place-items-center rounded-full border text-[11px] font-medium"
                   :class="
                     isComplete(step.path)
-                      ? 'bg-[#f5c542] border-[#f5c542] text-black'
-                      : 'border-white/20 text-zinc-500'
+                      ? 'border-blue bg-blue text-background'
+                      : 'border-border text-muted-foreground'
                   "
                 >
                   <svg
                     v-if="isComplete(step.path)"
-                    class="w-3.5 h-3.5"
+                    class="h-3.5 w-3.5"
                     fill="none"
                     stroke="currentColor"
                     viewBox="0 0 24 24"
+                    aria-hidden="true"
                   >
                     <path
                       stroke-linecap="round"
@@ -178,26 +175,32 @@ function formatDate(date: string | undefined) {
                 </span>
                 <template #fallback>
                   <span
-                    class="shrink-0 w-6 h-6 rounded-full border border-white/20 text-zinc-500 flex items-center justify-center text-[11px] font-bold"
+                    class="grid h-6 w-6 shrink-0 place-items-center rounded-full border border-border text-[11px] font-medium text-muted-foreground"
                     >{{ i + 1 }}</span
                   >
                 </template>
               </ClientOnly>
+
               <div class="min-w-0 flex-1">
                 <p
-                  class="text-sm font-medium text-white group-hover:text-[#f5c542] transition-colors truncate"
+                  class="truncate text-[14px] font-medium transition-colors group-hover:text-blue"
                 >
                   {{ step.title }}
                 </p>
-                <p v-if="step.feature" class="text-[11px] text-zinc-600 truncate">
+                <p
+                  v-if="step.feature"
+                  class="truncate font-mono text-[10px] uppercase tracking-[0.08em] text-faint-ink"
+                >
                   {{ step.feature }}
                 </p>
               </div>
+
               <svg
-                class="w-4 h-4 text-zinc-600 group-hover:text-[#f5c542] transition-colors shrink-0"
+                class="h-4 w-4 shrink-0 text-faint-ink transition-colors group-hover:text-blue"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
+                aria-hidden="true"
               >
                 <path
                   stroke-linecap="round"

@@ -14,28 +14,33 @@ const getSlug = (path: string | undefined) => path?.split("/").pop() || "";
 </script>
 
 <template>
-  <div class="flex justify-between gap-4">
+  <div class="grid gap-6 sm:grid-cols-2">
     <NuxtLink
       v-if="prev"
       :to="`/blog/${getSlug(prev.path)}`"
-      class="flex items-center gap-1 text-[#f5c542] hover:underline transition-colors"
+      class="group block border-t border-border pt-3"
     >
-      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
-      </svg>
-      <span class="font-medium line-clamp-1">{{ prev.title }}</span>
+      <p class="label">Previous</p>
+      <p
+        class="mt-2 text-[15px] font-medium leading-snug transition-colors group-hover:text-blue"
+      >
+        ← {{ prev.title }}
+      </p>
     </NuxtLink>
-    <span v-else>&nbsp;</span>
+    <span v-else />
+
     <NuxtLink
       v-if="next"
       :to="`/blog/${getSlug(next.path)}`"
-      class="flex items-center gap-1 text-[#f5c542] hover:underline transition-colors"
+      class="group block border-t border-border pt-3 sm:text-right"
     >
-      <span class="font-medium line-clamp-1">{{ next.title }}</span>
-      <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
-      </svg>
+      <p class="label">Next</p>
+      <p
+        class="mt-2 text-[15px] font-medium leading-snug transition-colors group-hover:text-blue"
+      >
+        {{ next.title }} →
+      </p>
     </NuxtLink>
-    <span v-else>&nbsp;</span>
+    <span v-else />
   </div>
 </template>

@@ -8,21 +8,19 @@ defineProps<{
 </script>
 
 <template>
-  <li class="flex items-center py-2 border-b border-white/10 last:border-0">
+  <li class="flex items-center border-b border-border py-2 last:border-0">
     <NuxtImg
       :src="author?.img"
-      alt="avatar"
-      width="32"
-      height="32"
-      class="object-cover w-8 h-8 mx-3 rounded-full border border-white/10"
+      alt=""
+      width="28"
+      height="28"
+      class="mr-3 h-7 w-7 border border-border object-cover grayscale"
     />
-    <p>
-      <NuxtLink
-        :to="`/blog/author/${author?.name}`"
-        class="text-sm text-zinc-400 hover:text-white transition-colors"
-      >
-        {{ author?.name }}
-      </NuxtLink>
-    </p>
+    <NuxtLink
+      :to="`/blog/author/${author?.name}`"
+      class="text-[13px] text-muted-foreground transition-colors hover:text-foreground"
+    >
+      {{ author?.name }}
+    </NuxtLink>
   </li>
 </template>

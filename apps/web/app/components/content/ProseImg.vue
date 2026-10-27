@@ -20,17 +20,20 @@ defineProps({
 </script>
 
 <template>
-  <div class="my-8 border border-white/10 p-2 bg-zinc-900 rounded-xl flex flex-col items-center">
+  <figure class="my-8">
     <NuxtImg
       :src="src"
       :alt="alt"
       :width="width"
       :height="height"
-      sizes="100vw"
-      class="w-full h-auto object-cover rounded-lg"
+      sizes="(min-width: 1024px) 720px, 100vw"
+      class="w-full rounded-lg border border-border object-cover"
     />
-    <p v-if="alt" class="mt-2 text-[10px] font-mono text-zinc-600 uppercase tracking-widest">
+    <figcaption
+      v-if="alt"
+      class="mt-2 font-mono text-[9px] uppercase tracking-[0.12em] text-faint-ink"
+    >
       {{ alt }}
-    </p>
-  </div>
+    </figcaption>
+  </figure>
 </template>

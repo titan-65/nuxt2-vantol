@@ -45,14 +45,17 @@ const { isComplete, toggle } = useTutorialProgress(seriesSlug.value);
 
 const runtimeConfig = useRuntimeConfig();
 const requestOrigin = computed(() => {
+  const configured = String(runtimeConfig.public.siteUrl || "").replace(/\/$/, "");
+  if (configured) return configured;
+
   if (import.meta.server) {
     try {
       return useRequestURL().origin;
     } catch {
-      return runtimeConfig.public.siteUrl || "";
+      return "";
     }
   }
-  return runtimeConfig.public.siteUrl || "";
+  return "";
 });
 const canonicalUrl = computed(() => `${requestOrigin.value}${route.path}`);
 
@@ -74,52 +77,54 @@ function markComplete() {
 </script>
 
 <template>
-  <div v-if="step" class="min-h-screen bg-[#0a0a0a] text-white font-sans">
+  <div v-if="step" class="reading-page min-h-screen bg-background text-foreground">
     <LearnHeaderNav />
     <ReadingProgress />
-    <div class="max-w-[1088px] mx-auto px-6 py-12">
-      <div class="lg:flex gap-12">
-        <!-- Stepper sidebar -->
-        <aside class="hidden lg:block w-64 shrink-0">
-          <div class="sticky top-24 border border-white/10 bg-[#111] rounded-xl p-6">
+
+    <div class="mx-auto max-w-[1088px] px-6 py-12 md:py-16">
+      <div class="flex flex-col gap-10 lg:flex-row lg:gap-12">
+        <aside class="hidden w-64 shrink-0 lg:block">
+          <div class="card sticky top-24 p-6">
             <NuxtLink
               :to="seriesPath"
-              class="block text-sm font-semibold text-white hover:text-[#f5c542] transition-colors mb-1"
+              class="block text-[14px] font-medium transition-colors hover:text-blue"
             >
               {{ landing?.title || "Series" }}
             </NuxtLink>
             <p
               v-if="landing?.nuxtVersion"
-              class="text-[10px] uppercase tracking-widest text-zinc-600 mb-4"
+              class="mt-1 font-mono text-[10px] uppercase tracking-[0.08em] text-faint-ink"
             >
               Nuxt v{{ landing.nuxtVersion }}
             </p>
-            <ol class="space-y-1">
+
+            <ol class="mt-5 space-y-1">
               <li v-for="(s, i) in siblings" :key="s.path">
                 <NuxtLink
                   :to="s.path"
-                  class="flex items-center gap-3 px-2 py-1.5 rounded-lg text-xs transition-colors"
+                  class="flex items-center gap-3 rounded-md px-2 py-1.5 text-[12px] transition-colors"
                   :class="
                     s.path === route.path
-                      ? 'bg-white/10 text-white'
-                      : 'text-zinc-500 hover:text-white hover:bg-white/5'
+                      ? 'bg-surface-2 text-foreground'
+                      : 'text-muted-foreground hover:bg-surface-2 hover:text-foreground'
                   "
                 >
                   <ClientOnly>
                     <span
-                      class="shrink-0 w-5 h-5 rounded-full border flex items-center justify-center text-[10px] font-bold"
+                      class="grid h-5 w-5 shrink-0 place-items-center rounded-full border text-[10px] font-medium"
                       :class="
                         isComplete(s.path)
-                          ? 'bg-[#f5c542] border-[#f5c542] text-black'
-                          : 'border-white/20'
+                          ? 'border-blue bg-blue text-background'
+                          : 'border-border'
                       "
                     >
                       <svg
                         v-if="isComplete(s.path)"
-                        class="w-3 h-3"
+                        class="h-3 w-3"
                         fill="none"
                         stroke="currentColor"
                         viewBox="0 0 24 24"
+                        aria-hidden="true"
                       >
                         <path
                           stroke-linecap="round"
@@ -132,7 +137,7 @@ function markComplete() {
                     </span>
                     <template #fallback>
                       <span
-                        class="shrink-0 w-5 h-5 rounded-full border border-white/20 flex items-center justify-center text-[10px] font-bold"
+                        class="grid h-5 w-5 shrink-0 place-items-center rounded-full border border-border text-[10px] font-medium"
                         >{{ i + 1 }}</span
                       >
                     </template>
@@ -144,38 +149,43 @@ function markComplete() {
           </div>
         </aside>
 
-        <!-- Main -->
-        <div class="flex-auto min-w-0">
-          <article class="bg-[#111] border border-white/10 rounded-xl p-8 md:p-12">
-            <header class="mb-10 border-b border-white/10 pb-8">
-              <div class="flex flex-wrap items-center gap-3 mb-6">
+        <div class="min-w-0 flex-auto">
+          <article class="card p-6 md:p-10">
+            <header class="mb-10 border-b border-border pb-8">
+              <div class="flex flex-wrap items-center gap-3">
                 <NuxtLink
                   :to="seriesPath"
-                  class="px-2.5 py-1 bg-[#f5c542] text-black text-[10px] font-bold uppercase tracking-widest rounded-md hover:bg-[#e0b13a] transition-colors"
+                  class="rounded border border-blue/30 bg-blue/10 px-2.5 py-1 font-mono text-[9px] font-medium uppercase tracking-[0.08em] text-blue"
                 >
                   Step {{ stepNumber }} of {{ totalSteps }}
                 </NuxtLink>
-                <span v-if="step.feature" class="text-xs text-zinc-500">{{ step.feature }}</span>
-                <span class="text-xs text-zinc-700">|</span>
+                <span v-if="step.feature" class="font-mono text-[10px] text-muted-foreground">
+                  {{ step.feature }}
+                </span>
+                <span aria-hidden="true" class="text-faint-ink">|</span>
                 <ViewCounter :slug="`learn-${seriesSlug}-${stepParam}`" />
                 <ReactionButton :slug="`learn-${seriesSlug}-${stepParam}`" />
               </div>
 
-              <h1 class="text-3xl md:text-4xl font-semibold tracking-tight mb-6 leading-tight">
+              <h1 class="display mt-4 max-w-[22ch] text-[clamp(2.2rem,4vw,3.2rem)]">
                 {{ step.title }}
               </h1>
-              <p class="text-zinc-400 text-lg font-light leading-relaxed">{{ step.description }}</p>
+              <p class="mt-4 max-w-2xl text-[17px] leading-relaxed text-muted-foreground">
+                {{ step.description }}
+              </p>
 
-              <div class="flex items-center justify-between mt-6">
+              <div class="mt-6 flex flex-wrap items-center justify-between gap-4">
                 <div v-if="step.sourcePRs?.length" class="flex flex-wrap items-center gap-2">
-                  <span class="text-[11px] text-zinc-600 uppercase tracking-wider">Source:</span>
+                  <span class="font-mono text-[10px] uppercase tracking-[0.08em] text-faint-ink"
+                    >Source</span
+                  >
                   <a
                     v-for="(pr, i) in step.sourcePRs"
                     :key="pr"
                     :href="pr"
                     target="_blank"
                     rel="noopener noreferrer"
-                    class="text-[11px] text-zinc-400 hover:text-[#f5c542] transition-colors underline"
+                    class="text-[11px] text-blue underline underline-offset-4 hover:text-blue-hover"
                   >
                     PR #{{ i + 1 }}
                   </a>
@@ -184,27 +194,25 @@ function markComplete() {
               </div>
             </header>
 
-            <!-- Content -->
-            <div
-              class="prose prose-invert max-w-none font-light prose-headings:font-semibold prose-headings:tracking-tight prose-a:text-[#f5c542] prose-a:no-underline hover:prose-a:underline prose-code:text-[#f5c542] prose-pre:bg-zinc-900 prose-pre:border prose-pre:border-white/10"
-            >
+            <div class="article-prose">
               <ContentRenderer :value="step" />
             </div>
 
-            <!-- Complete + nav -->
-            <div class="mt-12 pt-8 border-t border-white/10">
+            <div class="mt-12 border-t border-border pt-8">
               <ClientOnly>
                 <button
                   type="button"
+                  class="btn mb-8 w-full sm:w-auto"
+                  :class="isComplete(route.path) ? 'btn-secondary' : 'btn-primary'"
                   @click="markComplete"
-                  class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-lg text-sm font-bold transition-colors mb-8"
-                  :class="
-                    isComplete(route.path)
-                      ? 'bg-white/10 text-white border border-white/20 hover:bg-white/15'
-                      : 'bg-[#f5c542] text-black hover:bg-[#e0b13a]'
-                  "
                 >
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg
+                    class="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
                     <path
                       stroke-linecap="round"
                       stroke-linejoin="round"
@@ -223,9 +231,15 @@ function markComplete() {
                 <NuxtLink
                   v-if="prev"
                   :to="prev.path"
-                  class="flex items-center gap-1 text-[#f5c542] hover:underline transition-colors"
+                  class="flex items-center gap-1 text-[13px] text-blue transition-colors hover:text-blue-hover"
                 >
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <svg
+                    class="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
                     <path
                       stroke-linecap="round"
                       stroke-linejoin="round"
@@ -233,17 +247,23 @@ function markComplete() {
                       d="M15 19l-7-7 7-7"
                     />
                   </svg>
-                  <span class="font-medium line-clamp-1">{{ prev.title }}</span>
+                  <span class="line-clamp-1 font-medium">{{ prev.title }}</span>
                 </NuxtLink>
                 <span v-else>&nbsp;</span>
 
                 <NuxtLink
                   v-if="next"
                   :to="next.path"
-                  class="flex items-center gap-1 text-[#f5c542] hover:underline transition-colors"
+                  class="flex items-center gap-1 text-[13px] text-blue transition-colors hover:text-blue-hover"
                 >
-                  <span class="font-medium line-clamp-1">{{ next.title }}</span>
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <span class="line-clamp-1 font-medium">{{ next.title }}</span>
+                  <svg
+                    class="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
                     <path
                       stroke-linecap="round"
                       stroke-linejoin="round"
@@ -255,10 +275,16 @@ function markComplete() {
                 <NuxtLink
                   v-else
                   :to="seriesPath"
-                  class="flex items-center gap-1 text-[#f5c542] hover:underline transition-colors"
+                  class="flex items-center gap-1 text-[13px] text-blue transition-colors hover:text-blue-hover"
                 >
-                  <span class="font-medium line-clamp-1">Back to series</span>
-                  <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <span class="font-medium">Back to series</span>
+                  <svg
+                    class="h-4 w-4"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    aria-hidden="true"
+                  >
                     <path
                       stroke-linecap="round"
                       stroke-linejoin="round"

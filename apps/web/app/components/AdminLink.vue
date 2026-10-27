@@ -2,7 +2,7 @@
   <li>
     <NuxtLink
       to="/admin"
-      class="hover:text-white hover:underline transition-colors uppercase text-zinc-500"
+      class="text-muted-foreground transition-colors hover:text-foreground"
       >Admin</NuxtLink
     >
   </li>

@@ -6,17 +6,15 @@ defineProps<{
 </script>
 
 <template>
-  <div class="my-8 border border-white/10 p-6 bg-[#111] rounded-xl">
-    <div v-if="title" class="mb-4">
-      <h4
-        class="text-xs font-bold uppercase tracking-[0.2em] text-zinc-400 border-b border-white/10 pb-2 flex items-center gap-2"
-      >
-        <span v-if="icon" class="text-lg">{{ icon }}</span>
-        {{ title }}
-      </h4>
-    </div>
-    <div class="prose prose-sm prose-invert max-w-none italic text-zinc-400">
+  <aside class="my-8 border-y border-border bg-surface px-5 py-5">
+    <p v-if="title" class="label flex items-center gap-2 text-foreground">
+      <span v-if="icon" aria-hidden="true">{{ icon }}</span>
+      {{ title }}
+    </p>
+    <div
+      class="mt-3 font-serif text-[15px] leading-[1.7] text-muted-foreground [&_a]:text-blue [&_a]:underline [&_p]:m-0 [&_p+p]:mt-3"
+    >
       <slot />
     </div>
-  </div>
+  </aside>
 </template>

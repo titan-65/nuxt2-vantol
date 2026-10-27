@@ -19,11 +19,11 @@ function formatDate(date: string | Date) {
 </script>
 
 <template>
-  <div class="min-h-screen bg-[#0a0a0a] text-white font-sans py-12">
+  <div class="min-h-screen bg-background text-foreground font-sans py-12">
     <div class="max-w-[1088px] mx-auto px-6">
       <div
         v-if="author"
-        class="text-center mb-12 border border-white/10 bg-[#111] rounded-xl p-10 max-w-4xl mx-auto"
+        class="text-center mb-12 border border-border bg-card rounded-xl p-10 max-w-4xl mx-auto"
       >
         <div class="relative inline-block mb-6">
           <NuxtImg
@@ -31,10 +31,10 @@ function formatDate(date: string | Date) {
             :alt="author.name"
             width="128"
             height="128"
-            class="w-32 h-32 rounded-full mx-auto object-cover border border-white/10"
+            class="w-32 h-32 rounded-full mx-auto object-cover border border-border"
           />
           <div
-            class="absolute -bottom-2 -right-2 w-8 h-8 bg-[#f5c542] text-black rounded-full flex items-center justify-center border-4 border-[#111]"
+            class="absolute -bottom-2 -right-2 w-8 h-8 bg-brand text-brand-foreground rounded-full flex items-center justify-center border-4 border-[#111]"
           >
             <svg
               width="12"
@@ -50,22 +50,22 @@ function formatDate(date: string | Date) {
           </div>
         </div>
 
-        <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500 mb-2">
+        <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground mb-2">
           Author Profile
         </p>
         <h1 class="text-4xl md:text-5xl font-semibold tracking-tight leading-tight mb-4">
           {{ author.name }}
         </h1>
         <div
-          class="flex items-center justify-center gap-4 text-xs text-zinc-500 uppercase tracking-widest"
+          class="flex items-center justify-center gap-4 text-xs text-muted-foreground uppercase tracking-widest"
         >
           <span>{{ posts?.length || 0 }} Articles</span>
-          <span v-if="author.website" class="w-1 h-1 bg-zinc-700 rounded-full"></span>
+          <span v-if="author.website" class="w-1 h-1 bg-border-strong rounded-full"></span>
           <a
             v-if="author.website"
             :href="`https://${author.website}`"
             target="_blank"
-            class="hover:text-[#f5c542] transition-colors"
+            class="hover:text-blue transition-colors"
           >
             {{ author.website }}
           </a>
@@ -78,14 +78,14 @@ function formatDate(date: string | Date) {
 
       <div
         v-else
-        class="text-center py-20 border border-dashed border-white/10 bg-[#111] rounded-xl max-w-4xl mx-auto"
+        class="text-center py-20 border border-dashed border-border bg-card rounded-xl max-w-4xl mx-auto"
       >
-        <p class="text-zinc-500 text-sm uppercase tracking-widest">
+        <p class="text-muted-foreground text-sm uppercase tracking-widest">
           No posts found for this author
         </p>
         <NuxtLink
           to="/blog"
-          class="inline-block mt-8 border border-white/10 px-6 py-3 text-xs font-bold uppercase hover:bg-white/5 hover:border-white/20 transition-all rounded-lg text-zinc-300"
+          class="inline-block mt-8 border border-border px-6 py-3 text-xs font-bold uppercase hover:bg-accent hover:border-border-strong transition-all rounded-lg text-foreground"
         >
           Back to all posts
         </NuxtLink>

@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 
+const mounted = ref(false);
 const activeTab = ref<"code" | "runner" | "plot">("code");
 const activeFile = ref<"module" | "instructions" | "tool" | "config">("module");
 const userPrompt = ref("Summarize the top Nuxt 4 & Eve features");
@@ -83,6 +84,10 @@ const stepsTrajectory = ref([
   },
 ]);
 
+onMounted(() => {
+  mounted.value = true;
+});
+
 const runInteractiveDemo = async () => {
   if (isExecuting.value) return;
   isExecuting.value = true;
@@ -129,7 +134,8 @@ const runInteractiveDemo = async () => {
 
 <template>
   <div
-    class="my-8 rounded-2xl bg-zinc-950 border border-amber-500/30 overflow-hidden shadow-2xl font-sans text-white"
+    v-if="mounted"
+    class="my-8 rounded-xl bg-zinc-950 border border-blue/30 overflow-hidden font-sans text-white"
   >
     <!-- Header -->
     <div
@@ -137,9 +143,9 @@ const runInteractiveDemo = async () => {
     >
       <div class="flex items-center space-x-3">
         <div
-          class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 font-bold flex items-center justify-center border border-amber-500/30"
+          class="w-8 h-8 rounded-lg bg-blue/10 text-blue font-bold flex items-center justify-center border border-blue/30"
         >
-          ⚡
+          E
         </div>
         <div>
           <h3 class="text-sm font-bold text-white tracking-wide">
@@ -157,28 +163,28 @@ const runInteractiveDemo = async () => {
           @click="activeTab = 'code'"
           class="px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors"
           :class="
-            activeTab === 'code' ? 'bg-amber-500 text-black' : 'text-zinc-400 hover:text-white'
+            activeTab === 'code' ? 'bg-blue text-background' : 'text-zinc-400 hover:text-white'
           "
         >
-          💻 Module Code
+          Module code
         </button>
         <button
           @click="activeTab = 'runner'"
           class="px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors"
           :class="
-            activeTab === 'runner' ? 'bg-amber-500 text-black' : 'text-zinc-400 hover:text-white'
+            activeTab === 'runner' ? 'bg-blue text-background' : 'text-zinc-400 hover:text-white'
           "
         >
-          🤖 Live Runner
+          Live runner
         </button>
         <button
           @click="activeTab = 'plot'"
           class="px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors"
           :class="
-            activeTab === 'plot' ? 'bg-amber-500 text-black' : 'text-zinc-400 hover:text-white'
+            activeTab === 'plot' ? 'bg-blue text-background' : 'text-zinc-400 hover:text-white'
           "
         >
-          📍 Learning Plot DAG
+          Learning plot DAG
         </button>
       </div>
     </div>
@@ -195,7 +201,7 @@ const runInteractiveDemo = async () => {
             class="px-3 py-1.5 rounded-lg border transition-colors"
             :class="
               activeFile === 'module'
-                ? 'bg-white/15 text-amber-400 border-amber-500/50 font-bold'
+                ? 'bg-white/15 text-blue border-blue/40 font-bold'
                 : 'border-transparent text-zinc-400 hover:text-white'
             "
           >
@@ -206,7 +212,7 @@ const runInteractiveDemo = async () => {
             class="px-3 py-1.5 rounded-lg border transition-colors"
             :class="
               activeFile === 'instructions'
-                ? 'bg-white/15 text-amber-400 border-amber-500/50 font-bold'
+                ? 'bg-white/15 text-blue border-blue/40 font-bold'
                 : 'border-transparent text-zinc-400 hover:text-white'
             "
           >
@@ -217,7 +223,7 @@ const runInteractiveDemo = async () => {
             class="px-3 py-1.5 rounded-lg border transition-colors"
             :class="
               activeFile === 'tool'
-                ? 'bg-white/15 text-amber-400 border-amber-500/50 font-bold'
+                ? 'bg-white/15 text-blue border-blue/40 font-bold'
                 : 'border-transparent text-zinc-400 hover:text-white'
             "
           >
@@ -228,7 +234,7 @@ const runInteractiveDemo = async () => {
             class="px-3 py-1.5 rounded-lg border transition-colors"
             :class="
               activeFile === 'config'
-                ? 'bg-white/15 text-amber-400 border-amber-500/50 font-bold'
+                ? 'bg-white/15 text-blue border-blue/40 font-bold'
                 : 'border-transparent text-zinc-400 hover:text-white'
             "
           >
@@ -237,7 +243,7 @@ const runInteractiveDemo = async () => {
         </div>
 
         <pre
-          class="p-4 bg-black rounded-xl border border-white/10 font-mono text-xs text-amber-200 overflow-x-auto leading-relaxed"
+          class="p-4 bg-black rounded-xl border border-white/10 font-mono text-xs text-[#ededed] overflow-x-auto leading-relaxed"
           >{{ codeSnippets[activeFile] }}</pre
         >
 
@@ -245,10 +251,10 @@ const runInteractiveDemo = async () => {
           class="flex items-center justify-between text-xs text-zinc-400 bg-zinc-900/60 p-3 rounded-lg border border-white/5"
         >
           <span
-            >💡 Notice how <code class="text-amber-400">defineNuxtModule</code> bridges Nitro server
+            >Note: <code class="text-blue">defineNuxtModule</code> bridges Nitro server
             routes with Eve's filesystem agents!</span
           >
-          <button @click="activeTab = 'runner'" class="text-amber-400 font-bold hover:underline">
+          <button @click="activeTab = 'runner'" class="text-blue font-bold hover:underline">
             Test Agent Live ➔
           </button>
         </div>
@@ -261,14 +267,14 @@ const runInteractiveDemo = async () => {
             v-model="userPrompt"
             type="text"
             placeholder="Type a test prompt for the Eve module..."
-            class="flex-1 bg-black border border-zinc-700 rounded-xl px-4 py-2.5 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-amber-500"
+            class="flex-1 bg-black border border-zinc-700 rounded-xl px-4 py-2.5 text-xs text-white placeholder-zinc-500 focus:outline-none focus:border-blue"
           />
           <button
             @click="runInteractiveDemo"
             :disabled="isExecuting || !userPrompt.trim()"
-            class="px-5 py-2.5 rounded-xl bg-amber-500 hover:bg-amber-400 disabled:opacity-50 text-black font-bold text-xs transition-colors flex items-center space-x-1"
+            class="px-5 py-2.5 rounded-xl bg-blue hover:bg-blue-hover disabled:opacity-50 text-background font-bold text-xs transition-colors flex items-center space-x-1"
           >
-            <span v-if="isExecuting" class="animate-spin">⚙️</span>
+            <span v-if="isExecuting" class="h-3 w-3 animate-spin rounded-full border-2 border-current border-t-transparent" />
             <span>{{ isExecuting ? "Running Agent..." : "Run Agent" }}</span>
           </button>
         </div>
@@ -283,7 +289,7 @@ const runInteractiveDemo = async () => {
           <div v-if="executionOutput" class="text-emerald-400 leading-relaxed">
             {{ executionOutput }}
           </div>
-          <div v-else class="text-zinc-600 italic">
+          <div v-else class="text-zinc-400 italic">
             Click "Run Agent" to execute the Eve module pipeline and stream tokens live.
           </div>
         </div>
@@ -300,14 +306,14 @@ const runInteractiveDemo = async () => {
               s.status === 'complete'
                 ? 'bg-emerald-950/40 border-emerald-500/50 text-emerald-300'
                 : s.status === 'active'
-                  ? 'bg-amber-950/40 border-amber-500 ring-2 ring-amber-500/20 text-amber-300 animate-pulse'
+                  ? 'bg-blue/10 border-blue ring-2 ring-blue/20 text-blue animate-pulse'
                   : 'bg-black/60 border-zinc-800 text-zinc-500'
             "
           >
             <div class="flex items-center justify-between mb-1">
               <span class="text-[10px] font-mono font-bold">STEP {{ s.index }}</span>
               <span class="text-xs">
-                {{ s.status === "complete" ? "✅" : s.status === "active" ? "⚡" : "⏳" }}
+                {{ s.status === "complete" ? "Done" : s.status === "active" ? "Running" : "Queued" }}
               </span>
             </div>
             <h4 class="text-xs font-semibold">{{ s.name }}</h4>
@@ -319,14 +325,15 @@ const runInteractiveDemo = async () => {
           class="p-3 bg-zinc-900/80 rounded-xl border border-white/10 text-xs text-zinc-300 font-light flex items-center justify-between"
         >
           <span
-            >📍 The Learning Plot visualizer tracks agent thought loops & tool calls in real
+            >The Learning Plot visualizer tracks agent thought loops & tool calls in real
             time.</span
           >
-          <button @click="runInteractiveDemo" class="text-amber-400 font-bold hover:underline">
+          <button @click="runInteractiveDemo" class="text-blue font-bold hover:underline">
             Trigger Execution ➔
           </button>
         </div>
       </div>
     </div>
   </div>
+  <div v-else class="my-8 h-[420px] rounded-xl border border-border bg-surface-2" aria-hidden="true" />
 </template>

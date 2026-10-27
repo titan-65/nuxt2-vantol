@@ -19,15 +19,15 @@ function formatDate(timestamp: number) {
 </script>
 
 <template>
-  <div class="min-h-screen bg-[#0a0a0a] text-white font-sans">
+  <div class="min-h-screen bg-background text-foreground font-sans">
     <div class="max-w-3xl mx-auto px-6 py-20">
       <!-- Header -->
       <div class="mb-12">
-        <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-4">
+        <p class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-4">
           Reading List
         </p>
         <h1 class="text-4xl md:text-5xl font-semibold tracking-tight mb-4">Saved Posts</h1>
-        <p class="text-lg text-zinc-400 font-light">Posts you've saved to read later.</p>
+        <p class="text-lg text-muted-foreground font-light">Posts you've saved to read later.</p>
       </div>
 
       <!-- Bookmarks List -->
@@ -36,22 +36,22 @@ function formatDate(timestamp: number) {
           <div
             v-for="bookmark in bookmarks"
             :key="bookmark.slug"
-            class="bg-[#111] border border-white/10 rounded-xl p-6 flex items-center justify-between hover:border-white/20 transition-colors"
+            class="bg-card border border-border rounded-xl p-6 flex items-center justify-between hover:border-border-strong transition-colors"
           >
             <div class="flex-1 min-w-0">
               <NuxtLink
                 :to="`/blog/${bookmark.slug}`"
-                class="text-lg font-medium hover:text-[#f5c542] transition-colors block truncate"
+                class="text-lg font-medium hover:text-blue transition-colors block truncate"
               >
                 {{ bookmark.title }}
               </NuxtLink>
-              <span class="text-xs text-zinc-600 mt-1">
+              <span class="text-xs text-muted-foreground mt-1">
                 Saved {{ formatDate(bookmark.savedAt) }}
               </span>
             </div>
             <button
               @click="removeBookmark(bookmark.slug)"
-              class="ml-4 text-xs font-medium text-zinc-500 hover:text-red-400 transition-colors"
+              class="ml-4 text-xs font-medium text-muted-foreground hover:text-danger transition-colors"
             >
               Remove
             </button>
@@ -59,7 +59,7 @@ function formatDate(timestamp: number) {
         </div>
 
         <!-- Empty State -->
-        <div v-else class="bg-[#111] border border-white/10 rounded-xl p-12 text-center">
+        <div v-else class="bg-card border border-border rounded-xl p-12 text-center">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="48"
@@ -68,23 +68,23 @@ function formatDate(timestamp: number) {
             fill="none"
             stroke="currentColor"
             stroke-width="1.5"
-            class="mx-auto mb-4 text-zinc-700"
+            class="mx-auto mb-4 text-muted-foreground"
           >
             <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
           </svg>
-          <p class="text-zinc-500 text-sm mb-4">No saved posts yet</p>
+          <p class="text-muted-foreground text-sm mb-4">No saved posts yet</p>
           <NuxtLink
             to="/blog"
-            class="inline-block px-6 py-3 bg-[#f5c542] text-black text-xs font-bold uppercase tracking-widest hover:bg-[#e0b13a] transition-colors rounded-lg"
+            class="inline-block px-6 py-3 bg-brand text-brand-foreground text-xs font-bold uppercase tracking-widest hover:bg-brand-hover transition-colors rounded-lg"
           >
             Browse Posts
           </NuxtLink>
         </div>
 
         <template #fallback>
-          <div class="bg-[#111] border border-white/10 rounded-xl p-12 text-center">
+          <div class="bg-card border border-border rounded-xl p-12 text-center">
             <div
-              class="inline-block w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin"
+              class="inline-block w-5 h-5 border-2 border-border-strong border-t-white rounded-full animate-spin"
             ></div>
           </div>
         </template>

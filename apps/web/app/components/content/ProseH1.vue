@@ -3,7 +3,10 @@ defineProps<{ id: string }>();
 </script>
 
 <template>
-  <h1 :id="id" class="text-3xl md:text-5xl font-medium tracking-tight mb-8 leading-tight">
+  <h1
+    :id="id"
+    class="scroll-mt-28 text-balance text-[clamp(2rem,4vw,3rem)] font-medium leading-[1.05] tracking-[-0.03em]"
+  >
     <slot />
   </h1>
 </template>

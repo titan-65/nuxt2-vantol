@@ -26,16 +26,16 @@ async function handleLogout() {
 </script>
 
 <template>
-  <main class="min-h-screen bg-[#0a0a0a] text-white font-sans">
+  <main class="min-h-screen bg-background text-foreground font-sans">
     <div class="max-w-xl mx-auto px-6 py-16">
-      <section class="border border-white/10 bg-[#111] rounded-xl p-6 md:p-10">
-        <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-500">Authentication</p>
+      <section class="border border-border bg-card rounded-xl p-6 md:p-10">
+        <p class="text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground">Authentication</p>
         <h1 class="mt-2 text-3xl font-semibold tracking-tight">Sign in</h1>
-        <p class="mt-3 text-xs text-zinc-400">
+        <p class="mt-3 text-xs text-muted-foreground">
           Sign in with GitHub to personalize your experience across the blog.
         </p>
 
-        <p v-if="unauthorized" class="mt-4 text-xs text-red-400">
+        <p v-if="unauthorized" class="mt-4 text-xs text-danger">
           This GitHub account is signed in but not authorized for admin access.
         </p>
 
@@ -48,7 +48,7 @@ async function handleLogout() {
           />
           <div class="min-w-0 flex-1">
             <p class="truncate text-sm font-semibold">{{ user.name }}</p>
-            <p class="truncate text-xs text-zinc-500">{{ user.email }}</p>
+            <p class="truncate text-xs text-muted-foreground">{{ user.email }}</p>
           </div>
         </div>
 
@@ -56,7 +56,7 @@ async function handleLogout() {
           <button
             v-if="!user"
             type="button"
-            class="w-full bg-[#f5c542] text-black px-4 py-3 text-xs font-bold uppercase tracking-widest hover:bg-[#e0b13a] transition-colors rounded-lg"
+            class="w-full bg-brand text-brand-foreground px-4 py-3 text-xs font-bold uppercase tracking-widest hover:bg-brand-hover transition-colors rounded-lg"
             @click="handleLogin"
           >
             Continue with GitHub
@@ -65,13 +65,13 @@ async function handleLogout() {
           <template v-else>
             <NuxtLink
               :to="redirectTo"
-              class="block w-full bg-[#f5c542] text-center text-black px-4 py-3 text-xs font-bold uppercase tracking-widest hover:bg-[#e0b13a] transition-colors rounded-lg"
+              class="block w-full bg-brand text-center text-brand-foreground px-4 py-3 text-xs font-bold uppercase tracking-widest hover:bg-brand-hover transition-colors rounded-lg"
             >
               Continue
             </NuxtLink>
             <button
               type="button"
-              class="w-full border border-white/10 px-4 py-3 text-xs font-bold uppercase tracking-widest hover:bg-white/5 transition-colors rounded-lg"
+              class="w-full border border-border px-4 py-3 text-xs font-bold uppercase tracking-widest hover:bg-accent transition-colors rounded-lg"
               @click="handleLogout"
             >
               Sign out

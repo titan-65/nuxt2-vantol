@@ -1,0 +1,1 @@
+ALTER TABLE `flavors` ADD `image_key` text;

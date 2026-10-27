@@ -1,7 +1,10 @@
 <script setup lang="ts">
-const { data: allPosts } = await useAsyncData("all-posts", async () => {
-  const items = (await queryCollection("blog").order("date", "DESC").limit(4).all()) as any[];
-  return items.map((p) => ({ ...p, _path: p.path, slug: p.path.split("/").pop() }));
+const { data: posts } = await useAsyncData("home-posts", async () => {
+  const items = (await queryCollection("blog").order("date", "DESC").limit(7).all()) as any[];
+  return items.map((post) => ({
+    ...post,
+    slug: post.path?.split("/").pop(),
+  }));
 });
 
 const { data: series } = await useAsyncData("home-series", async () => {
@@ -15,332 +18,352 @@ const { data: series } = await useAsyncData("home-series", async () => {
     )
     .slice(0, 4);
 });
+
+const featured = computed(() => posts.value?.[0]);
+const recent = computed(() => posts.value?.slice(1, 4) ?? []);
+const recentCards = computed(() => posts.value?.slice(1, 4) ?? []);
+const leadSeries = computed(() => series.value?.[0]);
+const moreSeries = computed(() => series.value?.slice(1, 4) ?? []);
+
+const stack = ["Nuxt", "Vue", "TypeScript", "Nitro", "Vite", "Node"];
+
+function formatDate(date: string | Date | undefined) {
+  if (!date) return "";
+  return new Date(date).toLocaleDateString("en", {
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
+  });
+}
+
+function isoDate(date: string | Date | undefined) {
+  if (!date) return "";
+  return new Date(date).toISOString().slice(0, 10);
+}
+
+function tagLabel(tag: string | undefined) {
+  return (tag || "").replace(/^["'“”\s]+|["'“”\s]+$/g, "").trim();
+}
+
+function readingTime(post: any) {
+  if (post?.readTime) return post.readTime;
+  if (post?.body) {
+    const text = JSON.stringify(post.body);
+    const words = text.match(/\w+/g)?.length || 0;
+    return Math.max(1, Math.ceil(words / 200));
+  }
+  return 1;
+}
 </script>
 
 <template>
-  <div class="min-h-screen bg-[#0a0a0a] text-white font-sans">
-    <!-- Hero Section -->
+  <div class="reading-page">
     <section
-      class="relative border-b border-white/10 min-h-[70vh] flex items-center overflow-hidden"
+      class="relative flex min-h-[calc(100svh-var(--header-height))] max-h-[1100px] flex-col overflow-hidden"
     >
-      <!-- Background Image -->
-      <NuxtImg
-        provider="cloudinary"
-        src="v1784462779/vantol_hero_orrfjn.jpg"
-        alt="Vantol Bennett"
-        class="absolute inset-0 w-full h-full object-cover"
-      />
-      <div
-        class="absolute inset-0 bg-gradient-to-r from-[#0a0a0a] via-[#0a0a0a]/85 to-[#0a0a0a]/40"
-      />
-
-      <!-- Text -->
-      <div class="relative max-w-[1200px] mx-auto px-6 py-16 lg:py-24 w-full">
-        <h1 class="text-5xl md:text-7xl font-medium tracking-tight mb-6 leading-[1.05] text-[#fff]">
-          Vantol<br />Bennett
-        </h1>
-        <p class="text-lg md:text-xl text-zinc-400 mb-2 font-light">
-          Jamaican Educator & Developer
-        </p>
-        <p class="text-zinc-500 mb-10">Founder of Zhyjenae · Building at MPS</p>
-
-        <div class="flex flex-wrap gap-3">
-          <NuxtLink to="/learn" class="hero-btn inline-flex items-center gap-2">
-            Start Learning
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path d="M5 12h14M12 5l7 7-7 7" />
-            </svg>
-          </NuxtLink>
-          <NuxtLink to="/contact" class="hero-btn-outline"> Contact Me </NuxtLink>
-        </div>
-      </div>
-    </section>
-
-    <!-- Editorial Section -->
-    <section class="border-b border-white/10">
-      <div class="max-w-[1200px] mx-auto px-6 py-24">
-        <div class="grid md:grid-cols-2 gap-12 md:gap-20">
-          <div>
-            <h2 class="text-3xl md:text-4xl font-semibold tracking-tight leading-tight">
-              Building real things teaches you more than any tutorial.
-            </h2>
-          </div>
-          <div class="space-y-6 text-zinc-400 leading-relaxed">
-            <p>
-              I spent over a decade teaching Mathematics and Science at Eltham High School. What I
-              learned is this: the best way to master anything is to teach it — and the best way to
-              learn code is to ship it.
+      <div class="container-page relative flex flex-1 items-center">
+        <div
+          class="grid w-full grid-cols-12 items-center gap-x-6 gap-y-10 py-16 lg:py-10"
+        >
+          <div class="col-span-12 lg:col-span-4">
+            <h1 class="display text-[clamp(3rem,4.6vw,4rem)]">
+              Writing<br />that ships.
+            </h1>
+            <p class="mt-5 max-w-sm text-[15px] leading-relaxed text-muted-foreground">
+              Field notes on Nuxt, Vue, TypeScript, and the work of building software that survives
+              contact with production.
             </p>
-            <p>
-              Today I'm a full-stack developer building with Vue.js, Nuxt, TypeScript, and Node.js.
-              I write about the tools I'm using, the mistakes I'm making, and the patterns that
-              actually hold up in production.
-            </p>
-            <p>
-              This blog isn't about hot takes or hype cycles. It's about real engineering — the kind
-              that survives contact with messy requirements, legacy code, and tight deadlines.
-            </p>
-            <p class="text-zinc-300">
-              "The best way to write code all day is by doing it! Evolve with innovation."
-            </p>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Learn Section -->
-    <section class="relative overflow-hidden">
-      <div
-        class="absolute inset-0 bg-gradient-to-br from-[#f5c542]/10 via-transparent to-transparent"
-      />
-      <div class="relative max-w-[1200px] mx-auto px-6 py-24">
-        <div class="flex flex-col md:flex-row md:items-end justify-between mb-12 gap-6">
-          <div>
-            <p
-              class="text-[10px] font-bold uppercase tracking-widest text-[#f5c542] mb-3 flex items-center gap-2"
-            >
-              <span class="inline-block w-2 h-2 rounded-full bg-[#f5c542] animate-pulse" />
-              Now Learning
-            </p>
-            <h2 class="text-3xl md:text-5xl font-semibold tracking-tight">
-              Learn
-              <ClientOnly>
-                <RotatingText
-                  :texts="['Nuxt', 'Vue', 'React', 'EVE-framework']"
-                  class="text-[#f5c542]"
-                  element-level-class-name="inline-block"
-                  :rotation-interval="2200"
-                  :stagger-duration="0.02"
-                />
-                <template #fallback>
-                  <span class="text-[#f5c542]">Nuxt</span>
-                </template>
-              </ClientOnly>
-              <span class="block text-2xl md:text-4xl text-zinc-400 mt-2"
-                >one release at a time</span
+            <div class="mt-7 flex flex-wrap gap-3">
+              <NuxtLink
+                :to="featured ? `/blog/${featured.slug}` : '/blog'"
+                class="btn btn-primary btn-pill h-10 px-5"
               >
-            </h2>
-          </div>
-          <p class="text-zinc-400 text-sm max-w-md">
-            Hands-on tutorials where we learn the new framework features together — straight from
-            the release notes, step by step.
-          </p>
-        </div>
-
-        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <NuxtLink
-            v-for="s in series"
-            :key="s.slug"
-            :to="`/learn/${s.slug}`"
-            class="group relative flex flex-col bg-[#111] border border-white/10 hover:border-[#f5c542] rounded-2xl overflow-hidden transition-all hover:-translate-y-1 hover:shadow-[0_0_40px_-12px_rgba(245,197,66,0.35)]"
-          >
-            <div v-if="s.img" class="aspect-[16/9] overflow-hidden bg-zinc-900">
-              <NuxtImg
-                :src="s.img"
-                :alt="s.title"
-                class="w-full h-full object-cover opacity-90 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
-                sizes="500px"
-              />
-            </div>
-            <div class="p-6 flex flex-col flex-1">
-              <div class="flex items-center gap-2 mb-3">
-                <span
-                  class="px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider bg-[#f5c542] text-black rounded"
-                  >v{{ s.nuxtVersion }}</span
-                >
-                <span
-                  v-if="s.difficulty"
-                  class="text-[10px] font-mono uppercase tracking-wider text-zinc-500"
-                  >{{ s.difficulty }}</span
-                >
-                <span v-if="s.releaseDate" class="text-[10px] text-zinc-600 ml-auto">{{
-                  new Date(s.releaseDate).toLocaleDateString("en", {
-                    month: "short",
-                    year: "numeric",
-                  })
-                }}</span>
-              </div>
-              <h3 class="text-lg font-semibold group-hover:text-[#f5c542] transition-colors mb-2">
-                {{ s.title }}
-              </h3>
-              <p class="text-sm text-zinc-500 line-clamp-2 flex-1">{{ s.description }}</p>
-              <span
-                class="mt-5 inline-flex items-center gap-1.5 text-sm font-semibold text-[#f5c542] transition-colors"
-              >
-                Start learning
-                <svg
-                  width="14"
-                  height="14"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  class="group-hover:translate-x-1 transition-transform"
-                >
-                  <path d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
-              </span>
-            </div>
-          </NuxtLink>
-        </div>
-
-        <div class="mt-12 text-center">
-          <NuxtLink to="/learn" class="hero-btn inline-flex items-center gap-2">
-            Browse All Tutorials
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              stroke-width="2"
-            >
-              <path d="M5 12h14M12 5l7 7-7 7" />
-            </svg>
-          </NuxtLink>
-        </div>
-      </div>
-    </section>
-
-    <!-- Testimonial -->
-    <section class="border-b border-white/10">
-      <div class="max-w-[1200px] mx-auto px-6 py-24">
-        <div class="max-w-3xl mx-auto text-center">
-          <div class="flex justify-center gap-1 mb-6">
-            <svg
-              v-for="i in 5"
-              :key="i"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="#f5c542"
-              class="text-[#f5c542]"
-            >
-              <path
-                d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"
-              />
-            </svg>
-          </div>
-          <blockquote class="text-2xl md:text-3xl font-medium leading-tight mb-8 text-zinc-200">
-            "The best way to write code all day is by doing it! Evolve with innovation."
-          </blockquote>
-          <div class="flex items-center justify-center gap-3">
-            <div class="w-10 h-10 rounded-full overflow-hidden bg-zinc-800">
-              <img
-                src="https://res.cloudinary.com/ddszyeplg/image/upload/v1656478354/IMG_1412_orxemy.jpg"
-                alt="Vantol Bennett"
-                class="w-full h-full object-cover"
-              />
-            </div>
-            <div class="text-left">
-              <div class="font-semibold text-sm">Vantol Bennett</div>
-              <div class="text-xs text-zinc-500">Founder, Zhyjenae</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- About / Bio Section -->
-    <section class="border-b border-white/10">
-      <div class="max-w-[1200px] mx-auto px-6 py-24">
-        <div class="grid md:grid-cols-2 gap-12 items-center">
-          <div class="relative aspect-[4/3] rounded-2xl overflow-hidden bg-zinc-900">
-            <video
-              src="/about-loop.mp4"
-              class="w-full h-full object-cover"
-              autoplay
-              loop
-              muted
-              playsinline
-            />
-          </div>
-          <div>
-            <h2 class="text-3xl font-semibold tracking-tight mb-6">Hi, I'm Vantol Bennett</h2>
-            <div class="space-y-4 text-zinc-400 leading-relaxed">
-              <p>
-                Before creating Zhyjenae, I spent over a decade teaching Mathematics and Science at
-                Eltham High School — where I learned that the best way to master anything is to
-                teach it.
-              </p>
-              <p>
-                Today, I'm a full-stack developer building with Vue.js, Nuxt, TypeScript, and
-                Node.js. I'm passionate about creating tools that help developers and educators
-                level up.
-              </p>
-              <p>
-                I'm building in public — sharing everything I learn about modern web development,
-                AI-assisted coding, and software architecture.
-              </p>
-            </div>
-            <div class="mt-8">
-              <NuxtLink to="/about" class="hero-btn inline-flex items-center gap-2">
-                More About Me
-                <svg
-                  width="16"
-                  height="16"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  stroke-width="2"
-                >
-                  <path d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
+                Read the latest
+              </NuxtLink>
+              <NuxtLink to="/blog" class="btn btn-secondary btn-pill h-10 px-5">
+                Browse the archive
               </NuxtLink>
             </div>
           </div>
-        </div>
-      </div>
-    </section>
 
-    <!-- Newsletter CTA -->
-    <section class="border-b border-white/10">
-      <div class="max-w-[1200px] mx-auto px-6 py-24">
-        <div class="max-w-2xl mx-auto text-center">
-          <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-4">
-            Stay Updated
-          </p>
-          <h2 class="text-3xl md:text-4xl font-semibold tracking-tight mb-4">Code that ships.</h2>
-          <p class="text-zinc-400 mb-8">
-            Notes on the tools, patterns, and hard-won lessons from building real software — no
-            fluff, no hype cycles.
-          </p>
-          <Newsletter />
-        </div>
-      </div>
-    </section>
-
-    <!-- Latest Posts Grid -->
-    <section class="border-b border-white/10">
-      <div class="max-w-[1200px] mx-auto px-6 py-20">
-        <h2 class="text-2xl md:text-3xl font-semibold tracking-tight text-center mb-12">
-          My latest posts
-        </h2>
-
-        <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-          <PostCard v-for="post in allPosts" :key="post._path" :item="post" />
-        </div>
-
-        <div class="mt-12 text-center">
-          <NuxtLink to="/blog" class="hero-btn-outline inline-flex items-center gap-2">
-            View All Posts
+          <div
+            class="relative col-span-12 flex items-center justify-center lg:col-span-5"
+          >
+            <div class="glow-field animate-breathe" aria-hidden="true" />
             <svg
-              width="16"
-              height="16"
-              viewBox="0 0 24 24"
+              class="hero-mark"
+              viewBox="0 0 480 440"
               fill="none"
-              stroke="currentColor"
-              stroke-width="2"
+              aria-hidden="true"
             >
-              <path d="M5 12h14M12 5l7 7-7 7" />
+              <path d="M48 42 L240 398 L432 42 L360 42 L240 254 L120 42 Z" fill="#000000" stroke="rgba(255,255,255,0.14)" stroke-width="1" />
             </svg>
+          </div>
+
+          <div class="col-span-12 lg:col-span-3 lg:justify-self-end">
+            <ul class="space-y-2.5 text-[14px] text-muted-foreground">
+              <li>For developers.</li>
+              <li>By Vantol Bennett.</li>
+              <li>Built in Jamaica.</li>
+            </ul>
+            <p class="mt-6 font-mono text-[11px] uppercase tracking-[0.08em] text-faint-ink">
+              Essays / Series
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="border-t border-border">
+        <div
+          class="container-page flex flex-wrap items-center gap-x-8 gap-y-4 py-6 md:justify-between"
+        >
+          <span class="meta">Built with</span>
+          <span
+            v-for="tool in stack"
+            :key="tool"
+            class="text-[15px] font-medium tracking-[-0.02em] text-muted-foreground opacity-70 transition-opacity hover:opacity-100"
+          >
+            {{ tool }}
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <section class="container-page pt-28 md:pt-40">
+      <div class="grid gap-6 lg:grid-cols-12">
+        <h2 class="section-title text-[clamp(2.5rem,4.2vw,3.5rem)] lg:col-span-7">
+          Essays that survive production.
+        </h2>
+        <div class="lg:col-span-5 lg:pl-10">
+          <p class="max-w-md text-[15px] leading-relaxed text-muted-foreground">
+            The best way to master anything is to teach it. I write from shipped work — the release
+            notes, the failure, the tradeoff that looked obvious in hindsight.
+          </p>
+          <p class="mt-4 font-mono text-[11px] uppercase tracking-[0.08em] text-faint-ink">
+            Vantol Bennett / Educator, developer
+          </p>
+        </div>
+      </div>
+
+      <div class="mt-12 grid gap-5 lg:grid-cols-12">
+        <NuxtLink
+          v-if="featured"
+          :to="`/blog/${featured.slug}`"
+          class="card group flex flex-col lg:col-span-8"
+        >
+          <div class="preview-panel relative aspect-[16/9] overflow-hidden border-b border-border bg-[#050505]">
+            <div class="glow-field opacity-60" aria-hidden="true" />
+            <div class="relative z-10 flex h-full flex-col p-5 md:p-7 text-[#ededed]">
+              <div
+                class="flex items-center gap-2 border-b border-[#1f1f1f] pb-3 font-mono text-[10px] text-[#a1a1a1]"
+              >
+                <span class="flex gap-1.5" aria-hidden="true">
+                  <span class="h-1.5 w-1.5 rounded-full bg-border-strong" />
+                  <span class="h-1.5 w-1.5 rounded-full bg-border-strong" />
+                  <span class="h-1.5 w-1.5 rounded-full bg-border-strong" />
+                </span>
+                <span class="truncate">vantolbennett.com/blog/{{ featured.slug }}</span>
+              </div>
+              <div class="mt-auto pt-8">
+                <p class="font-mono text-[12px] text-[#a1a1a1]">
+                  <time :datetime="isoDate(featured.date)">{{ formatDate(featured.date) }}</time>
+                  <span aria-hidden="true"> · </span>
+                  {{ tagLabel(featured.tag) }}
+                  <span aria-hidden="true"> · </span>
+                  {{ readingTime(featured) }} min
+                </p>
+                <h3
+                  class="mt-3 max-w-[22ch] text-[clamp(1.7rem,2.9vw,2.5rem)] font-medium leading-[1.08] tracking-[-0.045em] text-balance text-white"
+                >
+                  {{ featured.title }}
+                </h3>
+                <p
+                  class="mt-3 max-w-xl text-[14px] leading-relaxed text-[#a1a1a1] line-clamp-3"
+                >
+                  {{ featured.description }}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="flex items-center justify-between p-5">
+            <span class="text-[14px] text-blue">Read the essay →</span>
+            <span class="meta">{{ tagLabel(featured.tag) }}</span>
+          </div>
+        </NuxtLink>
+
+        <div class="lg:col-span-4">
+          <p class="label mb-3">Recent essays</p>
+          <div class="border-t border-border">
+            <NuxtLink
+              v-for="post in recent"
+              :key="post.path"
+              :to="`/blog/${post.slug}`"
+              class="group block border-b border-border py-4"
+            >
+              <p class="meta">{{ formatDate(post.date) }} · {{ readingTime(post) }} min</p>
+              <h3
+                class="mt-1.5 text-[16px] font-medium leading-snug tracking-[-0.02em] transition-colors group-hover:text-blue"
+              >
+                {{ post.title }}
+              </h3>
+            </NuxtLink>
+          </div>
+          <NuxtLink
+            to="/blog"
+            class="mt-4 inline-flex text-[13px] text-muted-foreground transition-colors hover:text-foreground"
+          >
+            All essays →
+          </NuxtLink>
+        </div>
+      </div>
+    </section>
+
+    <section v-if="series?.length" class="container-page pt-28 md:pt-40">
+      <div class="grid gap-6 lg:grid-cols-12">
+        <h2 class="section-title text-[clamp(2.5rem,4.2vw,3.5rem)] lg:col-span-7">
+          Learn by building.
+        </h2>
+        <p class="max-w-md text-[15px] leading-relaxed text-muted-foreground lg:col-span-5 lg:pl-10">
+          Step-by-step series from real releases. Every lesson is tied to something that shipped,
+          not a toy example.
+        </p>
+      </div>
+
+      <div class="mt-12 grid gap-5 lg:grid-cols-12">
+        <NuxtLink
+          v-if="leadSeries"
+          :to="`/learn/${leadSeries.slug}`"
+          class="card group flex flex-col lg:col-span-8"
+        >
+          <div class="preview-panel relative aspect-[16/9] overflow-hidden border-b border-border bg-[#050505]">
+            <div class="glow-field opacity-50" aria-hidden="true" />
+            <div class="relative z-10 flex h-full flex-col p-5 md:p-7 text-[#ededed]">
+              <div
+                class="flex items-center justify-between border-b border-[#1f1f1f] pb-3 font-mono text-[10px] text-[#a1a1a1]"
+              >
+                <span>{{ leadSeries.difficulty || "Tutorial series" }}</span>
+                <span>{{ leadSeries.nuxtVersion ? `Nuxt v${leadSeries.nuxtVersion}` : "Series" }}</span>
+              </div>
+              <div class="mt-auto pt-8">
+                <p class="font-mono text-[12px] text-[#a1a1a1]">
+                  {{
+                    leadSeries.releaseDate ? formatDate(leadSeries.releaseDate) : "Ongoing"
+                  }}
+                </p>
+                <h3
+                  class="mt-3 max-w-[24ch] text-[clamp(1.7rem,2.9vw,2.5rem)] font-medium leading-[1.08] tracking-[-0.045em] text-balance text-white"
+                >
+                  {{ leadSeries.title }}
+                </h3>
+                <p
+                  class="mt-3 max-w-xl text-[14px] leading-relaxed text-[#a1a1a1] line-clamp-3"
+                >
+                  {{ leadSeries.description }}
+                </p>
+              </div>
+            </div>
+          </div>
+          <div class="flex items-center justify-between p-5">
+            <span class="text-[14px] text-blue">Open the series →</span>
+            <span class="meta">{{ leadSeries.difficulty || "Tutorial" }}</span>
+          </div>
+        </NuxtLink>
+
+        <div class="lg:col-span-4">
+          <p class="label mb-3">More series</p>
+          <div class="border-t border-border">
+            <NuxtLink
+              v-for="item in moreSeries"
+              :key="item.slug"
+              :to="`/learn/${item.slug}`"
+              class="group block border-b border-border py-4"
+            >
+              <p class="meta">
+                {{ item.nuxtVersion ? `v${item.nuxtVersion}` : item.difficulty || "Series" }}
+              </p>
+              <h3
+                class="mt-1.5 text-[16px] font-medium leading-snug tracking-[-0.02em] transition-colors group-hover:text-blue"
+              >
+                {{ item.title }}
+              </h3>
+            </NuxtLink>
+          </div>
+          <NuxtLink
+            to="/learn"
+            class="mt-4 inline-flex text-[13px] text-muted-foreground transition-colors hover:text-foreground"
+          >
+            All series →
+          </NuxtLink>
+        </div>
+      </div>
+    </section>
+
+    <section class="container-page pt-28 md:pt-40">
+      <div class="flex items-end justify-between gap-6">
+        <h2 class="section-title text-[clamp(2.5rem,4.2vw,3.5rem)]">Recently published.</h2>
+        <NuxtLink
+          to="/blog"
+          class="hidden text-[13px] text-muted-foreground transition-colors hover:text-foreground sm:inline-flex"
+        >
+          All writing →
+        </NuxtLink>
+      </div>
+
+      <div class="mt-10 grid gap-5 md:grid-cols-3">
+        <NuxtLink
+          v-for="post in recentCards"
+          :key="`card-${post.path}`"
+          :to="`/blog/${post.slug}`"
+          class="card group flex flex-col"
+        >
+          <div class="aspect-[16/10] overflow-hidden border-b border-border bg-surface-2">
+            <NuxtImg
+              :src="post.img"
+              :alt="post.title"
+              sizes="(min-width: 768px) 33vw, 100vw"
+              class="h-full w-full object-cover opacity-90 transition-all duration-500 group-hover:scale-[1.025] group-hover:opacity-100"
+            />
+          </div>
+          <div class="flex flex-1 flex-col p-5">
+            <p class="meta">{{ formatDate(post.date) }} · {{ tagLabel(post.tag) }}</p>
+            <h3
+              class="mt-2 text-[17px] font-medium leading-snug tracking-[-0.02em] transition-colors group-hover:text-blue"
+            >
+              {{ post.title }}
+            </h3>
+            <p class="mt-2 text-[14px] leading-relaxed text-muted-foreground line-clamp-2">
+              {{ post.description }}
+            </p>
+            <span class="mt-auto pt-5 text-[13px] text-blue">Read more →</span>
+          </div>
+        </NuxtLink>
+      </div>
+    </section>
+
+    <section class="container-page pt-28 md:pt-40">
+      <Newsletter />
+    </section>
+
+    <section class="container-page pt-20 md:pt-28">
+      <div
+        class="relative overflow-hidden rounded-xl border border-border px-6 py-20 text-center md:py-24"
+      >
+        <div class="glow-field opacity-60" aria-hidden="true" />
+        <h2 class="display relative mx-auto max-w-[16ch] text-[clamp(2.4rem,5vw,4rem)]">
+          Start with the newest note.
+        </h2>
+        <p class="relative mx-auto mt-4 max-w-md text-[15px] leading-relaxed text-muted-foreground">
+          No feed. No algorithm. Just the next thing I learned, written down properly.
+        </p>
+        <div class="relative mt-8 flex flex-wrap justify-center gap-3">
+          <NuxtLink
+            :to="featured ? `/blog/${featured.slug}` : '/blog'"
+            class="btn btn-primary btn-pill h-10 px-5"
+          >
+            Read the latest
+          </NuxtLink>
+          <NuxtLink to="/about" class="btn btn-secondary btn-pill h-10 px-5">
+            About Vantol
           </NuxtLink>
         </div>
       </div>
