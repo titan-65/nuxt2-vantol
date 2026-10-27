@@ -9,7 +9,7 @@
     "dev": "vp dev",
     "build": "vp build",
     "preview": "vp preview",
-    "postinstall": "void prepare"
+    "postinstall": "node scripts/postinstall.mjs"
   },
   "dependencies": {
     "hono": "^4.11.9",

@@ -27,5 +27,6 @@ jobs:
       - uses: voidzero-dev/setup-vp@v1
         with:
           cache: true
+          node-version: "24.22.1"
       - run: vp install
       - run: pnpm --filter jumble build
