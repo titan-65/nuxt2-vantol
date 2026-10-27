@@ -8,7 +8,7 @@ const { subscribe: subscribeToNewsletter } = useNewsletter();
 const handleSubscribe = async () => {
   if (!email.value || !email.value.includes("@")) {
     status.value = "error";
-    message.value = "Please enter a valid email address";
+    message.value = "Enter a valid email address.";
     return;
   }
 
@@ -28,65 +28,54 @@ const handleSubscribe = async () => {
   setTimeout(() => {
     status.value = "idle";
     message.value = "";
-  }, 3000);
+  }, 4000);
 };
 </script>
 
 <template>
-  <div class="border border-white/10 p-6 md:p-8 bg-[#111] rounded-xl">
-    <div class="max-w-xl mx-auto text-center">
-      <h3 class="text-lg font-semibold mb-2">Stay Updated</h3>
-      <p class="text-zinc-500 text-sm mb-6">
-        Get the latest posts delivered straight to your inbox.
+  <div class="card grid gap-8 p-6 md:p-10 lg:grid-cols-[1fr_1fr] lg:items-end">
+    <div>
+      <p class="label">Letters from the field</p>
+      <h2 class="mt-3 max-w-[18ch] text-[clamp(1.8rem,3vw,2.4rem)] font-medium leading-[1.1] tracking-[-0.045em]">
+        The next essay, in your inbox.
+      </h2>
+      <p class="mt-3 max-w-md text-[15px] leading-relaxed text-muted-foreground">
+        New essays and build notes, sent when there is something worth saying. No feed, no noise.
       </p>
-
-      <ClientOnly>
-        <div>
-          <form
-            @submit.prevent="handleSubscribe"
-            class="flex flex-col sm:flex-row gap-0 border border-white/10 rounded-lg overflow-hidden p-1 bg-[#0a0a0a] focus-within:border-white/30 transition-colors"
-          >
-            <input
-              v-model="email"
-              type="email"
-              placeholder="Enter your email"
-              class="flex-1 px-4 py-3 bg-transparent text-sm text-white placeholder-zinc-600 focus:outline-none"
-              :disabled="status === 'loading' || status === 'success'"
-            />
-            <button
-              type="submit"
-              :disabled="status === 'loading' || status === 'success'"
-              class="px-6 py-3 bg-[#f5c542] text-black text-xs font-bold uppercase tracking-wider rounded-md hover:bg-[#e0b13a] transition-colors disabled:opacity-70 disabled:cursor-not-allowed"
-            >
-              <span v-if="status === 'loading'">...</span>
-              <span v-else-if="status === 'success'">Done</span>
-              <span v-else>Subscribe</span>
-            </button>
-          </form>
-
-          <p v-if="status === 'error'" class="mt-3 text-red-400 text-xs">{{ message }}</p>
-          <p v-if="status === 'success'" class="mt-3 text-green-400 text-xs">{{ message }}</p>
-        </div>
-
-        <template #fallback>
-          <div
-            class="flex flex-col sm:flex-row gap-0 border border-white/10 rounded-lg overflow-hidden p-1 bg-[#0a0a0a]"
-          >
-            <input
-              type="email"
-              placeholder="Enter your email"
-              class="flex-1 px-4 py-3 bg-transparent text-sm text-white placeholder-zinc-600"
-              disabled
-            />
-            <button
-              disabled
-              class="px-6 py-3 bg-[#f5c542] text-black text-xs font-bold uppercase rounded-md opacity-70"
-            >
-              Subscribe
-            </button>
-          </div>
-        </template>
-      </ClientOnly>
     </div>
+
+    <form class="w-full" @submit.prevent="handleSubscribe">
+      <label for="newsletter-email" class="sr-only">Email address</label>
+      <div class="flex gap-2">
+        <input
+          id="newsletter-email"
+          v-model="email"
+          type="email"
+          placeholder="you@example.com"
+          class="field"
+          :disabled="status === 'loading' || status === 'success'"
+        />
+        <button
+          type="submit"
+          class="btn btn-primary shrink-0 px-4"
+          :disabled="status === 'loading' || status === 'success'"
+        >
+          <span v-if="status === 'loading'">…</span>
+          <span v-else-if="status === 'success'">Sent</span>
+          <span v-else>Subscribe</span>
+        </button>
+      </div>
+      <p
+        v-if="message"
+        class="mt-3 text-[12px]"
+        :class="status === 'error' ? 'text-danger' : 'text-success'"
+        role="status"
+      >
+        {{ message }}
+      </p>
+      <p class="mt-3 font-mono text-[10px] uppercase tracking-[0.08em] text-faint-ink">
+        No noise. Unsubscribe any time.
+      </p>
+    </form>
   </div>
 </template>

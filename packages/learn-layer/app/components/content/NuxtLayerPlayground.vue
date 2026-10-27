@@ -47,7 +47,7 @@ export default defineContentConfig({
 
 <template>
   <div
-    class="my-8 rounded-2xl bg-zinc-950 border border-amber-500/30 overflow-hidden shadow-2xl font-sans text-white"
+    class="my-8 rounded-xl bg-zinc-950 border border-blue/30 overflow-hidden font-sans text-white"
   >
     <!-- Header Controls -->
     <div
@@ -55,9 +55,9 @@ export default defineContentConfig({
     >
       <div class="flex items-center space-x-3">
         <div
-          class="w-8 h-8 rounded-lg bg-amber-500/20 text-amber-400 font-bold flex items-center justify-center border border-amber-500/30 text-sm"
+          class="w-8 h-8 rounded-lg bg-blue/10 text-blue font-bold flex items-center justify-center border border-blue/30 text-sm"
         >
-          🥞
+          L
         </div>
         <div>
           <h3 class="text-sm font-bold text-white tracking-wide">
@@ -78,11 +78,11 @@ export default defineContentConfig({
           class="px-3.5 py-1.5 rounded-lg font-bold transition-all"
           :class="
             activeViewMode === 'learn'
-              ? 'bg-amber-500 text-black shadow-md'
+              ? 'bg-blue text-background shadow-md'
               : 'text-zinc-400 hover:text-white'
           "
         >
-          🎓 Learn Platform Mode
+          Learn platform mode
         </button>
         <button
           @click="activeViewMode = 'blog'"
@@ -93,7 +93,7 @@ export default defineContentConfig({
               : 'text-zinc-400 hover:text-white'
           "
         >
-          📰 Editorial Blog Mode
+          Editorial blog mode
         </button>
       </div>
     </div>
@@ -105,12 +105,12 @@ export default defineContentConfig({
         class="p-4 rounded-xl border transition-all duration-300 flex items-center justify-between"
         :class="
           activeViewMode === 'learn'
-            ? 'bg-[#0d0d0d] border-amber-500/40 shadow-lg shadow-amber-500/10'
+            ? 'bg-[#0d0d0d] border-blue/30 shadow-lg '
             : 'bg-[#18181b] border-white/15'
         "
       >
         <div class="flex items-center space-x-3">
-          <span class="text-xl">{{ activeViewMode === "learn" ? "🎓" : "📰" }}</span>
+          <span class="text-xl">{{ activeViewMode === "learn" ? "Learn" : "Blog" }}</span>
           <div>
             <div class="flex items-center space-x-2">
               <h4 class="text-xs font-bold text-white">
@@ -124,7 +124,7 @@ export default defineContentConfig({
                 class="px-2 py-0.5 rounded text-[10px] font-mono font-bold uppercase"
                 :class="
                   activeViewMode === 'learn'
-                    ? 'bg-amber-500/20 text-amber-300 border border-amber-500/40'
+                    ? 'bg-blue/10 text-blue border border-blue/30'
                     : 'bg-white/10 text-zinc-300 border border-white/20'
                 "
               >
@@ -155,7 +155,7 @@ export default defineContentConfig({
             class="px-3 py-1.5 rounded-lg border transition-colors"
             :class="
               activeFileTab === 'parentConfig'
-                ? 'bg-white/15 text-amber-400 border-amber-500/50 font-bold'
+                ? 'bg-white/15 text-blue border-blue/40 font-bold'
                 : 'border-transparent text-zinc-400 hover:text-white'
             "
           >
@@ -166,7 +166,7 @@ export default defineContentConfig({
             class="px-3 py-1.5 rounded-lg border transition-colors"
             :class="
               activeFileTab === 'layerConfig'
-                ? 'bg-white/15 text-amber-400 border-amber-500/50 font-bold'
+                ? 'bg-white/15 text-blue border-blue/40 font-bold'
                 : 'border-transparent text-zinc-400 hover:text-white'
             "
           >
@@ -177,7 +177,7 @@ export default defineContentConfig({
             class="px-3 py-1.5 rounded-lg border transition-colors"
             :class="
               activeFileTab === 'layerTree'
-                ? 'bg-white/15 text-amber-400 border-amber-500/50 font-bold'
+                ? 'bg-white/15 text-blue border-blue/40 font-bold'
                 : 'border-transparent text-zinc-400 hover:text-white'
             "
           >
@@ -188,7 +188,7 @@ export default defineContentConfig({
             class="px-3 py-1.5 rounded-lg border transition-colors"
             :class="
               activeFileTab === 'contentConfig'
-                ? 'bg-white/15 text-amber-400 border-amber-500/50 font-bold'
+                ? 'bg-white/15 text-blue border-blue/40 font-bold'
                 : 'border-transparent text-zinc-400 hover:text-white'
             "
           >
@@ -197,7 +197,7 @@ export default defineContentConfig({
         </div>
 
         <pre
-          class="p-4 bg-black rounded-xl border border-white/10 font-mono text-xs text-amber-200 overflow-x-auto leading-relaxed"
+          class="p-4 bg-black rounded-xl border border-white/10 font-mono text-xs text-[#ededed] overflow-x-auto leading-relaxed"
           >{{ snippets[activeFileTab] }}</pre
         >
       </div>

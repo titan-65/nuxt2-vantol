@@ -38,40 +38,33 @@ const { data: relatedPosts } = await useAsyncData(`related-${props.currentSlug}`
 
   return scored;
 });
+
+function tagLabel(tag: string | undefined) {
+  return (tag || "").replace(/^["'“”\s]+|["'“”\s]+$/g, "").trim();
+}
+
+function formatDate(date: string | Date | undefined) {
+  if (!date) return "";
+  return new Date(date).toLocaleDateString("en", {
+    year: "numeric",
+    month: "short",
+    day: "2-digit",
+  });
+}
 </script>
 
 <template>
-  <div v-if="relatedPosts && relatedPosts.length > 0" class="mt-12 pt-8 border-t border-white/10">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-      <NuxtLink
-        v-for="post in relatedPosts"
-        :key="post.slug"
-        :to="`/blog/${post.slug}`"
-        class="group block border border-white/10 bg-[#111] rounded-xl overflow-hidden hover:border-white/20 transition-colors"
-      >
-        <div class="relative h-32 overflow-hidden">
-          <NuxtImg
-            :src="post.img"
-            :alt="post.title"
-            width="400"
-            height="256"
-            sizes="(min-width: 1024px) 33vw, (min-width: 768px) 50vw, 100vw"
-            class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity"
-          />
-          <div class="absolute inset-0 bg-gradient-to-t from-[#111] to-transparent opacity-40" />
-        </div>
-        <div class="p-4">
-          <span
-            v-if="post.tag"
-            class="inline-block px-2 py-0.5 text-[10px] font-bold uppercase tracking-widest bg-[#f5c542] text-black rounded-md mb-2"
-          >
-            {{ post.tag }}
-          </span>
-          <h4 class="font-medium text-sm line-clamp-2 group-hover:text-[#f5c542] transition-colors">
-            {{ post.title }}
-          </h4>
-        </div>
-      </NuxtLink>
-    </div>
+  <div v-if="relatedPosts && relatedPosts.length > 0">
+    <NuxtLink
+      v-for="post in relatedPosts"
+      :key="post.slug"
+      :to="`/blog/${post.slug}`"
+      class="group block border-t border-border py-4 first:border-t-0 first:pt-0"
+    >
+      <p class="ledger-meta">{{ formatDate(post.date) }} · {{ tagLabel(post.tag) }}</p>
+      <p class="mt-2 text-[15px] font-medium leading-snug transition-colors group-hover:text-blue">
+        {{ post.title }}
+      </p>
+    </NuxtLink>
   </div>
 </template>

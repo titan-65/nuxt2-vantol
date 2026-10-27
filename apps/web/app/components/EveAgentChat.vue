@@ -134,30 +134,30 @@ onMounted(() => {
 
 <template>
   <div
-    class="flex flex-col h-full bg-[#0a0a0a] border border-white/10 rounded-2xl overflow-hidden shadow-2xl"
+    class="flex flex-col h-full bg-background border border-border rounded-2xl overflow-hidden shadow-2xl"
   >
     <!-- Chat Header -->
-    <div class="px-5 py-4 bg-[#111] border-b border-white/10 flex items-center justify-between">
+    <div class="px-5 py-4 bg-card border-b border-border flex items-center justify-between">
       <div class="flex items-center gap-3">
         <div
-          class="w-8 h-8 rounded-lg bg-[#f5c542]/10 border border-[#f5c542]/30 flex items-center justify-center text-[#f5c542]"
+          class="w-8 h-8 rounded-lg bg-brand/10 border border-blue/30 flex items-center justify-center text-blue"
         >
           <Bot class="w-4 h-4" />
         </div>
         <div>
           <div class="flex items-center gap-2">
-            <h3 class="text-sm font-semibold text-white">Eve AI Agent</h3>
+            <h3 class="text-sm font-semibold text-foreground">Eve AI Agent</h3>
             <span
-              class="px-2 py-0.5 text-[10px] font-mono bg-[#f5c542]/10 text-[#f5c542] border border-[#f5c542]/30 rounded-full font-semibold"
+              class="px-2 py-0.5 text-[10px] font-mono bg-brand/10 text-blue border border-blue/30 rounded-full font-semibold"
             >
               FILESYSTEM FIRST
             </span>
           </div>
-          <p class="text-[11px] text-zinc-400">Powered by Vercel Eve Framework & GPT-5.4-mini</p>
+          <p class="text-[11px] text-muted-foreground">Powered by Vercel Eve Framework & GPT-5.4-mini</p>
         </div>
       </div>
 
-      <div class="flex items-center gap-2 text-[11px] text-zinc-500 font-mono">
+      <div class="flex items-center gap-2 text-[11px] text-muted-foreground font-mono">
         <span class="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
         <span>AGENT ACTIVE</span>
       </div>
@@ -169,7 +169,7 @@ onMounted(() => {
         <!-- User Message -->
         <div v-if="msg.role === 'user'" class="flex justify-end">
           <div
-            class="max-w-[85%] bg-white/10 text-white rounded-2xl px-4 py-3 text-sm leading-relaxed border border-white/10"
+            class="max-w-[85%] bg-accent text-foreground rounded-2xl px-4 py-3 text-sm leading-relaxed border border-border"
           >
             {{ msg.content }}
           </div>
@@ -178,7 +178,7 @@ onMounted(() => {
         <!-- Assistant Message -->
         <div v-else class="flex gap-3 max-w-[92%]">
           <div
-            class="w-7 h-7 rounded-lg bg-[#f5c542] text-black font-bold flex items-center justify-center shrink-0 mt-1 shadow-lg shadow-[#f5c542]/20"
+            class="w-7 h-7 rounded-lg bg-brand text-brand-foreground font-bold flex items-center justify-center shrink-0 mt-1 shadow-lg shadow-[#f5c542]/20"
           >
             <Sparkles class="w-3.5 h-3.5" />
           </div>
@@ -218,39 +218,39 @@ onMounted(() => {
               <div
                 v-for="(tc, idx) in msg.metadata.toolCalls"
                 :key="idx"
-                class="bg-zinc-900/90 border border-white/10 rounded-lg overflow-hidden text-xs"
+                class="bg-muted/90 border border-border rounded-lg overflow-hidden text-xs"
               >
                 <button
                   type="button"
                   @click="toggleTool(msg.id + '-' + idx)"
-                  class="w-full px-3 py-2 flex items-center justify-between hover:bg-white/5 transition-colors font-mono text-zinc-300"
+                  class="w-full px-3 py-2 flex items-center justify-between hover:bg-accent transition-colors font-mono text-foreground"
                 >
                   <div class="flex items-center gap-2">
-                    <Terminal class="w-3.5 h-3.5 text-[#f5c542]" />
+                    <Terminal class="w-3.5 h-3.5 text-blue" />
                     <span
-                      >Tool Called: <strong class="text-white">{{ tc.tool }}</strong></span
+                      >Tool Called: <strong class="text-foreground">{{ tc.tool }}</strong></span
                     >
                   </div>
                   <component
                     :is="expandedTools[msg.id + '-' + idx] ? ChevronDown : ChevronRight"
-                    class="w-3.5 h-3.5 text-zinc-500"
+                    class="w-3.5 h-3.5 text-muted-foreground"
                   />
                 </button>
 
                 <div
                   v-if="expandedTools[msg.id + '-' + idx]"
-                  class="p-3 bg-black/60 border-t border-white/10 font-mono space-y-2 text-[11px]"
+                  class="p-3 bg-foreground/60 border-t border-border font-mono space-y-2 text-[11px]"
                 >
                   <div>
-                    <span class="text-zinc-500">Inputs:</span>
-                    <pre class="text-amber-300 overflow-x-auto p-1.5 bg-zinc-950 rounded mt-0.5">{{
+                    <span class="text-muted-foreground">Inputs:</span>
+                    <pre class="text-amber-300 overflow-x-auto p-1.5 bg-background rounded mt-0.5">{{
                       JSON.stringify(tc.args, null, 2)
                     }}</pre>
                   </div>
                   <div>
-                    <span class="text-zinc-500">Output:</span>
+                    <span class="text-muted-foreground">Output:</span>
                     <pre
-                      class="text-emerald-400 overflow-x-auto p-1.5 bg-zinc-950 rounded mt-0.5"
+                      class="text-emerald-400 overflow-x-auto p-1.5 bg-background rounded mt-0.5"
                       >{{ JSON.stringify(tc.result, null, 2) }}</pre
                     >
                   </div>
@@ -260,7 +260,7 @@ onMounted(() => {
 
             <!-- Content text -->
             <div
-              class="bg-[#111] border border-white/10 rounded-2xl p-4 text-sm text-zinc-200 leading-relaxed whitespace-pre-wrap font-sans prose prose-invert max-w-none prose-a:text-[#f5c542]"
+              class="bg-card border border-border rounded-2xl p-4 text-sm text-foreground leading-relaxed whitespace-pre-wrap font-sans prose  max-w-none prose-a:text-blue"
             >
               {{ msg.content }}
             </div>
@@ -271,10 +271,10 @@ onMounted(() => {
       <!-- Loading state -->
       <div
         v-if="isLoading"
-        class="flex gap-3 max-w-[80%] items-center text-xs text-zinc-400 font-mono"
+        class="flex gap-3 max-w-[80%] items-center text-xs text-muted-foreground font-mono"
       >
         <div
-          class="w-7 h-7 rounded-lg bg-[#f5c542]/20 border border-[#f5c542]/30 flex items-center justify-center text-[#f5c542]"
+          class="w-7 h-7 rounded-lg bg-brand/20 border border-blue/30 flex items-center justify-center text-blue"
         >
           <Loader2 class="w-4 h-4 animate-spin" />
         </div>
@@ -283,13 +283,13 @@ onMounted(() => {
     </div>
 
     <!-- Quick Prompts Bar -->
-    <div class="px-4 py-2 border-t border-white/5 bg-black/40 flex flex-wrap gap-2">
+    <div class="px-4 py-2 border-t border-border bg-foreground/40 flex flex-wrap gap-2">
       <button
         v-for="prompt in quickPrompts"
         :key="prompt"
         type="button"
         @click="sendMessage(prompt)"
-        class="text-xs px-2.5 py-1 bg-white/5 hover:bg-white/10 border border-white/10 hover:border-[#f5c542]/40 rounded-full text-zinc-300 hover:text-white transition-all text-left"
+        class="text-xs px-2.5 py-1 bg-accent hover:bg-accent border border-border hover:border-blue/40 rounded-full text-foreground hover:text-foreground transition-all text-left"
       >
         {{ prompt }}
       </button>
@@ -298,19 +298,19 @@ onMounted(() => {
     <!-- Input Form -->
     <form
       @submit.prevent="sendMessage()"
-      class="p-4 bg-[#111] border-t border-white/10 flex items-center gap-3"
+      class="p-4 bg-card border-t border-border flex items-center gap-3"
     >
       <input
         v-model="input"
         type="text"
         placeholder="Ask the Eve Agent about framework docs, tools, skills, or tutorials..."
-        class="flex-1 bg-zinc-900 border border-white/10 focus:border-[#f5c542] rounded-xl px-4 py-2.5 text-sm text-white placeholder-zinc-500 focus:outline-none transition-colors"
+        class="flex-1 bg-muted border border-border focus:border-blue rounded-xl px-4 py-2.5 text-sm text-foreground placeholder-zinc-500 focus:outline-none transition-colors"
         :disabled="isLoading"
       />
       <button
         type="submit"
         :disabled="!input.trim() || isLoading"
-        class="w-10 h-10 rounded-xl bg-[#f5c542] hover:bg-[#e0b13a] disabled:opacity-50 text-black flex items-center justify-center font-bold transition-all shrink-0 shadow-lg shadow-[#f5c542]/20"
+        class="w-10 h-10 rounded-xl bg-brand hover:bg-brand-hover disabled:opacity-50 text-brand-foreground flex items-center justify-center font-bold transition-all shrink-0 shadow-lg shadow-[#f5c542]/20"
       >
         <Send class="w-4 h-4" />
       </button>

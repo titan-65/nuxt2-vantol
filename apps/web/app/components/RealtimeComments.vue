@@ -38,7 +38,7 @@ const handleSubmit = async () => {
 };
 
 const handleDelete = async (commentId: string) => {
-  if (!confirm("Are you sure you want to delete this comment?")) return;
+  if (!confirm("Delete this comment?")) return;
 
   try {
     await deleteComment(commentId);
@@ -65,26 +65,22 @@ function formatDate(timestamp: number) {
 </script>
 
 <template>
-  <div class="border border-white/10 bg-[#111] rounded-xl p-6 md:p-8">
-    <div class="flex items-center gap-2 mb-6">
-      <span class="text-xs font-bold uppercase tracking-widest text-zinc-500">Comments</span>
-      <span class="text-xs text-zinc-600">({{ comments.length }})</span>
+  <div class="border-t border-border pt-6">
+    <div class="flex items-baseline justify-between">
+      <p class="label">Discussion</p>
+      <span class="ledger-meta">{{ comments.length }}</span>
     </div>
 
-    <!-- Loading State -->
-    <div v-if="loading" class="text-center py-8">
-      <div
-        class="inline-block w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin"
-      ></div>
+    <div v-if="loading" class="py-8">
+      <p class="font-serif text-[15px] text-muted-foreground">Loading the thread…</p>
     </div>
 
     <template v-else>
-      <!-- Comments List -->
-      <div v-if="comments.length > 0" class="space-y-6 mb-8">
-        <div
+      <div v-if="comments.length > 0">
+        <article
           v-for="comment in comments"
           :key="comment.id"
-          class="border-b border-white/10 pb-6 last:border-b-0 last:pb-0"
+          class="border-b border-border py-5 last:border-b-0"
         >
           <div class="flex items-start gap-3">
             <NuxtImg
@@ -95,99 +91,107 @@ function formatDate(timestamp: number) {
               :alt="comment.authorName"
               width="32"
               height="32"
-              class="w-8 h-8 rounded-full border border-white/10"
+              class="h-8 w-8 border border-border object-cover grayscale"
             />
-            <div class="flex-1 min-w-0">
-              <div class="flex items-center justify-between gap-2 mb-1">
-                <div class="flex items-center gap-2">
-                  <span class="text-xs font-bold uppercase tracking-wider">{{
-                    comment.authorName
+            <div class="min-w-0 flex-1">
+              <div class="flex items-start justify-between gap-3">
+                <p class="text-[12px]">
+                  <span class="font-semibold text-foreground">{{ comment.authorName }}</span>
+                  <span class="ml-2 font-mono text-[9px] text-faint-ink">{{
+                    formatDate(comment.createdAt)
                   }}</span>
-                  <span class="text-[10px] text-zinc-600">{{ formatDate(comment.createdAt) }}</span>
-                </div>
+                </p>
                 <button
                   v-if="canDelete(comment)"
+                  type="button"
+                  class="font-mono text-[9px] uppercase tracking-[0.1em] text-muted-foreground transition-colors hover:text-danger"
                   @click="handleDelete(comment.id)"
-                  class="text-[10px] text-zinc-500 hover:text-red-400 transition-colors uppercase"
                 >
                   Delete
                 </button>
               </div>
-              <p class="text-sm text-zinc-400 font-light leading-relaxed">{{ comment.text }}</p>
+              <p class="mt-2 font-serif text-[15px] leading-[1.7] text-muted-foreground">
+                {{ comment.text }}
+              </p>
             </div>
           </div>
-        </div>
+        </article>
       </div>
 
-      <!-- No Comments -->
-      <div v-else class="text-center py-8 border-b border-white/10 mb-8">
-        <p class="text-sm text-zinc-500">No comments yet. Be the first!</p>
+      <div v-else class="border-b border-border py-8">
+        <p class="font-serif text-[15px] text-muted-foreground">
+          No comments yet. Be the first to add a note.
+        </p>
       </div>
 
-      <!-- Error Message -->
       <div
         v-if="error"
-        class="mb-4 p-3 bg-red-500/10 border border-red-500/20 text-xs text-red-400 rounded-lg"
+        class="mt-4 border border-danger/30 bg-danger/5 p-3 text-[12px] text-danger"
+        role="alert"
       >
         {{ error }}
       </div>
 
-      <!-- Comment Form -->
-      <div v-if="user">
-        <div class="flex items-center justify-between mb-4">
-          <div class="flex items-center gap-3">
+      <div v-if="user" class="mt-6">
+        <div class="mb-3 flex items-center justify-between gap-4">
+          <div class="flex items-center gap-2.5">
             <NuxtImg
               :src="
                 user.photoURL ||
                 'https://ui-avatars.com/api/?name=' + encodeURIComponent(user.displayName || 'U')
               "
               :alt="user.displayName || 'User'"
-              width="32"
-              height="32"
-              class="w-8 h-8 rounded-full border border-white/10"
+              width="28"
+              height="28"
+              class="h-7 w-7 border border-border object-cover grayscale"
             />
-            <span class="text-xs text-zinc-500"
-              >Commenting as <strong class="text-white">{{ user.displayName }}</strong></span
-            >
+            <span class="text-[12px] text-muted-foreground">
+              Commenting as <strong class="font-semibold text-foreground">{{
+                user.displayName
+              }}</strong>
+            </span>
           </div>
           <button
+            type="button"
+            class="font-mono text-[9px] uppercase tracking-[0.1em] text-muted-foreground transition-colors hover:text-foreground"
             @click="signOut"
-            class="text-[10px] text-zinc-500 hover:text-white transition-colors uppercase"
           >
             Sign out
           </button>
         </div>
-        <form @submit.prevent="handleSubmit" class="space-y-4">
+
+        <form class="space-y-3" @submit.prevent="handleSubmit">
+          <label for="comment-body" class="sr-only">Comment</label>
           <textarea
+            id="comment-body"
             v-model="newComment"
-            placeholder="Write a comment..."
+            placeholder="Add a correction, a question, or a war story…"
             rows="3"
-            class="w-full px-4 py-3 border border-white/10 bg-[#0a0a0a] text-sm text-white placeholder-zinc-600 focus:outline-none focus:border-white/30 transition-colors resize-none rounded-lg"
+            class="field min-h-[7rem] resize-y font-serif text-[15px] leading-relaxed"
             :disabled="isSubmitting"
-          ></textarea>
+          />
           <button
             type="submit"
+            class="btn btn-primary"
             :disabled="!newComment.trim() || isSubmitting"
-            class="px-6 py-2 bg-[#f5c542] text-black text-xs font-bold uppercase tracking-widest hover:bg-[#e0b13a] transition-colors disabled:opacity-50 disabled:cursor-not-allowed rounded-lg"
           >
-            {{ isSubmitting ? "Posting..." : "Post Comment" }}
+            {{ isSubmitting ? "Posting…" : "Post comment" }}
           </button>
         </form>
       </div>
 
-      <!-- Sign In Prompt -->
-      <div v-else class="text-center py-6 border border-dashed border-white/10 rounded-lg">
-        <p class="text-sm text-zinc-500 mb-4">Sign in to join the conversation</p>
-        <button
-          @click="signInWithGoogle"
-          class="inline-flex items-center gap-2 px-6 py-3 border border-white/10 bg-[#111] text-xs font-bold uppercase tracking-widest hover:bg-white/5 transition-colors rounded-lg text-zinc-300"
-        >
+      <div v-else class="mt-6 border-y border-border py-6">
+        <p class="font-serif text-[15px] text-muted-foreground">
+          Sign in to join the conversation.
+        </p>
+        <button type="button" class="btn btn-secondary mt-4" @click="signInWithGoogle">
           <svg
             xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
+            width="14"
+            height="14"
             viewBox="0 0 24 24"
-            class="text-zinc-500"
+            class="text-muted-foreground"
+            aria-hidden="true"
           >
             <path
               fill="currentColor"

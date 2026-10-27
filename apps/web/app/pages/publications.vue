@@ -12,19 +12,19 @@ const publications = computed(() => publicationsData.value?.items || []);
 </script>
 
 <template>
-  <div class="min-h-screen bg-[#0a0a0a] text-white font-sans">
+  <div class="min-h-screen bg-background text-foreground font-sans">
     <!-- Hero Section -->
-    <section class="py-20 border-b border-white/10">
+    <section class="py-20 border-b border-border">
       <div class="max-w-[1088px] mx-auto px-6">
         <div class="max-w-3xl">
-          <p class="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-4">
+          <p class="text-[10px] font-bold uppercase tracking-widest text-muted-foreground mb-4">
             Publications
           </p>
 
           <h1 class="text-5xl md:text-6xl font-semibold tracking-tight mb-8">Published Works</h1>
 
           <p
-            class="text-xl text-zinc-400 font-light leading-relaxed border-l-2 border-white/10 pl-6"
+            class="text-xl text-muted-foreground font-light leading-relaxed border-l-2 border-border pl-6"
           >
             Books and written works exploring modern web development, frameworks, and the craft of
             building software.
@@ -49,8 +49,8 @@ const publications = computed(() => publicationsData.value?.items || []);
     <!-- Empty State -->
     <section v-if="publications.length === 0" class="py-24">
       <div class="max-w-[1088px] mx-auto px-6">
-        <div class="max-w-2xl mx-auto text-center border border-white/10 p-12 bg-[#111] rounded-xl">
-          <p class="text-zinc-500 text-sm uppercase tracking-wider">
+        <div class="max-w-2xl mx-auto text-center border border-border p-12 bg-card rounded-xl">
+          <p class="text-muted-foreground text-sm uppercase tracking-wider">
             More publications coming soon.
           </p>
         </div>
@@ -58,15 +58,15 @@ const publications = computed(() => publicationsData.value?.items || []);
     </section>
 
     <!-- CTA Section -->
-    <section class="py-16 border-t border-white/10">
+    <section class="py-16 border-t border-border">
       <div class="max-w-[1088px] mx-auto px-6">
-        <div class="max-w-2xl mx-auto text-center border border-white/10 p-8 bg-[#111] rounded-xl">
-          <p class="text-zinc-400 font-light mb-4">
+        <div class="max-w-2xl mx-auto text-center border border-border p-8 bg-card rounded-xl">
+          <p class="text-muted-foreground font-light mb-4">
             Interested in collaborating on a technical book or publication?
           </p>
           <NuxtLink
             to="/contact"
-            class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest bg-[#f5c542] text-black px-6 py-3 hover:bg-[#e0b13a] transition-colors rounded-lg"
+            class="inline-flex items-center gap-2 text-xs font-bold uppercase tracking-widest bg-brand text-brand-foreground px-6 py-3 hover:bg-brand-hover transition-colors rounded-lg"
           >
             Get in Touch
             <svg

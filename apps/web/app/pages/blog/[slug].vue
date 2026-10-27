@@ -1,4 +1,6 @@
 <script setup lang="ts">
+import { nextTick, onBeforeUnmount, onMounted, ref } from "vue";
+
 const route = useRoute();
 const slug = computed(() => {
   const param = route.params.slug;
@@ -19,38 +21,86 @@ const { data: surround } = await useAsyncData("surround-" + route.path, () => {
 const prev = computed(() => surround.value?.[0]);
 const next = computed(() => surround.value?.[1]);
 
+const tocLinks = computed(
+  () => (post.value?.body?.toc?.links || []).filter((link: any) => link.depth <= 3) as any[],
+);
+
 const readingTime = computed(() => {
   if (post.value?.readTime) return post.value.readTime;
   if (post.value?.body) {
     const text = JSON.stringify(post.value.body);
     const words = text.match(/\w+/g)?.length || 0;
-    return Math.ceil(words / 200);
+    return Math.max(1, Math.ceil(words / 200));
   }
   return 1;
 });
 
 const runtimeConfig = useRuntimeConfig();
 const requestOrigin = computed(() => {
+  const configured = String(runtimeConfig.public.siteUrl || "").replace(/\/$/, "");
+  if (configured) return configured;
+
   if (import.meta.server) {
     try {
       return useRequestURL().origin;
     } catch {
-      return runtimeConfig.public.siteUrl || "";
+      return "";
     }
   }
-  return runtimeConfig.public.siteUrl || "";
+  return "";
 });
-const canonicalUrl = computed(() => post.value?.canonical || `${requestOrigin.value}${route.path}`);
+const canonicalUrl = computed(
+  () => post.value?.canonical || `${requestOrigin.value}${route.path}`,
+);
 const ogImage = computed(() => post.value?.ogImage || post.value?.img || "");
 
 function formatDate(date: string | Date | undefined) {
   if (!date) return "";
-  const options: Intl.DateTimeFormatOptions = { year: "numeric", month: "long", day: "numeric" };
-  return new Date(date).toLocaleDateString("en", options);
+  return new Date(date).toLocaleDateString("en", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 }
 
+function tagLabel(tag: string | undefined) {
+  return (tag || "").replace(/^["'“”\s]+|["'“”\s]+$/g, "").trim();
+}
+
+function isoDate(date: string | Date | undefined) {
+  if (!date) return "";
+  return new Date(date).toISOString().slice(0, 10);
+}
+
+const activeHeading = ref("");
+let headingObserver: IntersectionObserver | null = null;
+
+onMounted(async () => {
+  await nextTick();
+  const headings = Array.from(
+    document.querySelectorAll<HTMLElement>(".article-prose h2[id], .article-prose h3[id]"),
+  );
+  if (!headings.length) return;
+
+  headingObserver = new IntersectionObserver(
+    (entries) => {
+      const visible = entries
+        .filter((entry) => entry.isIntersecting)
+        .sort((a, b) => a.boundingClientRect.top - b.boundingClientRect.top);
+      if (visible[0]) activeHeading.value = visible[0].target.id;
+    },
+    { rootMargin: "-18% 0px -68% 0px" },
+  );
+
+  headings.forEach((heading) => headingObserver?.observe(heading));
+});
+
+onBeforeUnmount(() => {
+  headingObserver?.disconnect();
+});
+
 useSeoMeta({
-  title: () => (post.value?.title ? `${post.value.title} | VantolBennett` : "VantolBennett"),
+  title: () => (post.value?.title ? `${post.value.title} | Vantol Bennett` : "Vantol Bennett"),
   description: () => post.value?.description || "",
   ogTitle: () => post.value?.title || "",
   ogDescription: () => post.value?.description || "",
@@ -85,147 +135,212 @@ useHead(() => {
 
   return {
     link: [{ rel: "canonical", href: canonicalUrl.value }],
-    script: jsonLd ? [{ type: "application/ld+json", children: JSON.stringify(jsonLd) }] : [],
+    script: jsonLd ? [{ type: "application/ld+json", innerHTML: JSON.stringify(jsonLd) }] : [],
   };
 });
 </script>
 
 <template>
-  <div v-if="post" class="min-h-screen bg-[#0a0a0a] text-white font-sans">
+  <div v-if="post" class="reading-page pb-8">
     <ReadingProgress />
-    <div class="max-w-[1088px] mx-auto px-6 py-12">
-      <div class="lg:flex gap-12">
-        <!-- Sidebar / TOC -->
-        <aside class="hidden lg:block w-64 shrink-0">
-          <div class="sticky top-24 border border-white/10 bg-[#111] rounded-xl p-6">
-            <h3
-              class="text-[11px] font-bold uppercase tracking-widest mb-4 pb-2 border-b border-white/10 text-zinc-500"
-            >
-              Contents
-            </h3>
-            <nav class="text-sm">
-              <ul class="space-y-2">
-                <li v-for="link of post.body?.toc?.links || []" :key="link.id">
-                  <NuxtLink
-                    :to="`#${link.id}`"
-                    class="block text-zinc-500 hover:text-white transition-colors text-xs"
-                    :class="{
-                      'pl-0': link.depth === 2,
-                      'pl-4': link.depth === 3,
-                    }"
-                    >{{ link.text }}</NuxtLink
-                  >
-                </li>
-              </ul>
-            </nav>
-          </div>
-        </aside>
 
-        <!-- Main Content -->
-        <div class="flex-auto min-w-0">
-          <article class="bg-[#111] border border-white/10 rounded-xl p-8 md:p-12">
-            <!-- Header -->
-            <header class="mb-12 border-b border-white/10 pb-8">
-              <div class="flex flex-wrap items-center gap-3 mb-6">
-                <NuxtLink
-                  :to="`/blog?tag=${post.tag}`"
-                  class="px-2.5 py-1 bg-[#f5c542] text-black text-[10px] font-bold uppercase tracking-widest rounded-md hover:bg-[#e0b13a] transition-colors"
-                >
-                  {{ post.tag }}
-                </NuxtLink>
-                <span class="text-xs text-zinc-500">{{
-                  formatDate(post.date || post.createdAt)
-                }}</span>
-                <span class="text-xs text-zinc-600">• {{ readingTime }} min read</span>
-                <span class="text-xs text-zinc-700">|</span>
-                <ViewCounter :slug="slugValue" />
-                <PresenceIndicator :slug="slugValue" />
-                <ReactionButton :slug="slugValue" />
-              </div>
+    <div class="container-page pt-12 md:pt-20">
+      <nav
+        class="flex flex-wrap items-center gap-2 font-mono text-[11px] uppercase tracking-[0.1em] text-muted-foreground"
+        aria-label="Breadcrumb"
+      >
+        <NuxtLink to="/blog" class="link hover:text-foreground">Writing</NuxtLink>
+        <span aria-hidden="true">/</span>
+        <NuxtLink :to="`/blog?tag=${encodeURIComponent(tagLabel(post.tag))}`" class="link hover:text-foreground">{{
+          tagLabel(post.tag)
+        }}</NuxtLink>
+      </nav>
 
-              <h1 class="text-3xl md:text-5xl font-semibold tracking-tight mb-8 leading-tight">
-                {{ post.title }}
-              </h1>
+      <header class="mt-8 grid gap-8 lg:grid-cols-12 lg:gap-10">
+        <div class="lg:col-span-9">
+          <p class="ledger-meta">
+            <time :datetime="isoDate(post.date || post.createdAt)">{{
+              formatDate(post.date || post.createdAt)
+            }}</time>
+            <span aria-hidden="true"> · </span>
+            {{ readingTime }} min read
+          </p>
 
-              <div class="flex items-center justify-between">
-                <div class="flex items-center gap-4">
-                  <NuxtImg
-                    :src="post.author?.img || post.img"
-                    :alt="post.author?.name || post.title"
-                    width="40"
-                    height="40"
-                    class="h-10 w-10 rounded-full border border-white/10"
-                  />
-                  <div>
-                    <p class="text-xs font-bold uppercase tracking-wider text-white">
-                      By {{ post.author?.name }}
-                    </p>
-                    <p class="text-xs text-zinc-500">Author</p>
-                  </div>
-                </div>
-                <BookmarkButton :slug="slugValue" :title="post.title" />
-              </div>
-            </header>
+          <h1
+            class="display mt-4 max-w-[22ch] text-[clamp(2.8rem,5vw,4rem)]"
+          >
+            {{ post.title }}
+          </h1>
 
-            <!-- Hero Image -->
-            <div class="mb-12 rounded-xl overflow-hidden bg-zinc-900">
+          <p
+            class="mt-6 max-w-2xl text-[clamp(1.1rem,1.6vw,1.35rem)] leading-[1.6] text-muted-foreground"
+          >
+            {{ post.description }}
+          </p>
+
+          <div
+            class="mt-8 flex flex-wrap items-center justify-between gap-x-6 gap-y-4 border-t border-border pt-4"
+          >
+            <div class="flex items-center gap-3">
               <NuxtImg
-                :src="post.img"
-                :alt="post.title"
-                sizes="100vw"
-                class="w-full h-auto object-cover"
+                v-if="post.author?.img"
+                :src="post.author.img"
+                :alt="post.author.name"
+                width="36"
+                height="36"
+                class="h-9 w-9 border border-border object-cover grayscale"
               />
-            </div>
-
-            <!-- Content -->
-            <div
-              class="prose prose-invert max-w-none font-light prose-headings:font-semibold prose-headings:tracking-tight prose-a:text-[#f5c542] prose-a:no-underline hover:prose-a:underline prose-strong:text-white prose-code:text-[#f5c542] prose-pre:bg-zinc-900 prose-pre:border prose-pre:border-white/10"
-            >
-              <ContentRenderer :value="post" />
-            </div>
-
-            <!-- Footer -->
-            <div class="mt-12 pt-8 border-t border-white/10">
-              <div class="flex flex-col sm:flex-row justify-between items-center gap-6">
-                <div class="w-full sm:w-auto">
-                  <h4 class="text-xs font-bold uppercase tracking-widest mb-4 text-zinc-500">
-                    Share this post
-                  </h4>
-                  <ShareButtons :title="post.title" :description="post.description" />
-                </div>
-
-                <div
-                  class="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-end"
-                >
-                  <PrevNext :prev="prev" :next="next" />
-                </div>
-              </div>
-
-              <div class="mt-12">
-                <Newsletter />
+              <div>
+                <p class="text-[13px] font-medium">{{ post.author?.name || "Vantol Bennett" }}</p>
+                <p class="mt-0.5 font-mono text-[10px] uppercase tracking-[0.1em] text-muted-foreground">
+                  {{ post.author?.title || "Educator / Developer" }}
+                </p>
               </div>
             </div>
 
-            <!-- Comments Section -->
-            <div class="mt-12">
-              <RealtimeComments :slug="slugValue" />
-            </div>
-          </article>
-
-          <div class="mt-12">
-            <h3 class="text-xl font-semibold mb-6">Related Posts</h3>
-            <RelatedPosts
-              :current-slug="route.params.slug as string"
-              :current-tag="post.tag"
-              :current-keywords="post.keywords"
-            />
+            <BookmarkButton :slug="slugValue" :title="post.title" />
           </div>
         </div>
-      </div>
+
+      </header>
+    </div>
+
+    <div class="container-page mt-10 grid gap-10 lg:grid-cols-12 lg:gap-10">
+      <aside class="hidden lg:col-span-2 lg:block">
+        <div class="sticky top-24 space-y-6">
+          <div>
+            <p class="label">Published</p>
+            <p class="mt-1.5 text-[12px] text-muted-foreground">
+              <time :datetime="isoDate(post.date || post.createdAt)">{{
+                formatDate(post.date || post.createdAt)
+              }}</time>
+            </p>
+          </div>
+          <div>
+            <p class="label">Reading</p>
+            <p class="mt-1.5 text-[12px] text-muted-foreground">{{ readingTime }} minutes</p>
+          </div>
+          <div>
+            <p class="label">Tag</p>
+            <NuxtLink
+              :to="`/blog?tag=${encodeURIComponent(tagLabel(post.tag))}`"
+              class="link mt-1.5 inline-block text-[12px] text-muted-foreground hover:text-foreground"
+            >
+              {{ tagLabel(post.tag) }}
+            </NuxtLink>
+          </div>
+          <div>
+            <p class="label">Share</p>
+            <ShareButtons :title="post.title" :description="post.description" class="mt-2" />
+          </div>
+        </div>
+      </aside>
+
+      <article class="min-w-0 lg:col-span-7">
+        <details class="mb-8 border-y border-border py-3 lg:hidden">
+          <summary class="label cursor-pointer list-none [&::-webkit-details-marker]:hidden">
+            Contents
+            <span class="ml-2 font-mono text-[10px] text-faint-ink">({{ tocLinks.length }})</span>
+          </summary>
+          <nav class="mt-3 space-y-2" aria-label="Table of contents">
+            <NuxtLink
+              v-for="link in tocLinks"
+              :key="`mobile-${link.id}`"
+              :to="`#${link.id}`"
+              class="block text-[13px] leading-snug text-muted-foreground hover:text-foreground"
+              :class="link.depth === 3 ? 'pl-3' : ''"
+            >
+              {{ link.text }}
+            </NuxtLink>
+          </nav>
+        </details>
+
+        <div class="article-prose font-feature-reading">
+          <ContentRenderer :value="post" />
+        </div>
+
+        <div class="mt-12 border-t border-border pt-6">
+          <ShareButtons :title="post.title" :description="post.description" />
+        </div>
+
+        <div class="mt-10 border-t border-border pt-6">
+          <PrevNext :prev="prev" :next="next" />
+        </div>
+
+        <div class="mt-8 flex items-center gap-5 border-t border-border pt-4">
+          <ViewCounter :slug="slugValue" />
+          <ReactionButton :slug="slugValue" />
+          <PresenceIndicator :slug="slugValue" />
+        </div>
+      </article>
+
+      <aside class="hidden lg:col-span-3 lg:block">
+        <div class="sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto pr-2">
+          <div class="border-t border-border pt-4">
+            <p class="label">In this essay</p>
+            <nav class="mt-3 space-y-2" aria-label="Table of contents">
+              <NuxtLink
+                v-for="link in tocLinks"
+                :key="link.id"
+                :to="`#${link.id}`"
+                class="block text-[12px] leading-snug transition-colors"
+                :class="[
+                  link.depth === 3 ? 'pl-3' : '',
+                  activeHeading === link.id
+                    ? 'font-medium text-blue'
+                    : 'text-muted-foreground hover:text-foreground',
+                ]"
+                :aria-current="activeHeading === link.id ? 'location' : undefined"
+              >
+                {{ link.text }}
+              </NuxtLink>
+            </nav>
+          </div>
+          <div class="mt-8 border-t border-border pt-4">
+            <p class="label">Notes</p>
+            <p class="mt-3 text-[14px] leading-relaxed text-muted-foreground">
+              This is a field note, not a finished manual. If something here is wrong or out of
+              date, the guestbook and comments are open.
+            </p>
+          </div>
+          <div class="mt-8 border-t border-border pt-4">
+            <p class="label">Reading progress</p>
+            <p class="mt-3 font-mono text-[10px] uppercase tracking-[0.1em] text-faint-ink">
+              {{ readingTime }} minutes · {{ tocLinks.length }} sections
+            </p>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <section class="container-page mt-16">
+      <Newsletter />
+    </section>
+
+    <div class="container-page mt-16 grid gap-12 lg:grid-cols-12 lg:gap-16">
+      <section class="lg:col-span-8" aria-labelledby="comments-heading">
+        <h2 id="comments-heading" class="text-[22px] font-medium tracking-[-0.035em]">Comments</h2>
+        <p class="mt-2 max-w-xl text-[15px] leading-relaxed text-muted-foreground">
+          Questions, corrections, and war stories are welcome. Sign in to join the thread.
+        </p>
+        <div class="mt-6">
+          <RealtimeComments :slug="slugValue" />
+        </div>
+      </section>
+
+      <aside class="lg:col-span-4">
+        <h2 class="text-[22px] font-medium tracking-[-0.035em]">Related reading</h2>
+        <p class="mt-2 font-serif text-[15px] leading-relaxed text-muted-foreground">
+          More from the same corner of the field.
+        </p>
+        <div class="mt-6">
+          <RelatedPosts
+            :current-slug="route.params.slug as string"
+            :current-tag="post.tag"
+            :current-keywords="post.keywords"
+          />
+        </div>
+      </aside>
     </div>
   </div>
 </template>
-
-<style scoped>
-/* Scoped styles for the post article */
-</style>

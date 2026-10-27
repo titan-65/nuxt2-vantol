@@ -6,17 +6,15 @@ defineProps<{
 
 <template>
   <div
-    class="my-6 p-4 border border-white/10 bg-[#111] rounded-xl font-sans"
+    class="my-6 border-y px-5 py-4 font-sans text-[14px] leading-[1.7]"
     :class="{
-      'border-white/10': type === 'info' || !type || type === 'success',
-      'border-yellow-500/30 bg-yellow-500/5': type === 'warning',
-      'border-red-500/30 bg-red-500/5': type === 'danger',
+      'border-border bg-surface text-foreground': type === 'info' || !type,
+      'border-success/30 bg-success/5 text-foreground': type === 'success',
+      'border-warning/40 bg-warning/5 text-foreground': type === 'warning',
+      'border-danger/30 bg-danger/5 text-foreground': type === 'danger',
     }"
+    role="note"
   >
-    <div class="flex items-start gap-3">
-      <div class="flex-1 text-sm leading-relaxed text-zinc-300">
-        <slot />
-      </div>
-    </div>
+    <slot />
   </div>
 </template>

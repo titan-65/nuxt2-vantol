@@ -66,15 +66,15 @@ onMounted(() => {
 <template>
   <Teleport to="body">
     <div v-if="isOpen" class="fixed inset-0 z-50 overflow-y-auto" @click.self="handleClose">
-      <div class="fixed inset-0 bg-black/70 backdrop-blur-sm" @click="handleClose" />
+      <div class="fixed inset-0 bg-foreground/70 backdrop-blur-sm" @click="handleClose" />
       <div class="relative min-h-screen flex items-start justify-center pt-20 px-4">
         <div
-          class="relative w-full max-w-xl bg-[#111] border border-white/10 rounded-xl shadow-2xl overflow-hidden"
+          class="relative w-full max-w-xl bg-card border border-border rounded-xl shadow-2xl overflow-hidden"
         >
           <div class="p-4">
-            <div class="flex items-center border-b border-white/10 pb-4">
+            <div class="flex items-center border-b border-border pb-4">
               <svg
-                class="w-5 h-5 text-zinc-500"
+                class="w-5 h-5 text-muted-foreground"
                 fill="none"
                 stroke="currentColor"
                 viewBox="0 0 24 24"
@@ -90,10 +90,10 @@ onMounted(() => {
                 v-model="searchQuery"
                 type="text"
                 placeholder="Search posts..."
-                class="w-full ml-3 bg-transparent outline-none text-white placeholder-zinc-600"
+                class="w-full ml-3 bg-transparent outline-none text-foreground placeholder-zinc-600"
                 autofocus
               />
-              <button @click="handleClose" class="p-1 hover:bg-white/5 rounded text-zinc-500">
+              <button @click="handleClose" class="p-1 hover:bg-accent rounded text-muted-foreground">
                 <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path
                     stroke-linecap="round"
@@ -107,11 +107,11 @@ onMounted(() => {
             <div class="py-4 max-h-96 overflow-y-auto">
               <div
                 v-if="searchQuery && searchResults.length === 0 && !isSearching"
-                class="text-center text-zinc-500 py-8"
+                class="text-center text-muted-foreground py-8"
               >
                 No posts found for "{{ searchQuery }}"
               </div>
-              <div v-else-if="!searchQuery" class="text-center text-zinc-600 py-8">
+              <div v-else-if="!searchQuery" class="text-center text-muted-foreground py-8">
                 Start typing to search...
               </div>
               <div v-else class="space-y-2">
@@ -119,13 +119,13 @@ onMounted(() => {
                   v-for="post in searchResults"
                   :key="post._path"
                   @click="navigateToPost(post)"
-                  class="w-full text-left p-3 rounded-lg hover:bg-white/5 transition-colors"
+                  class="w-full text-left p-3 rounded-lg hover:bg-accent transition-colors"
                 >
-                  <h3 class="font-medium text-white">{{ post.title }}</h3>
-                  <p class="text-sm text-zinc-500 line-clamp-1">{{ post.description }}</p>
+                  <h3 class="font-medium text-foreground">{{ post.title }}</h3>
+                  <p class="text-sm text-muted-foreground line-clamp-1">{{ post.description }}</p>
                   <span
                     v-if="post.tag"
-                    class="inline-block mt-1 px-2 py-0.5 text-xs bg-[#f5c542]/10 text-[#f5c542] rounded"
+                    class="inline-block mt-1 px-2 py-0.5 text-xs bg-brand/10 text-blue rounded"
                   >
                     {{ post.tag }}
                   </span>
@@ -134,7 +134,7 @@ onMounted(() => {
             </div>
           </div>
           <div
-            class="border-t border-white/10 px-4 py-3 text-xs text-zinc-600 flex items-center justify-between"
+            class="border-t border-border px-4 py-3 text-xs text-muted-foreground flex items-center justify-between"
           >
             <span>Press ESC to close</span>
             <span>{{ searchResults.length }} result(s)</span>

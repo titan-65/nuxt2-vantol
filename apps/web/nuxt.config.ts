@@ -66,6 +66,16 @@ export default defineNuxtConfig({
         { name: "format-detection", content: "telephone=no" },
       ],
       link: [
+        { rel: "preconnect", href: "https://fonts.googleapis.com" },
+        {
+          rel: "preconnect",
+          href: "https://fonts.gstatic.com",
+          crossorigin: "anonymous",
+        },
+        {
+          rel: "stylesheet",
+          href: "https://fonts.googleapis.com/css2?family=Geist:wght@100..900&family=Geist+Mono:wght@100..900&display=swap",
+        },
         { rel: "icon", type: "image/x-icon", href: "/favicon.ico" },
         { rel: "apple-touch-icon", sizes: "180x180", href: "/apple-touch-icon.png" },
         { rel: "icon", type: "image/png", sizes: "32x32", href: "/favicon-32x32.png" },
@@ -149,7 +159,12 @@ export default defineNuxtConfig({
     spotifyClientSecret: "",
     spotifyRefreshToken: "",
     public: {
-      siteUrl: process.env.NUXT_PUBLIC_SITE_URL || "",
+      siteUrl: process.env.NUXT_PUBLIC_SITE_URL || "https://vantolbennett.vercel.app",
+      jumbleUrl:
+        process.env.NUXT_PUBLIC_JUMBLE_URL ||
+        (process.env.NODE_ENV === "development"
+          ? "http://localhost:5173"
+          : "https://jumble.educreon.workers.dev"),
       supabaseUrl: "",
       supabaseKey: "",
       adminEmails: process.env.NUXT_PUBLIC_ADMIN_EMAILS || "",

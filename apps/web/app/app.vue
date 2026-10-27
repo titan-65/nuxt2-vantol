@@ -9,8 +9,9 @@ useHead({
     {
       innerHTML: `(() => {
         const stored = localStorage.getItem('colorMode')
-        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches
-        document.documentElement.classList.toggle('dark', stored ? stored === 'dark' : prefersDark)
+        const dark = stored ? stored === 'dark' : true
+        document.documentElement.classList.toggle('dark', dark)
+        document.documentElement.style.colorScheme = dark ? 'dark' : 'light'
       })()`,
       tagPosition: "head",
     },

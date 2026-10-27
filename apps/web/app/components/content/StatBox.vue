@@ -12,10 +12,10 @@ defineProps({
 </script>
 
 <template>
-  <div class="inline-flex flex-col border border-white/10 p-4 bg-[#111] min-w-[120px] rounded-xl">
-    <span class="text-[10px] font-bold uppercase tracking-widest text-zinc-500 mb-1">{{
-      label
+  <div class="inline-flex min-w-[120px] flex-col border-t border-border pt-3">
+    <span class="label">{{ label }}</span>
+    <span class="mt-1 font-mono text-2xl font-medium tabular-nums text-foreground">{{
+      value
     }}</span>
-    <span class="text-2xl font-mono font-medium text-white">{{ value }}</span>
   </div>
 </template>

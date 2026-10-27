@@ -1,0 +1,48 @@
+{
+  "version": "7",
+  "dialect": "sqlite",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "6",
+      "when": 1792979941987,
+      "tag": "20261026015901_open_dakota_north",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "6",
+      "when": 1793013452583,
+      "tag": "20261026111732_plain_luke_cage",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1793014211717,
+      "tag": "20261026113000_seed_stage_two_menu",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1793061385073,
+      "tag": "20261027003625_thin_iron_monger",
+      "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "6",
+      "when": 1793061421073,
+      "tag": "20261027003701_jittery_lester",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "6",
+      "when": 1793062156640,
+      "tag": "20261027004916_smart_hellion",
+      "breakpoints": true
+    }
+  ]
+}

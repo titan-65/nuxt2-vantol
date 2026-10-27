@@ -12,36 +12,32 @@ withDefaults(
 </script>
 
 <template>
-  <header
-    class="w-full bg-[#0d0d0d] border-b border-amber-500/20 py-3.5 px-6 flex items-center justify-between text-white font-sans"
-  >
-    <div class="flex items-center space-x-3">
-      <div
-        class="w-7 h-7 rounded-lg bg-amber-500/20 border border-amber-500/40 text-amber-400 font-bold flex items-center justify-center text-xs"
-      >
-        🎓
-      </div>
-      <div>
-        <div class="flex items-center space-x-2">
-          <span class="text-xs font-bold tracking-wide text-white">{{ title }}</span>
+  <header class="border-b border-border bg-surface">
+    <div class="container-page flex flex-wrap items-center justify-between gap-x-6 gap-y-3 py-3">
+      <div class="flex flex-wrap items-center gap-3">
+        <span
+          class="grid h-7 w-7 place-items-center rounded-md border border-border bg-background font-mono text-[10px] font-medium text-foreground"
+          aria-hidden="true"
+          >L</span
+        >
+        <div class="flex flex-wrap items-center gap-2">
+          <span class="text-[12px] font-medium text-foreground">{{ title }}</span>
           <span
-            class="px-2 py-0.5 rounded bg-amber-500/10 text-amber-400 border border-amber-500/30 text-[10px] font-mono font-bold uppercase"
+            class="rounded border border-blue/30 bg-blue/10 px-1.5 py-0.5 font-mono text-[9px] uppercase tracking-[0.1em] text-blue"
           >
-            NUXT LAYER
+            Nuxt layer
           </span>
         </div>
-        <p class="text-[10px] text-zinc-400 font-mono">
-          Isolated Learning Atmosphere — Nuxt v{{ version }}
+        <p class="font-mono text-[10px] uppercase tracking-[0.08em] text-faint-ink">
+          Isolated learning atmosphere · v{{ version }}
         </p>
       </div>
-    </div>
 
-    <div class="flex items-center space-x-4">
       <NuxtLink
         to="/blog"
-        class="text-xs text-zinc-400 hover:text-white transition-colors font-medium"
+        class="text-[12px] text-muted-foreground transition-colors hover:text-foreground"
       >
-        ← Switch to Editorial Blog Site
+        ← Back to writing
       </NuxtLink>
     </div>
   </header>

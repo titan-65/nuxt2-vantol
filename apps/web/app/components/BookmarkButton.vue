@@ -19,23 +19,25 @@ const handleToggle = () => {
 
 <template>
   <button
-    @click="handleToggle"
-    class="group flex items-center gap-1 text-xs font-mono text-zinc-500 hover:text-white transition-colors uppercase"
+    type="button"
+    class="group inline-flex items-center gap-1.5 text-[11px] text-muted-foreground transition-colors hover:text-foreground"
     :title="saved ? 'Remove bookmark' : 'Save for later'"
+    @click="handleToggle"
   >
     <svg
       xmlns="http://www.w3.org/2000/svg"
-      width="16"
-      height="16"
+      width="14"
+      height="14"
       viewBox="0 0 24 24"
       :fill="saved ? 'currentColor' : 'none'"
       stroke="currentColor"
-      stroke-width="2"
+      stroke-width="1.5"
       class="transition-colors"
-      :class="saved ? 'text-[#f5c542]' : 'text-zinc-600 group-hover:text-white'"
+      :class="saved ? 'text-blue' : 'text-faint-ink group-hover:text-foreground'"
+      aria-hidden="true"
     >
       <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z" />
     </svg>
-    <span class="hidden sm:inline">{{ saved ? "Saved" : "Save" }}</span>
+    <span>{{ saved ? "Saved" : "Save" }}</span>
   </button>
 </template>

@@ -36,22 +36,22 @@ useSeoMeta({
 </script>
 
 <template>
-  <div class="min-h-screen bg-[#0a0a0a] text-white font-sans overflow-x-hidden">
+  <div class="min-h-screen bg-background text-foreground font-sans overflow-x-hidden">
     <div class="max-w-[1400px] w-full mx-auto px-4 sm:px-6 py-6 overflow-hidden">
       <!-- Breadcrumb & Agent Header Bar -->
       <div
-        class="mb-6 flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-5"
+        class="mb-6 flex flex-wrap items-center justify-between gap-4 border-b border-border pb-5"
       >
         <div class="flex items-center space-x-4">
           <NuxtLink
             to="/eve"
-            class="px-3 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 border border-white/10 text-xs font-semibold text-white transition-colors flex items-center space-x-1.5"
+            class="px-3 py-1.5 rounded-xl bg-accent hover:bg-accent border border-border text-xs font-semibold text-foreground transition-colors flex items-center space-x-1.5"
           >
             <ArrowLeft class="w-3.5 h-3.5" />
             <span>All Agents</span>
           </NuxtLink>
 
-          <div class="h-4 w-px bg-white/20"></div>
+          <div class="h-4 w-px bg-accent"></div>
 
           <div>
             <div class="flex items-center space-x-2">
@@ -60,9 +60,9 @@ useSeoMeta({
               >
                 CANVAS WORKSPACE
               </span>
-              <span class="text-xs text-zinc-500 font-mono">/eve/{{ agentId }}</span>
+              <span class="text-xs text-muted-foreground font-mono">/eve/{{ agentId }}</span>
             </div>
-            <h1 class="text-2xl font-bold text-white capitalize mt-0.5 flex items-center space-x-2">
+            <h1 class="text-2xl font-bold text-foreground capitalize mt-0.5 flex items-center space-x-2">
               <span>Agent Canvas: {{ agentId }}</span>
             </h1>
           </div>
@@ -92,21 +92,21 @@ useSeoMeta({
 
           <!-- Bottom Right: Filesystem Inspector Card -->
           <div
-            class="bg-[#111] border border-white/10 rounded-2xl overflow-hidden shadow-2xl flex-1 flex flex-col min-h-[300px]"
+            class="bg-card border border-border rounded-2xl overflow-hidden shadow-2xl flex-1 flex flex-col min-h-[300px]"
           >
             <div
-              class="px-5 py-3.5 bg-black/60 border-b border-white/10 flex items-center justify-between"
+              class="px-5 py-3.5 bg-foreground/60 border-b border-border flex items-center justify-between"
             >
-              <div class="flex items-center space-x-2 text-xs font-semibold text-white">
-                <FolderTree class="w-4 h-4 text-[#f5c542]" />
+              <div class="flex items-center space-x-2 text-xs font-semibold text-foreground">
+                <FolderTree class="w-4 h-4 text-blue" />
                 <span>Agent Memory & Filesystem Inspector</span>
               </div>
-              <span class="text-[10px] font-mono text-zinc-500">server/agents/{{ agentId }}/</span>
+              <span class="text-[10px] font-mono text-muted-foreground">server/agents/{{ agentId }}/</span>
             </div>
 
             <!-- Tabs -->
             <div
-              class="flex items-center gap-1 p-2 bg-zinc-950 border-b border-white/10 overflow-x-auto text-xs font-mono"
+              class="flex items-center gap-1 p-2 bg-background border-b border-border overflow-x-auto text-xs font-mono"
             >
               <button
                 @click="
@@ -116,8 +116,8 @@ useSeoMeta({
                 class="px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-colors"
                 :class="
                   activeTab === 'instructions'
-                    ? 'bg-[#f5c542] text-black font-bold'
-                    : 'text-zinc-400 hover:text-white hover:bg-white/5'
+                    ? 'bg-brand text-brand-foreground font-bold'
+                    : 'text-muted-foreground hover:text-brand-foreground hover:bg-accent'
                 "
               >
                 <FileText class="w-3.5 h-3.5" />
@@ -132,8 +132,8 @@ useSeoMeta({
                 class="px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-colors"
                 :class="
                   activeTab === 'config'
-                    ? 'bg-[#f5c542] text-black font-bold'
-                    : 'text-zinc-400 hover:text-white hover:bg-white/5'
+                    ? 'bg-brand text-brand-foreground font-bold'
+                    : 'text-muted-foreground hover:text-brand-foreground hover:bg-accent'
                 "
               >
                 <Code2 class="w-3.5 h-3.5" />
@@ -148,8 +148,8 @@ useSeoMeta({
                 class="px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition-colors"
                 :class="
                   activeTab === 'tools'
-                    ? 'bg-[#f5c542] text-black font-bold'
-                    : 'text-zinc-400 hover:text-white hover:bg-white/5'
+                    ? 'bg-brand text-brand-foreground font-bold'
+                    : 'text-muted-foreground hover:text-brand-foreground hover:bg-accent'
                 "
               >
                 <Wrench class="w-3.5 h-3.5" />
@@ -159,19 +159,19 @@ useSeoMeta({
 
             <!-- Content Area -->
             <div
-              class="flex-1 p-4 bg-zinc-950 font-mono text-xs text-zinc-300 overflow-y-auto leading-relaxed"
+              class="flex-1 p-4 bg-background font-mono text-xs text-foreground overflow-y-auto leading-relaxed"
             >
               <div v-if="activeTab === 'instructions'" class="space-y-1">
-                <div class="text-[10px] text-zinc-500 mb-2 border-b border-white/10 pb-1">
+                <div class="text-[10px] text-muted-foreground mb-2 border-b border-border pb-1">
                   System Instructions (server/agents/{{ agentId }}/instructions.md)
                 </div>
-                <pre class="text-zinc-200 whitespace-pre-wrap font-sans leading-relaxed">{{
+                <pre class="text-foreground whitespace-pre-wrap font-sans leading-relaxed">{{
                   agentData?.filesystem?.instructions
                 }}</pre>
               </div>
 
               <div v-else-if="activeTab === 'config'" class="space-y-1">
-                <div class="text-[10px] text-zinc-500 mb-2 border-b border-white/10 pb-1">
+                <div class="text-[10px] text-muted-foreground mb-2 border-b border-border pb-1">
                   Agent Config (server/agents/{{ agentId }}/agent.config.ts)
                 </div>
                 <pre class="text-amber-300 whitespace-pre-wrap leading-relaxed">{{
@@ -180,7 +180,7 @@ useSeoMeta({
               </div>
 
               <div v-else-if="activeTab === 'tools'" class="space-y-2">
-                <div class="flex items-center gap-2 border-b border-white/10 pb-2 overflow-x-auto">
+                <div class="flex items-center gap-2 border-b border-border pb-2 overflow-x-auto">
                   <button
                     v-for="(tool, idx) in agentData?.filesystem?.tools"
                     :key="tool.name"
@@ -188,8 +188,8 @@ useSeoMeta({
                     class="px-2.5 py-1 rounded text-[11px] transition-colors"
                     :class="
                       selectedItemIndex === idx
-                        ? 'bg-white/20 text-white font-bold'
-                        : 'text-zinc-500 hover:text-zinc-300'
+                        ? 'bg-accent text-foreground font-bold'
+                        : 'text-muted-foreground hover:text-foreground'
                     "
                   >
                     {{ tool.name }}.ts

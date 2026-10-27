@@ -1,0 +1,31 @@
+name: Jumble CI
+
+on:
+  push:
+    paths:
+      - "apps/jumble/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - ".github/workflows/jumble-ci.yml"
+  pull_request:
+    paths:
+      - "apps/jumble/**"
+      - "package.json"
+      - "pnpm-lock.yaml"
+      - ".github/workflows/jumble-ci.yml"
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      ADMIN_PASSWORD: ci-build-only-password
+    steps:
+      - uses: actions/checkout@v4
+      - uses: voidzero-dev/setup-vp@v1
+        with:
+          cache: true
+      - run: vp install
+      - run: pnpm --filter jumble build
