@@ -29,4 +29,5 @@ jobs:
           cache: true
           node-version: "24.22.1"
       - run: vp install
-      - run: pnpm --filter jumble build
+      - run: vp build
+        working-directory: apps/jumble
